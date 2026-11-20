@@ -920,6 +920,14 @@
         <span class="knob"></span>
       </button>
     </div>
+    <div class="field-group" id="artesao-modo-wrap">
+      <label>Como o desconto do Artesão entra</label>
+      <div class="segmented" id="artesao-modo" role="tablist" aria-label="Modo do desconto do Artesão">
+        <button type="button" class="seg-btn" data-artmodo="duplo" role="tab">Duas compras (−36%)</button>
+        <button type="button" class="seg-btn" data-artmodo="simples" role="tab">Uma compra (−20%)</button>
+      </div>
+      <p class="magicos-note" id="artesao-explica"></p>
+    </div>
     <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2 — nenhuma característica da classe altera essa proporção para itens mundanos.</p>
 
     <div class="toggle-row">
@@ -1457,6 +1465,7 @@
     obraPrima: false,
     melhorDosMelhores: false,
     artesao: true,
+    artesaoModo: 'duplo',
     materiaisPossuidos: false,
     pressa: false,
     mostrarDureza: true,
@@ -1523,6 +1532,9 @@
   // --- DOM refs ---
   var pdeInput = document.getElementById('pde');
   var artesaoSwitch = document.getElementById('artesao-switch');
+  var artesaoModoWrap = document.getElementById('artesao-modo-wrap');
+  var artesaoModoBtns = Array.prototype.slice.call(document.querySelectorAll('#artesao-modo .seg-btn'));
+  var artesaoExplica = document.getElementById('artesao-explica');
   var materiaisSwitch = document.getElementById('materiais-switch');
   var durezaSwitch = document.getElementById('dureza-switch');
   var resultPropsEl = document.getElementById('result-props');
@@ -1832,6 +1844,7 @@
     var divisor = FORJADOR_DIVISOR;
     var lucro = num(state.lucro, 0);
     var discFactor = 1 - (desconto / 100);
+    var duplo = !!state.artesao && state.artesaoModo !== 'simples';
     var possuidos = !!state.materiaisPossuidos;
 
     var cheioPadrao = pde * sumMat;
@@ -1842,12 +1855,12 @@
       cheio = pde * (1 - ARMADURA_FRACAO) + pde * ARMADURA_FRACAO * sumMat;
       pdeDesc = null;
       matDesc = null;
-      subtotal = cheio * discFactor;
+      subtotal = cheio * discFactor * (duplo ? discFactor : 1);
       proprio = possuidos ? 0 : subtotal / divisor;
     } else {
       cheio = cheioPadrao;
       pdeDesc = pde * discFactor;
-      matDesc = sumMat * discFactor;
+      matDesc = duplo ? sumMat * discFactor : sumMat;
       subtotal = pdeDesc * matDesc;
       proprio = possuidos ? 0 : subtotal / divisor;
     }
@@ -1863,7 +1876,7 @@
       pde: pde, sumMat: sumMat, desconto: desconto, divisor: divisor, lucro: lucro,
       pdeDesc: pdeDesc, matDesc: matDesc, subtotal: subtotal, proprio: proprio,
       cheio: cheio, cheioPadrao: cheioPadrao, usaFracaoFixa: usaFracaoFixa,
-      lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota
+      lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota, duplo: duplo
     };
   }
 
@@ -2402,7 +2415,7 @@
       if (c.possuidos) {
         breakdownEl.appendChild(bRow('Materiais já em posse (Trabalhador Itinerante)', 'grátis — só o tempo'));
       } else {
-        breakdownEl.appendChild(bRow('Com desconto (' + fmt(c.cheio) + ' × ' + (100 - c.desconto) + '%)', fmt(c.subtotal) + ' po'));
+        breakdownEl.appendChild(bRow('Com desconto (' + fmt(c.cheio) + ' × ' + (100 - c.desconto) + '%' + (c.duplo ? ' × ' + (100 - c.desconto) + '%' : '') + ')', fmt(c.subtotal) + ' po'));
         breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmt(c.proprio) + ' po'));
       }
     } else {
@@ -2411,7 +2424,9 @@
         breakdownEl.appendChild(bRow('Materiais já em posse (Trabalhador Itinerante)', 'grátis — só o tempo'));
       } else {
         breakdownEl.appendChild(bRow('PDE com desconto (' + fmt(c.pde) + ' × ' + (100 - c.desconto) + '%)', fmt(c.pdeDesc) + ' po'));
-        breakdownEl.appendChild(bRow('Σ materiais com desconto (' + fmt(c.sumMat) + ' × ' + (100 - c.desconto) + '%)', fmt(c.matDesc)));
+        breakdownEl.appendChild(bRow(c.duplo
+          ? 'Σ materiais com desconto (' + fmt(c.sumMat) + ' × ' + (100 - c.desconto) + '%)'
+          : 'Σ materiais (desconto só uma vez)', fmt(c.matDesc)));
         breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmt(c.proprio) + ' po'));
       }
     }
@@ -2424,7 +2439,7 @@
       ? 'materiais em posse — grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
       : c.usaFracaoFixa
         ? '(PDE × ' + fmt((1 - ARMADURA_FRACAO) * 100) + '% + PDE × ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ multiplicadores) × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
-        : '(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '');
+        : (c.duplo ? '(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor' : '(PDE × desconto) × Σ multiplicadores ÷ divisor') + (state.modo === 'vendido' ? ' + lucro' : '');
     formulaNote.textContent = formulaStr;
 
     var comMaterial = c.cheio / 2;
@@ -2597,6 +2612,25 @@
     update();
   }
 
+  var ARTESAO_EXPLICA = {
+    duplo: 'O Forjador faz duas compras de itens não-mágicos: primeiro compra a matéria-prima de um NPC (−20%) e depois paga a fabricação do item (−20% de novo). ' +
+      'Descontos seguidos se multiplicam, não se somam: 0,8 × 0,8 = 0,64. Você paga 64% do preço, ou seja, 36% de desconto (e não 40%). É a leitura usada na nossa mesa.',
+    simples: 'O talento Artesão dá 20% de desconto ao comprar um item não-mágico. Como o Forjador fabrica o item ele mesmo, a única compra é a da matéria-prima: ' +
+      'você paga 80% do preço, 20% de desconto. É a leitura literal do talento; use esta se o seu Mestre não aceitar o desconto duas vezes.'
+  };
+  function setArtesaoModo(modo) {
+    state.artesaoModo = modo === 'simples' ? 'simples' : 'duplo';
+    artesaoModoBtns.forEach(function (btn) {
+      var active = btn.dataset.artmodo === state.artesaoModo;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    artesaoExplica.textContent = ARTESAO_EXPLICA[state.artesaoModo];
+    artesaoModoWrap.hidden = !state.artesao;
+    saveState();
+    update();
+  }
+
   function setMode(mode) {
     state.modo = mode;
     segBtns.forEach(function (btn) {
@@ -2637,6 +2671,7 @@
   artesaoSwitch.addEventListener('click', function () {
     state.artesao = !state.artesao;
     artesaoSwitch.setAttribute('aria-checked', state.artesao ? 'true' : 'false');
+    artesaoModoWrap.hidden = !state.artesao;
     saveState();
     update();
   });
@@ -2717,6 +2752,10 @@
     updateMagicos();
   });
 
+  artesaoModoBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () { setArtesaoModo(btn.dataset.artmodo); });
+  });
+
   addBtn.addEventListener('click', function () {
     if (state.materials.length >= MAX_MATERIALS) return;
     state.materials.push({ materialId: '', name: '', mult: '', tier: '' });
@@ -2765,6 +2804,7 @@
     setMode(state.modo || 'proprio');
     setTipo(state.tipoItem || 'arma');
     setPeso(state.peso || '');
+    setArtesaoModo(state.artesaoModo || 'duplo');
     initTransmutCombos();
     update();
     updateMagicos();

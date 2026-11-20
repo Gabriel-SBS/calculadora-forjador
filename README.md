@@ -10,7 +10,7 @@ Fiz esta calculadora para a minha mesa de D&D 5e, onde jogo com a classe **Forja
 
 1. Em **Equipamento do Guia**, digite o nome do item (por exemplo "espada longa" ou "cota de malha"). O PDE, o tipo e o peso são preenchidos sozinhos. Se o item não estiver na lista, digite o PDE à mão.
 2. Em **Materiais**, busque o material ("aço", "prata", "coral"...). O multiplicador e o tier vêm da tabela do Guia. Dá para juntar até 4 materiais no mesmo item.
-3. Ligue o que vale para o seu personagem: talento Artesão, se você já tem os materiais, Pressa, Obra-Prima.
+3. Ligue o que vale para o seu personagem: talento Artesão (e se o desconto entra uma ou duas vezes), se você já tem os materiais, Pressa, Obra-Prima.
 4. O custo aparece no topo (no computador ele fica fixo na lateral). Logo abaixo vêm a conta passo a passo, a comparação com um ferreiro comum e o tempo de produção.
 
 Os valores ficam salvos no seu navegador, então dá para fechar a página e voltar depois.
@@ -38,9 +38,14 @@ Os valores ficam salvos no seu navegador, então dá para fechar a página e vol
 - Habilidades do Forjador que mexem nisso: Perito, Especialista, Criações Automáticas, Versado e a energia de um item desencantado.
 - Transmutação do Forjador Alquimista no 3º, 7º e 13º nível.
 
-## Uma escolha da nossa mesa
+## Desconto do Artesão: 36% ou 20%?
 
-Aqui o desconto do Artesão entra duas vezes: uma na compra do material e outra na fabricação do item, porque contamos as duas como compras separadas. Na prática isso dá 36% de desconto, não 20%. Se a sua mesa lê a regra de outro jeito, é só desligar o Artesão e aplicar o desconto que vocês usam.
+O talento Artesão dá 20% de desconto na compra de itens não-mágicos. A dúvida é quantas compras o Forjador faz, e por isso a calculadora tem um botão para escolher:
+
+- **Duas compras (−36%)**, como jogamos na nossa mesa. O Forjador compra a matéria-prima de um NPC e depois paga a fabricação do item, e cada uma recebe os 20%. Descontos seguidos se multiplicam, não se somam: 0,8 × 0,8 = 0,64. Você paga 64% do preço, ou seja, 36% de desconto, e não 40%.
+- **Uma compra (−20%)**, a leitura literal do talento. Como o próprio Forjador fabrica o item, a única compra é a da matéria-prima, e o desconto entra uma vez só.
+
+Exemplo com uma espada longa de aço (PDE 50 × 36 de materiais = 1.800 po cheio, ÷ 2 pelo Trabalhador Itinerante): 576 po com duas compras, 720 po com uma. Combine com o seu Mestre qual vale.
 
 ## Limites
 
