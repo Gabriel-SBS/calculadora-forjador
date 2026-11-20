@@ -1,0 +1,2955 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora do Forjador</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b85c26">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Forjador">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIkNhbGN1bGFkb3JhIGRvIEZvcmphZG9yIiwgInNob3J0X25hbWUiOiAiRm9yamFkb3IiLCAiZGVzY3JpcHRpb24iOiAiQ3VzdG8gZGUgY3JpYWNhbyBkZSBpdGVucyAtIE1hdGVyaWFpcyBlIENyaWFjYW8gZGUgRXF1aXBhbWVudG8iLCAic3RhcnRfdXJsIjogIi4iLCAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwgImJhY2tncm91bmRfY29sb3IiOiAiIzFhMTgxNSIsICJ0aGVtZV9jb2xvciI6ICIjYjg1YzI2IiwgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBTUFBQUFEQUNBWUFBQUJTM0d3SEFBQUV5MGxFUVZSNG5PM2RPMjRjUnhTR1VaSHdDZ1FvOFNJVTJCa2piOHFyMEtZY0tiT0RXUVFUQWRxQ0JRbVFJRkxEWVQrcXUrcldmMDRtUUNBSHcvdFYxYng2N3Q0TTV2ZDNiLy92ZlJzNHp1T256M2R2QnRMMXhoaDJla2R4K2k4MjlJd1V3Mm0vek9BellnaUgveEtEejhnaEhQYkREVDRWUW1qK1F3MCtsVUs0Yi9uREREOUhhejFqVFdveStGVGREWGJ2QUlhZlhsck0zcTRBREQrOTdaM0J6UUVZZmtheFp4WTNCV0Q0R2MzV21Wd2RnT0ZuVkZ0bWMxVUFocC9SclozUnhRRVlmcXBZTTZ1TEFqRDhWTE4wWmw4TndQQlQxWkxaYmZwV0NLam1aZ0JXZjZwN2JZWmZETUR3TTR0YnMrd0lSTFNyQVZqOW1jMUxNMjBISU5vdkFWajltZFcxMmJZREVPMUpBRlovWnZkOHh1MEFSUHNSZ05XZkZEL1B1aDJBYUFJZzJyY0FISDlJODMzbTdRQkVFd0RSQkVBMEFSRHR6Z05na3RrQmlDWUFvZ21BYUFJZ21nQ0lKZ0NpQ1lCb0FpRGFiNzF2QU9mNCtQY2ZULzc5OE9FL2Q3MVhndk1HLzdtSDhCQWNnWUtIZituL21aa0FKclZtc0Q4R1J5QUFvZ21BYUFJZ21nQ0lKb0JKclhsNjh5SDRxVkFCVEd6SllEOEVELzlYUGhJWndpdkIxd21BYUk1QVJCTUEwUVJBTkFFUVRRQkVFd0RSQkVBMEFSQk5BRVFUQU5FRVFEUUJFRTBBUkJNQTBRUkF0TzZYUnJ6OCswL3ZtMEJuNy8vOEsrOERNUWFmRWFJNFBRQ0R6MGhSbkJLQW9XZlVLQTROd09BemVoU0hQQWcyK0ZUWkVab0dZUENwZGh6YUhZQ2hwL0pqZ2MwQkdIeG1lQ0M4T2dDRHowelBBdDFYZXRVT1dzL2lycWRCN1FiMDBtb2gzdlZtT0xzQlBiU2N1OTN2QmhVQloybzliMDFmQ1hZazRraEhMTFpOUHc5Z04rQW9SODFXOHcvRWlJQktNK1hOY0F6dDZBWDEwSTlFMmcwWWZYNE8vMHl3Q05oaXlrK0VlWmFJMFJiTlU2OEtZVGRndEJrNS9iSW9JbUNrMmVqNk5hbU9SUFJlR0x0ZUdNdHVRT3gxZ2FxcXNHdFpXSlp6YWNUSmhtdjAyemNhQVJCTkFFUVRBTkVFTU5FNWU5VGJOVElCRUUwQVJCUEFKTWVOMFc1UEZRSWdtZ0NJSmdDaUNXQ0NjL2NvdDZNaUFSQk5BRVFUUURIalIrL2ZYNTBBaUNZQW9nbUFhQUlvZkE1My90OVBBRVFUQU5FRVVQUTQ0dmpUaGdDSUpnQ2lDWUJvQWloNExuZitiMmY2U3lOV3VKVGg2TjVQL0g0ak93RFJwZzdBNnU5K2pBNEFZZ093K3JzL293T0EyQUNzL3U3WDZBQmdLUUVRYmJvQUhIL2N2OUVCUUd3QVZuLzNjM1FBRUJ1QTFkLzlIUjBBYkNFQW9rMFJnT09QK3owNkFJZ053T3J2L284T0FHSURzUHFQNFZMNGM5ZWxBNEM5QkVDMHNnRlUzblpuZENuNjl5Z2JBTVFHVUhXMW1kMmw0TitsWkFBUUcwREZWU2JKcGRqZnAxd0EwTkwwRjhlRlcrd0FSQk1BMGU0ZlAzMis2MzBqb0lldnMyOEhJSm9BaUNZQW9nbUFhTjhDOEVDWU5OOW4zZzVBTkFFUTdVY0Fqa0drK0huVzdRQkVleEtBWFlEWlBaOXhPd0RSZmduQUxzQ3NyczIySFlCb1Z3T3dDekNibDJiYURrQzBGd093Q3pDTFc3Tjhjd2NRQWRXOU5zT09RRVI3TlFDN0FGVXRtZDFGTzRBSXFHYnB6QzQrQW9tQUt0Yk02cXJIQUNKZ2RHdG5kUFdEWUJFd3FpMnp1ZWxaSUJFd21xMHp1ZmxwVUJFd2lqMnp1T3QxQUJIUTI5NFozUDFDbUFqb3BjWHNOYjB1cUV1dGM0YVdpMjdUdDBMWURUaGE2eGs3N01yUWRnTXFMSzZIWHhwZENJeDhxamp0dXdHRXdJakg2ZE8vSEVNSWpQUTRzdXUzdzRpQjNrK2VEUGYxU0tLWTIrTmdYOG4xQmRBc2Rvc3R4K3NwQUFBQUFFbEZUa1N1UW1DQyIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn0sIHsic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBZ0FBQUFJQUNBWUFBQUQwZU5UNkFBQVBqa2xFUVZSNG5PM2RNWExqeUJtRzRkSFVua0JWU25RSUJIYm15SmZ5S1h5cGpaeXRnejBFazYzYUs4ZzFYc3ZEMVVnVUNEVFFmL2YzUEtuTExnb2M4bnZSa0djZXZsRFM4OVBqUysvWEFOREM1YmZmSDF6SmVyd3BuUmg0Z0Q4SWhENEV3QW1NUGNCOVJNSHhCTUFCREQ1QVc0S2dQUUhRZ01FSE9KY2cyRThBYkdUMEFXb1FBOXNJZ0RzWWZZRGF4TUI2QXVBVFJoOWdUR0xnTmdId0FjTVBNQWNoOEQ0QmNNWG9BOHhOREh3bkFBdy9RSnlMdjUwd093RGM4UU5rdXdTSFFPUVBidmdCU0ErQnFCL1k4QU53eXlVb0JDSitVTU1Qd0QwdUFTSHc5Y3ZrakQ4QXR1TkgweGFPNFFlZ2hjdWtwd0hUL1ZDR0g0QWpYQ1lMZ2FrZUFSaC9BR3pNT2xQVWpPRUg0RXlYQ1U0RGhqOEJNUDRBMko2d0FERCtBTmlnYllZOHdqRDhBRlJ5R2ZDUndIQW5BTVlmZ0dxZW54NWZ2Z3htcUFBWThRSURrT0Y1c0kwYTRzaGl0SXNLUUxiTEFJOEV5cDhBR0g4QVJ2TTh3STFyNlFBWTRRSUN3SWdiVmpZQXFsODRBQmg1eTBvR1FPVUxCZ0F6YkZxNUFLaDZvUUJncG0wckZRQVZMeEFBekxoeFpRS2cyb1VCZ0ptM3JrUUFWTG9nQUpDd2VkMERvTXFGQUlDazdmdWFmZ0VBSUhFRHY2Yis0QURRVzg4dDdCSUF4aDhBK203aTZRRmcvQUdnL3phZUdnREdId0JxYk9ScEFXRDhBYURPVnA0U0FNWWZBR3B0WnZlL0J3QUFPTi9oQWVEdUh3RHFiZWVoQVdEOEFhRG1oaDRXQU1ZZkFPcHVxZDhCQUlCQWh3U0F1MzhBcUwycHpRUEErQU5BL1cxdEdnREdId0NPMFhwai9RNEFBQVJxRmdEdS9nSGdXQzIzdGtrQUdIOEFPRWVyemZVSUFBQUM3UTRBZC84QWNLNFcyK3NFQUFBQzdRb0FkLzhBME1mZURkNGNBTVlmQVByYXM4VWVBUUJBb0UwQjRPNGZBR3JZdXNsT0FBQWcwTjBCNE80ZkFHclpzczFPQUFBZzBGMEI0TzRmQUdxNmQ2T2RBQUJBb05VQjRPNGZBR3E3WjZ1ZEFBQkFvRlVCNE80ZkFNYXdkck9kQUFCQUlBRUFBSUUrRFFESC93QXdsalhiN1FRQUFBTGREQUIzL3dBd3BzODIzQWtBQUFRU0FBQVE2TU1BY1B3UEFHTzd0ZVZPQUFBZ2tBQUFnRUR2Qm9EamZ3Q1l3MGViN2dRQUFBSUpBQUFJOUVNQU9QNEhnTG04dCsxT0FBQWdrQUFBZ0VBQ0FBRFNBOER6ZndDWTA5dU5kd0lBQUlFRUFBQUVFZ0FBa0J3QW52OER3Tnl1dDk0SkFBQUVFZ0FBRUVnQUFFQWdBUUFBcVFIZ0Z3QUJJTVByNWpzQkFJQkFBZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNQVGc3d0FBZ0R4T0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ0NRQUFDQ1FBQUNBUUFJQUFBSUpBQUFJSkFBQUlKQUFBSUJBQWdBQUFna0FBQWdrQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNEUVQ3MWZBRUJGLy9ySFgyNys1My83NTc5UGV5MXdoSWZucDhlWFEvNlhBU1liL1krSUFVYmtFUURBanZIZis5K0ZYcHdBQU5GYWo3ZlRBRWJoQkFDSWRjU2R1OU1BUmlFQWdFaEhEclVJWUFRQ0FBQUNDUUFnemhsMzZFNEJxRTRBQUZIT0hHWVJRR1VDQUFBQ0NRQUFDQ1FBZ0JnOWp1UTlCcUFxQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBUUl3ZS8xU3ZmeDZZcWdRQUFBUVNBQUFRU0FBQVVjNDhrbmY4VDJVQ0FJaHp4akFiZjZvVEFBQVFTQUFBa1k2OFEzZjN6d2dFQUJEcmlLRTIvb3ppNGZucDhhWDNpd0RvYmU4LzIydjRHWTBUQUlDZEEyNzhHWkVUQUlBTkp3SkduOUVKQUFBSTVCRUFBUVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJCSUFBQkFJQUVBQUlFRUFBQUVFZ0FBRUVnQUFFQWdBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCRG9wOTR2WUVhLy92Sno3NWNBTUpYbHIzL3YvUkttOC9EODlQalMrMFhNd3ZBRG5FTVE3Q2NBR2pEOEFQMkpndnNJZ0IwTVAwQmRndUEyQWJDQjRRY1lreWo0VGdDc1pQUUI1ck1FLzNLaEFQaUU0UWZJc29SRWdRRDRnT0VIWU9ZZ0VBQnZHSDRBRXFKQUFQeVA0UWNnS1FqaUE4RHdBNUFZQmJFQllQZ0JTQTZDdUFBdy9BQlUwVE1LSXY0eElLTVBRRFZMNXhPQnFRUEE4QU5RMFZMZ2NjQ1VBV0Q0QWFocUtURCswd1dBNFFlZ3NxWEkrRThUQUlZZmdPcVdRdU0vZkFBWWZnQkdzQlFiLzJFRHdQQURNSXFsNFBnUEZ3Q0dINENSTEVYSGY0Z0FNUG9Bakdnck5QNmxBOER3QXpDcXBmajRsd3dBd3cvQXlKWUJ4cjlVQUJoK0FFYTNERExHTWZJZ0FNUHdDaVc0YU4vNml2c1ZIQ0hnRUFBQUFBRWxGVGtTdVFtQ0MiLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyJ9XX0=">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADXElEQVR4nO3dMW7UQBiGYSfiBEg0HMIFdFtxKU7BpajSQbEnoo1EvsDaY/ufmefpEqRIa7/ze7Jrh6fPnz4u8JbnN78L4uA9JgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxEH/I/sd3L9y+vv7z9+L10yOQ4vIzlre90QRyNvYQOeuxDHC29vFtAd32Ig0gcROIgEgeROFq6vft+RnfvdoijsVsooLsyxHGI218d9FjGsixP/gNAEpcVInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4uCKh5ruv34e98N5bf27benlI3tZjBFK4zhkMVIlzeKQxXihNIhDFqNWsj0OTQwfypbfVmQxyQh5LA5ZTHVx+d84ZDHhtuPfcchi2g3p81XvvnG+R0/lA7+tGCFd27DIH/jgzQjp17Zz99insvro0eaztvFNMJeYXuxZzxvv5zBCurDzNO39bMUIKWv/At57J5gRUlOT89LgNkF9VNPqjLS82cclpoKGa7XlDcZGyOXanoLGd5/r40LND/5RfxPMJeZkRyzLo55bMULO1NOjCZc7f26tI352PeYTbyefqnXEMoaNgybEQSQO5ovjtH3AOuiGY+Q42E8cROJgyjhO2A2s4244Bo+DncTBrHEcOvbXoa8p48fBHuIgEgcTx3HQzmAdfcMxRRxsJg4icTB3HM33B+sEG45Z4mAbcRCJg2X2OBruEtY5NhzVH2qa4ZnKtXBqs0wOhopjhrGx1H6ZdePgckXjqLyemiv7YovGQQUV4yi7kmZ7yRXjoAhx0E8cNQfsnC+8XBzUUSuOgqtn5pdfKw5KEQc9xFFtqF6i1EEoFAfVVImj1Iq51r3MoagSBwWViKPOWiniXuOAlIiDmsRB4TiKjNBq7gUOy/VxUNbFcVRYH2Xdrz44Jgcl47h8ZdR3v/QQmRz0+Tgk1zI5iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHCzJH0BUW+WfhdlIAwAAAABJRU5ErkJggg==">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ede6d9;
+    --surface: #f8f3e8;
+    --surface-2: #ece2cf;
+    --border: #d9cbb3;
+    --text: #2b241c;
+    --text-dim: #6b5f4f;
+    --accent: #b85c26;
+    --accent-ink: #fff8f0;
+    --accent-2: #3f6178;
+    --good: #4f7a45;
+    --radius: 7px;
+    --shadow: 0 1px 2px rgba(43,36,28,.08), 0 6px 18px rgba(43,36,28,.07);
+    --font-display: 'Big Shoulders Display', 'Oswald', 'Arial Narrow', sans-serif;
+    --font-body: 'Work Sans', 'Segoe UI', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Consolas', 'SFMono-Regular', monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1a1815;
+      --surface: #24211c;
+      --surface-2: #2e2a23;
+      --border: #3d372e;
+      --text: #ece2d2;
+      --text-dim: #a3947e;
+      --accent: #e08a44;
+      --accent-ink: #1a1512;
+      --accent-2: #86adc2;
+      --good: #8fbb83;
+      --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 28px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1a1815;
+    --surface: #24211c;
+    --surface-2: #2e2a23;
+    --border: #3d372e;
+    --text: #ece2d2;
+    --text-dim: #a3947e;
+    --accent: #e08a44;
+    --accent-ink: #1a1512;
+    --accent-2: #86adc2;
+    --good: #8fbb83;
+    --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 28px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { color-scheme: light dark; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: clamp(24px, 5vw, 56px) 20px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .hero { display: flex; flex-direction: column; gap: 6px; }
+  .eyebrow {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(34px, 8vw, 46px);
+    letter-spacing: .01em;
+    line-height: .98;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+  .sub { margin: 2px 0 0; color: var(--text-dim); font-size: 15px; max-width: 46ch; }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  label {
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: var(--text-dim);
+  }
+  input[type="number"], input[type="text"], .field-group > select {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    padding: 10px 12px;
+    width: 100%;
+  }
+  input[type="text"] { font-family: var(--font-body); }
+  .field-group > select { font-family: var(--font-body); }
+  input:focus-visible, .field-group > select:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  input::placeholder { color: var(--text-dim); opacity: .6; }
+  input:disabled, .tier-select:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+
+  .materials-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .materials-head > span {
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: var(--text-dim);
+  }
+  .btn-ghost {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--accent-2);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 6px 11px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .btn-ghost:hover { border-color: var(--accent-2); }
+  .btn-ghost:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-ghost:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  #material-rows { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+  .material-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .mat-row-top {
+    display: grid;
+    grid-template-columns: 1fr 52px 90px 32px;
+    gap: 8px;
+    align-items: center;
+  }
+  .tier-select {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    padding: 10px 4px;
+    width: 100%;
+    text-align: center;
+  }
+  .tier-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .mat-combo { position: relative; min-width: 0; }
+  .mat-search {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text);
+    padding: 10px 10px;
+    width: 100%;
+  }
+  .mat-search:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .mat-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 20;
+    max-height: 260px;
+    overflow-y: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+    padding: 4px;
+  }
+  .mat-dropdown[hidden] { display: none; }
+  .mat-group-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 7px 8px 3px;
+  }
+  .mat-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .mat-option:hover, .mat-option.active { background: var(--surface-2); }
+  .mat-option .mo-mult {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 12px;
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+  .mat-option-empty {
+    padding: 9px 8px;
+    font-size: 13px;
+    color: var(--text-dim);
+    font-style: italic;
+  }
+  .mat-cap-note {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .btn-remove {
+    width: 32px;
+    height: 38px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+  }
+  .btn-remove:hover { color: var(--accent); border-color: var(--accent); }
+  .btn-remove:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .btn-remove:disabled { opacity: .3; cursor: not-allowed; }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .toggle-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .toggle-label .t-name { font-weight: 600; font-size: 14.5px; }
+  .toggle-label .t-sub { font-size: 12px; color: var(--text-dim); }
+  .switch {
+    position: relative;
+    width: 46px;
+    height: 26px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    padding: 0;
+  }
+  .switch .knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--text-dim);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .switch .knob { transition: transform .15s ease, background-color .15s ease; }
+    .switch { transition: background-color .15s ease, border-color .15s ease; }
+  }
+  .switch[aria-checked="true"] { background: color-mix(in srgb, var(--accent) 30%, var(--surface-2)); border-color: var(--accent); }
+  .switch[aria-checked="true"] .knob { transform: translateX(20px); background: var(--accent); }
+  .switch:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .mao-obra-note {
+    margin: -6px 0 0;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .mode { display: flex; flex-direction: column; gap: 14px; }
+  .segmented {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px;
+    gap: 3px;
+  }
+  .seg-btn {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 13.5px;
+    padding: 9px 10px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+  }
+  .seg-btn.active { background: var(--accent); color: var(--accent-ink); }
+  .seg-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  #lucro-wrap { max-width: 200px; }
+
+  .result {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .result-label {
+    margin: 0;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .result-value {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: clamp(38px, 10vw, 54px);
+    color: var(--accent);
+    text-shadow: 0 0 24px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .result-value .unit {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text-dim);
+    text-shadow: none;
+  }
+  .result-props {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: -2px 0 2px;
+  }
+  .result-props[hidden] { display: none; }
+  .prop-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 10px;
+    font-size: 12.5px;
+  }
+  .prop-chip .p-k { color: var(--text-dim); font-weight: 600; }
+  .prop-chip .p-v {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .b-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 13.5px;
+  }
+  .b-row .b-label { color: var(--text-dim); }
+  .b-row .b-value {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+  }
+  .b-row.b-final .b-label,
+  .b-row.b-final .b-value { color: var(--accent-2); font-weight: 600; }
+
+  .compare {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .compare-title {
+    margin: 0 0 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .compare-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+  }
+  .compare-row:first-of-type { border-top: none; padding-top: 4px; }
+  .compare-row .c-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .compare-row .c-name { font-size: 14px; font-weight: 600; }
+  .compare-row .c-formula {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .compare-row .c-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+  .compare-row .c-value {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 17px;
+  }
+  .compare-row .c-delta { font-family: var(--font-mono); font-size: 11px; color: var(--good); }
+  .compare-row.c-highlight {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border-radius: 6px;
+    border-top: none;
+    margin-top: 4px;
+    padding: 12px 12px;
+  }
+  .compare-row.c-highlight .c-value { color: var(--accent); }
+
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .foot p {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .btn-reset {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 2px;
+  }
+  .btn-reset:hover { color: var(--accent); }
+  .btn-reset:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  @media (max-width: 420px) {
+    .mat-row-top { grid-template-columns: 1fr 42px 68px 30px; }
+  }
+
+  .production {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .production-title {
+    margin: 0 0 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .production-note {
+    margin: 6px 0 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .production .toggle-row { padding: 6px 0; }
+  .production .toggle-row + .toggle-row { border-top: 1px solid var(--border); }
+  .p-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 0;
+    border-top: 1px solid var(--border);
+  }
+  .p-row:first-of-type { border-top: none; padding-top: 4px; }
+  .p-row .p-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .p-row .p-name { font-size: 14px; font-weight: 600; }
+  .p-row .p-sub { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
+  .p-row .p-value {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 15px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .p-row.p-best .p-value { color: var(--good); }
+
+  .vantagens {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .vantagens[hidden] { display: none; }
+  .vantagens-title {
+    margin: 0 0 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .v-item {
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .v-item:first-of-type { border-top: none; padding-top: 4px; }
+  .v-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .v-name { font-weight: 700; font-size: 14.5px; }
+  .v-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .v-row { display: flex; gap: 8px; font-size: 13.5px; line-height: 1.45; }
+  .v-row .v-icon { flex-shrink: 0; width: 16px; text-align: center; }
+  .v-row.v-pro .v-icon { color: var(--good); }
+  .v-row.v-con .v-icon { color: var(--accent); }
+  .v-row .v-text { color: var(--text-dim); }
+  .v-empty { font-size: 13.5px; color: var(--text-dim); font-style: italic; }
+
+  .magicos {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .magicos:not([open]) { overflow: hidden; }
+  .magicos-summary {
+    cursor: pointer;
+    padding: 20px 22px;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    list-style: none;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .magicos-summary::-webkit-details-marker { display: none; }
+  .magicos-summary::before { content: '▸'; flex-shrink: 0; }
+  .magicos[open] .magicos-summary::before { content: '▾'; }
+  .magicos-sub { text-transform: none; font-weight: 400; letter-spacing: 0; font-size: 11.5px; }
+  .magicos-body {
+    padding: 0 22px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .magicos-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+  .magicos-block:first-child { padding-top: 0; border-top: none; }
+  .magicos-block-title { margin: 0; font-weight: 700; font-size: 14.5px; }
+  .magicos-note { margin: 0; font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+  .mg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mg-result { display: flex; flex-direction: column; }
+  .mg-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 0;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px;
+  }
+  .mg-line:first-child { border-top: none; }
+  .mg-line .mg-v {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .mg-warning { margin: 4px 0 0; color: var(--accent); font-size: 12.5px; }
+
+  @media (max-width: 480px) {
+    .mg-grid { grid-template-columns: 1fr; }
+  }
+
+  .segmented.seg-4 { grid-template-columns: repeat(4, 1fr); }
+  .segmented.seg-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 480px) {
+    .segmented.seg-4 { grid-template-columns: 1fr 1fr; }
+    .segmented.seg-3 .seg-btn { font-size: 12px; padding: 9px 4px; }
+  }
+  .equip-info { margin: 0; font-size: 12px; color: var(--text-dim); }
+  .juncao {
+    margin-top: 8px;
+    font-size: 12.5px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .juncao strong { color: var(--accent-2); }
+  .juncao .jw { color: var(--accent); }
+  .mods {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface-2);
+  }
+  .mods-summary {
+    cursor: pointer;
+    padding: 10px 12px;
+    font-weight: 600;
+    font-size: 14px;
+    list-style: none;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .mods-summary::-webkit-details-marker { display: none; }
+  .mods-summary::before { content: '▸'; }
+  .mods[open] .mods-summary::before { content: '▾'; }
+  .mods-total { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); font-weight: 500; }
+  .mods-body { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 10px; }
+  .mods-list { display: flex; flex-direction: column; gap: 2px; max-height: 340px; overflow-y: auto; }
+  .mod-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 2px 10px;
+    align-items: start;
+    padding: 6px 4px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .mod-item input { margin-top: 3px; accent-color: var(--accent); }
+  .mod-name { font-weight: 600; }
+  .mod-cost { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); white-space: nowrap; }
+  .mod-desc { grid-column: 2 / 4; font-size: 11.5px; color: var(--text-dim); line-height: 1.4; }
+
+  /* ===== Redesign: forja ===== */
+  :root { --ember: #e2621b; --ember-hot: #ffc46b; --tier-d: #8a8178; --tier-c: #b07a45; --tier-b: #6d8aa0; --tier-a: #c9a227; --tier-s: #9b6bd6; }
+  body { background: radial-gradient(120% 60% at 50% 115%, color-mix(in srgb, var(--ember) 16%, var(--bg)) 0%, var(--bg) 60%) fixed, var(--bg); }
+  #embers { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+  .forge-glow {
+    position: fixed; left: 0; right: 0; bottom: -20vh; height: 45vh; pointer-events: none; z-index: 0;
+    background: radial-gradient(60% 70% at 50% 100%, color-mix(in srgb, var(--ember) 22%, transparent), transparent 70%);
+    animation: forge-breathe 6s ease-in-out infinite;
+  }
+  @keyframes forge-breathe { 0%, 100% { opacity: .55; } 50% { opacity: .9; } }
+  .page { position: relative; z-index: 1; }
+
+  .panel, .result, .compare, .vantagens, .production, .magicos {
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .hero, .panel, .side, .vantagens, .production, .magicos, .foot { animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
+  .panel { animation-delay: .06s; } .side { animation-delay: .12s; } .vantagens { animation-delay: .18s; }
+  .production { animation-delay: .24s; } .magicos { animation-delay: .3s; }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  h1 { background: linear-gradient(180deg, var(--text) 40%, var(--accent) 140%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  /* Resultado: metal quente */
+  .result { position: relative; overflow: hidden; border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+  .result::before {
+    content: ''; position: absolute; inset: -40%; pointer-events: none; z-index: 0;
+    background: radial-gradient(40% 35% at 30% 20%, color-mix(in srgb, var(--ember) 18%, transparent), transparent 70%),
+                radial-gradient(35% 30% at 80% 90%, color-mix(in srgb, var(--ember-hot) 12%, transparent), transparent 70%);
+    animation: heat 9s ease-in-out infinite alternate;
+  }
+  .result > * { position: relative; z-index: 1; }
+  @keyframes heat { from { transform: translate(-4%, -3%) rotate(0deg); } to { transform: translate(5%, 4%) rotate(8deg); } }
+  .result.pulse { animation: pulse .6s ease-out; }
+  @keyframes pulse { 0% { box-shadow: var(--shadow), 0 0 0 0 color-mix(in srgb, var(--ember) 55%, transparent); } 100% { box-shadow: var(--shadow), 0 0 0 18px transparent; } }
+  .result-value { transition: color .3s; }
+
+  /* Lateral fixa no computador */
+  @media (min-width: 1060px) {
+    .page {
+      max-width: 1180px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 400px;
+      column-gap: 26px;
+      align-items: start;
+    }
+    .hero { grid-column: 1 / -1; }
+    .page > :not(.hero):not(.side) { grid-column: 1; }
+    .side { grid-column: 2; grid-row: 2 / span 6; position: sticky; top: 20px; display: flex; flex-direction: column; gap: 22px; }
+  }
+  @media (max-width: 1059.98px) { .side { display: flex; flex-direction: column; gap: 22px; } }
+
+  /* Barra de custo no celular */
+  .cost-bar {
+    position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 20;
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    padding: 12px 16px; border-radius: 10px;
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in srgb, var(--accent) 50%, var(--border));
+    box-shadow: 0 8px 28px rgba(0,0,0,.25), 0 0 22px color-mix(in srgb, var(--ember) 25%, transparent);
+    transform: translateY(140%); transition: transform .35s cubic-bezier(.2,.7,.2,1);
+  }
+  .cost-bar.show { transform: none; }
+  .cb-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-dim); }
+  .cb-value { font-family: var(--font-mono); font-weight: 700; font-size: 22px; color: var(--accent); font-variant-numeric: tabular-nums; }
+  @media (min-width: 1060px) { .cost-bar { display: none; } }
+
+  /* Tiers coloridos */
+  .material-row { border-left: 3px solid var(--tier-color, transparent); padding-left: 8px; border-radius: 4px; transition: border-color .3s; }
+  .material-row[data-tier="D"], .mat-group-label[data-tier="D"] { --tier-color: var(--tier-d); }
+  .material-row[data-tier="C"], .mat-group-label[data-tier="C"] { --tier-color: var(--tier-c); }
+  .material-row[data-tier="B"], .mat-group-label[data-tier="B"] { --tier-color: var(--tier-b); }
+  .material-row[data-tier="A"], .mat-group-label[data-tier="A"] { --tier-color: var(--tier-a); }
+  .material-row[data-tier="S"], .mat-group-label[data-tier="S"] { --tier-color: var(--tier-s); }
+  .material-row[data-tier] .tier-select { color: var(--tier-color); font-weight: 700; border-color: color-mix(in srgb, var(--tier-color) 55%, var(--border)); }
+  .mat-group-label[data-tier] { color: var(--tier-color); }
+  .material-row[data-tier="S"] { box-shadow: -6px 0 16px -10px var(--tier-s); }
+  .material-row.is-new { animation: slide-in .35s cubic-bezier(.2,.7,.2,1); }
+  @keyframes slide-in { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+
+  /* Obra-Prima reluzente */
+  .prop-chip.chip-obra { position: relative; overflow: hidden; border-color: var(--tier-a); }
+  .prop-chip.chip-obra .p-v { color: var(--tier-a); }
+  .prop-chip.chip-obra::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(110deg, transparent 30%, color-mix(in srgb, var(--ember-hot) 55%, transparent) 50%, transparent 70%);
+    transform: translateX(-120%); animation: shine 2.6s ease-in-out infinite;
+  }
+  @keyframes shine { 0%, 55% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+
+  .seg-btn { transition: background-color .2s, color .2s, transform .1s; }
+  .seg-btn:active { transform: scale(.97); }
+  .btn-ghost, .btn-reset, .btn-remove { transition: background-color .2s, border-color .2s, transform .1s; }
+  .mod-item { transition: background-color .15s; border-radius: 4px; }
+  .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+  .mat-dropdown:not([hidden]) { animation: drop .16s ease-out; transform-origin: top; }
+  @keyframes drop { from { opacity: 0; transform: translateY(-4px) scaleY(.97); } to { opacity: 1; transform: none; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .cost-bar { transform: none; }
+    .cost-bar:not(.show) { display: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="embers" aria-hidden="true"></canvas>
+<div class="forge-glow" aria-hidden="true"></div>
+<div class="page">
+  <header class="hero">
+    <p class="eyebrow">Materiais e Criação de Equipamento</p>
+    <h1>Calculadora do Forjador</h1>
+    <p class="sub">Custo de criação de um item, combinando o desconto de Artesão com a mão de obra dispensada pelo Forjador.</p>
+  </header>
+
+  <main class="panel">
+    <div class="field-group">
+      <label>Equipamento do Guia (opcional)</label>
+      <div id="equip-wrap"></div>
+      <p class="equip-info" id="equip-info" hidden></p>
+    </div>
+
+    <div class="field-group">
+      <label for="pde" id="pde-label">PDE — Preço de Equipamento (po)</label>
+      <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" />
+    </div>
+
+    <div class="field-group">
+      <label>Tipo de Item</label>
+      <div class="segmented seg-4" id="tipo-segmented" role="tablist" aria-label="Tipo de item">
+        <button type="button" class="seg-btn" data-tipo="arma" role="tab">Arma</button>
+        <button type="button" class="seg-btn" data-tipo="armadura" role="tab">Armadura</button>
+        <button type="button" class="seg-btn" data-tipo="municao" role="tab">Munição</button>
+        <button type="button" class="seg-btn" data-tipo="polvora" role="tab">Pólvora</button>
+      </div>
+    </div>
+
+    <div class="field-group" id="peso-wrap">
+      <label>Peso do item (tempo de criação)</label>
+      <div class="segmented seg-3" id="peso-segmented" role="tablist" aria-label="Peso do item">
+        <button type="button" class="seg-btn" data-peso="leve" role="tab">Leve (−8h)</button>
+        <button type="button" class="seg-btn" data-peso="" role="tab">Normal</button>
+        <button type="button" class="seg-btn" data-peso="pesado" role="tab">Pesado (+8h)</button>
+      </div>
+    </div>
+
+    <div class="toggle-row" id="fracao-wrap" hidden>
+      <div class="toggle-label">
+        <span class="t-name">Fração fixa do PDE</span>
+        <span class="t-sub">Regra opcional: só 20% do PDE é sensível ao material — suaviza armaduras caras</span>
+      </div>
+      <button type="button" class="switch" id="fracao-switch" role="switch" aria-checked="false" aria-label="Fração fixa do PDE">
+        <span class="knob"></span>
+      </button>
+    </div>
+
+    <div class="materials">
+      <div class="materials-head">
+        <span>Materiais (multiplicador ×PDE)</span>
+        <button type="button" id="add-material" class="btn-ghost">+ material</button>
+      </div>
+      <div id="material-rows"></div>
+      <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais — além disso, não altera o custo.</p>
+      <div class="juncao" id="juncao-info" hidden></div>
+    </div>
+
+    <details class="mods" id="mods-details">
+      <summary class="mods-summary">Modificações <span class="mods-total" id="mods-total"></span></summary>
+      <div class="mods-body">
+        <p class="magicos-note">Cada modificação soma ao valor-base (PDE) antes de multiplicar pelo material (p. 163).</p>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Modificar item que já possui</span>
+            <span class="t-sub">Paga só as modificações × material, não o item de novo</span>
+          </div>
+          <button type="button" class="switch" id="existente-switch" role="switch" aria-checked="false" aria-label="Modificar item existente">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="mods-list" id="mods-list"></div>
+      </div>
+    </details>
+
+    <div class="toggle-row">
+      <div class="toggle-label">
+        <span class="t-name">Talento Artesão</span>
+        <span class="t-sub">−20% em compras de itens não-mágicos</span>
+      </div>
+      <button type="button" class="switch" id="artesao-switch" role="switch" aria-checked="false" aria-label="Talento Artesão">
+        <span class="knob"></span>
+      </button>
+    </div>
+    <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2 — nenhuma característica da classe altera essa proporção para itens mundanos.</p>
+
+    <div class="toggle-row">
+      <div class="toggle-label">
+        <span class="t-name">Já possui os materiais</span>
+        <span class="t-sub">Trabalhador Itinerante: grátis, só custa o tempo</span>
+      </div>
+      <button type="button" class="switch" id="materiais-switch" role="switch" aria-checked="false" aria-label="Já possui os materiais">
+        <span class="knob"></span>
+      </button>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-label">
+        <span class="t-name">Mostrar Dureza</span>
+        <span class="t-sub">Regra de quebra de equipamentos é opcional</span>
+      </div>
+      <button type="button" class="switch" id="dureza-switch" role="switch" aria-checked="true" aria-label="Mostrar Dureza">
+        <span class="knob"></span>
+      </button>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-label">
+        <span class="t-name">Obra-Prima</span>
+        <span class="t-sub">20 natural no teste (17–20 com Prodígio, nível 2): +1 no modificador, máx. +3</span>
+      </div>
+      <button type="button" class="switch" id="obra-switch" role="switch" aria-checked="false" aria-label="Obra-Prima">
+        <span class="knob"></span>
+      </button>
+    </div>
+
+    <div class="toggle-row">
+      <div class="toggle-label">
+        <span class="t-name">O Melhor dos Melhores</span>
+        <span class="t-sub">Forjador nível 14: gasta o dobro de materiais e o item vira Obra-Prima</span>
+      </div>
+      <button type="button" class="switch" id="melhor-switch" role="switch" aria-checked="false" aria-label="O Melhor dos Melhores">
+        <span class="knob"></span>
+      </button>
+    </div>
+
+    <div class="mode">
+      <div class="segmented" id="mode-segmented" role="tablist" aria-label="Modo de cálculo">
+        <button type="button" class="seg-btn" data-mode="proprio" role="tab">Item Próprio</button>
+        <button type="button" class="seg-btn" data-mode="vendido" role="tab">Item para Venda</button>
+      </div>
+      <div class="field-group" id="lucro-wrap" hidden>
+        <label for="lucro">Margem de lucro (%)</label>
+        <input id="lucro" type="number" min="0" step="1" />
+      </div>
+    </div>
+  </main>
+
+  <aside class="side" id="side">
+  <section class="result" id="result-card">
+    <p class="result-label" id="result-label">Custo para forjar</p>
+    <p class="result-value"><span id="result">0</span><span class="unit">po</span></p>
+    <div class="result-props" id="result-props" hidden></div>
+    <div class="breakdown" id="breakdown"></div>
+  </section>
+
+  <section class="compare">
+    <p class="compare-title">Comparativo</p>
+    <div id="compare-rows"></div>
+  </section>
+  </aside>
+
+  <section class="vantagens" id="vantagens-section">
+    <p class="vantagens-title">Vantagens e desvantagens dos materiais</p>
+    <div id="vantagens-rows"></div>
+  </section>
+
+  <section class="production">
+    <p class="production-title">Tempo de Produção</p>
+
+    <div class="toggle-row">
+      <div class="toggle-label">
+        <span class="t-name">Pressa</span>
+        <span class="t-sub">Metade do tempo, item sai com −1 no modificador</span>
+      </div>
+      <button type="button" class="switch" id="pressa-switch" role="switch" aria-checked="false" aria-label="Pressa">
+        <span class="knob"></span>
+      </button>
+    </div>
+
+    <p class="production-note" id="production-note"></p>
+    <div id="production-rows"></div>
+  </section>
+
+  <details class="magicos" id="magicos-details">
+    <summary class="magicos-summary">Itens Mágicos e Transmutação <span class="magicos-sub">(Forjador Arcano / Alquimista)</span></summary>
+    <div class="magicos-body">
+
+      <div class="magicos-block">
+        <p class="magicos-block-title">Itens Mágicos</p>
+        <p class="magicos-note">Tabela da p. 169: o item é fabricado normalmente (custo e tempo acima) e ainda paga o custo do encantamento. Raro exige StarWood, Muito Raro exige StarStone e Lendário exige StarMetal entre os materiais. O Trabalhador Itinerante não reduz o tempo de itens mágicos.</p>
+        <div class="field-group">
+          <label for="magico-raridade">Raridade</label>
+          <select id="magico-raridade">
+            <option value="comum">Comum</option>
+            <option value="incomum">Incomum</option>
+            <option value="raro">Raro</option>
+            <option value="muitoRaro">Muito Raro</option>
+            <option value="lendario">Lendário</option>
+            <option value="personalizado">Personalizado</option>
+          </select>
+        </div>
+        <div class="mg-grid">
+          <div class="field-group">
+            <label for="magico-custo">Custo do encantamento (po)</label>
+            <input id="magico-custo" type="number" min="0" step="0.01" inputmode="decimal" />
+          </div>
+          <div class="field-group">
+            <label for="magico-tempo">Tempo do encantamento (horas)</label>
+            <input id="magico-tempo" type="number" min="0" step="1" inputmode="decimal" />
+          </div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Encantar item que já possui</span>
+            <span class="t-sub">Ritual sobre um item existente: paga só o encantamento</span>
+          </div>
+          <button type="button" class="switch" id="encantar-switch" role="switch" aria-checked="false" aria-label="Encantar item existente">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Energia de item desencantado</span>
+            <span class="t-sub">Iniciado em Itens Mágicos: desencantou um item da mesma raridade, tempo ÷2</span>
+          </div>
+          <button type="button" class="switch" id="desencantado-switch" role="switch" aria-checked="false" aria-label="Energia de item desencantado">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Perito em Itens Mágicos</span>
+            <span class="t-sub">10º nível de Forjador: custo de criação ÷2</span>
+          </div>
+          <button type="button" class="switch" id="perito-switch" role="switch" aria-checked="false" aria-label="Perito em Itens Mágicos">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Especialista em Itens Mágicos</span>
+            <span class="t-sub">13º nível de Forjador Arcano: tempo ÷4 (raridade comum/incomum)</span>
+          </div>
+          <button type="button" class="switch" id="especialista-switch" role="switch" aria-checked="false" aria-label="Especialista em Itens Mágicos">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Criações Automáticas</span>
+            <span class="t-sub">17º nível de Forjador Arcano: ferramenta automatizada ajuda, tempo ÷2</span>
+          </div>
+          <button type="button" class="switch" id="automaticas-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Versado em Itens Mágicos</span>
+            <span class="t-sub">18º nível de Forjador: tempo ÷2</span>
+          </div>
+          <button type="button" class="switch" id="versado-switch" role="switch" aria-checked="false" aria-label="Versado em Itens Mágicos">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div id="magico-result" class="mg-result"></div>
+      </div>
+
+      <div class="magicos-block">
+        <p class="magicos-block-title">Transmutação de Material</p>
+        <p class="magicos-note">Forjador Alquimista: usa o PDE do formulário principal. Custa metade do valor do item no material de destino (até 30 cm³).</p>
+        <div class="field-group">
+          <label for="transmut-nivel">Nível da característica</label>
+          <select id="transmut-nivel">
+            <option value="3">3º — Transmutação (Tier D/C, mesma categoria)</option>
+            <option value="7">7º — Avançada (qualquer categoria, até Tier B)</option>
+            <option value="13">13º — Suprema (D/C/B grátis, Tier A permitido)</option>
+          </select>
+        </div>
+        <div class="mg-grid">
+          <div class="field-group">
+            <label>Material de origem</label>
+            <div id="transmut-origem-wrap"></div>
+          </div>
+          <div class="field-group">
+            <label>Material de destino</label>
+            <div id="transmut-destino-wrap"></div>
+          </div>
+        </div>
+        <div id="transmut-result" class="mg-result"></div>
+      </div>
+
+    </div>
+  </details>
+
+  <footer class="foot">
+    <p id="formula-note">(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor</p>
+    <button type="button" class="btn-reset" id="reset-btn">restaurar padrão</button>
+  </footer>
+</div>
+
+<div class="cost-bar" id="cost-bar" aria-live="polite">
+  <span class="cb-label" id="cb-label">Custo para forjar</span>
+  <span class="cb-value"><span id="cb-value">0</span> po</span>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  // Tempo de Produção: baseado na tabela Tempo de Criação (Materiais e Criação) + Trabalhador Itinerante (Forjador).
+
+  var STORAGE_KEY = 'forjador-calc-v5';
+
+  // [id, categoria, tier, nome, multiplicador, dureza, modificador, vantagens, desvantagens]
+  var MATERIALS_DB = [
+    ['metal_cobre','Metais','D','Cobre',2,'d4','-1','Não perde durabilidade por eletricidade.',''],
+    ['metal_ouro','Metais','D','Ouro',100,'d4','-2','Não perde durabilidade por umidade ou corrosão.','Pesa o dobro do peso padrão.'],
+    ['metal_bronze','Metais','C','Bronze',1,'d4','0','Não perde durabilidade por umidade ou corrosão.',''],
+    ['metal_ferro','Metais','C','Ferro',1,'d6','0','Material básico, resistente e fácil de encontrar.',''],
+    ['metal_prata','Metais','C','Prata',2,'d6','0','Eficaz contra lobisomens e mortos-vivos com resistência ou imunidade a armas não-mágicas; não perde durabilidade por eletricidade.','Mais frágil, exige manutenção mais frequente.'],
+    ['metal_dlarun','Metais','C','Dlarun',30,'d4','0','+1 de dano de frio; armaduras dão resistência a frio e vantagem contra exaustão por frio; escudos ganham Parry contra dano de frio.','Desvantagem em testes de durabilidade se o motivo for calor ou fogo.'],
+    ['metal_ferro_febril','Metais','C','Ferro Febril',30,'d4','0','+1 de dano de fogo; armaduras dão resistência a fogo e vantagem contra exaustão por calor; escudos ganham Parry contra dano de fogo.','Desvantagem em testes de durabilidade se o motivo for frio.'],
+    ['metal_aco','Metais','B','Aço',30,'d8','+1','Ótimo custo-benefício, muito usado em armas e armaduras.',''],
+    ['metal_prata_alquimica','Metais','B','Prata Alquímica',35,'d6','+1','Como a prata, mas monstros afetados por prata também são afetados por este material, com +1 de dano extra.','Ainda é frágil como a prata comum.'],
+    ['metal_aco_verde_baatoriano','Metais','B','Aço Verde Baatoriano',35,'d8','+1','+2 de dano extra contra criaturas do tipo corruptores; armaduras médias/pesadas e escudos dão +1 de CA contra corruptores.','Pesa apenas metade do aço comum (sem desvantagem prática).'],
+    ['metal_virestal','Metais','B','Virestal',55,'d10','+1','Óleos e venenos aplicados na arma permanecem o dobro do tempo.',''],
+    ['metal_aco_damasco','Metais','A','Aço Damasco',150,'d20','+2','Lâminas de extrema resistência, mantêm o fio afiado por longos períodos.',''],
+    ['metal_mithral','Metais','A','Mithral',175,'d20','+2','Sem requerimento de Força; pode trocar -5 no acerto por +10 no dano; armaduras/escudos sem requerimento de Força nem desvantagem em Furtividade, dá para dormir com a armadura vestida.','Pesa metade do peso normal — sem desvantagem prática.'],
+    ['metal_starmetal','Metais','S','Starmetal',400,'d100','+3','Suporta criação de itens mágicos de raridade muito alta (raros a lendários).',''],
+    ['metal_adamante','Metais','S','Adamante',500,'∞','+3','Dano dobrado contra criaturas do tipo constructo; críticos contra o portador causam metade do dano e ele não pode ser teleportado; escudo ganha maestria Deflect.','Imune a qualquer forma de desgaste — sem desvantagem.'],
+    ['metal_aco_negro','Metais','S','Aço Negro',500,'d100','+3','Ao absorver dano elemental, ganha +2 de dano daquele elemento (arma) ou resistência (armadura) por 8h, acumulável entre os 4 tipos; margem de crítico melhora em +1.',''],
+    ['metal_ebano','Metais','S','Ébano',500,'d100','+3','Não perde durabilidade por umidade ou corrosão.','Pesa metade do peso — sem desvantagem prática.'],
+    ['metal_elementium','Metais','S','Elementium',500,'d100','+3','Escolha um dano elemental (fogo/frio/elétrico/ácido): +1d4 de dano ou substitui todo o dano físico; armaduras médias/pesadas dão imunidade a esse elemento; escudo ganha Deflect.','Se empunhado por alguém não autorizado, reage causando 1d10 de dano por turno.'],
+
+    ['veg_madeira_podre','Vegetais','D','Madeira Podre',1,'d4','-1','Nenhuma — resultado da falta de cuidado com o item.','Modificador negativo, sem propriedade especial.'],
+    ['veg_carvalho','Vegetais','C','Carvalho',1,'d6','0','Madeira comum e robusta, boa para armas e ferramentas padrão.',''],
+    ['veg_bronzewood','Vegetais','C','BronzeWood',5,'d4','0','Armaduras/escudos sem penalidade de Furtividade em florestas; não perde durabilidade por umidade.',''],
+    ['veg_freixo','Vegetais','B','Freixo',30,'d8','+1','Leve e resistente, bom equilíbrio entre força e manuseabilidade.',''],
+    ['veg_madeira_da_alma','Vegetais','B','Madeira da Alma',45,'d6','+1','Prende as almas de criaturas que morrem a até 4,5m, impedindo sua ressurreição até a alma ser libertada.',''],
+    ['veg_fungo_viventis','Vegetais','B','Fungo Viventis',60,'d6','+1','Regenera naturalmente +1 de durabilidade por dia; mesmo destruído, tenta se regenerar lentamente.',''],
+    ['veg_starwood','Vegetais','B','StarWood',65,'d8','+1','Permite criação de itens mágicos de raridade "rara".',''],
+    ['veg_teixo','Vegetais','A','Teixo',150,'d20','+2','Excelente elasticidade e resistência à tração.',''],
+    ['veg_iron_wood','Vegetais','A','Iron-Wood',200,'d20','+2','Efeitos de empurrão em armas/munições aumentam +1,5m; armaduras/escudos reduzem o empurrão sofrido em +1,5m.','Pesa o dobro do normal; ganha a propriedade pesada (ou +2 no requerimento de Força se já tiver).'],
+    ['veg_nogueira','Vegetais','A','Nogueira',170,'d20','+2','Se tiver ao menos 1 ponto de feitiçaria, ganha +1 ponto extra ao sintonizar.',''],
+    ['veg_bordo','Vegetais','A','Bordo',170,'d20','+2','Se tiver ao menos 1 ponto de Ki, ganha +1 ponto extra ao sintonizar.',''],
+    ['veg_samambaia_metamorfica','Vegetais','A','Samambaia Metamórfica',185,'d20','+2','Material vivo; pode assumir 2 formas de item diferentes, alternando com ação bônus; modo furtivo 1x/rodada.','Precisa de vínculo com o portador e se alimenta de luz solar 1h/dia.'],
+    ['veg_yggdrasil','Vegetais','S','Yggdrasil',500,'∞','+3','Atinge criaturas no Plano Astral/incorpóreas; foco de conjuração dobra a distância de teletransporte; +1 em testes de Sabedoria ou Inteligência ao sintonizar.','Extremamente raro de obter — indestrutível, sem desvantagem mecânica.'],
+    ['veg_samambaia_primordial','Vegetais','S','Samambaia Primordial',500,'d100','+3','Material vivo; 1x/dia soma 2d4 a um teste próximo; pode assumir até 10 formas de item, alternando com ação bônus; recupera +1 durabilidade/dia.',''],
+    ['veg_hera_lunar','Vegetais','S','Hera Lunar',500,'d100','+3','Material vivo; gera vagens de esporos que ativam efeitos variados (espinhos, luz, veneno, feromônios) conforme a fase da lua, todos disponíveis na Lua Cheia.','Precisa de luz da lua para se alimentar.'],
+
+    ['geo_pedra_gritante','Geológicos','D','Pedra Gritante',5,'d6','-1','Pode soltar um som alto e estridente ao ser usado — útil como distração.','Denuncia o usuário; ativa aleatoriamente em críticos ou disparos de munição.'],
+    ['geo_pedra','Geológicos','C','Pedra',1,'d6','0','Material comum e acessível, boa resistência para dano contundente.',''],
+    ['geo_silex_adormecido','Geológicos','C','Sílex Cinético Adormecido',50,'d8','0','Crítico positivo (causado ou sofrido) transforma o item no Tier S "Sílex Cinético Acordado" por 2 rodadas; não perde durabilidade por concussão.',''],
+    ['geo_obsidiana','Geológicos','C','Obsidiana',40,'d4','0','Extremamente afiada — armas de corte/perfuração ou munições ganham a maestria Bleed adicional.','Quebradiça; munições sempre quebram após o ataque.'],
+    ['geo_pedra_ana','Geológicos','B','Pedra Anã',30,'d8','+1','Grande resistência, textura quase idêntica ao mármore.','Dificulta a mobilidade.'],
+    ['geo_sal_cristalizado','Geológicos','B','Sal Cristalizado',35,'d8','+1','+2 de dano extra contra mortos-vivos (armas); +1 de CA contra mortos-vivos (armaduras/escudos pesados).',''],
+    ['geo_skip_rock','Geológicos','B','Skip Rock',30,'d6','+1','Munição de concussão ricocheteia para um segundo alvo próximo (maestria Cleave adicional).',''],
+    ['geo_pedra_cegante','Geológicos','B','Pedra Cegante',30,'d6','+1','Munição gera uma explosão de luz ao acertar, cegando por 10 min criaturas com Visão no Escuro em 6m (CD 16 Con).',''],
+    ['geo_gelo_eterno','Geológicos','B','Gelo Eterno',75,'d10','+1','+1 dano de frio em magias com foco deste material; efeitos mágicos de frio duram o dobro; só é destruído por dano físico.','O item está sempre frio ao toque.'],
+    ['geo_brasa_eterna','Geológicos','B','Brasa Eterna',75,'d10','+1','+1 dano de fogo em magias com foco deste material; efeitos mágicos de fogo duram o dobro; só é destruído por dano físico.','O item está sempre quente ao toque.'],
+    ['geo_cristal_estigio','Geológicos','A','Cristal Estígio',150,'d20','+2','Resistente e brilhante, ótima escolha para armaduras e armas de alta qualidade.',''],
+    ['geo_argila_elukiana','Geológicos','A','Argila Elukiana',175,'d20','+2','Sem desvantagem em ataques submersos; armadura dá deslocamento de natação; se ficar a 0 PV embaixo d\'água, emerge automaticamente 9m à superfície.','Não é ideal para lâminas afiadas — melhor para perfuração ou concussão.'],
+    ['geo_pedra_ana_refinada','Geológicos','A','Pedra Anã Refinada',200,'d20','+2','Pode trocar -5 no acerto por +10 no dano (corpo a corpo/arremesso); altera efeitos de empurrão conforme o uso.','Pesa o dobro do normal; ganha propriedade pesada (ou +2 no requerimento de Força se já tiver).'],
+    ['geo_glass_steel','Geológicos','A','Glass Steel',200,'d20','+2','Vantagem no primeiro ataque em penumbra; munições/armas de arremesso não deixam rastro visual; itens têm vantagem para serem escondidos.','O portador também sofre desvantagem no primeiro ataque contra ele em penumbra.'],
+    ['geo_deep_crystal','Geológicos','A','Deep Crystal',400,'d20','+2','+2 de dano psíquico (ou +5 após 10 min de meditação); armaduras dão resistência a dano psíquico e vantagem contra controle mental/leitura de mente; escudo ganha Parry contra psíquico.','Armazena memórias recentes do usuário — risco se o item for perdido ou lido por magia.'],
+    ['geo_fragmento_igneo_vorthal','Geológicos','A','Fragmento Ígneo de Vorthal',170,'d20','+2','Dano de concussão também causa fogo em área (1,5m); quem acerta a arma corpo a corpo sofre 1d4 de fogo.','Ao quebrar, explode causando 1d4 de fogo por kg do material em 3m.'],
+    ['geo_starstone','Geológicos','A','StarStone',120,'d20','+2','Permite criação de itens mágicos de raridade "rara" ou "muito rara".',''],
+    ['geo_pedra_lunar','Geológicos','S','Pedra Lunar',500,'d20','+3','Reverte criaturas polimorfadas/metamorfas ao acertar; munições e teletransportes ganham alcance/distância extra, com vantagem no d100 de "teletransporte".','Ao quebrar, causa 3d6 de dano de veneno a quem estiver a 1,5m (exceto o usuário).'],
+    ['geo_deep_crystal_alpha','Geológicos','S','Deep Crystal Alpha',500,'d20','+3','Versão superior do Deep Crystal: até +6 de dano psíquico acumulado, armazena memórias de vidas inteiras.','Uso contínuo induz amnésia gradual no usuário — arriscado para itens de combate.'],
+    ['geo_piroclasto_vorthal','Geológicos','S','Piroclasto de Vorthal',500,'d100','+3','Dano de concussão também causa fogo em área (3m); focos de conjuração aumentam o raio de magias de área em dano de fogo.','Ao quebrar, explode 1d6 de fogo por kg do material em 6m.'],
+    ['geo_quartzo_inercia','Geológicos','S','Quartzo de Inércia',500,'d100','+3','Absorve metade de um dano recebido e libera no turno seguinte; escudo empurra quem erra o ataque contra você; não perde durabilidade por concussão.',''],
+    ['geo_silex_acordado','Geológicos','S','Sílex Cinético Acordado',500,'d100','+3','Acumula cargas a cada acerto (arma) ou dano recebido (armadura/escudo); ao atingir o máximo, libera dano dobrado ou uma explosão de energia.','Se não usado por 24h, "adormece" e vira Sílex Cinético Adormecido (Tier C), perdendo as propriedades até ser reativado.'],
+
+    ['org_couro_nd0_5','Orgânicos','C','Couro e Escamas (Nd 0-5)',1,'d6','0','Proteção modesta, fácil de encontrar e trabalhar.',''],
+    ['org_coral_morto','Orgânicos','C','Coral Morto',1,'d4','0','Sem desvantagem para ataques feitos submersos em água.','Mais rígido e propenso a lascar sob pressão que o coral vivo.'],
+    ['org_ossos_nd0_5','Orgânicos','C','Ossos (Nd 0-5)',1,'d6','0','Leves e fáceis de manusear, ideais para itens leves e flexíveis.',''],
+    ['org_inseto_treinado','Orgânicos','C','Artrópode Treinado',50,'d10','0','Material vivo e inteligente; alterna entre forma de criatura e de item por ação bônus; evolui e fortalece o vínculo com o dono.','Precisa se alimentar (1kg a cada 3 dias ou perde durabilidade); só o dono pode usá-lo.'],
+    ['org_couro_nd6_11','Orgânicos','B','Couro e Escamas (Nd 6-11)',30,'d8','+1','Escolha um tipo de dano (exceto cortante/perfurante/concussão): a armadura passa a dar resistência a esse dano.',''],
+    ['org_ossos_nd6_11','Orgânicos','B','Ossos (Nd 6-11)',30,'d6','+1','Ignoram resistência/imunidade a armas não-mágicas de criaturas do mesmo tipo; +1 dano necrótico em focos de conjuração; pesam metade do peso.',''],
+    ['org_quitina','Orgânicos','B','Quitina',45,'d8','+1','Óleos e venenos aplicados permanecem o dobro do tempo; pesa metade do peso.',''],
+    ['org_coral','Orgânicos','B','Coral',30,'d6','+1','Material vivo; armadura de coral dá deslocamento de natação e não pesa nada submersa.','Precisa ficar submerso ao menos 1h/dia ou "morre" e vira Coral Morto.'],
+    ['org_couro_nd12_17','Orgânicos','A','Couro e Escamas (Nd 12-17)',150,'d20','+2','Escolha um tipo de dano: a armadura dá resistência a esse dano, refletindo a origem poderosa da criatura.',''],
+    ['org_ossos_nd12_17','Orgânicos','A','Ossos (Nd 12-17)',150,'d20','+2','Ignoram resistência/imunidade a armas não-mágicas do mesmo tipo de criatura; +2 dano necrótico em focos; pesam metade do peso.',''],
+    ['org_couro_nd18','Orgânicos','S','Couro e Escamas (Nd 18+)',500,'d100','+3','Escolha 2 tipos de dano: reduz em -2 qualquer dano Cortante, Perfurante ou Concussão sofrido, além da resistência escolhida.',''],
+    ['org_ossos_nd18','Orgânicos','S','Ossos (Nd 18+)',500,'d100','+3','Ignoram resistência/imunidade a armas não-mágicas do mesmo tipo; +3 dano necrótico em focos; vantagem contra medo de criaturas do mesmo tipo.',''],
+    ['org_ossos_tarrasque','Orgânicos','S','Ossos de Tarrasque',500,'∞','+3','Armas ignoram resistência/imunidade a armas não-mágicas e causam o dobro de dano em estruturas; imune à presença aterradora de Tarrasques.','Indestrutível — nem magia de Desejo pode alterá-lo.']
+  ].map(function (row) {
+    return {
+      id: row[0], categoria: row[1], tier: row[2], nome: row[3],
+      mult: row[4], dureza: row[5], mod: row[6],
+      vantagens: row[7], desvantagens: row[8]
+    };
+  });
+
+  // Equipamentos e PDE (Guia de Xyleff Sualky, p. 155–162)
+  var EQUIP_DB = [
+    ["Cestus", "Armas", 10, "leve", "arma", "Ágil"],
+    ["Katar", "Armas", 10, "leve", "arma", "Afligir"],
+    ["Bagh Nakh", "Armas", 10, "leve", "arma", "Drenar"],
+    ["Tonfa", "Armas", 20, "leve", "arma", "Aparar"],
+    ["Tekko-kagi", "Armas", 20, "leve", "arma", "Desarmar"],
+    ["Lu Jiao Dao", "Armas", 20, "leve", "arma", "Ágil"],
+    ["Nunchaku", "Armas", 20, "leve", "arma", "Drenar"],
+    ["Sansetsukon", "Armas", 40, "", "arma", "Desarmar"],
+    ["Agulha", "Armas", 1, "leve", "arma", "Forma"],
+    ["Jitte", "Armas", 25, "leve", "arma", "Desarmar"],
+    ["Adaga", "Armas", 30, "leve", "arma", "Ágil"],
+    ["Kunai", "Armas", 20, "leve", "arma", "Lentidão"],
+    ["Punhal", "Armas", 25, "leve", "arma", "Forma"],
+    ["Adaga Kris", "Armas", 25, "leve", "arma", "Sangramento"],
+    ["Sai", "Armas", 25, "leve", "arma", "Aparar"],
+    ["Hunga-munga", "Armas", 35, "leve", "arma", "Aparar"],
+    ["Kpinga", "Armas", 30, "leve", "arma", "Desarmar"],
+    ["Urumi", "Armas", 35, "leve", "arma", "Sangramento"],
+    ["Espada Curta", "Armas", 40, "leve", "arma", "Afligir"],
+    ["Cimitarra", "Armas", 40, "leve", "arma", "Ágil"],
+    ["Kopesh", "Armas", 45, "leve", "arma", "Drenar"],
+    ["Espada Gancho", "Armas", 40, "leve", "arma", "Desarmar"],
+    ["Lâmina gêmea", "Armas", 80, "", "arma", "Ágil"],
+    ["Falchion", "Armas", 50, "", "arma", "Garantido"],
+    ["Rapieira", "Armas", 50, "", "arma", "Afligir"],
+    ["Estoc", "Armas", 50, "", "arma", "Drenar"],
+    ["Espada Longa", "Armas", 50, "", "arma", "Drenar"],
+    ["Flamberge", "Armas", 50, "", "arma", "Sangramento"],
+    ["Espada Bastarda", "Armas", 50, "", "arma", "Garantido"],
+    ["Katana", "Armas", 60, "", "arma", "Afligir"],
+    ["Espada Grande", "Armas", 55, "pesado", "arma", "Garantido"],
+    ["Clava Colossal", "Armas", 85, "pesado", "arma", "Derrubar"],
+    ["Espada Colossal", "Armas", 85, "pesado", "arma", "Trespassar"],
+    ["Machado Colossal", "Armas", 85, "pesado", "arma", "Crítico"],
+    ["Martelo Colossal", "Armas", 85, "pesado", "arma", "Drenar"],
+    ["Shuriken Gigante", "Armas", 75, "pesado", "arma", "Trespassar"],
+    ["Arco Colossal", "Armas", 80, "pesado", "arma", "Trespassar"],
+    ["Besta Colossal", "Armas", 80, "pesado", "arma", "Empurrar"],
+    ["Azagaia", "Armas", 35, "", "arma", "Lentidão"],
+    ["Lança", "Armas", 40, "", "arma", "Drenar"],
+    ["Tridente", "Armas", 55, "", "arma", "Derrubar"],
+    ["Glaive", "Armas", 50, "pesado", "arma", "Garantido"],
+    ["Alabarda", "Armas", 50, "pesado", "arma", "Trespassar"],
+    ["Lança de montaria", "Armas", 55, "pesado", "arma", "Derrubar"],
+    ["Lança longa", "Armas", 50, "pesado", "arma", "Empurrar"],
+    ["Clava", "Armas", 15, "leve", "arma", "Lentidão"],
+    ["Foice curta", "Armas", 15, "leve", "arma", "Ágil"],
+    ["Martelo leve", "Armas", 20, "leve", "arma", "Ágil"],
+    ["Maça", "Armas", 25, "", "arma", "Drenar"],
+    ["Bordão", "Armas", 35, "", "arma", "Derrubar"],
+    ["Bastão", "Armas", 80, "", "arma", "Empurrar"],
+    ["Machadinha", "Armas", 35, "leve", "arma", "Afligir"],
+    ["Clava Grande", "Armas", 30, "", "arma", "Empurrar"],
+    ["Chicote", "Armas", 35, "", "arma", "Desarmar"],
+    ["Peso com corrente", "Armas", 70, "", "arma", "Forma"],
+    ["Kusarigama", "Armas", 80, "", "arma", "Desarmar"],
+    ["Foice Média", "Armas", 45, "leve", "arma", "Afligir"],
+    ["Foice Dupla", "Armas", 90, "pesado", "arma", "Ágil"],
+    ["Mangual Atroz", "Armas", 80, "", "arma", "Garantido"],
+    ["Foice Grande", "Armas", 40, "pesado", "arma", "Derrubar"],
+    ["Mangual", "Armas", 40, "", "arma", "Drenar"],
+    ["Maça Estrela", "Armas", 40, "", "arma", "Drenar"],
+    ["Machado de batalha", "Armas", 50, "", "arma", "Derrubar"],
+    ["Martelo de guerra", "Armas", 50, "", "arma", "Empurrar"],
+    ["Picareta de guerra", "Armas", 50, "", "arma", "Drenar"],
+    ["Kanabo", "Armas", 55, "pesado", "arma", "Derrubar"],
+    ["Marreta", "Armas", 55, "pesado", "arma", "Crítico"],
+    ["Machado grande", "Armas", 55, "pesado", "arma", "Trespassar"],
+    ["Estilingue", "Armas", 15, "leve", "arma", "Afligir"],
+    ["Dardo", "Armas", 1, "", "arma", "Afligir"],
+    ["Funda", "Armas", 15, "", "arma", "Lentidão"],
+    ["Arpão", "Armas", 35, "", "arma", "Drenar"],
+    ["Bumerangue", "Armas", 50, "", "arma", "Afligir"],
+    ["Arco curto", "Armas", 25, "", "arma", "Afligir"],
+    ["Besta leve", "Armas", 40, "", "arma", "Lentidão"],
+    ["Zarabatana", "Armas", 1, "", "arma", "Afligir"],
+    ["Shuriken", "Armas", 1, "", "arma", "Drenar"],
+    ["Cartão de Metal", "Armas", 1, "", "arma", "Sangramento"],
+    ["Besta de mão", "Armas", 35, "leve", "arma", "Afligir"],
+    ["Besta dupla", "Armas", 70, "", "arma", "Ágil"],
+    ["Besta de repetição", "Armas", 85, "", "arma", "Drenar"],
+    ["Besta automática", "Armas", 50, "", "arma", "Afligir"],
+    ["Arco longo", "Armas", 40, "pesado", "arma", "Lentidão"],
+    ["Arco composto", "Armas", 40, "pesado", "arma", "Estender"],
+    ["Besta pesada", "Armas", 50, "pesado", "arma", "Empurrar"],
+    ["Mosquete", "Armas", 95, "", "arma", "Lentidão"],
+    ["Pistola", "Armas", 95, "", "arma", "Afligir"],
+    ["Bacamarte", "Armas", 95, "", "arma", "Drenar"],
+    ["Canhão", "Armas", 100, "pesado", "arma", "Empurrar"],
+    ["Arcabuz", "Armas", 85, "", "arma", "Garantido"],
+    ["Broquel", "Escudos", 35, "leve", "armadura", "Aparar"],
+    ["Rodela", "Escudos", 35, "leve", "armadura", "Drenar"],
+    ["Escudo padrão", "Escudos", 50, "", "armadura", "Defletir"],
+    ["Escudo grande", "Escudos", 75, "", "armadura", "Derrubar"],
+    ["Escudo aerodinâmico", "Escudos", 75, "", "armadura", "Forma"],
+    ["Escudo de duas mãos", "Escudos", 100, "", "armadura", "Empurrar"],
+    ["Acolchoada", "Armaduras", 10, "leve", "armadura", ""],
+    ["Couro", "Armaduras", 30, "leve", "armadura", ""],
+    ["Brigantina", "Armaduras", 30, "leve", "armadura", ""],
+    ["Couro batido", "Armaduras", 75, "leve", "armadura", ""],
+    ["Peça de Armadura", "Armaduras", 50, "leve", "armadura", ""],
+    ["Gibão de peles", "Armaduras", 10, "", "armadura", ""],
+    ["Camisão de malha", "Armaduras", 30, "", "armadura", ""],
+    ["Brunea", "Armaduras", 30, "", "armadura", ""],
+    ["Peitoral", "Armaduras", 75, "", "armadura", ""],
+    ["Meia-armadura", "Armaduras", 50, "", "armadura", ""],
+    ["Cota de anéis", "Armaduras", 20, "pesado", "armadura", ""],
+    ["Cota de malha", "Armaduras", 75, "pesado", "armadura", ""],
+    ["Cota de talas", "Armaduras", 250, "pesado", "armadura", ""],
+    ["Placas", "Armaduras", 750, "pesado", "armadura", ""],
+    ["Placas encouraçada", "Armaduras", 2000, "pesado", "armadura", ""],
+    ["Flecha (1 unidade)", "Munições", 0.05, "", "municao", ""],
+    ["Virote (1 unidade)", "Munições", 0.05, "", "municao", ""],
+    ["Bala (1 unidade)", "Munições", 0.05, "", "municao", ""],
+    ["Agulha de Zarabatana (1 unidade)", "Munições", 0.02, "", "municao", ""],
+    ["Pólvora negra", "Pólvoras", 5, "", "polvora", ""],
+    ["Pólvora elukiana", "Pólvoras", 15, "", "polvora", ""],
+    ["Pólvora silente", "Pólvoras", 15, "", "polvora", ""],
+    ["Pólvora fumegante", "Pólvoras", 20, "", "polvora", ""],
+    ["Pólvora potente", "Pólvoras", 30, "", "polvora", ""],
+    ["Pólvora refinada", "Pólvoras", 50, "", "polvora", ""],
+    ["Pólvora de luz", "Pólvoras", 75, "", "polvora", ""],
+    ["Pólvora vermelha", "Pólvoras", 100, "", "polvora", ""],
+    ["Pólvora azul", "Pólvoras", 100, "", "polvora", ""],
+    ["Pólvora amarela", "Pólvoras", 100, "", "polvora", ""],
+    ["Pólvora verde", "Pólvoras", 100, "", "polvora", ""]
+  ].map(function (r) {
+    return { nome: r[0], grupo: r[1], pde: r[2], peso: r[3], tipo: r[4], maestria: r[5] };
+  });
+
+  // Modificações (Guia de Xyleff Sualky, p. 163–168): [nome, custo, compatível, efeito]
+  var MODS_DB = [
+    ['Dano Extra', 10, 'Armas corpo a corpo ou de arremesso', 'A arma pode causar um segundo tipo de dano, escolhido na modificação.'],
+    ['Estrutura Leve', 10, 'Qualquer item', 'Peso do item reduzido em 25%.'],
+    ['Estrutura Ocultável', 10, 'Item sem Pesado / armadura não pesada', 'Vantagem para esconder o item; sem teste se não for revistado.'],
+    ['Câmara Expandida', 25, 'Armas com Ignição', '+1d10 de dano, +3 no valor de Emperrado, empurra usuário Pequeno 1,5 m.'],
+    ['Suporte para Baioneta', 10, 'Armas com Munição ou focos', 'Acopla uma arma Sutil para ataques corpo a corpo.'],
+    ['Prótese', 5, 'Item que não seja de duas mãos', 'Acopla o item a um membro faltante; não pode ser desarmado.'],
+    ['Amálgama', 5, 'Itens aprovados pelo Mestre (5 po em cada)', 'Une dois itens num híbrido; alterna a forma com ação livre.'],
+    ['Desacoplamento', 5, 'Armas Duplo ou com Amálgama (5 po em cada)', 'Separa o item “dois em um” com ação livre.'],
+    ['Arma Gêmea', 5, 'Armas corpo a corpo leves (5 po em cada)', 'Junta duas armas leves numa arma Duas Mãos e Dupla.'],
+    ['Usuário Preferido', 10, 'Qualquer item', 'Quem não conhece o segredo usa sem proficiência.'],
+    ['Suporte para Carregador', 10, 'Bestas', 'Aceita carregador (5 po, 10 munições) e ignora Recarga.'],
+    ['Compartimento Secreto', 5, 'Item grande o bastante', 'Guarda um item pequeno; pegar é ação livre.'],
+    ['Coronha Reforçada', 10, 'Armas com Ignição ou Recarga', 'Ignora o empurrão do próprio disparo.'],
+    ['Ferramenta Integrada', 5, 'Qualquer arma corpo a corpo', 'A arma também funciona como uma ferramenta escolhida.'],
+    ['Remoção de Maestria (−30 po)', -30, 'Item com Maestria', 'Perde a Maestria e o valor-base cai 30 po (mínimo 1 po).'],
+    ['Remoção de Maestria (+dano)', 0, 'Item com Maestria', 'Perde a Maestria e o dado de dano sobe um passo.'],
+    ['Maestria Adicional', 35, 'Qualquer arma ou escudo', 'Ganha uma segunda Maestria (máximo de duas).'],
+    ['Maestria Reconfigurada', 5, 'Arma ou escudo com Maestria', 'Troca a Maestria por outra.'],
+    ['Tensão', 5, 'Armas de ataque à distância', 'Ganha a propriedade Tensão.'],
+    ['Espaço', 20, 'Armas com Alcance', 'Ganha Espaço e o dado de dano sobe um passo.'],
+    ['Retorno', 10, 'Armas com Arremesso', 'Ganha a propriedade Retorno.'],
+    ['Rajada', 35, 'Armas com Munição', 'Ganha a propriedade Rajada.'],
+    ['Arremesso', 10, 'Qualquer arma', 'Ganha Arremesso (6/18).'],
+    ['Alcance', 20, 'Armas corpo a corpo', 'Ganha a propriedade Alcance.'],
+    ['Flexível', 5, 'Qualquer arma corpo a corpo', 'Ganha a propriedade Flexível.'],
+    ['Montaria', 10, 'Armas corpo a corpo de duas mãos', 'Ganha a propriedade Montaria.']
+  ];
+
+  // Encantamento (p. 169): horas de trabalho, custo e material mínimo exigido
+  var RARIDADE_TABELA = {
+    comum: { horas: 24, custo: 50, material: null },
+    incomum: { horas: 24, custo: 200, material: null },
+    raro: { horas: 48, custo: 2000, material: ['veg_starwood', 'geo_starstone', 'metal_starmetal'] },
+    muitoRaro: { horas: 96, custo: 20000, material: ['geo_starstone', 'metal_starmetal'] },
+    lendario: { horas: 192, custo: 100000, material: ['metal_starmetal'] }
+  };
+  var RARIDADE_MATERIAL_NOME = { raro: 'StarWood', muitoRaro: 'StarStone', lendario: 'StarMetal' };
+
+  // Munições (p. 171): horas por tier, rendem 2d4 e custam o equivalente a 4 unidades
+  var MUNICAO_HORAS = { D: 1, C: 1, B: 6, A: 12, S: 24 };
+
+  var CATEGORIA_ORDER = ['Metais', 'Vegetais', 'Geológicos', 'Orgânicos'];
+  var TIER_ORDER = ['D', 'C', 'B', 'A', 'S'];
+
+  function materialById(id) {
+    for (var i = 0; i < MATERIALS_DB.length; i++) {
+      if (MATERIALS_DB[i].id === id) return MATERIALS_DB[i];
+    }
+    return null;
+  }
+
+
+  var CATEGORIA_ALIASES = {
+    'Metais': ['metal', 'metais'],
+    'Vegetais': ['vegetal', 'vegetais', 'madeira'],
+    'Geológicos': ['geologico', 'geologicos', 'pedra', 'mineral', 'cristal'],
+    'Orgânicos': ['organico', 'organicos']
+  };
+
+  var DIACRITICS_RE = new RegExp(String.fromCharCode(0x5b) + String.fromCharCode(0x0300) + '-' + String.fromCharCode(0x036f) + String.fromCharCode(0x5d), 'g');
+
+  function normalizeSearch(s) {
+    return (s || '').toString().normalize('NFD').replace(DIACRITICS_RE, '').toLowerCase().trim();
+  }
+
+  MATERIALS_DB.forEach(function (m) {
+    var aliases = CATEGORIA_ALIASES[m.categoria] || [];
+    m._blob = normalizeSearch(m.nome + ' ' + m.categoria + ' tier ' + m.tier + ' ' + aliases.join(' '));
+  });
+
+  function searchMaterials(query) {
+    var q = normalizeSearch(query);
+    if (!q) return [];
+    var out = [];
+    CATEGORIA_ORDER.forEach(function (categoria) {
+      TIER_ORDER.forEach(function (tier) {
+        MATERIALS_DB.forEach(function (m) {
+          if (m.categoria === categoria && m.tier === tier && m._blob.indexOf(q) !== -1) out.push(m);
+        });
+      });
+    });
+    return out;
+  }
+
+  var ARTESAO_DESCONTO = 20;
+  var FORJADOR_DIVISOR = 2;
+  var ARMADURA_FRACAO = 0.2;
+
+
+  var DEFAULTS = {
+    pde: 35,
+    materials: [
+      { materialId: 'metal_prata_alquimica', name: 'Prata Alquímica', mult: 35, tier: 'B' },
+      { materialId: 'org_coral_morto', name: 'Coral Morto', mult: 1, tier: 'C' }
+    ],
+    equipNome: '',
+    peso: '',
+    mods: [],
+    modExistente: false,
+    obraPrima: false,
+    melhorDosMelhores: false,
+    artesao: true,
+    materiaisPossuidos: false,
+    pressa: false,
+    mostrarDureza: true,
+    tipoItem: 'arma',
+    fracaoFixa: false,
+    modo: 'proprio',
+    lucro: 30,
+    magicoRaridade: 'comum',
+    magicoCustoBase: '',
+    magicoTempoBase: '',
+    encantarExistente: false,
+    desencantado: false,
+    peritoItensMagicos: false,
+    especialistaItensMagicos: false,
+    criacoesAutomaticas: false,
+    versadoItensMagicos: false,
+    transmutNivel: '3',
+    transmutOrigemId: '',
+    transmutDestinoId: ''
+  };
+
+  var DUREZA_RANK = { 'd4': 1, 'd6': 2, 'd8': 3, 'd10': 4, 'd12': 5, 'd20': 6, 'd100': 7, '∞': 8 };
+
+  var TIER_HOURS = { D: 24, C: 24, B: 48, A: 96, S: 192 };
+  var COMUM_HORAS_DIA = 8;
+  var FORJADOR_HORAS_DIA = 12;
+
+  var state = null;
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return JSON.parse(JSON.stringify(DEFAULTS));
+      var parsed = JSON.parse(raw);
+      if (!parsed || !Array.isArray(parsed.materials) || !parsed.materials.length) {
+        return JSON.parse(JSON.stringify(DEFAULTS));
+      }
+      var merged = JSON.parse(JSON.stringify(DEFAULTS));
+      Object.keys(parsed).forEach(function (k) { merged[k] = parsed[k]; });
+      if (!Array.isArray(merged.mods)) merged.mods = [];
+      return merged;
+    } catch (e) {
+      return JSON.parse(JSON.stringify(DEFAULTS));
+    }
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* ignore */ }
+  }
+
+  function fmt(n) {
+    if (!isFinite(n)) return '0';
+    var rounded = Math.round(n * 100) / 100;
+    return rounded.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
+
+  function num(v, fallback) {
+    var n = parseFloat(v);
+    return isFinite(n) ? n : (fallback || 0);
+  }
+
+  // --- DOM refs ---
+  var pdeInput = document.getElementById('pde');
+  var artesaoSwitch = document.getElementById('artesao-switch');
+  var materiaisSwitch = document.getElementById('materiais-switch');
+  var durezaSwitch = document.getElementById('dureza-switch');
+  var resultPropsEl = document.getElementById('result-props');
+  var lucroInput = document.getElementById('lucro');
+  var lucroWrap = document.getElementById('lucro-wrap');
+  var rowsWrap = document.getElementById('material-rows');
+  var addBtn = document.getElementById('add-material');
+  var capNote = document.getElementById('mat-cap-note');
+  var segBtns = Array.prototype.slice.call(document.querySelectorAll('#mode-segmented .seg-btn'));
+  var tipoBtns = Array.prototype.slice.call(document.querySelectorAll('#tipo-segmented .seg-btn'));
+  var fracaoSwitch = document.getElementById('fracao-switch');
+  var fracaoWrap = document.getElementById('fracao-wrap');
+  var magicoRaridadeSelect = document.getElementById('magico-raridade');
+  var magicoCustoInput = document.getElementById('magico-custo');
+  var magicoTempoInput = document.getElementById('magico-tempo');
+  var peritoSwitch = document.getElementById('perito-switch');
+  var especialistaSwitch = document.getElementById('especialista-switch');
+  var magicoResultEl = document.getElementById('magico-result');
+  var transmutOrigemWrap = document.getElementById('transmut-origem-wrap');
+  var transmutDestinoWrap = document.getElementById('transmut-destino-wrap');
+  var transmutResultEl = document.getElementById('transmut-result');
+  var resultEl = document.getElementById('result');
+  var resultLabel = document.getElementById('result-label');
+  var breakdownEl = document.getElementById('breakdown');
+  var compareRowsEl = document.getElementById('compare-rows');
+  var vantagensRowsEl = document.getElementById('vantagens-rows');
+  var productionRowsEl = document.getElementById('production-rows');
+  var productionNoteEl = document.getElementById('production-note');
+  var pressaSwitch = document.getElementById('pressa-switch');
+  var formulaNote = document.getElementById('formula-note');
+  var resetBtn = document.getElementById('reset-btn');
+  var equipWrap = document.getElementById('equip-wrap');
+  var equipInfo = document.getElementById('equip-info');
+  var pdeLabel = document.getElementById('pde-label');
+  var pesoWrap = document.getElementById('peso-wrap');
+  var pesoBtns = Array.prototype.slice.call(document.querySelectorAll('#peso-segmented .seg-btn'));
+  var juncaoInfo = document.getElementById('juncao-info');
+  var modsList = document.getElementById('mods-list');
+  var modsTotal = document.getElementById('mods-total');
+  var transmutNivelSelect = document.getElementById('transmut-nivel');
+
+  // Switches simples: id do botão → chave do estado → o que recalcular
+  var SIMPLE_SWITCHES = [
+    ['existente-switch', 'modExistente', 'main'],
+    ['obra-switch', 'obraPrima', 'main'],
+    ['melhor-switch', 'melhorDosMelhores', 'main'],
+    ['encantar-switch', 'encantarExistente', 'magic'],
+    ['desencantado-switch', 'desencantado', 'magic'],
+    ['automaticas-switch', 'criacoesAutomaticas', 'magic'],
+    ['versado-switch', 'versadoItensMagicos', 'magic']
+  ];
+
+  var MAX_MATERIALS = 4;
+
+  function buildMaterialCombo(idx, mat, multInput, tierSelect) {
+    var wrap = document.createElement('div');
+    wrap.className = 'mat-combo';
+
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'mat-search';
+    input.autocomplete = 'off';
+    input.setAttribute('role', 'combobox');
+    input.setAttribute('aria-expanded', 'false');
+    input.setAttribute('aria-autocomplete', 'list');
+    input.placeholder = 'Buscar material (ex: coral, metal, prata)';
+    input.value = mat.name || '';
+    input.setAttribute('aria-label', 'Material ' + (idx + 1));
+
+    var dropdown = document.createElement('div');
+    dropdown.className = 'mat-dropdown';
+    dropdown.setAttribute('role', 'listbox');
+    dropdown.hidden = true;
+
+    var activeIndex = -1;
+    var currentMatches = [];
+
+    function closeDropdown() {
+      dropdown.hidden = true;
+      dropdown.innerHTML = '';
+      input.setAttribute('aria-expanded', 'false');
+      activeIndex = -1;
+      currentMatches = [];
+    }
+
+    function pick(m) {
+      state.materials[idx].materialId = m.id;
+      state.materials[idx].name = m.nome;
+      state.materials[idx].mult = m.mult;
+      state.materials[idx].tier = m.tier;
+      input.value = m.nome;
+      var rowEl = input.closest('.material-row');
+      if (rowEl) rowEl.dataset.tier = m.tier;
+      if (m.tier === 'S' && window.Forja) window.Forja.sparksAt(input, 'purple');
+      else if (m.tier === 'A' && window.Forja) window.Forja.sparksAt(input);
+      multInput.value = m.mult;
+      tierSelect.value = m.tier;
+      multInput.disabled = true;
+      tierSelect.disabled = true;
+      multInput.title = tierSelect.title = 'Definido pelo material — apague o nome para digitar um material personalizado';
+      saveState();
+      closeDropdown();
+      update();
+    }
+
+    function highlight(newIndex) {
+      var opts = dropdown.querySelectorAll('.mat-option');
+      if (!opts.length) return;
+      if (activeIndex >= 0 && opts[activeIndex]) opts[activeIndex].classList.remove('active');
+      activeIndex = Math.max(0, Math.min(newIndex, opts.length - 1));
+      opts[activeIndex].classList.add('active');
+      opts[activeIndex].scrollIntoView({ block: 'nearest' });
+    }
+
+    function openDropdown(query) {
+      var matches = searchMaterials(query);
+      currentMatches = matches;
+      activeIndex = -1;
+      dropdown.innerHTML = '';
+
+      if (!query) { closeDropdown(); return; }
+
+      if (!matches.length) {
+        var empty = document.createElement('div');
+        empty.className = 'mat-option-empty';
+        empty.textContent = 'Nenhum material encontrado — será salvo como nome personalizado.';
+        dropdown.appendChild(empty);
+      } else {
+        var lastGroup = null;
+        matches.forEach(function (m) {
+          var groupKey = m.categoria + ' — Tier ' + m.tier;
+          if (groupKey !== lastGroup) {
+            var head = document.createElement('div');
+            head.className = 'mat-group-label';
+            head.dataset.tier = m.tier;
+            head.textContent = groupKey;
+            dropdown.appendChild(head);
+            lastGroup = groupKey;
+          }
+          var opt = document.createElement('div');
+          opt.className = 'mat-option';
+          opt.setAttribute('role', 'option');
+          var nameSpan = document.createElement('span');
+          nameSpan.className = 'mo-name';
+          nameSpan.textContent = m.nome;
+          var multSpan = document.createElement('span');
+          multSpan.className = 'mo-mult';
+          multSpan.textContent = '×' + m.mult;
+          opt.appendChild(nameSpan);
+          opt.appendChild(multSpan);
+          opt.addEventListener('mousedown', function (e) {
+            e.preventDefault();
+            pick(m);
+          });
+          dropdown.appendChild(opt);
+        });
+      }
+      dropdown.hidden = false;
+      input.setAttribute('aria-expanded', 'true');
+    }
+
+    input.addEventListener('input', function () {
+      state.materials[idx].materialId = '';
+      state.materials[idx].name = input.value;
+      multInput.disabled = false;
+      tierSelect.disabled = false;
+      multInput.title = tierSelect.title = '';
+      saveState();
+      openDropdown(input.value);
+      update();
+    });
+
+    input.addEventListener('focus', function () {
+      if (input.value) openDropdown(input.value);
+    });
+
+    input.addEventListener('blur', function () {
+      setTimeout(closeDropdown, 120);
+    });
+
+    input.addEventListener('keydown', function (e) {
+      if (dropdown.hidden) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        highlight(activeIndex + 1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        highlight(activeIndex - 1);
+      } else if (e.key === 'Enter') {
+        if (activeIndex >= 0 && currentMatches[activeIndex]) {
+          e.preventDefault();
+          pick(currentMatches[activeIndex]);
+        } else if (currentMatches.length === 1) {
+          e.preventDefault();
+          pick(currentMatches[0]);
+        }
+      } else if (e.key === 'Escape') {
+        closeDropdown();
+        input.blur();
+      }
+    });
+
+    wrap.appendChild(input);
+    wrap.appendChild(dropdown);
+    return wrap;
+  }
+
+  var newRowIndex = -1;
+  function renderMaterials() {
+    rowsWrap.innerHTML = '';
+    state.materials.forEach(function (mat, idx) {
+      var row = document.createElement('div');
+      row.className = 'material-row' + (idx === newRowIndex ? ' is-new' : '');
+      if (mat.tier) row.dataset.tier = mat.tier;
+
+      var topLine = document.createElement('div');
+      topLine.className = 'mat-row-top';
+
+      var multInput = document.createElement('input');
+      multInput.type = 'number';
+      multInput.min = '0';
+      multInput.step = '0.1';
+      multInput.placeholder = '×PDE';
+      multInput.value = mat.mult === '' || mat.mult == null ? '' : mat.mult;
+      multInput.setAttribute('aria-label', 'Multiplicador do material ' + (idx + 1));
+      multInput.addEventListener('input', function () {
+        state.materials[idx].mult = multInput.value;
+        saveState();
+        update();
+      });
+
+      var tierSelect = document.createElement('select');
+      tierSelect.className = 'tier-select';
+      tierSelect.setAttribute('aria-label', 'Tier do material ' + (idx + 1));
+      ['', 'D', 'C', 'B', 'A', 'S'].forEach(function (t) {
+        var opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t || '—';
+        tierSelect.appendChild(opt);
+      });
+      tierSelect.value = mat.tier || '';
+      multInput.disabled = !!mat.materialId;
+      tierSelect.disabled = !!mat.materialId;
+      var lockedTitle = 'Definido pelo material — apague o nome para digitar um material personalizado';
+      multInput.title = mat.materialId ? lockedTitle : '';
+      tierSelect.title = mat.materialId ? lockedTitle : '';
+      tierSelect.addEventListener('change', function () {
+        state.materials[idx].tier = tierSelect.value;
+        if (tierSelect.value) row.dataset.tier = tierSelect.value; else delete row.dataset.tier;
+        saveState();
+        update();
+      });
+
+      var combo = buildMaterialCombo(idx, mat, multInput, tierSelect);
+
+      var removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn-remove';
+      removeBtn.textContent = '×';
+      removeBtn.setAttribute('aria-label', 'Remover material ' + (idx + 1));
+      removeBtn.disabled = state.materials.length <= 1;
+      removeBtn.addEventListener('click', function () {
+        state.materials.splice(idx, 1);
+        newRowIndex = -1;
+        saveState();
+        renderMaterials();
+        update();
+      });
+
+      topLine.appendChild(combo);
+      topLine.appendChild(tierSelect);
+      topLine.appendChild(multInput);
+      topLine.appendChild(removeBtn);
+      row.appendChild(topLine);
+      rowsWrap.appendChild(row);
+    });
+
+    addBtn.disabled = state.materials.length >= MAX_MATERIALS;
+    capNote.hidden = state.materials.length < MAX_MATERIALS;
+  }
+
+  function modsSum() {
+    return (state.mods || []).reduce(function (s, i) { return s + (MODS_DB[i] ? MODS_DB[i][1] : 0); }, 0);
+  }
+
+  // Valor-base efetivo: PDE + modificações (p. 163), munição = 4 unidades, pólvora = 2 unidades (p. 171)
+  function baseValue() {
+    var pdeItem = num(state.pde, 0);
+    var mods = modsSum();
+    var tipo = state.tipoItem;
+    if (tipo === 'municao') return { valor: pdeItem * 4, nota: 'preço de 4 munições (rende 2d4)' };
+    if (tipo === 'polvora') return { valor: pdeItem * 2, nota: 'preço de 2 pólvoras (rende 1d4)' };
+    if (state.modExistente) return { valor: Math.max(0, mods), nota: 'só as modificações (item já existe)' };
+    var v = pdeItem + mods;
+    if (pdeItem > 0) v = Math.max(1, v);
+    return { valor: v, nota: mods ? 'PDE ' + fmt(pdeItem) + ' + modificações ' + fmt(mods) : '' };
+  }
+
+  function calculate() {
+    var base = baseValue();
+    var pde = base.valor;
+    var sumMat = state.tipoItem === 'polvora'
+      ? 1
+      : state.materials.reduce(function (s, m) { return s + num(m.mult, 0); }, 0);
+    if (state.melhorDosMelhores && state.tipoItem !== 'polvora') sumMat *= 2;
+    var desconto = state.artesao ? ARTESAO_DESCONTO : 0;
+    var divisor = FORJADOR_DIVISOR;
+    var lucro = num(state.lucro, 0);
+    var discFactor = 1 - (desconto / 100);
+    var possuidos = !!state.materiaisPossuidos;
+
+    var cheioPadrao = pde * sumMat;
+    var usaFracaoFixa = state.tipoItem === 'armadura' && !!state.fracaoFixa;
+
+    var cheio, pdeDesc, matDesc, subtotal, proprio;
+    if (usaFracaoFixa) {
+      cheio = pde * (1 - ARMADURA_FRACAO) + pde * ARMADURA_FRACAO * sumMat;
+      pdeDesc = null;
+      matDesc = null;
+      subtotal = cheio * discFactor;
+      proprio = possuidos ? 0 : subtotal / divisor;
+    } else {
+      cheio = cheioPadrao;
+      pdeDesc = pde * discFactor;
+      matDesc = sumMat * discFactor;
+      subtotal = pdeDesc * matDesc;
+      proprio = possuidos ? 0 : subtotal / divisor;
+    }
+
+    var lucroValor = 0;
+    var final = proprio;
+    if (state.modo === 'vendido') {
+      lucroValor = proprio * (lucro / 100);
+      final = proprio + lucroValor;
+    }
+
+    return {
+      pde: pde, sumMat: sumMat, desconto: desconto, divisor: divisor, lucro: lucro,
+      pdeDesc: pdeDesc, matDesc: matDesc, subtotal: subtotal, proprio: proprio,
+      cheio: cheio, cheioPadrao: cheioPadrao, usaFracaoFixa: usaFracaoFixa,
+      lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota
+    };
+  }
+
+  function bRow(label, value, isFinal) {
+    var row = document.createElement('div');
+    row.className = 'b-row' + (isFinal ? ' b-final' : '');
+    var l = document.createElement('span');
+    l.className = 'b-label';
+    l.textContent = label;
+    var v = document.createElement('span');
+    v.className = 'b-value';
+    v.textContent = value;
+    row.appendChild(l);
+    row.appendChild(v);
+    return row;
+  }
+
+  function cRow(name, formula, value, delta, highlight) {
+    var row = document.createElement('div');
+    row.className = 'compare-row' + (highlight ? ' c-highlight' : '');
+
+    var label = document.createElement('div');
+    label.className = 'c-label';
+    var nameEl = document.createElement('span');
+    nameEl.className = 'c-name';
+    nameEl.textContent = name;
+    var formulaEl = document.createElement('span');
+    formulaEl.className = 'c-formula';
+    formulaEl.textContent = formula;
+    label.appendChild(nameEl);
+    label.appendChild(formulaEl);
+
+    var right = document.createElement('div');
+    right.className = 'c-right';
+    var valueEl = document.createElement('span');
+    valueEl.className = 'c-value';
+    valueEl.textContent = fmt(value) + ' po';
+    right.appendChild(valueEl);
+    if (delta) {
+      var deltaEl = document.createElement('span');
+      deltaEl.className = 'c-delta';
+      deltaEl.textContent = delta + ' vs. ferreiro comum';
+      right.appendChild(deltaEl);
+    }
+
+    row.appendChild(label);
+    row.appendChild(right);
+    return row;
+  }
+
+  function renderVantagens() {
+    vantagensRowsEl.innerHTML = '';
+    var known = state.materials
+      .map(function (m) { return m.materialId ? materialById(m.materialId) : null; })
+      .filter(Boolean);
+
+    if (!known.length) {
+      var empty = document.createElement('p');
+      empty.className = 'v-empty';
+      empty.textContent = 'Selecione materiais da lista (em vez de "Personalizado") para ver as vantagens e desvantagens de cada um.';
+      vantagensRowsEl.appendChild(empty);
+      return;
+    }
+
+    known.forEach(function (m) {
+      var item = document.createElement('div');
+      item.className = 'v-item';
+
+      var head = document.createElement('div');
+      head.className = 'v-head';
+      var name = document.createElement('span');
+      name.className = 'v-name';
+      name.textContent = m.nome;
+      var tag = document.createElement('span');
+      tag.className = 'v-tag';
+      tag.textContent = m.categoria + ' · Tier ' + m.tier + ' · ×' + m.mult +
+        (state.mostrarDureza ? ' · ' + m.dureza : '') + ' · ' + m.mod;
+      head.appendChild(name);
+      head.appendChild(tag);
+      item.appendChild(head);
+
+      var pro = document.createElement('div');
+      pro.className = 'v-row v-pro';
+      pro.innerHTML = '<span class="v-icon">+</span><span class="v-text"></span>';
+      pro.querySelector('.v-text').textContent = m.vantagens || 'Sem propriedade mecânica adicional além do bônus.';
+      item.appendChild(pro);
+
+      if (m.desvantagens) {
+        var con = document.createElement('div');
+        con.className = 'v-row v-con';
+        con.innerHTML = '<span class="v-icon">−</span><span class="v-text"></span>';
+        con.querySelector('.v-text').textContent = m.desvantagens;
+        item.appendChild(con);
+      }
+
+      vantagensRowsEl.appendChild(item);
+    });
+  }
+
+  function fmtTempo(horas, horasPorDia) {
+    var dias = Math.ceil(horas / horasPorDia);
+    return fmt(horas) + 'h (' + dias + (dias === 1 ? ' dia' : ' dias') + ')';
+  }
+
+  function pRow(name, sub, value, isBest) {
+    var row = document.createElement('div');
+    row.className = 'p-row' + (isBest ? ' p-best' : '');
+    var label = document.createElement('div');
+    label.className = 'p-label';
+    var nameEl = document.createElement('span');
+    nameEl.className = 'p-name';
+    nameEl.textContent = name;
+    var subEl = document.createElement('span');
+    subEl.className = 'p-sub';
+    subEl.textContent = sub;
+    label.appendChild(nameEl);
+    label.appendChild(subEl);
+    var valueEl = document.createElement('span');
+    valueEl.className = 'p-value';
+    valueEl.textContent = value;
+    row.appendChild(label);
+    row.appendChild(valueEl);
+    return row;
+  }
+
+  function renderProduction() {
+    productionRowsEl.innerHTML = '';
+    var tipo = state.tipoItem;
+    var totalHoras, noteText;
+
+    if (tipo === 'polvora') {
+      totalHoras = 8;
+      noteText = 'Pólvora: 8h de base, rende 1d4 unidades (p. 171).';
+    } else {
+      var tabela = tipo === 'municao' ? MUNICAO_HORAS : TIER_HOURS;
+      var tiers = state.materials
+        .map(function (m) { return m.tier; })
+        .filter(function (t) { return t && tabela[t]; });
+
+      if (!tiers.length) {
+        productionNoteEl.textContent = 'Escolha um Tier para cada material (preenchido automaticamente ao selecionar da lista) para calcular o tempo de produção.';
+        return;
+      }
+
+      totalHoras = tiers.reduce(function (sum, t) { return sum + tabela[t]; }, 0);
+      var tiersDesc = tiers.map(function (t) { return 'Tier ' + t + ' = ' + tabela[t] + 'h'; }).join(' + ');
+      noteText = (tipo === 'municao' ? 'Munições, rendem 2d4 unidades (p. 171). ' : '') +
+        'Tempo somado por material, regra de Junção de Materiais (' + tiersDesc + ' = ' + fmt(totalHoras) + 'h de base).';
+
+      if (tipo === 'arma' || tipo === 'armadura') {
+        if (state.peso === 'leve') {
+          totalHoras = Math.max(0, totalHoras - 8);
+          noteText += ' Leve: −8h.';
+        } else if (state.peso === 'pesado') {
+          totalHoras += 8;
+          noteText += ' Pesado: +8h.';
+        }
+      }
+    }
+
+    var timeFactor = 1;
+    if (state.pressa) { timeFactor *= 0.5; noteText += ' Pressa: ÷2, item sai com −1 no modificador.'; }
+    productionNoteEl.textContent = noteText;
+
+    var forjadorHoras = totalHoras * 2 / 3 * timeFactor;
+    var forjadorAjudanteHoras = forjadorHoras / 2;
+    var comumHoras = totalHoras * timeFactor;
+    var comumAjudanteHoras = comumHoras / 2;
+
+    productionRowsEl.appendChild(pRow(
+      'Forjador (sozinho)',
+      'Trabalhador Itinerante: 2/3 do tempo · ' + FORJADOR_HORAS_DIA + 'h de trabalho/dia',
+      fmtTempo(forjadorHoras, FORJADOR_HORAS_DIA)
+    ));
+    productionRowsEl.appendChild(pRow(
+      'Forjador (com ajudante)',
+      'metade do tempo do Forjador · ' + FORJADOR_HORAS_DIA + 'h/dia',
+      fmtTempo(forjadorAjudanteHoras, FORJADOR_HORAS_DIA),
+      true
+    ));
+    productionRowsEl.appendChild(pRow(
+      'Outra classe, não-Forjador (sozinho)',
+      'tempo padrão da tabela · ' + COMUM_HORAS_DIA + 'h de trabalho/dia',
+      fmtTempo(comumHoras, COMUM_HORAS_DIA)
+    ));
+    productionRowsEl.appendChild(pRow(
+      'Outra classe, não-Forjador (com ajudante)',
+      'metade do tempo padrão · ' + COMUM_HORAS_DIA + 'h/dia',
+      fmtTempo(comumAjudanteHoras, COMUM_HORAS_DIA)
+    ));
+  }
+
+  function itemProps() {
+    var known = state.materials
+      .map(function (m) { return m.materialId ? materialById(m.materialId) : null; })
+      .filter(Boolean);
+    if (!known.length) return null;
+
+    var bestDureza = known[0].dureza;
+    var bestRank = DUREZA_RANK[bestDureza] || 0;
+    var bestMod = parseInt(known[0].mod, 10) || 0;
+
+    known.forEach(function (m) {
+      var r = DUREZA_RANK[m.dureza] || 0;
+      if (r > bestRank) { bestRank = r; bestDureza = m.dureza; }
+      var modNum = parseInt(m.mod, 10) || 0;
+      if (modNum > bestMod) bestMod = modNum;
+    });
+
+    var obra = state.obraPrima || state.melhorDosMelhores;
+    if (obra) bestMod = Math.min(3, bestMod + 1);
+    if (state.pressa) bestMod -= 1;
+
+    return { dureza: bestDureza, mod: bestMod, obra: obra };
+  }
+
+  // Junção de Materiais (p. 171–172): classifica SS / SA e avisa o que não tem efeito
+  function renderJuncao() {
+    var mats = state.materials.filter(function (m) { return m.tier; });
+    juncaoInfo.innerHTML = '';
+    if (state.tipoItem === 'polvora') {
+      juncaoInfo.hidden = false;
+      juncaoInfo.textContent = 'Pólvora não usa materiais: o custo é o de 2 pólvoras.';
+      return;
+    }
+    if (mats.length < 2) { juncaoInfo.hidden = true; return; }
+    juncaoInfo.hidden = false;
+    var nS = mats.filter(function (m) { return m.tier === 'S'; }).length;
+    var head = document.createElement('div');
+    var warn = [];
+    if (nS >= 2) {
+      head.innerHTML = '<strong>Equipamento Tier SS</strong> — dois materiais Tier S.';
+      if (mats.length > 2) warn.push('Os materiais além dos dois Tier S só trazem propriedades “Geral” ou “Material Vivo”.');
+      if (nS > 2) warn.push('Um terceiro Tier S não soma propriedades exclusivas.');
+    } else {
+      head.innerHTML = '<strong>Equipamento Tier ' + mats.map(function (m) { return m.tier; }).sort(function (a, b) {
+        return TIER_ORDER.indexOf(b) - TIER_ORDER.indexOf(a);
+      }).join('') + '</strong> — até 4 materiais, sem repetir Tier S. Dureza e bônus: o maior entre eles.';
+    }
+    juncaoInfo.appendChild(head);
+    warn.forEach(function (w) {
+      var d = document.createElement('div');
+      d.className = 'jw';
+      d.textContent = '⚠ ' + w;
+      juncaoInfo.appendChild(d);
+    });
+  }
+
+  function propChip(label, value) {
+    var chip = document.createElement('span');
+    chip.className = 'prop-chip';
+    var k = document.createElement('span');
+    k.className = 'p-k';
+    k.textContent = label;
+    var v = document.createElement('span');
+    v.className = 'p-v';
+    v.textContent = value;
+    chip.appendChild(k);
+    chip.appendChild(v);
+    return chip;
+  }
+
+  function renderResultProps() {
+    var props = itemProps();
+    resultPropsEl.innerHTML = '';
+    if (!props) {
+      resultPropsEl.hidden = true;
+      return;
+    }
+    resultPropsEl.hidden = false;
+    if (state.mostrarDureza) {
+      resultPropsEl.appendChild(propChip('Dureza', props.dureza));
+    }
+    var tags = [];
+    if (props.obra) tags.push('Obra-Prima');
+    if (state.pressa) tags.push('Pressa');
+    var modChip = propChip('Modificador' + (tags.length ? ' (' + tags.join(', ') + ')' : ''), (props.mod > 0 ? '+' : '') + props.mod);
+    if (props.obra) modChip.classList.add('chip-obra');
+    resultPropsEl.appendChild(modChip);
+  }
+
+  function buildSimpleCombo(placeholder, initialId, onPick) {
+    var wrap = document.createElement('div');
+    wrap.className = 'mat-combo';
+
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'mat-search';
+    input.autocomplete = 'off';
+    input.placeholder = placeholder;
+    var initial = initialId ? materialById(initialId) : null;
+    input.value = initial ? initial.nome : '';
+
+    var dropdown = document.createElement('div');
+    dropdown.className = 'mat-dropdown';
+    dropdown.hidden = true;
+
+    function close() {
+      dropdown.hidden = true;
+      dropdown.innerHTML = '';
+    }
+
+    function open(query) {
+      var matches = searchMaterials(query);
+      dropdown.innerHTML = '';
+      if (!query || !matches.length) { close(); return; }
+      var lastGroup = null;
+      matches.forEach(function (m) {
+        var groupKey = m.categoria + ' — Tier ' + m.tier;
+        if (groupKey !== lastGroup) {
+          var head = document.createElement('div');
+          head.className = 'mat-group-label';
+          head.dataset.tier = m.tier;
+          head.textContent = groupKey;
+          dropdown.appendChild(head);
+          lastGroup = groupKey;
+        }
+        var opt = document.createElement('div');
+        opt.className = 'mat-option';
+        opt.setAttribute('role', 'option');
+        var nameSpan = document.createElement('span');
+        nameSpan.className = 'mo-name';
+        nameSpan.textContent = m.nome;
+        var multSpan = document.createElement('span');
+        multSpan.className = 'mo-mult';
+        multSpan.textContent = 'Tier ' + m.tier;
+        opt.appendChild(nameSpan);
+        opt.appendChild(multSpan);
+        opt.addEventListener('mousedown', function (e) {
+          e.preventDefault();
+          input.value = m.nome;
+          close();
+          onPick(m.id);
+        });
+        dropdown.appendChild(opt);
+      });
+      dropdown.hidden = false;
+    }
+
+    input.addEventListener('input', function () {
+      onPick('');
+      open(input.value);
+    });
+    input.addEventListener('focus', function () {
+      if (input.value) open(input.value);
+    });
+    input.addEventListener('blur', function () {
+      setTimeout(close, 120);
+    });
+
+    wrap.appendChild(input);
+    wrap.appendChild(dropdown);
+    return wrap;
+  }
+
+  function initTransmutCombos() {
+    transmutOrigemWrap.innerHTML = '';
+    transmutOrigemWrap.appendChild(buildSimpleCombo('Buscar material', state.transmutOrigemId, function (id) {
+      state.transmutOrigemId = id;
+      saveState();
+      updateMagicos();
+    }));
+    transmutDestinoWrap.innerHTML = '';
+    transmutDestinoWrap.appendChild(buildSimpleCombo('Buscar material', state.transmutDestinoId, function (id) {
+      state.transmutDestinoId = id;
+      saveState();
+      updateMagicos();
+    }));
+  }
+
+  function mgLine(label, value) {
+    var row = document.createElement('div');
+    row.className = 'mg-line';
+    var l = document.createElement('span');
+    l.textContent = label;
+    var v = document.createElement('span');
+    v.className = 'mg-v';
+    v.textContent = value;
+    row.appendChild(l);
+    row.appendChild(v);
+    return row;
+  }
+
+  function mgWarning(text) {
+    var p = document.createElement('p');
+    p.className = 'mg-warning';
+    p.textContent = text;
+    return p;
+  }
+
+  function syncMagicoRaridade() {
+    var t = RARIDADE_TABELA[state.magicoRaridade];
+    var personalizado = !t;
+    magicoCustoInput.disabled = !personalizado;
+    magicoTempoInput.disabled = !personalizado;
+    if (t) {
+      state.magicoCustoBase = t.custo;
+      state.magicoTempoBase = t.horas;
+    }
+    magicoCustoInput.value = state.magicoCustoBase;
+    magicoTempoInput.value = state.magicoTempoBase;
+  }
+
+  function fmtHorasDias(h) {
+    return fmt(h) + 'h (' + Math.ceil(h / COMUM_HORAS_DIA) + ' dias de 8h · ' + Math.ceil(h / FORJADOR_HORAS_DIA) + ' dias de 12h)';
+  }
+
+  function updateMagicos() {
+    var raridadeAtual = state.magicoRaridade;
+    var t = RARIDADE_TABELA[raridadeAtual];
+    var elegivelEspecialista = raridadeAtual === 'comum' || raridadeAtual === 'incomum';
+
+    var custoEnc = num(state.magicoCustoBase, 0);
+    if (state.peritoItensMagicos) custoEnc /= 2;
+    var horas = num(state.magicoTempoBase, 0);
+    var notasTempo = [];
+    if (state.especialistaItensMagicos && elegivelEspecialista) { horas /= 4; notasTempo.push('÷4 Especialista'); }
+    if (state.criacoesAutomaticas) { horas /= 2; notasTempo.push('÷2 Criações Automáticas'); }
+    if (state.versadoItensMagicos) { horas /= 2; notasTempo.push('÷2 Versado'); }
+    if (state.desencantado) { horas /= 2; notasTempo.push('÷2 item desencantado'); }
+
+    magicoResultEl.innerHTML = '';
+    var custoItem = state.encantarExistente ? 0 : calculate().final;
+    magicoResultEl.appendChild(mgLine('Custo do encantamento', fmt(custoEnc) + ' po' + (state.peritoItensMagicos ? ' (÷2 Perito)' : '')));
+    magicoResultEl.appendChild(mgLine(
+      state.encantarExistente ? 'Item base (já possui)' : 'Fabricação do item (resultado acima)',
+      fmt(custoItem) + ' po'
+    ));
+    magicoResultEl.appendChild(mgLine('Custo total', fmt(custoEnc + custoItem) + ' po'));
+    magicoResultEl.appendChild(mgLine('Tempo do encantamento', fmtHorasDias(horas) + (notasTempo.length ? ' · ' + notasTempo.join(', ') : '')));
+    if (!state.encantarExistente) {
+      magicoResultEl.appendChild(mgLine('Tempo de fabricação do item', 'veja Tempo de Produção, somado ao do encantamento'));
+    }
+
+    if (t && t.material) {
+      var temMaterial = state.materials.some(function (m) { return t.material.indexOf(m.materialId) !== -1; });
+      if (!temMaterial) {
+        magicoResultEl.appendChild(mgWarning('Raridade ' + magicoRaridadeSelect.options[magicoRaridadeSelect.selectedIndex].text +
+          ' exige ' + RARIDADE_MATERIAL_NOME[raridadeAtual] + ' (ou material superior) entre os materiais do item.'));
+      }
+    }
+
+    // --- Transmutação (Forjador Alquimista 3º / 7º / 13º) ---
+    var nivel = parseInt(state.transmutNivel, 10) || 3;
+    var origem = materialById(state.transmutOrigemId);
+    var destino = materialById(state.transmutDestinoId);
+    transmutResultEl.innerHTML = '';
+
+    if (!origem || !destino) {
+      transmutResultEl.appendChild(mgWarning('Escolha o material de origem e de destino.'));
+      return;
+    }
+    var rOrigem = TIER_ORDER.indexOf(origem.tier);
+    var rDestino = TIER_ORDER.indexOf(destino.tier);
+    var maxTier = nivel >= 13 ? 3 : (nivel >= 7 ? 2 : 1); // índice em TIER_ORDER: C=1, B=2, A=3
+    if (nivel < 7 && origem.categoria !== destino.categoria) {
+      transmutResultEl.appendChild(mgWarning('No 3º nível os materiais precisam ser da mesma categoria (' + origem.categoria + ' → ' + destino.categoria + '). A Transmutação Avançada (7º) libera isso.'));
+      return;
+    }
+    if (rOrigem > maxTier || rDestino > maxTier) {
+      transmutResultEl.appendChild(mgWarning('Neste nível o limite é Tier ' + TIER_ORDER[maxTier] + '.'));
+      return;
+    }
+    if (rDestino < rOrigem) {
+      transmutResultEl.appendChild(mgWarning('Só é possível manter o tier ou subir, não regredir.'));
+      return;
+    }
+
+    var pde = num(state.pde, 0);
+    var custoTransmut = 0.5 * pde * destino.mult;
+    var complexa = rOrigem >= 2 || rDestino >= 2 || origem.categoria !== destino.categoria;
+    var tempoTransmut = complexa ? 8 : 1 + (rDestino - rOrigem);
+    var notaCusto = 'metade do PDE × material de destino';
+    if (nivel >= 13 && rDestino <= 2 && rOrigem <= 2) { custoTransmut = 0; notaCusto = 'Transmutação Suprema: grátis até Tier B'; }
+
+    transmutResultEl.appendChild(mgLine('Custo (' + notaCusto + ')', fmt(custoTransmut) + ' po'));
+    transmutResultEl.appendChild(mgLine('Tempo de trabalho', fmt(tempoTransmut) + 'h' + (complexa ? ' (transmutação complexa: 8h por material)' : '')));
+  }
+
+  function deltaPct(value, cheio) {
+    if (!cheio) return '';
+    var pct = (1 - value / cheio) * 100;
+    if (pct <= 0.05) return '';
+    return '−' + fmt(pct) + '%';
+  }
+
+  var shownValue = null, animId = 0;
+  var resultCard = document.getElementById('result-card');
+  var cbValue = document.getElementById('cb-value');
+  var cbLabel = document.getElementById('cb-label');
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function animateResult(target) {
+    cbLabel.textContent = state.modo === 'vendido' ? 'Preço de venda' : 'Custo para forjar';
+    if (shownValue === null || reduceMotion || !isFinite(target)) {
+      shownValue = target;
+      resultEl.textContent = fmt(target);
+      cbValue.textContent = fmt(target);
+      return;
+    }
+    if (Math.abs(target - shownValue) < 0.005) return;
+    var from = shownValue, t0 = performance.now(), dur = 520, id = ++animId;
+    shownValue = target;
+    resultCard.classList.remove('pulse');
+    void resultCard.offsetWidth;
+    resultCard.classList.add('pulse');
+    (function tick(now) {
+      if (id !== animId) return;
+      var k = Math.min(1, (now - t0) / dur);
+      var e = 1 - Math.pow(1 - k, 3);
+      var v = from + (target - from) * e;
+      resultEl.textContent = fmt(v);
+      cbValue.textContent = fmt(v);
+      if (k < 1) requestAnimationFrame(tick);
+    })(t0);
+  }
+
+  function update() {
+    var c = calculate();
+
+    animateResult(c.final);
+    resultLabel.textContent = state.modo === 'vendido' ? 'Preço de venda' : 'Custo para forjar';
+
+    breakdownEl.innerHTML = '';
+    if (c.baseNota) {
+      breakdownEl.appendChild(bRow('Valor-base (' + c.baseNota + ')', fmt(c.pde) + ' po'));
+    }
+    if (state.melhorDosMelhores && state.tipoItem !== 'polvora') {
+      breakdownEl.appendChild(bRow('O Melhor dos Melhores: dobro de materiais', 'Σ × 2 = ' + fmt(c.sumMat)));
+    }
+    if (c.usaFracaoFixa) {
+      breakdownEl.appendChild(bRow(
+        'Preço cheio, fração fixa (' + fmt((1 - ARMADURA_FRACAO) * 100) + '% fixo + ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ materiais)',
+        fmt(c.cheio) + ' po'
+      ));
+      breakdownEl.appendChild(bRow('Preço padrão do livro, para referência (PDE × Σ materiais)', fmt(c.cheioPadrao) + ' po'));
+      if (c.possuidos) {
+        breakdownEl.appendChild(bRow('Materiais já em posse (Trabalhador Itinerante)', 'grátis — só o tempo'));
+      } else {
+        breakdownEl.appendChild(bRow('Com desconto (' + fmt(c.cheio) + ' × ' + (100 - c.desconto) + '%)', fmt(c.subtotal) + ' po'));
+        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmt(c.proprio) + ' po'));
+      }
+    } else {
+      breakdownEl.appendChild(bRow('Preço cheio, sem desconto (PDE × Σ materiais)', fmt(c.cheio) + ' po'));
+      if (c.possuidos) {
+        breakdownEl.appendChild(bRow('Materiais já em posse (Trabalhador Itinerante)', 'grátis — só o tempo'));
+      } else {
+        breakdownEl.appendChild(bRow('PDE com desconto (' + fmt(c.pde) + ' × ' + (100 - c.desconto) + '%)', fmt(c.pdeDesc) + ' po'));
+        breakdownEl.appendChild(bRow('Σ materiais com desconto (' + fmt(c.sumMat) + ' × ' + (100 - c.desconto) + '%)', fmt(c.matDesc)));
+        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmt(c.proprio) + ' po'));
+      }
+    }
+    if (state.modo === 'vendido') {
+      breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(c.lucro) + '%)', '+' + fmt(c.lucroValor) + ' po'));
+    }
+    breakdownEl.appendChild(bRow(state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmt(c.final) + ' po', true));
+
+    var formulaStr = c.possuidos
+      ? 'materiais em posse — grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
+      : c.usaFracaoFixa
+        ? '(PDE × ' + fmt((1 - ARMADURA_FRACAO) * 100) + '% + PDE × ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ multiplicadores) × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
+        : '(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '');
+    formulaNote.textContent = formulaStr;
+
+    var comMaterial = c.cheio / 2;
+    compareRowsEl.innerHTML = '';
+    if (c.usaFracaoFixa) {
+      compareRowsEl.appendChild(cRow('Preço padrão do livro (sem fração fixa)', 'PDE × Σ materiais', c.cheioPadrao, ''));
+      compareRowsEl.appendChild(cRow('Ferreiro comum (com fração fixa)', fmt((1 - ARMADURA_FRACAO) * 100) + '% fixo + ' + fmt(ARMADURA_FRACAO * 100) + '% × material', c.cheio, deltaPct(c.cheio, c.cheioPadrao)));
+    } else {
+      compareRowsEl.appendChild(cRow('Ferreiro comum', 'PDE × Σ materiais', c.cheio, ''));
+    }
+    if (state.artesao) {
+      compareRowsEl.appendChild(cRow('Ferreiro, levando o material pronto', '(PDE × Σ materiais) ÷ 2', comMaterial, deltaPct(comMaterial, c.cheio)));
+    }
+    var seuLabel = (state.modo === 'vendido' ? 'Seu preço de venda' : 'Seu custo') +
+      (c.possuidos
+        ? ' (materiais em posse)'
+        : ' (Forjador' + (state.artesao ? ' + Artesão' : ', sem Artesão') + ')');
+    compareRowsEl.appendChild(cRow(
+      seuLabel,
+      formulaStr,
+      c.final,
+      deltaPct(c.final, c.cheio),
+      true
+    ));
+
+    renderVantagens();
+    renderProduction();
+    renderResultProps();
+    renderJuncao();
+    updateMagicos();
+  }
+
+  // --- Equipamento do Guia: preenche PDE, tipo e peso ---
+  function searchEquip(q) {
+    q = normalizeSearch(q);
+    if (!q) return [];
+    return EQUIP_DB.filter(function (e) { return normalizeSearch(e.nome + ' ' + e.grupo).indexOf(q) !== -1; });
+  }
+
+  function showEquipInfo() {
+    var e = null;
+    EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) e = x; });
+    if (!e) { equipInfo.hidden = true; return; }
+    var partes = [e.grupo, 'PDE ' + fmt(e.pde) + ' po'];
+    if (e.peso) partes.push(e.peso === 'leve' ? 'Leve (−8h)' : 'Pesado (+8h)');
+    if (e.maestria) partes.push('Maestria: ' + e.maestria);
+    equipInfo.textContent = partes.join(' · ');
+    equipInfo.hidden = false;
+  }
+
+  function buildEquipCombo() {
+    var wrap = document.createElement('div');
+    wrap.className = 'mat-combo';
+    var input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'mat-search';
+    input.autocomplete = 'off';
+    input.placeholder = 'Buscar arma, armadura, escudo, munição ou pólvora';
+    input.value = state.equipNome || '';
+    var dropdown = document.createElement('div');
+    dropdown.className = 'mat-dropdown';
+    dropdown.hidden = true;
+
+    function close() { dropdown.hidden = true; dropdown.innerHTML = ''; }
+    function pick(e) {
+      state.equipNome = e.nome;
+      state.pde = e.pde;
+      pdeInput.value = e.pde;
+      input.value = e.nome;
+      close();
+      setTipo(e.tipo);
+      setPeso(e.peso);
+      showEquipInfo();
+      updateMagicos();
+    }
+    function open(q) {
+      var matches = searchEquip(q).slice(0, 60);
+      dropdown.innerHTML = '';
+      if (!q || !matches.length) { close(); return; }
+      var last = null;
+      matches.forEach(function (e) {
+        if (e.grupo !== last) {
+          var head = document.createElement('div');
+          head.className = 'mat-group-label';
+          head.textContent = e.grupo;
+          dropdown.appendChild(head);
+          last = e.grupo;
+        }
+        var opt = document.createElement('div');
+        opt.className = 'mat-option';
+        opt.setAttribute('role', 'option');
+        var n = document.createElement('span');
+        n.className = 'mo-name';
+        n.textContent = e.nome;
+        var p = document.createElement('span');
+        p.className = 'mo-mult';
+        p.textContent = fmt(e.pde) + ' po';
+        opt.appendChild(n);
+        opt.appendChild(p);
+        opt.addEventListener('mousedown', function (ev) { ev.preventDefault(); pick(e); });
+        dropdown.appendChild(opt);
+      });
+      dropdown.hidden = false;
+    }
+    input.addEventListener('input', function () {
+      state.equipNome = '';
+      equipInfo.hidden = true;
+      saveState();
+      open(input.value);
+    });
+    input.addEventListener('focus', function () { if (input.value) open(input.value); });
+    input.addEventListener('blur', function () { setTimeout(close, 120); });
+    wrap.appendChild(input);
+    wrap.appendChild(dropdown);
+    return wrap;
+  }
+
+  // --- Modificações ---
+  function renderMods() {
+    modsList.innerHTML = '';
+    MODS_DB.forEach(function (m, i) {
+      var lab = document.createElement('label');
+      lab.className = 'mod-item';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = state.mods.indexOf(i) !== -1;
+      cb.addEventListener('change', function () {
+        var pos = state.mods.indexOf(i);
+        if (cb.checked && pos === -1) state.mods.push(i);
+        if (!cb.checked && pos !== -1) state.mods.splice(pos, 1);
+        saveState();
+        updateModsTotal();
+        update();
+        updateMagicos();
+      });
+      var name = document.createElement('span');
+      name.className = 'mod-name';
+      name.textContent = m[0];
+      var cost = document.createElement('span');
+      cost.className = 'mod-cost';
+      cost.textContent = (m[1] > 0 ? '+' : m[1] < 0 ? '−' : '') + Math.abs(m[1]) + ' po';
+      var desc = document.createElement('span');
+      desc.className = 'mod-desc';
+      desc.textContent = m[2] + ' — ' + m[3];
+      lab.appendChild(cb);
+      lab.appendChild(name);
+      lab.appendChild(cost);
+      lab.appendChild(desc);
+      modsList.appendChild(lab);
+    });
+    updateModsTotal();
+  }
+
+  function updateModsTotal() {
+    var n = state.mods.length;
+    var s = modsSum();
+    modsTotal.textContent = n
+      ? n + (n === 1 ? ' escolhida · ' : ' escolhidas · ') + (s >= 0 ? '+' : '−') + Math.abs(s) + ' po no valor-base'
+      : '';
+  }
+
+  function setPeso(peso) {
+    state.peso = peso || '';
+    pesoBtns.forEach(function (btn) {
+      var active = btn.dataset.peso === state.peso;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    saveState();
+    update();
+  }
+
+  function setMode(mode) {
+    state.modo = mode;
+    segBtns.forEach(function (btn) {
+      var active = btn.dataset.mode === mode;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    lucroWrap.hidden = mode !== 'vendido';
+    saveState();
+    update();
+  }
+
+  function setTipo(tipo) {
+    state.tipoItem = tipo;
+    tipoBtns.forEach(function (btn) {
+      var active = btn.dataset.tipo === tipo;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    fracaoWrap.hidden = tipo !== 'armadura';
+    pesoWrap.hidden = tipo === 'municao' || tipo === 'polvora';
+    pdeLabel.textContent = tipo === 'municao' || tipo === 'polvora'
+      ? 'Preço de 1 unidade (po)'
+      : 'PDE — Preço de Equipamento (po)';
+    saveState();
+    update();
+  }
+
+  // --- wire static inputs ---
+  pdeInput.addEventListener('input', function () {
+    state.pde = pdeInput.value;
+    state.equipNome = '';
+    equipInfo.hidden = true;
+    saveState();
+    update();
+    updateMagicos();
+  });
+  artesaoSwitch.addEventListener('click', function () {
+    state.artesao = !state.artesao;
+    artesaoSwitch.setAttribute('aria-checked', state.artesao ? 'true' : 'false');
+    saveState();
+    update();
+  });
+  materiaisSwitch.addEventListener('click', function () {
+    state.materiaisPossuidos = !state.materiaisPossuidos;
+    materiaisSwitch.setAttribute('aria-checked', state.materiaisPossuidos ? 'true' : 'false');
+    saveState();
+    update();
+  });
+  durezaSwitch.addEventListener('click', function () {
+    state.mostrarDureza = !state.mostrarDureza;
+    durezaSwitch.setAttribute('aria-checked', state.mostrarDureza ? 'true' : 'false');
+    saveState();
+    update();
+  });
+  pressaSwitch.addEventListener('click', function () {
+    state.pressa = !state.pressa;
+    pressaSwitch.setAttribute('aria-checked', state.pressa ? 'true' : 'false');
+    saveState();
+    update();
+  });
+  fracaoSwitch.addEventListener('click', function () {
+    state.fracaoFixa = !state.fracaoFixa;
+    fracaoSwitch.setAttribute('aria-checked', state.fracaoFixa ? 'true' : 'false');
+    saveState();
+    update();
+  });
+  magicoRaridadeSelect.addEventListener('change', function () {
+    state.magicoRaridade = magicoRaridadeSelect.value;
+    syncMagicoRaridade();
+    saveState();
+    updateMagicos();
+  });
+  magicoCustoInput.addEventListener('input', function () {
+    state.magicoCustoBase = magicoCustoInput.value;
+    saveState();
+    updateMagicos();
+  });
+  magicoTempoInput.addEventListener('input', function () {
+    state.magicoTempoBase = magicoTempoInput.value;
+    saveState();
+    updateMagicos();
+  });
+  peritoSwitch.addEventListener('click', function () {
+    state.peritoItensMagicos = !state.peritoItensMagicos;
+    peritoSwitch.setAttribute('aria-checked', state.peritoItensMagicos ? 'true' : 'false');
+    saveState();
+    updateMagicos();
+  });
+  especialistaSwitch.addEventListener('click', function () {
+    state.especialistaItensMagicos = !state.especialistaItensMagicos;
+    especialistaSwitch.setAttribute('aria-checked', state.especialistaItensMagicos ? 'true' : 'false');
+    saveState();
+    updateMagicos();
+  });
+  lucroInput.addEventListener('input', function () {
+    state.lucro = lucroInput.value;
+    saveState();
+    update();
+  });
+
+  SIMPLE_SWITCHES.forEach(function (sw) {
+    var el = document.getElementById(sw[0]);
+    el.addEventListener('click', function () {
+      state[sw[1]] = !state[sw[1]];
+      el.setAttribute('aria-checked', state[sw[1]] ? 'true' : 'false');
+      saveState();
+      if (sw[2] === 'main') update();
+      updateMagicos();
+    });
+  });
+  pesoBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () { setPeso(btn.dataset.peso); updateMagicos(); });
+  });
+  transmutNivelSelect.addEventListener('change', function () {
+    state.transmutNivel = transmutNivelSelect.value;
+    saveState();
+    updateMagicos();
+  });
+
+  addBtn.addEventListener('click', function () {
+    if (state.materials.length >= MAX_MATERIALS) return;
+    state.materials.push({ materialId: '', name: '', mult: '', tier: '' });
+    newRowIndex = state.materials.length - 1;
+    saveState();
+    renderMaterials();
+    update();
+  });
+
+  segBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () { setMode(btn.dataset.mode); });
+  });
+  tipoBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () { setTipo(btn.dataset.tipo); });
+  });
+
+  resetBtn.addEventListener('click', function () {
+    state = JSON.parse(JSON.stringify(DEFAULTS));
+    saveState();
+    hydrateForm();
+  });
+
+  function hydrateForm() {
+    if (state.mostrarDureza === undefined) state.mostrarDureza = true;
+    if (!state.magicoRaridade) state.magicoRaridade = 'comum';
+    pdeInput.value = state.pde;
+    artesaoSwitch.setAttribute('aria-checked', state.artesao ? 'true' : 'false');
+    materiaisSwitch.setAttribute('aria-checked', state.materiaisPossuidos ? 'true' : 'false');
+    durezaSwitch.setAttribute('aria-checked', state.mostrarDureza ? 'true' : 'false');
+    pressaSwitch.setAttribute('aria-checked', state.pressa ? 'true' : 'false');
+    fracaoSwitch.setAttribute('aria-checked', state.fracaoFixa ? 'true' : 'false');
+    lucroInput.value = state.lucro;
+    magicoRaridadeSelect.value = state.magicoRaridade || 'comum';
+    peritoSwitch.setAttribute('aria-checked', state.peritoItensMagicos ? 'true' : 'false');
+    especialistaSwitch.setAttribute('aria-checked', state.especialistaItensMagicos ? 'true' : 'false');
+    SIMPLE_SWITCHES.forEach(function (sw) {
+      document.getElementById(sw[0]).setAttribute('aria-checked', state[sw[1]] ? 'true' : 'false');
+    });
+    transmutNivelSelect.value = state.transmutNivel || '3';
+    equipWrap.innerHTML = '';
+    equipWrap.appendChild(buildEquipCombo());
+    showEquipInfo();
+    renderMods();
+    syncMagicoRaridade();
+    renderMaterials();
+    setMode(state.modo || 'proprio');
+    setTipo(state.tipoItem || 'arma');
+    setPeso(state.peso || '');
+    initTransmutCombos();
+    update();
+    updateMagicos();
+  }
+
+  state = loadState();
+  hydrateForm();
+
+  var costBar = document.getElementById('cost-bar');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      costBar.classList.toggle('show', !entries[0].isIntersecting);
+    }, { threshold: 0.15 }).observe(resultCard);
+  }
+})();
+</script>
+<script>
+// Brasas acesas caindo ao vento + faíscas (canvas de fundo)
+(function () {
+  'use strict';
+  var canvas = document.getElementById('embers');
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext('2d');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var embers = [], sparks = [];
+  var t = 0, last = 0, running = true;
+
+  function isDark() {
+    var forced = document.documentElement.getAttribute('data-theme');
+    if (forced) return forced === 'dark';
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
+  // Sprite de brilho pré-renderizado (mais leve que shadowBlur)
+  function makeSprite(core, glow) {
+    var c = document.createElement('canvas');
+    c.width = c.height = 64;
+    var g = c.getContext('2d');
+    var grd = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    grd.addColorStop(0, core);
+    grd.addColorStop(0.18, core);
+    grd.addColorStop(0.42, glow);
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = grd;
+    g.fillRect(0, 0, 64, 64);
+    return c;
+  }
+  var SPRITES = {
+    dark: [makeSprite('rgba(255,236,190,1)', 'rgba(255,140,40,.55)'),
+           makeSprite('rgba(255,190,110,1)', 'rgba(230,90,20,.5)'),
+           makeSprite('rgba(255,140,70,1)', 'rgba(190,40,10,.45)')],
+    light: [makeSprite('rgba(214,98,22,1)', 'rgba(214,98,22,.35)'),
+            makeSprite('rgba(184,70,18,1)', 'rgba(184,70,18,.3)'),
+            makeSprite('rgba(150,45,15,1)', 'rgba(150,45,15,.28)')]
+  };
+
+  function resize() {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    var target = Math.round(Math.min(110, Math.max(35, W * H / 16000)));
+    while (embers.length < target) embers.push(spawn(true));
+    if (embers.length > target) embers.length = target;
+  }
+
+  function spawn(anywhere) {
+    // Nascem no alto ou na borda de onde vem o vento e caem rodopiando
+    var fromSide = !anywhere && Math.random() < 0.35;
+    return {
+      x: fromSide ? -10 : Math.random() * (W + 200) - 200,
+      y: anywhere ? Math.random() * H : (fromSide ? Math.random() * H * 0.6 : -10 - Math.random() * 40),
+      r: 0.8 + Math.random() * 2.4,
+      vy: 14 + Math.random() * 34,
+      drift: 0.6 + Math.random() * 0.8,
+      phase: Math.random() * Math.PI * 2,
+      wob: 0.6 + Math.random() * 1.6,
+      life: 0,
+      maxLife: 7 + Math.random() * 9,
+      heat: Math.random(),
+      flick: 4 + Math.random() * 8
+    };
+  }
+
+  function wind(time, y) {
+    // Rajadas suaves: soma de senoides, mais forte no alto da tela
+    var gust = Math.sin(time * 0.23) * 0.5 + Math.sin(time * 0.071 + 1.3) * 0.35 + Math.sin(time * 0.53 + y * 0.004) * 0.15;
+    return 28 + gust * 38;
+  }
+
+  function burst(x, y, n, color) {
+    for (var i = 0; i < (n || 26); i++) {
+      var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;
+      var sp = 120 + Math.random() * 260;
+      sparks.push({
+        x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+        life: 0, maxLife: 0.5 + Math.random() * 0.7,
+        r: 0.8 + Math.random() * 1.6, purple: color === 'purple' && Math.random() < 0.6
+      });
+    }
+    if (reduce) sparks.length = 0;
+    if (!running) start();
+  }
+
+  function step(dt) {
+    t += dt;
+    for (var i = 0; i < embers.length; i++) {
+      var e = embers[i];
+      e.life += dt;
+      e.x += (wind(t, e.y) * e.drift + Math.sin(t * e.wob + e.phase) * 14) * dt;
+      e.y += (e.vy + Math.cos(t * e.wob * 0.7 + e.phase) * 8) * dt;
+      if (e.y > H + 20 || e.x > W + 30 || e.life > e.maxLife) embers[i] = spawn(false);
+    }
+    for (var j = sparks.length - 1; j >= 0; j--) {
+      var s = sparks[j];
+      s.life += dt;
+      s.vy += 380 * dt;
+      s.vx *= 0.985;
+      s.x += s.vx * dt;
+      s.y += s.vy * dt;
+      if (s.life > s.maxLife) sparks.splice(j, 1);
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    var dark = isDark();
+    var set = dark ? SPRITES.dark : SPRITES.light;
+    ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
+    for (var i = 0; i < embers.length; i++) {
+      var e = embers[i];
+      var lifeK = e.life / e.maxLife;
+      var fade = Math.min(1, e.life * 1.5) * (1 - Math.pow(lifeK, 3));
+      var flicker = 0.7 + 0.3 * Math.sin(t * e.flick + e.phase);
+      // Esfriam enquanto caem: amarelo → laranja → vermelho
+      var cool = Math.min(2, Math.floor((e.heat * 0.5 + lifeK) * 2));
+      ctx.globalAlpha = Math.max(0, fade * flicker * (dark ? 0.95 : 0.8));
+      var size = e.r * 7 * (1 - lifeK * 0.35);
+      ctx.drawImage(set[cool], e.x - size / 2, e.y - size / 2, size, size);
+    }
+    for (var j = 0; j < sparks.length; j++) {
+      var s = sparks[j];
+      var k = 1 - s.life / s.maxLife;
+      ctx.globalAlpha = Math.max(0, k);
+      var sz = s.r * 9 * (0.5 + k * 0.5);
+      ctx.drawImage(s.purple ? SPRITE_S : set[0], s.x - sz / 2, s.y - sz / 2, sz, sz);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  var SPRITE_S = makeSprite('rgba(235,215,255,1)', 'rgba(155,107,214,.6)');
+
+  function frame(now) {
+    if (!running) return;
+    var dt = Math.min(0.05, (now - (last || now)) / 1000);
+    last = now;
+    step(dt);
+    draw();
+    requestAnimationFrame(frame);
+  }
+  function start() {
+    if (reduce) { draw(); return; }
+    running = true;
+    last = 0;
+    requestAnimationFrame(frame);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { running = false; } else if (!reduce) { start(); }
+  });
+  if (reduce) { draw(); } else { start(); }
+
+  window.Forja = {
+    sparksAt: function (el, color) {
+      if (!el || !el.getBoundingClientRect) return;
+      var r = el.getBoundingClientRect();
+      burst(r.left + r.width / 2, r.top + r.height / 2, 30, color);
+    }
+  };
+})();
+</script>
+
+</body>
+</html>
