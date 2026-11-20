@@ -151,9 +151,28 @@
   }
 
   /* Troca de tema em onda (View Transitions) */
-  :root.theme-wave::view-transition-old(root),
-  :root.theme-wave::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
-  :root.theme-wave::view-transition-new(root) { z-index: 2; }
+  /* A frente da onda é macia e deixa 3 ondulações para trás antes de assentar */
+  @property --wave-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
+  :root.theme-wave::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
+  :root.theme-wave::view-transition-new(root) {
+    z-index: 2;
+    mix-blend-mode: normal;
+    --wave-r: 0px;
+    -webkit-mask-image: var(--wave-mask);
+    mask-image: var(--wave-mask);
+    --wave-mask: radial-gradient(circle at var(--wave-x) var(--wave-y),
+      #000 0,
+      #000 max(0px, calc(var(--wave-r) - 260px)),
+      rgba(0,0,0,.72) max(0px, calc(var(--wave-r) - 215px)),
+      #000 max(0px, calc(var(--wave-r) - 175px)),
+      rgba(0,0,0,.5) max(0px, calc(var(--wave-r) - 130px)),
+      rgba(0,0,0,.92) max(0px, calc(var(--wave-r) - 95px)),
+      rgba(0,0,0,.3) max(0px, calc(var(--wave-r) - 55px)),
+      rgba(0,0,0,.55) max(0px, calc(var(--wave-r) - 30px)),
+      transparent var(--wave-r));
+    animation: theme-wave 1400ms cubic-bezier(.5, 0, .3, 1) forwards;
+  }
+  @keyframes theme-wave { from { --wave-r: 0px; } to { --wave-r: var(--wave-max); } }
 
   .page {
     position: relative;
@@ -3258,15 +3277,17 @@
     var r = btn.getBoundingClientRect();
     var x = r.left + r.width / 2, y = r.top + r.height / 2;
     var raio = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+    // Centro e alcance da onda (o CSS anima o raio; as ondulações vêm atrás da frente)
+    root.style.setProperty('--wave-x', x + 'px');
+    root.style.setProperty('--wave-y', y + 'px');
+    root.style.setProperty('--wave-max', Math.ceil(raio + 280) + 'px');
     root.classList.add('theme-wave');
     var transition = document.startViewTransition(function () { apply(next); });
-    transition.ready.then(function () {
-      root.animate(
-        { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + raio + 'px at ' + x + 'px ' + y + 'px)'] },
-        { duration: 700, easing: 'cubic-bezier(.65,0,.35,1)', pseudoElement: '::view-transition-new(root)' }
-      );
-    }).catch(function () {});
-    transition.finished.then(function () { root.classList.remove('theme-wave'); }, function () { root.classList.remove('theme-wave'); });
+    function limpar() {
+      root.classList.remove('theme-wave');
+      ['--wave-x', '--wave-y', '--wave-max'].forEach(function (p) { root.style.removeProperty(p); });
+    }
+    transition.finished.then(limpar, limpar);
   });
   if (mq && mq.addEventListener) mq.addEventListener('change', sync);
   sync();
