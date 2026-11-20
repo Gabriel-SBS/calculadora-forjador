@@ -15,78 +15,145 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  /* =========================================================
+     1. Tokens
+     ========================================================= */
   :root {
+    /* Cor — tema claro (papel de oficina) */
     --bg: #ede6d9;
     --surface: #f8f3e8;
-    --surface-2: #ece2cf;
+    --surface-2: #efe6d5;
     --border: #d9cbb3;
+    --border-strong: #c4b292;
     --text: #2b241c;
     --text-dim: #6b5f4f;
-    --accent: #b85c26;
+    --accent: #b0551f;
     --accent-ink: #fff8f0;
     --accent-2: #3f6178;
     --good: #4f7a45;
-    --radius: 7px;
-    --shadow: 0 1px 2px rgba(43,36,28,.08), 0 6px 18px rgba(43,36,28,.07);
+    --ember: #e2621b;
+    --ember-hot: #ffc46b;
+    --tier-d: #8a8178;
+    --tier-c: #b07a45;
+    --tier-b: #5f7f96;
+    --tier-a: #b8911a;
+    --tier-s: #8d5ccc;
+    --shadow: 0 1px 2px rgba(43,36,28,.06), 0 4px 14px rgba(43,36,28,.06);
+    --shadow-lift: 0 8px 28px rgba(43,36,28,.18);
+
+    /* Tipografia */
     --font-display: 'Big Shoulders Display', 'Oswald', 'Arial Narrow', sans-serif;
     --font-body: 'Work Sans', 'Segoe UI', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', 'Consolas', 'SFMono-Regular', monospace;
+    --fs-xs: 12px;
+    --fs-sm: 13px;
+    --fs-md: 14px;
+    --fs-lg: 16px;
+    --fs-xl: 20px;
+    --fs-2xl: 28px;
+    --fs-3xl: 48px;
+
+    /* Espaço (base 4) */
+    --sp-1: 4px;
+    --sp-2: 8px;
+    --sp-3: 12px;
+    --sp-4: 16px;
+    --sp-5: 24px;
+    --sp-6: 32px;
+
+    /* Forma */
+    --r-sm: 6px;
+    --r-lg: 12px;
+    --r-pill: 999px;
+    --control-h: 42px;
+
+    /* Movimento */
+    --ease: cubic-bezier(.2,.7,.2,1);
+    --t-fast: .15s;
+    --t-med: .3s;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #1a1815;
       --surface: #24211c;
-      --surface-2: #2e2a23;
-      --border: #3d372e;
+      --surface-2: #2c2822;
+      --border: #3a342b;
+      --border-strong: #514838;
       --text: #ece2d2;
       --text-dim: #a3947e;
       --accent: #e08a44;
       --accent-ink: #1a1512;
       --accent-2: #86adc2;
       --good: #8fbb83;
-      --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 28px rgba(0,0,0,.4);
+      --tier-d: #a39a90;
+      --tier-c: #cf9a62;
+      --tier-b: #8fb0c8;
+      --tier-a: #e0bc4a;
+      --tier-s: #b48be8;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.28);
+      --shadow-lift: 0 10px 32px rgba(0,0,0,.5);
     }
   }
   :root[data-theme="dark"] {
     --bg: #1a1815;
     --surface: #24211c;
-    --surface-2: #2e2a23;
-    --border: #3d372e;
+    --surface-2: #2c2822;
+    --border: #3a342b;
+    --border-strong: #514838;
     --text: #ece2d2;
     --text-dim: #a3947e;
     --accent: #e08a44;
     --accent-ink: #1a1512;
     --accent-2: #86adc2;
     --good: #8fbb83;
-    --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 28px rgba(0,0,0,.4);
+    --tier-d: #a39a90;
+    --tier-c: #cf9a62;
+    --tier-b: #8fb0c8;
+    --tier-a: #e0bc4a;
+    --tier-s: #b48be8;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.28);
+    --shadow-lift: 0 10px 32px rgba(0,0,0,.5);
   }
 
+  /* =========================================================
+     2. Base
+     ========================================================= */
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
   html { color-scheme: light dark; }
   body {
     margin: 0;
-    background: var(--bg);
+    background:
+      radial-gradient(120% 50% at 50% 115%, color-mix(in srgb, var(--ember) 9%, var(--bg)) 0%, var(--bg) 60%) fixed,
+      var(--bg);
     color: var(--text);
     font-family: var(--font-body);
+    font-size: var(--fs-md);
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
   .page {
+    position: relative;
+    z-index: 1;
     max-width: 640px;
     margin: 0 auto;
-    padding: clamp(24px, 5vw, 56px) 20px 64px;
+    padding: clamp(24px, 5vw, 56px) 16px 96px;
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: var(--sp-5);
   }
 
-  .hero { display: flex; flex-direction: column; gap: 6px; }
+  /* =========================================================
+     3. Cabeçalho
+     ========================================================= */
+  .hero { display: flex; flex-direction: column; gap: var(--sp-2); }
   .eyebrow {
     margin: 0;
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: var(--fs-xs);
     letter-spacing: .08em;
     text-transform: uppercase;
     color: var(--accent-2);
@@ -95,204 +162,221 @@
     margin: 0;
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(34px, 8vw, 46px);
+    font-size: clamp(var(--fs-2xl), 8vw, var(--fs-3xl));
     letter-spacing: .01em;
-    line-height: .98;
+    line-height: 1;
     text-transform: uppercase;
     text-wrap: balance;
   }
-  .sub { margin: 2px 0 0; color: var(--text-dim); font-size: 15px; max-width: 46ch; }
+  .sub { margin: 0; color: var(--text-dim); font-size: var(--fs-lg); max-width: 48ch; }
 
-  .panel {
+  /* =========================================================
+     4. Cartões
+     ========================================================= */
+  .panel, .result, .compare, .vantagens, .production, .magicos {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: var(--r-lg);
     box-shadow: var(--shadow);
-    padding: 22px;
+  }
+  .panel { display: flex; flex-direction: column; }
+
+  /* Seções numeradas do formulário */
+  .form-section {
+    padding: var(--sp-5);
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
-
-  .field-group { display: flex; flex-direction: column; gap: 6px; }
-  label {
-    font-size: 12.5px;
+  .form-section + .form-section { border-top: 1px solid var(--border); }
+  .section-head { display: flex; align-items: flex-start; gap: var(--sp-3); }
+  .section-head > div { flex: 1; min-width: 0; }
+  .section-head h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--fs-xl);
+    letter-spacing: .03em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+  .section-head p { margin: 2px 0 0; font-size: var(--fs-sm); color: var(--text-dim); }
+  .step {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    margin-top: -1px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--font-mono);
+    font-size: var(--fs-sm);
     font-weight: 600;
-    letter-spacing: .02em;
+    color: var(--accent);
+    border: 1.5px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+  .section-action { align-self: center; flex-shrink: 0; }
+
+  /* Lista de ajustes (interruptores agrupados) */
+  .settings-list {
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    background: color-mix(in srgb, var(--surface-2) 50%, transparent);
+  }
+  .setting { padding: var(--sp-3) var(--sp-4); }
+  .setting + .setting { border-top: 1px solid var(--border); }
+  .setting-sub {
+    margin-top: var(--sp-3);
+    padding-left: var(--sp-3);
+    border-left: 2px solid var(--border-strong);
+  }
+  .compare, .vantagens, .production { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-1); }
+
+  /* Rótulo de seção (padrão único) */
+  .result-label, .compare-title, .production-title, .vantagens-title, .magicos-summary {
+    margin: 0;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
     color: var(--text-dim);
   }
-  input[type="number"], input[type="text"], .field-group > select {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    font-size: 16px;
+  .compare-title, .production-title, .vantagens-title { margin-bottom: var(--sp-2); }
+
+  /* Texto de apoio (padrão único) */
+  .mao-obra-note, .production-note, .magicos-note, .equip-info, .mat-cap-note {
+    margin: 0;
+    font-size: var(--fs-xs);
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+  .production-note { margin: var(--sp-2) 0; }
+
+  /* =========================================================
+     5. Campos
+     ========================================================= */
+  .field-group { display: flex; flex-direction: column; gap: var(--sp-2); }
+  label {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--text-dim);
+  }
+  input[type="number"], input[type="text"], select, .mat-search {
+    height: var(--control-h);
+    font-family: var(--font-body);
+    font-size: var(--fs-lg); /* 16px: evita zoom no iOS */
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 5px;
+    border-radius: var(--r-sm);
     color: var(--text);
-    padding: 10px 12px;
+    padding: 0 var(--sp-3);
     width: 100%;
+    transition: border-color var(--t-fast), background-color var(--t-fast);
   }
-  input[type="text"] { font-family: var(--font-body); }
-  .field-group > select { font-family: var(--font-body); }
-  input:focus-visible, .field-group > select:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 1px;
-  }
-  input::placeholder { color: var(--text-dim); opacity: .6; }
-  input:disabled, .tier-select:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-  }
+  input[type="number"] { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  input:hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--border-strong); }
+  input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+  input::placeholder { color: var(--text-dim); opacity: .7; }
+  input:disabled, select:disabled { opacity: .5; cursor: not-allowed; }
 
-  .materials-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 12px;
-  }
-  .materials-head > span {
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: .02em;
-    color: var(--text-dim);
-  }
+  /* =========================================================
+     6. Botões
+     ========================================================= */
   .btn-ghost {
+    height: 34px;
     background: none;
     border: 1px solid var(--border);
     color: var(--accent-2);
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 13px;
-    padding: 6px 11px;
-    border-radius: 5px;
+    font-size: var(--fs-sm);
+    padding: 0 var(--sp-3);
+    border-radius: var(--r-sm);
     cursor: pointer;
+    transition: border-color var(--t-fast), background-color var(--t-fast);
   }
-  .btn-ghost:hover { border-color: var(--accent-2); }
+  .btn-ghost:hover:not(:disabled) { border-color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 8%, transparent); }
   .btn-ghost:disabled { opacity: .4; cursor: not-allowed; }
-  .btn-ghost:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
-  #material-rows { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
-  .material-row {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .mat-row-top {
-    display: grid;
-    grid-template-columns: 1fr 52px 90px 32px;
-    gap: 8px;
-    align-items: center;
-  }
-  .tier-select {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    color: var(--text);
-    padding: 10px 4px;
-    width: 100%;
-    text-align: center;
-  }
-  .tier-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-  .mat-combo { position: relative; min-width: 0; }
-  .mat-search {
-    font-family: var(--font-body);
-    font-size: 14.5px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    color: var(--text);
-    padding: 10px 10px;
-    width: 100%;
-  }
-  .mat-search:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-  .mat-dropdown {
-    position: absolute;
-    top: calc(100% + 4px);
-    left: 0;
-    right: 0;
-    z-index: 20;
-    max-height: 260px;
-    overflow-y: auto;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    box-shadow: var(--shadow);
-    padding: 4px;
-  }
-  .mat-dropdown[hidden] { display: none; }
-  .mat-group-label {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    padding: 7px 8px 3px;
-  }
-  .mat-option {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  .mat-option:hover, .mat-option.active { background: var(--surface-2); }
-  .mat-option .mo-mult {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    font-size: 12px;
-    color: var(--text-dim);
-    flex-shrink: 0;
-  }
-  .mat-option-empty {
-    padding: 9px 8px;
-    font-size: 13px;
-    color: var(--text-dim);
-    font-style: italic;
-  }
-  .mat-cap-note {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 2px;
-  }
   .btn-remove {
-    width: 32px;
-    height: 38px;
-    background: var(--surface-2);
+    width: 36px;
+    height: var(--control-h);
+    background: none;
     border: 1px solid var(--border);
     color: var(--text-dim);
-    border-radius: 5px;
+    border-radius: var(--r-sm);
     cursor: pointer;
-    font-size: 16px;
+    font-size: var(--fs-lg);
     line-height: 1;
+    transition: color var(--t-fast), border-color var(--t-fast);
   }
-  .btn-remove:hover { color: var(--accent); border-color: var(--accent); }
-  .btn-remove:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .btn-remove:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
   .btn-remove:disabled { opacity: .3; cursor: not-allowed; }
 
+  .btn-reset {
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: var(--font-body);
+    font-size: var(--fs-sm);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    padding: var(--sp-1);
+  }
+  .btn-reset:hover { color: var(--accent); }
+
+  /* Controle segmentado */
+  .segmented {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 3px;
+    gap: 3px;
+  }
+  .segmented.seg-3 { grid-template-columns: repeat(3, 1fr); }
+  .segmented.seg-4 { grid-template-columns: repeat(4, 1fr); }
+  .seg-btn {
+    min-height: 34px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: var(--fs-sm);
+    padding: var(--sp-2);
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: background-color var(--t-fast), color var(--t-fast);
+  }
+  .seg-btn:hover:not(.active) { color: var(--text); background: color-mix(in srgb, var(--text) 5%, transparent); }
+  .seg-btn.active { background: var(--accent); color: var(--accent-ink); }
+  .seg-btn:active { transform: scale(.98); }
+
+  /* Interruptor */
   .toggle-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
+    gap: var(--sp-4);
   }
   .toggle-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .toggle-label .t-name { font-weight: 600; font-size: 14.5px; }
-  .toggle-label .t-sub { font-size: 12px; color: var(--text-dim); }
+  .toggle-label .t-name { font-weight: 600; font-size: var(--fs-md); }
+  .toggle-label .t-sub { font-size: var(--fs-xs); color: var(--text-dim); }
   .switch {
     position: relative;
-    width: 46px;
+    width: 44px;
     height: 26px;
     flex-shrink: 0;
-    border-radius: 14px;
+    border-radius: var(--r-pill);
     background: var(--surface-2);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
     cursor: pointer;
     padding: 0;
+    transition: background-color var(--t-fast), border-color var(--t-fast);
   }
   .switch .knob {
     position: absolute;
@@ -302,529 +386,441 @@
     height: 20px;
     border-radius: 50%;
     background: var(--text-dim);
+    transition: transform var(--t-fast) var(--ease), background-color var(--t-fast);
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .switch .knob { transition: transform .15s ease, background-color .15s ease; }
-    .switch { transition: background-color .15s ease, border-color .15s ease; }
-  }
-  .switch[aria-checked="true"] { background: color-mix(in srgb, var(--accent) 30%, var(--surface-2)); border-color: var(--accent); }
-  .switch[aria-checked="true"] .knob { transform: translateX(20px); background: var(--accent); }
-  .switch:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .switch[aria-checked="true"] { background: var(--accent); border-color: var(--accent); }
+  .switch[aria-checked="true"] .knob { transform: translateX(18px); background: var(--accent-ink); }
 
-  .mao-obra-note {
-    margin: -6px 0 0;
-    font-size: 12px;
-    color: var(--text-dim);
-    line-height: 1.5;
-  }
-
-  .mode { display: flex; flex-direction: column; gap: 14px; }
-  .segmented {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 3px;
-    gap: 3px;
-  }
-  .seg-btn {
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 13.5px;
-    padding: 9px 10px;
-    border: none;
-    border-radius: 4px;
-    background: transparent;
-    color: var(--text-dim);
-    cursor: pointer;
-  }
-  .seg-btn.active { background: var(--accent); color: var(--accent-ink); }
-  .seg-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-  #lucro-wrap { max-width: 200px; }
-
-  .result {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 24px 22px 20px;
+  /* =========================================================
+     7. Materiais
+     ========================================================= */
+  #material-rows { display: flex; flex-direction: column; gap: var(--sp-2); }
+  .material-row {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: var(--sp-2);
+    border-left: 3px solid var(--tier-color, var(--border));
+    padding-left: var(--sp-2);
+    transition: border-color var(--t-med);
   }
-  .result-label {
-    margin: 0;
-    font-size: 12.5px;
-    font-weight: 600;
+  .material-row[data-tier="D"], .mat-group-label[data-tier="D"] { --tier-color: var(--tier-d); }
+  .material-row[data-tier="C"], .mat-group-label[data-tier="C"] { --tier-color: var(--tier-c); }
+  .material-row[data-tier="B"], .mat-group-label[data-tier="B"] { --tier-color: var(--tier-b); }
+  .material-row[data-tier="A"], .mat-group-label[data-tier="A"] { --tier-color: var(--tier-a); }
+  .material-row[data-tier="S"], .mat-group-label[data-tier="S"] { --tier-color: var(--tier-s); }
+  .material-row.is-new { animation: slide-in .3s var(--ease); }
+
+  .mat-row-top {
+    display: grid;
+    grid-template-columns: 1fr 56px 88px 36px;
+    gap: var(--sp-2);
+    align-items: center;
+  }
+  .mat-combo { position: relative; min-width: 0; }
+  .tier-select {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-align: center;
+    padding: 0 var(--sp-1);
+  }
+  .material-row[data-tier] .tier-select {
+    color: var(--tier-color);
+    border-color: color-mix(in srgb, var(--tier-color) 55%, var(--border));
+  }
+
+  .mat-dropdown {
+    position: absolute;
+    top: calc(100% + var(--sp-1));
+    left: 0;
+    right: 0;
+    z-index: 30;
+    max-height: 280px;
+    overflow-y: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    box-shadow: var(--shadow-lift);
+    padding: var(--sp-1);
+    transform-origin: top;
+    animation: drop .14s ease-out;
+  }
+  .mat-group-label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
     letter-spacing: .04em;
     text-transform: uppercase;
     color: var(--text-dim);
+    padding: var(--sp-2) var(--sp-2) var(--sp-1);
   }
+  .mat-group-label[data-tier] { color: var(--tier-color); }
+  .mat-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-2);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: var(--fs-md);
+  }
+  .mat-option:hover, .mat-option.active { background: var(--surface-2); }
+  .mat-option .mo-mult {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--fs-xs);
+    color: var(--text-dim);
+    flex-shrink: 0;
+  }
+  .mat-option-empty {
+    padding: var(--sp-2);
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
+    font-style: italic;
+  }
+  .mat-cap-note { margin-top: var(--sp-2); }
+
+  .juncao {
+    margin-top: var(--sp-3);
+    font-size: var(--fs-sm);
+    padding: var(--sp-2) var(--sp-3);
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-1);
+  }
+  .juncao strong { color: var(--accent-2); }
+  .juncao .jw { color: var(--accent); }
+
+  /* Modificações */
+  .mods {
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    background: var(--surface-2);
+  }
+  .mods-summary {
+    cursor: pointer;
+    padding: var(--sp-3);
+    font-weight: 600;
+    font-size: var(--fs-md);
+    list-style: none;
+    display: flex;
+    gap: var(--sp-2);
+    align-items: baseline;
+  }
+  .mods-body { padding: 0 var(--sp-3) var(--sp-3); display: flex; flex-direction: column; gap: var(--sp-3); }
+  .mods-total { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--accent); font-weight: 500; }
+  .mods-list { display: flex; flex-direction: column; max-height: 340px; overflow-y: auto; }
+  .mod-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 2px var(--sp-3);
+    align-items: start;
+    padding: var(--sp-2) var(--sp-1);
+    border-bottom: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: var(--fs-sm);
+    cursor: pointer;
+    transition: background-color var(--t-fast);
+  }
+  .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+  .mod-item input { margin-top: 3px; accent-color: var(--accent); }
+  .mod-name { font-weight: 600; }
+  .mod-cost { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); white-space: nowrap; }
+  .mod-desc { grid-column: 2 / 4; font-size: var(--fs-xs); color: var(--text-dim); line-height: 1.4; }
+
+  /* Setas dos <details> */
+  .mods-summary::-webkit-details-marker, .magicos-summary::-webkit-details-marker { display: none; }
+  .mods-summary::before, .magicos-summary::before {
+    content: '';
+    flex-shrink: 0;
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(-45deg);
+    transition: transform var(--t-fast);
+    align-self: center;
+  }
+  .mods[open] .mods-summary::before, .magicos[open] .magicos-summary::before { transform: translateY(-3px) rotate(45deg); }
+
+  .mode { display: flex; flex-direction: column; gap: var(--sp-3); }
+  #lucro-wrap { max-width: 200px; }
+
+  /* =========================================================
+     8. Resultado
+     ========================================================= */
+  .result {
+    position: relative;
+    padding: var(--sp-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+    background:
+      radial-gradient(80% 60% at 0% 0%, color-mix(in srgb, var(--ember) 8%, transparent), transparent 70%),
+      var(--surface);
+  }
+  .result.pulse { animation: pulse .6s ease-out; }
   .result-value {
     margin: 0;
     display: flex;
     align-items: baseline;
-    gap: 8px;
+    gap: var(--sp-2);
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
     font-weight: 600;
-    font-size: clamp(38px, 10vw, 54px);
+    font-size: clamp(40px, 10vw, var(--fs-3xl));
+    line-height: 1.1;
     color: var(--accent);
-    text-shadow: 0 0 24px color-mix(in srgb, var(--accent) 35%, transparent);
   }
   .result-value .unit {
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 16px;
+    font-size: var(--fs-lg);
     color: var(--text-dim);
-    text-shadow: none;
   }
-  .result-props {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: -2px 0 2px;
-  }
-  .result-props[hidden] { display: none; }
+  .result-props { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
   .prop-chip {
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
     gap: 6px;
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 5px;
-    padding: 4px 10px;
-    font-size: 12.5px;
+    border-radius: var(--r-pill);
+    padding: var(--sp-1) var(--sp-3);
+    font-size: var(--fs-sm);
   }
   .prop-chip .p-k { color: var(--text-dim); font-weight: 600; }
-  .prop-chip .p-v {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    font-weight: 700;
-    color: var(--text);
+  .prop-chip .p-v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 700; }
+  .prop-chip.chip-obra { border-color: var(--tier-a); }
+  .prop-chip.chip-obra .p-v { color: var(--tier-a); }
+  .prop-chip.chip-obra::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(110deg, transparent 30%, color-mix(in srgb, var(--ember-hot) 55%, transparent) 50%, transparent 70%);
+    transform: translateX(-120%);
+    animation: shine 1.2s ease-out .2s 1 both;
   }
 
   .breakdown {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding-top: 10px;
+    gap: 6px;
+    padding-top: var(--sp-3);
     border-top: 1px solid var(--border);
   }
   .b-row {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    gap: 12px;
-    font-size: 13.5px;
+    gap: var(--sp-3);
+    font-size: var(--fs-sm);
   }
   .b-row .b-label { color: var(--text-dim); }
-  .b-row .b-value {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    color: var(--text);
-  }
-  .b-row.b-final .b-label,
-  .b-row.b-final .b-value { color: var(--accent-2); font-weight: 600; }
+  .b-row .b-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .b-row.b-final .b-label, .b-row.b-final .b-value { color: var(--accent-2); font-weight: 600; }
 
-  .compare {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 20px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .compare-title {
-    margin: 0 0 6px;
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
-  .compare-row {
+  /* Linhas de lista (comparativo, tempo) */
+  .compare-row, .p-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 14px;
-    padding: 12px 0;
+    gap: var(--sp-4);
+    padding: var(--sp-3) 0;
     border-top: 1px solid var(--border);
   }
-  .compare-row:first-of-type { border-top: none; padding-top: 4px; }
-  .compare-row .c-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .compare-row .c-name { font-size: 14px; font-weight: 600; }
-  .compare-row .c-formula {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  .compare-row:first-of-type, .p-row:first-of-type { border-top: none; padding-top: var(--sp-1); }
+  .compare-row .c-label, .p-row .p-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .compare-row .c-name, .p-row .p-name { font-size: var(--fs-md); font-weight: 600; }
+  .compare-row .c-formula, .p-row .p-sub { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); }
+  .compare-row .c-formula { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .compare-row .c-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
-  .compare-row .c-value {
+  .compare-row .c-value, .p-row .p-value {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
     font-weight: 600;
-    font-size: 17px;
-  }
-  .compare-row .c-delta { font-family: var(--font-mono); font-size: 11px; color: var(--good); }
-  .compare-row.c-highlight {
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-    border-radius: 6px;
-    border-top: none;
-    margin-top: 4px;
-    padding: 12px 12px;
-  }
-  .compare-row.c-highlight .c-value { color: var(--accent); }
-
-  .foot {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .foot p {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-dim);
-  }
-  .btn-reset {
-    background: none;
-    border: none;
-    color: var(--text-dim);
-    font-family: var(--font-body);
-    font-size: 12.5px;
-    text-decoration: underline;
-    cursor: pointer;
-    padding: 2px;
-  }
-  .btn-reset:hover { color: var(--accent); }
-  .btn-reset:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
-  @media (max-width: 420px) {
-    .mat-row-top { grid-template-columns: 1fr 42px 68px 30px; }
-  }
-
-  .production {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 20px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .production-title {
-    margin: 0 0 6px;
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
-  .production-note {
-    margin: 6px 0 8px;
-    font-size: 12px;
-    color: var(--text-dim);
-    line-height: 1.5;
-  }
-  .production .toggle-row { padding: 6px 0; }
-  .production .toggle-row + .toggle-row { border-top: 1px solid var(--border); }
-  .p-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 14px;
-    padding: 11px 0;
-    border-top: 1px solid var(--border);
-  }
-  .p-row:first-of-type { border-top: none; padding-top: 4px; }
-  .p-row .p-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .p-row .p-name { font-size: 14px; font-weight: 600; }
-  .p-row .p-sub { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
-  .p-row .p-value {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-    font-size: 15px;
+    font-size: var(--fs-lg);
     text-align: right;
     flex-shrink: 0;
   }
+  .compare-row .c-delta { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--good); }
+  .compare-row.c-highlight {
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    border-radius: var(--r-sm);
+    border-top: none;
+    margin-top: var(--sp-1);
+    padding: var(--sp-3);
+  }
+  .compare-row.c-highlight .c-value { color: var(--accent); }
   .p-row.p-best .p-value { color: var(--good); }
 
-  .vantagens {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 20px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .vantagens[hidden] { display: none; }
-  .vantagens-title {
-    margin: 0 0 6px;
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
+  /* Vantagens */
   .v-item {
-    padding: 12px 0;
+    padding: var(--sp-3) 0;
     border-top: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     gap: 6px;
   }
-  .v-item:first-of-type { border-top: none; padding-top: 4px; }
-  .v-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .v-name { font-weight: 700; font-size: 14.5px; }
-  .v-tag {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    white-space: nowrap;
-  }
-  .v-row { display: flex; gap: 8px; font-size: 13.5px; line-height: 1.45; }
+  .v-item:first-of-type { border-top: none; padding-top: var(--sp-1); }
+  .v-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); }
+  .v-name { font-weight: 700; font-size: var(--fs-md); }
+  .v-tag { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); white-space: nowrap; }
+  .v-row { display: flex; gap: var(--sp-2); font-size: var(--fs-sm); line-height: 1.45; }
   .v-row .v-icon { flex-shrink: 0; width: 16px; text-align: center; }
   .v-row.v-pro .v-icon { color: var(--good); }
   .v-row.v-con .v-icon { color: var(--accent); }
   .v-row .v-text { color: var(--text-dim); }
-  .v-empty { font-size: 13.5px; color: var(--text-dim); font-style: italic; }
+  .v-empty { font-size: var(--fs-sm); color: var(--text-dim); font-style: italic; }
 
-  .magicos {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-  }
+  /* =========================================================
+     9. Itens mágicos
+     ========================================================= */
   .magicos:not([open]) { overflow: hidden; }
   .magicos-summary {
     cursor: pointer;
-    padding: 20px 22px;
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: var(--text-dim);
+    padding: var(--sp-5);
     list-style: none;
     display: flex;
     align-items: baseline;
-    gap: 8px;
+    gap: var(--sp-2);
   }
-  .magicos-summary::-webkit-details-marker { display: none; }
-  .magicos-summary::before { content: '▸'; flex-shrink: 0; }
-  .magicos[open] .magicos-summary::before { content: '▾'; }
-  .magicos-sub { text-transform: none; font-weight: 400; letter-spacing: 0; font-size: 11.5px; }
-  .magicos-body {
-    padding: 0 22px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+  .magicos-summary:hover { color: var(--text); }
+  .magicos-sub { text-transform: none; font-weight: 400; letter-spacing: 0; }
+  .magicos-body { padding: 0 var(--sp-5) var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-5); }
   .magicos-block {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding-top: 16px;
+    gap: var(--sp-3);
+    padding-top: var(--sp-4);
     border-top: 1px solid var(--border);
   }
   .magicos-block:first-child { padding-top: 0; border-top: none; }
-  .magicos-block-title { margin: 0; font-weight: 700; font-size: 14.5px; }
-  .magicos-note { margin: 0; font-size: 12px; color: var(--text-dim); line-height: 1.5; }
-  .mg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .magicos-block-title { margin: 0; font-weight: 700; font-size: var(--fs-lg); }
+  .mg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3); }
   .mg-result { display: flex; flex-direction: column; }
   .mg-line {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
-    padding: 7px 0;
+    gap: var(--sp-3);
+    padding: var(--sp-2) 0;
     border-top: 1px solid var(--border);
-    font-size: 13.5px;
+    font-size: var(--fs-sm);
   }
   .mg-line:first-child { border-top: none; }
-  .mg-line .mg-v {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    font-weight: 600;
-  }
-  .mg-warning { margin: 4px 0 0; color: var(--accent); font-size: 12.5px; }
+  .mg-line .mg-v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .mg-warning { margin: var(--sp-1) 0 0; color: var(--accent); font-size: var(--fs-sm); }
 
-  @media (max-width: 480px) {
-    .mg-grid { grid-template-columns: 1fr; }
-  }
-
-  .segmented.seg-4 { grid-template-columns: repeat(4, 1fr); }
-  .segmented.seg-3 { grid-template-columns: repeat(3, 1fr); }
-  @media (max-width: 480px) {
-    .segmented.seg-4 { grid-template-columns: 1fr 1fr; }
-    .segmented.seg-3 .seg-btn { font-size: 12px; padding: 9px 4px; }
-  }
-  .equip-info { margin: 0; font-size: 12px; color: var(--text-dim); }
-  .juncao {
-    margin-top: 8px;
-    font-size: 12.5px;
-    padding: 8px 10px;
-    border-radius: 5px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
+  /* =========================================================
+     10. Rodapé
+     ========================================================= */
+  .foot {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    padding-top: var(--sp-2);
   }
-  .juncao strong { color: var(--accent-2); }
-  .juncao .jw { color: var(--accent); }
-  .mods {
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--surface-2);
-  }
-  .mods-summary {
-    cursor: pointer;
-    padding: 10px 12px;
-    font-weight: 600;
-    font-size: 14px;
-    list-style: none;
+  .foot p { margin: 0; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); }
+  .foot-actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--sp-3) var(--sp-5); }
+  .foot-switch {
     display: flex;
-    gap: 8px;
-    align-items: baseline;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: var(--fs-sm);
+    color: var(--text-dim);
   }
-  .mods-summary::-webkit-details-marker { display: none; }
-  .mods-summary::before { content: '▸'; }
-  .mods[open] .mods-summary::before { content: '▾'; }
-  .mods-total { font-family: var(--font-mono); font-size: 12.5px; color: var(--accent); font-weight: 500; }
-  .mods-body { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 10px; }
-  .mods-list { display: flex; flex-direction: column; gap: 2px; max-height: 340px; overflow-y: auto; }
-  .mod-item {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 2px 10px;
-    align-items: start;
-    padding: 6px 4px;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-    cursor: pointer;
-  }
-  .mod-item input { margin-top: 3px; accent-color: var(--accent); }
-  .mod-name { font-weight: 600; }
-  .mod-cost { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); white-space: nowrap; }
-  .mod-desc { grid-column: 2 / 4; font-size: 11.5px; color: var(--text-dim); line-height: 1.4; }
+  .foot-switch .switch { width: 36px; height: 22px; }
+  .foot-switch .switch .knob { width: 16px; height: 16px; }
+  .foot-switch .switch[aria-checked="true"] .knob { transform: translateX(14px); }
 
-  /* ===== Redesign: forja ===== */
-  :root { --ember: #e2621b; --ember-hot: #ffc46b; --tier-d: #8a8178; --tier-c: #b07a45; --tier-b: #6d8aa0; --tier-a: #c9a227; --tier-s: #9b6bd6; }
-  body { background: radial-gradient(120% 60% at 50% 115%, color-mix(in srgb, var(--ember) 16%, var(--bg)) 0%, var(--bg) 60%) fixed, var(--bg); }
-  #embers { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-  .forge-glow {
-    position: fixed; left: 0; right: 0; bottom: -20vh; height: 45vh; pointer-events: none; z-index: 0;
-    background: radial-gradient(60% 70% at 50% 100%, color-mix(in srgb, var(--ember) 22%, transparent), transparent 70%);
-    animation: forge-breathe 6s ease-in-out infinite;
-  }
-  @keyframes forge-breathe { 0%, 100% { opacity: .55; } 50% { opacity: .9; } }
-  .page { position: relative; z-index: 1; }
-
-  .panel, .result, .compare, .vantagens, .production, .magicos {
-    background: color-mix(in srgb, var(--surface) 88%, transparent);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
-  .hero, .panel, .side, .vantagens, .production, .magicos, .foot { animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
-  .panel { animation-delay: .06s; } .side { animation-delay: .12s; } .vantagens { animation-delay: .18s; }
-  .production { animation-delay: .24s; } .magicos { animation-delay: .3s; }
-  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-
-  h1 { background: linear-gradient(180deg, var(--text) 40%, var(--accent) 140%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-
-  /* Resultado: metal quente */
-  .result { position: relative; overflow: hidden; border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
-  .result::before {
-    content: ''; position: absolute; inset: -40%; pointer-events: none; z-index: 0;
-    background: radial-gradient(40% 35% at 30% 20%, color-mix(in srgb, var(--ember) 18%, transparent), transparent 70%),
-                radial-gradient(35% 30% at 80% 90%, color-mix(in srgb, var(--ember-hot) 12%, transparent), transparent 70%);
-    animation: heat 9s ease-in-out infinite alternate;
-  }
-  .result > * { position: relative; z-index: 1; }
-  @keyframes heat { from { transform: translate(-4%, -3%) rotate(0deg); } to { transform: translate(5%, 4%) rotate(8deg); } }
-  .result.pulse { animation: pulse .6s ease-out; }
-  @keyframes pulse { 0% { box-shadow: var(--shadow), 0 0 0 0 color-mix(in srgb, var(--ember) 55%, transparent); } 100% { box-shadow: var(--shadow), 0 0 0 18px transparent; } }
-  .result-value { transition: color .3s; }
-
-  /* Lateral fixa no computador */
+  /* =========================================================
+     11. Layout: lateral fixa no computador
+     ========================================================= */
   @media (min-width: 1060px) {
     .page {
       max-width: 1180px;
       display: grid;
       grid-template-columns: minmax(0, 1fr) 400px;
-      column-gap: 26px;
+      column-gap: var(--sp-5);
       align-items: start;
     }
     .hero { grid-column: 1 / -1; }
     .page > :not(.hero):not(.side) { grid-column: 1; }
-    .side { grid-column: 2; grid-row: 2 / span 6; position: sticky; top: 20px; display: flex; flex-direction: column; gap: 22px; }
+    .side { grid-column: 2; grid-row: 2 / span 6; position: sticky; top: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-5); }
   }
-  @media (max-width: 1059.98px) { .side { display: flex; flex-direction: column; gap: 22px; } }
+  @media (max-width: 1059.98px) { .side { display: flex; flex-direction: column; gap: var(--sp-5); } }
 
   /* Barra de custo no celular */
   .cost-bar {
-    position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 20;
-    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
-    padding: 12px 16px; border-radius: 10px;
-    background: color-mix(in srgb, var(--surface) 92%, transparent);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid color-mix(in srgb, var(--accent) 50%, var(--border));
-    box-shadow: 0 8px 28px rgba(0,0,0,.25), 0 0 22px color-mix(in srgb, var(--ember) 25%, transparent);
-    transform: translateY(140%); transition: transform .35s cubic-bezier(.2,.7,.2,1);
+    position: fixed;
+    left: var(--sp-3);
+    right: var(--sp-3);
+    bottom: calc(var(--sp-3) + env(safe-area-inset-bottom));
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: var(--shadow-lift);
+    transform: translateY(140%);
+    transition: transform .35s var(--ease);
   }
   .cost-bar.show { transform: none; }
-  .cb-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--text-dim); }
-  .cb-value { font-family: var(--font-mono); font-weight: 700; font-size: 22px; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .cb-label { font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); }
+  .cb-value { font-family: var(--font-mono); font-weight: 700; font-size: var(--fs-xl); color: var(--accent); font-variant-numeric: tabular-nums; }
   @media (min-width: 1060px) { .cost-bar { display: none; } }
 
-  /* Tiers coloridos */
-  .material-row { border-left: 3px solid var(--tier-color, transparent); padding-left: 8px; border-radius: 4px; transition: border-color .3s; }
-  .material-row[data-tier="D"], .mat-group-label[data-tier="D"] { --tier-color: var(--tier-d); }
-  .material-row[data-tier="C"], .mat-group-label[data-tier="C"] { --tier-color: var(--tier-c); }
-  .material-row[data-tier="B"], .mat-group-label[data-tier="B"] { --tier-color: var(--tier-b); }
-  .material-row[data-tier="A"], .mat-group-label[data-tier="A"] { --tier-color: var(--tier-a); }
-  .material-row[data-tier="S"], .mat-group-label[data-tier="S"] { --tier-color: var(--tier-s); }
-  .material-row[data-tier] .tier-select { color: var(--tier-color); font-weight: 700; border-color: color-mix(in srgb, var(--tier-color) 55%, var(--border)); }
-  .mat-group-label[data-tier] { color: var(--tier-color); }
-  .material-row[data-tier="S"] { box-shadow: -6px 0 16px -10px var(--tier-s); }
-  .material-row.is-new { animation: slide-in .35s cubic-bezier(.2,.7,.2,1); }
-  @keyframes slide-in { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
-
-  /* Obra-Prima reluzente */
-  .prop-chip.chip-obra { position: relative; overflow: hidden; border-color: var(--tier-a); }
-  .prop-chip.chip-obra .p-v { color: var(--tier-a); }
-  .prop-chip.chip-obra::after {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(110deg, transparent 30%, color-mix(in srgb, var(--ember-hot) 55%, transparent) 50%, transparent 70%);
-    transform: translateX(-120%); animation: shine 2.6s ease-in-out infinite;
+  @media (max-width: 480px) {
+    .form-section, .compare, .vantagens, .production { padding: var(--sp-4); }
+    .setting { padding: var(--sp-3); }
+    .magicos-summary { padding: var(--sp-4); }
+    .magicos-body { padding: 0 var(--sp-4) var(--sp-4); }
+    .mg-grid { grid-template-columns: 1fr; }
+    .segmented.seg-4 { grid-template-columns: 1fr 1fr; }
+    .segmented.seg-3 .seg-btn { font-size: var(--fs-xs); padding: var(--sp-2) var(--sp-1); }
   }
-  @keyframes shine { 0%, 55% { transform: translateX(-120%); } 100% { transform: translateX(120%); } }
+  @media (max-width: 420px) {
+    .mat-row-top { grid-template-columns: 1fr 48px 72px 36px; }
+  }
 
-  .seg-btn { transition: background-color .2s, color .2s, transform .1s; }
-  .seg-btn:active { transform: scale(.97); }
-  .btn-ghost, .btn-reset, .btn-remove { transition: background-color .2s, border-color .2s, transform .1s; }
-  .mod-item { transition: background-color .15s; border-radius: 4px; }
-  .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
-  .mat-dropdown:not([hidden]) { animation: drop .16s ease-out; transform-origin: top; }
-  @keyframes drop { from { opacity: 0; transform: translateY(-4px) scaleY(.97); } to { opacity: 1; transform: none; } }
+  /* =========================================================
+     12. Modo forja (opcional, desligado por padrão)
+     ========================================================= */
+  #embers { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; display: none; }
+  .forge-glow {
+    position: fixed; left: 0; right: 0; bottom: -20vh; height: 45vh; pointer-events: none; z-index: 0;
+    background: radial-gradient(60% 70% at 50% 100%, color-mix(in srgb, var(--ember) 22%, transparent), transparent 70%);
+    opacity: 0;
+    transition: opacity .6s ease;
+  }
+  .forja-on #embers { display: block; }
+  .forja-on .forge-glow { opacity: .7; animation: forge-breathe 6s ease-in-out infinite; }
+
+  /* =========================================================
+     13. Animações
+     ========================================================= */
+  .hero, .panel, .side, .vantagens, .production, .magicos, .foot { animation: rise .45s var(--ease) both; }
+  .panel { animation-delay: .04s; } .side { animation-delay: .08s; } .vantagens { animation-delay: .12s; }
+  .production { animation-delay: .16s; } .magicos { animation-delay: .2s; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes slide-in { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+  @keyframes drop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+  @keyframes pulse { 0% { box-shadow: var(--shadow), 0 0 0 0 color-mix(in srgb, var(--accent) 35%, transparent); } 100% { box-shadow: var(--shadow), 0 0 0 12px transparent; } }
+  @keyframes shine { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
+  @keyframes forge-breathe { 0%, 100% { opacity: .5; } 50% { opacity: .85; } }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -844,142 +840,194 @@
   </header>
 
   <main class="panel">
-    <div class="field-group">
-      <label>Equipamento do Guia (opcional)</label>
-      <div id="equip-wrap"></div>
-      <p class="equip-info" id="equip-info" hidden></p>
-    </div>
 
-    <div class="field-group">
-      <label for="pde" id="pde-label">PDE — Preço de Equipamento (po)</label>
-      <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" />
-    </div>
-
-    <div class="field-group">
-      <label>Tipo de Item</label>
-      <div class="segmented seg-4" id="tipo-segmented" role="tablist" aria-label="Tipo de item">
-        <button type="button" class="seg-btn" data-tipo="arma" role="tab">Arma</button>
-        <button type="button" class="seg-btn" data-tipo="armadura" role="tab">Armadura</button>
-        <button type="button" class="seg-btn" data-tipo="municao" role="tab">Munição</button>
-        <button type="button" class="seg-btn" data-tipo="polvora" role="tab">Pólvora</button>
-      </div>
-    </div>
-
-    <div class="field-group" id="peso-wrap">
-      <label>Peso do item (tempo de criação)</label>
-      <div class="segmented seg-3" id="peso-segmented" role="tablist" aria-label="Peso do item">
-        <button type="button" class="seg-btn" data-peso="leve" role="tab">Leve (−8h)</button>
-        <button type="button" class="seg-btn" data-peso="" role="tab">Normal</button>
-        <button type="button" class="seg-btn" data-peso="pesado" role="tab">Pesado (+8h)</button>
-      </div>
-    </div>
-
-    <div class="toggle-row" id="fracao-wrap" hidden>
-      <div class="toggle-label">
-        <span class="t-name">Fração fixa do PDE</span>
-        <span class="t-sub">Regra opcional: só 20% do PDE é sensível ao material — suaviza armaduras caras</span>
-      </div>
-      <button type="button" class="switch" id="fracao-switch" role="switch" aria-checked="false" aria-label="Fração fixa do PDE">
-        <span class="knob"></span>
-      </button>
-    </div>
-
-    <div class="materials">
-      <div class="materials-head">
-        <span>Materiais (multiplicador ×PDE)</span>
-        <button type="button" id="add-material" class="btn-ghost">+ material</button>
-      </div>
-      <div id="material-rows"></div>
-      <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais — além disso, não altera o custo.</p>
-      <div class="juncao" id="juncao-info" hidden></div>
-    </div>
-
-    <details class="mods" id="mods-details">
-      <summary class="mods-summary">Modificações <span class="mods-total" id="mods-total"></span></summary>
-      <div class="mods-body">
-        <p class="magicos-note">Cada modificação soma ao valor-base (PDE) antes de multiplicar pelo material (p. 163).</p>
-        <div class="toggle-row">
-          <div class="toggle-label">
-            <span class="t-name">Modificar item que já possui</span>
-            <span class="t-sub">Paga só as modificações × material, não o item de novo</span>
-          </div>
-          <button type="button" class="switch" id="existente-switch" role="switch" aria-checked="false" aria-label="Modificar item existente">
-            <span class="knob"></span>
-          </button>
+    <section class="form-section" aria-labelledby="sec-item">
+      <header class="section-head">
+        <span class="step" aria-hidden="true">1</span>
+        <div>
+          <h2 id="sec-item">Item</h2>
+          <p>Escolha do Guia ou digite o PDE à mão</p>
         </div>
-        <div class="mods-list" id="mods-list"></div>
-      </div>
-    </details>
+      </header>
 
-    <div class="toggle-row">
-      <div class="toggle-label">
-        <span class="t-name">Talento Artesão</span>
-        <span class="t-sub">−20% em compras de itens não-mágicos</span>
+      <div class="field-group">
+        <label id="equip-label">Equipamento do Guia (opcional)</label>
+        <div id="equip-wrap"></div>
+        <p class="equip-info" id="equip-info" hidden></p>
       </div>
-      <button type="button" class="switch" id="artesao-switch" role="switch" aria-checked="false" aria-label="Talento Artesão">
-        <span class="knob"></span>
-      </button>
-    </div>
-    <div class="field-group" id="artesao-modo-wrap">
-      <label>Como o desconto do Artesão entra</label>
-      <div class="segmented" id="artesao-modo" role="tablist" aria-label="Modo do desconto do Artesão">
-        <button type="button" class="seg-btn" data-artmodo="duplo" role="tab">Duas compras (−36%)</button>
-        <button type="button" class="seg-btn" data-artmodo="simples" role="tab">Uma compra (−20%)</button>
-      </div>
-      <p class="magicos-note" id="artesao-explica"></p>
-    </div>
-    <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2 — nenhuma característica da classe altera essa proporção para itens mundanos.</p>
 
-    <div class="toggle-row">
-      <div class="toggle-label">
-        <span class="t-name">Já possui os materiais</span>
-        <span class="t-sub">Trabalhador Itinerante: grátis, só custa o tempo</span>
+      <div class="field-group">
+        <label for="pde" id="pde-label">PDE — Preço de Equipamento (po)</label>
+        <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" />
       </div>
-      <button type="button" class="switch" id="materiais-switch" role="switch" aria-checked="false" aria-label="Já possui os materiais">
-        <span class="knob"></span>
-      </button>
-    </div>
 
-    <div class="toggle-row">
-      <div class="toggle-label">
-        <span class="t-name">Mostrar Dureza</span>
-        <span class="t-sub">Regra de quebra de equipamentos é opcional</span>
+      <div class="field-group">
+        <label>Tipo de Item</label>
+        <div class="segmented seg-4" id="tipo-segmented" role="tablist" aria-label="Tipo de item">
+          <button type="button" class="seg-btn" data-tipo="arma" role="tab">Arma</button>
+          <button type="button" class="seg-btn" data-tipo="armadura" role="tab">Armadura</button>
+          <button type="button" class="seg-btn" data-tipo="municao" role="tab">Munição</button>
+          <button type="button" class="seg-btn" data-tipo="polvora" role="tab">Pólvora</button>
+        </div>
       </div>
-      <button type="button" class="switch" id="dureza-switch" role="switch" aria-checked="true" aria-label="Mostrar Dureza">
-        <span class="knob"></span>
-      </button>
-    </div>
 
-    <div class="toggle-row">
-      <div class="toggle-label">
-        <span class="t-name">Obra-Prima</span>
-        <span class="t-sub">20 natural no teste (17–20 com Prodígio, nível 2): +1 no modificador, máx. +3</span>
+      <div class="field-group" id="peso-wrap">
+        <label>Peso do item (tempo de criação)</label>
+        <div class="segmented seg-3" id="peso-segmented" role="tablist" aria-label="Peso do item">
+          <button type="button" class="seg-btn" data-peso="leve" role="tab">Leve (−8h)</button>
+          <button type="button" class="seg-btn" data-peso="" role="tab">Normal</button>
+          <button type="button" class="seg-btn" data-peso="pesado" role="tab">Pesado (+8h)</button>
+        </div>
       </div>
-      <button type="button" class="switch" id="obra-switch" role="switch" aria-checked="false" aria-label="Obra-Prima">
-        <span class="knob"></span>
-      </button>
-    </div>
 
-    <div class="toggle-row">
-      <div class="toggle-label">
-        <span class="t-name">O Melhor dos Melhores</span>
-        <span class="t-sub">Forjador nível 14: gasta o dobro de materiais e o item vira Obra-Prima</span>
+      <div class="toggle-row" id="fracao-wrap" hidden>
+        <div class="toggle-label">
+          <span class="t-name">Fração fixa do PDE</span>
+          <span class="t-sub">Regra opcional: só 20% do PDE é sensível ao material — suaviza armaduras caras</span>
+        </div>
+        <button type="button" class="switch" id="fracao-switch" role="switch" aria-checked="false" aria-label="Fração fixa do PDE">
+          <span class="knob"></span>
+        </button>
       </div>
-      <button type="button" class="switch" id="melhor-switch" role="switch" aria-checked="false" aria-label="O Melhor dos Melhores">
-        <span class="knob"></span>
-      </button>
-    </div>
+    </section>
 
-    <div class="mode">
-      <div class="segmented" id="mode-segmented" role="tablist" aria-label="Modo de cálculo">
-        <button type="button" class="seg-btn" data-mode="proprio" role="tab">Item Próprio</button>
-        <button type="button" class="seg-btn" data-mode="vendido" role="tab">Item para Venda</button>
+    <section class="form-section" aria-labelledby="sec-mat">
+      <header class="section-head">
+        <span class="step" aria-hidden="true">2</span>
+        <div>
+          <h2 id="sec-mat">Materiais</h2>
+          <p>Até 4 materiais; cada um multiplica o PDE</p>
+        </div>
+        <button type="button" id="add-material" class="btn-ghost section-action">+ material</button>
+      </header>
+
+      <div class="materials">
+        <div id="material-rows"></div>
+        <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais — além disso, não altera o custo.</p>
+        <div class="juncao" id="juncao-info" hidden></div>
       </div>
-      <div class="field-group" id="lucro-wrap" hidden>
-        <label for="lucro">Margem de lucro (%)</label>
-        <input id="lucro" type="number" min="0" step="1" />
+
+      <details class="mods" id="mods-details">
+        <summary class="mods-summary">Modificações <span class="mods-total" id="mods-total"></span></summary>
+        <div class="mods-body">
+          <p class="magicos-note">Cada modificação soma ao valor-base (PDE) antes de multiplicar pelo material (p. 163).</p>
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Modificar item que já possui</span>
+              <span class="t-sub">Paga só as modificações × material, não o item de novo</span>
+            </div>
+            <button type="button" class="switch" id="existente-switch" role="switch" aria-checked="false" aria-label="Modificar item existente">
+              <span class="knob"></span>
+            </button>
+          </div>
+          <div class="mods-list" id="mods-list"></div>
+        </div>
+      </details>
+    </section>
+
+    <section class="form-section" aria-labelledby="sec-forj">
+      <header class="section-head">
+        <span class="step" aria-hidden="true">3</span>
+        <div>
+          <h2 id="sec-forj">O Forjador</h2>
+          <p>Talentos e características que mudam custo e tempo</p>
+        </div>
+      </header>
+
+      <div class="settings-list">
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Talento Artesão</span>
+              <span class="t-sub">−20% em compras de itens não-mágicos</span>
+            </div>
+            <button type="button" class="switch" id="artesao-switch" role="switch" aria-checked="false" aria-label="Talento Artesão">
+              <span class="knob"></span>
+            </button>
+          </div>
+          <div class="field-group setting-sub" id="artesao-modo-wrap">
+            <label>Como o desconto do Artesão entra</label>
+            <div class="segmented" id="artesao-modo" role="tablist" aria-label="Modo do desconto do Artesão">
+              <button type="button" class="seg-btn" data-artmodo="duplo" role="tab">Duas compras (−36%)</button>
+              <button type="button" class="seg-btn" data-artmodo="simples" role="tab">Uma compra (−20%)</button>
+            </div>
+            <p class="magicos-note" id="artesao-explica"></p>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Já possui os materiais</span>
+              <span class="t-sub">Trabalhador Itinerante: grátis, só custa o tempo</span>
+            </div>
+            <button type="button" class="switch" id="materiais-switch" role="switch" aria-checked="false" aria-label="Já possui os materiais">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Pressa</span>
+              <span class="t-sub">Metade do tempo, item sai com −1 no modificador</span>
+            </div>
+            <button type="button" class="switch" id="pressa-switch" role="switch" aria-checked="false" aria-label="Pressa">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Obra-Prima</span>
+              <span class="t-sub">20 natural no teste (17–20 com Prodígio, nível 2): +1 no modificador, máx. +3</span>
+            </div>
+            <button type="button" class="switch" id="obra-switch" role="switch" aria-checked="false" aria-label="Obra-Prima">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">O Melhor dos Melhores</span>
+              <span class="t-sub">Forjador nível 14: gasta o dobro de materiais e o item vira Obra-Prima</span>
+            </div>
+            <button type="button" class="switch" id="melhor-switch" role="switch" aria-checked="false" aria-label="O Melhor dos Melhores">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2 — nenhuma característica da classe altera essa proporção para itens mundanos.</p>
+    </section>
+
+    <section class="form-section" aria-labelledby="sec-fim">
+      <header class="section-head">
+        <span class="step" aria-hidden="true">4</span>
+        <div>
+          <h2 id="sec-fim">Finalidade</h2>
+          <p>Para uso próprio ou para vender com margem</p>
+        </div>
+      </header>
+
+      <div class="mode">
+        <div class="segmented" id="mode-segmented" role="tablist" aria-label="Modo de cálculo">
+          <button type="button" class="seg-btn" data-mode="proprio" role="tab">Item Próprio</button>
+          <button type="button" class="seg-btn" data-mode="vendido" role="tab">Item para Venda</button>
+        </div>
+        <div class="field-group" id="lucro-wrap" hidden>
+          <label for="lucro">Margem de lucro (%)</label>
+          <input id="lucro" type="number" min="0" step="1" />
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <aside class="side" id="side">
@@ -1003,17 +1051,6 @@
 
   <section class="production">
     <p class="production-title">Tempo de Produção</p>
-
-    <div class="toggle-row">
-      <div class="toggle-label">
-        <span class="t-name">Pressa</span>
-        <span class="t-sub">Metade do tempo, item sai com −1 no modificador</span>
-      </div>
-      <button type="button" class="switch" id="pressa-switch" role="switch" aria-checked="false" aria-label="Pressa">
-        <span class="knob"></span>
-      </button>
-    </div>
-
     <p class="production-note" id="production-note"></p>
     <div id="production-rows"></div>
   </section>
@@ -1132,7 +1169,21 @@
 
   <footer class="foot">
     <p id="formula-note">(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor</p>
-    <button type="button" class="btn-reset" id="reset-btn">restaurar padrão</button>
+    <div class="foot-actions">
+      <span class="foot-switch" title="Regra de quebra de equipamentos é opcional">
+        <span id="dureza-label">Mostrar dureza</span>
+        <button type="button" class="switch" id="dureza-switch" role="switch" aria-checked="true" aria-labelledby="dureza-label">
+          <span class="knob"></span>
+        </button>
+      </span>
+      <span class="foot-switch">
+        <span id="forja-label">Modo forja</span>
+        <button type="button" class="switch" id="forja-switch" role="switch" aria-checked="false" aria-labelledby="forja-label">
+          <span class="knob"></span>
+        </button>
+      </span>
+      <button type="button" class="btn-reset" id="reset-btn">restaurar padrão</button>
+    </div>
   </footer>
 </div>
 
@@ -2822,7 +2873,9 @@
 })();
 </script>
 <script>
-// Brasas acesas caindo ao vento + faíscas (canvas de fundo)
+// Modo forja: brasas subindo da forja (canvas de fundo, opcional)
+// Física simples: empuxo do calor + turbulência + vento; cada brasa esfria
+// seguindo a cor do corpo negro (branco-amarelo → laranja → vermelho → apaga).
 (function () {
   'use strict';
   var canvas = document.getElementById('embers');
@@ -2830,8 +2883,13 @@
   var ctx = canvas.getContext('2d');
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
-  var embers = [], sparks = [];
-  var t = 0, last = 0, running = true;
+  var embers = [], sparks = [], motes = [];
+  var t = 0, last = 0, running = false, loopId = 0;
+
+  var FORJA_KEY = 'forjador-modo-forja';
+  var enabled = false;
+  try { enabled = localStorage.getItem(FORJA_KEY) === '1'; } catch (err) {}
+  var forjaSwitch = document.getElementById('forja-switch');
 
   function isDark() {
     var forced = document.documentElement.getAttribute('data-theme');
@@ -2839,28 +2897,106 @@
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
-  // Sprite de brilho pré-renderizado (mais leve que shadowBlur)
-  function makeSprite(core, glow) {
-    var c = document.createElement('canvas');
-    c.width = c.height = 64;
-    var g = c.getContext('2d');
+  // ---------- Cor por temperatura (1 = quente, 0 = apagada) ----------
+  var RAMP = [
+    [0.00, 70, 14, 6],
+    [0.20, 150, 30, 8],
+    [0.42, 225, 70, 14],
+    [0.62, 255, 128, 30],
+    [0.80, 255, 186, 82],
+    [0.92, 255, 226, 160],
+    [1.00, 255, 248, 228]
+  ];
+  function rampColor(k) {
+    k = Math.max(0, Math.min(1, k));
+    for (var i = 1; i < RAMP.length; i++) {
+      if (k <= RAMP[i][0]) {
+        var a = RAMP[i - 1], b = RAMP[i], f = (k - a[0]) / (b[0] - a[0]);
+        return [a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f, a[3] + (b[3] - a[3]) * f];
+      }
+    }
+    return RAMP[RAMP.length - 1].slice(1);
+  }
+  function rgba(c, a) { return 'rgba(' + (c[0] | 0) + ',' + (c[1] | 0) + ',' + (c[2] | 0) + ',' + a.toFixed(3) + ')'; }
+
+  // Halos pré-renderizados por faixa de temperatura (muito mais leve que shadowBlur)
+  var LEVELS = 24;
+  function makeHalo(c, soft) {
+    var s = document.createElement('canvas');
+    s.width = s.height = 64;
+    var g = s.getContext('2d');
     var grd = g.createRadialGradient(32, 32, 0, 32, 32, 32);
-    grd.addColorStop(0, core);
-    grd.addColorStop(0.18, core);
-    grd.addColorStop(0.42, glow);
-    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    if (soft) {
+      // bokeh: disco desfocado com borda levemente mais clara
+      grd.addColorStop(0, rgba(c, .55));
+      grd.addColorStop(0.7, rgba(c, .45));
+      grd.addColorStop(0.86, rgba(c, .5));
+      grd.addColorStop(1, rgba(c, 0));
+    } else {
+      grd.addColorStop(0, rgba(c, .9));
+      grd.addColorStop(0.12, rgba(c, .55));
+      grd.addColorStop(0.35, rgba(c, .16));
+      grd.addColorStop(1, rgba(c, 0));
+    }
     g.fillStyle = grd;
     g.fillRect(0, 0, 64, 64);
-    return c;
+    return s;
   }
-  var SPRITES = {
-    dark: [makeSprite('rgba(255,236,190,1)', 'rgba(255,140,40,.55)'),
-           makeSprite('rgba(255,190,110,1)', 'rgba(230,90,20,.5)'),
-           makeSprite('rgba(255,140,70,1)', 'rgba(190,40,10,.45)')],
-    light: [makeSprite('rgba(214,98,22,1)', 'rgba(214,98,22,.35)'),
-            makeSprite('rgba(184,70,18,1)', 'rgba(184,70,18,.3)'),
-            makeSprite('rgba(150,45,15,1)', 'rgba(150,45,15,.28)')]
-  };
+  var HALOS = [], BOKEH = [];
+  for (var li = 0; li < LEVELS; li++) {
+    var col = rampColor(li / (LEVELS - 1));
+    HALOS.push(makeHalo(col, false));
+    BOKEH.push(makeHalo(col, true));
+  }
+  var VIOLET = makeHalo([200, 160, 255], false);
+  function lvl(k) { return Math.max(0, Math.min(LEVELS - 1, Math.round(k * (LEVELS - 1)))); }
+
+  // ---------- Campo de turbulência (soma de senoides: barato e suave) ----------
+  function flowX(x, y, time) {
+    return Math.sin(y * 0.011 + time * 0.9) * 0.6 + Math.sin(y * 0.027 - time * 1.7 + x * 0.004) * 0.4;
+  }
+  function flowY(x, y, time) {
+    return Math.cos(x * 0.013 - time * 0.7) * 0.5 + Math.sin(x * 0.031 + time * 1.3) * 0.3;
+  }
+  function gust(time) {
+    return Math.sin(time * 0.21) * 0.55 + Math.sin(time * 0.067 + 1.7) * 0.35 + Math.sin(time * 0.53) * 0.1;
+  }
+
+  // ---------- Partículas ----------
+  function spawnEmber(anywhere) {
+    var z = 0.35 + Math.random() * 0.65;          // profundidade: 1 = perto
+    var big = Math.random() < 0.12;
+    return {
+      x: Math.random() * W,
+      y: anywhere ? H * (0.25 + Math.random() * 0.8) : H + 10 + Math.random() * 40,
+      px: 0, py: 0,
+      vx: (Math.random() - 0.5) * 20,
+      vy: -(40 + Math.random() * 70) * z,
+      z: z,
+      r: (big ? 1.6 + Math.random() * 1.2 : 0.6 + Math.random() * 1.1) * (0.6 + z * 0.6),
+      temp: 0.75 + Math.random() * 0.25,
+      cool: 0.05 + Math.random() * 0.09,        // perda de temperatura por segundo
+      buoy: 30 + Math.random() * 40,
+      seed: Math.random() * 1000,
+      flick: 6 + Math.random() * 14,
+      tumble: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 6,
+      life: anywhere ? Math.random() * 3 : 0
+    };
+  }
+  function spawnMote() {
+    // brasas grandes desfocadas em primeiro plano (profundidade de campo)
+    return {
+      x: Math.random() * W,
+      y: H + 60 + Math.random() * H * 0.5,
+      vx: (Math.random() - 0.5) * 8,
+      vy: -(10 + Math.random() * 16),
+      r: 18 + Math.random() * 34,
+      temp: 0.62 + Math.random() * 0.28,
+      seed: Math.random() * 1000,
+      a: 0.04 + Math.random() * 0.05
+    };
+  }
 
   function resize() {
     W = window.innerWidth;
@@ -2868,125 +3004,194 @@
     canvas.width = Math.round(W * DPR);
     canvas.height = Math.round(H * DPR);
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    var target = Math.round(Math.min(110, Math.max(35, W * H / 16000)));
-    while (embers.length < target) embers.push(spawn(true));
+    var target = Math.round(Math.min(90, Math.max(28, W * H / 18000)));
+    while (embers.length < target) embers.push(spawnEmber(true));
     if (embers.length > target) embers.length = target;
-  }
-
-  function spawn(anywhere) {
-    // Nascem no alto ou na borda de onde vem o vento e caem rodopiando
-    var fromSide = !anywhere && Math.random() < 0.35;
-    return {
-      x: fromSide ? -10 : Math.random() * (W + 200) - 200,
-      y: anywhere ? Math.random() * H : (fromSide ? Math.random() * H * 0.6 : -10 - Math.random() * 40),
-      r: 0.8 + Math.random() * 2.4,
-      vy: 14 + Math.random() * 34,
-      drift: 0.6 + Math.random() * 0.8,
-      phase: Math.random() * Math.PI * 2,
-      wob: 0.6 + Math.random() * 1.6,
-      life: 0,
-      maxLife: 7 + Math.random() * 9,
-      heat: Math.random(),
-      flick: 4 + Math.random() * 8
-    };
-  }
-
-  function wind(time, y) {
-    // Rajadas suaves: soma de senoides, mais forte no alto da tela
-    var gust = Math.sin(time * 0.23) * 0.5 + Math.sin(time * 0.071 + 1.3) * 0.35 + Math.sin(time * 0.53 + y * 0.004) * 0.15;
-    return 28 + gust * 38;
+    var mt = W < 600 ? 3 : 6;
+    while (motes.length < mt) { var m = spawnMote(); m.y = Math.random() * H; motes.push(m); }
+    if (motes.length > mt) motes.length = mt;
   }
 
   function burst(x, y, n, color) {
+    if (!enabled || reduce) return;
     for (var i = 0; i < (n || 26); i++) {
-      var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.2;
-      var sp = 120 + Math.random() * 260;
+      var a = -Math.PI / 2 + (Math.random() - 0.5) * 2.4;
+      var sp = 140 + Math.random() * 320;
       sparks.push({
-        x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
-        life: 0, maxLife: 0.5 + Math.random() * 0.7,
-        r: 0.8 + Math.random() * 1.6, purple: color === 'purple' && Math.random() < 0.6
+        x: x, y: y, px: x, py: y,
+        vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+        life: 0, maxLife: 0.45 + Math.random() * 0.75,
+        r: 0.6 + Math.random() * 1.1,
+        violet: color === 'purple' && Math.random() < 0.6
       });
     }
-    if (reduce) sparks.length = 0;
     if (!running) start();
   }
 
+  // ---------- Simulação ----------
   function step(dt) {
     t += dt;
+    var g = gust(t);
     for (var i = 0; i < embers.length; i++) {
       var e = embers[i];
+      e.px = e.x; e.py = e.y;
       e.life += dt;
-      e.x += (wind(t, e.y) * e.drift + Math.sin(t * e.wob + e.phase) * 14) * dt;
-      e.y += (e.vy + Math.cos(t * e.wob * 0.7 + e.phase) * 8) * dt;
-      if (e.y > H + 20 || e.x > W + 30 || e.life > e.maxLife) embers[i] = spawn(false);
+      // empuxo diminui conforme esfria; turbulência mais forte em brasas leves
+      var lift = e.buoy * (0.35 + e.temp);
+      var fx = flowX(e.x, e.y, t + e.seed) * 90 + (18 + g * 34);
+      var fy = flowY(e.x, e.y, t + e.seed) * 40 - lift;
+      e.vx += (fx * e.z - e.vx) * Math.min(1, dt * 1.6);
+      e.vy += (fy * e.z - e.vy) * Math.min(1, dt * 1.2);
+      e.x += e.vx * dt;
+      e.y += e.vy * dt;
+      e.tumble += e.spin * dt;
+      e.temp -= e.cool * dt;
+      if (e.temp <= 0.02 || e.y < -30 || e.x > W + 40 || e.x < -40) embers[i] = spawnEmber(false);
+    }
+    for (var m = 0; m < motes.length; m++) {
+      var o = motes[m];
+      o.x += (o.vx + (14 + g * 18) * 0.4 + Math.sin(t * 0.4 + o.seed) * 6) * dt;
+      o.y += o.vy * dt;
+      if (o.y < -o.r * 2 || o.x > W + o.r * 2) motes[m] = spawnMote();
     }
     for (var j = sparks.length - 1; j >= 0; j--) {
       var s = sparks[j];
+      s.px = s.x; s.py = s.y;
       s.life += dt;
-      s.vy += 380 * dt;
-      s.vx *= 0.985;
+      s.vy += 520 * dt;          // gravidade
+      s.vx *= Math.pow(0.18, dt); // arrasto do ar
+      s.vy *= Math.pow(0.5, dt);
       s.x += s.vx * dt;
       s.y += s.vy * dt;
       if (s.life > s.maxLife) sparks.splice(j, 1);
     }
   }
 
+  // ---------- Desenho ----------
   function draw() {
     ctx.clearRect(0, 0, W, H);
     var dark = isDark();
-    var set = dark ? SPRITES.dark : SPRITES.light;
     ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
+    var dim = dark ? 1 : 0.7;
+    ctx.lineCap = 'round';
+
+    // 1. bokeh ao fundo/frente
+    for (var m = 0; m < motes.length; m++) {
+      var o = motes[m];
+      var fl = 0.8 + 0.2 * Math.sin(t * 1.3 + o.seed);
+      ctx.globalAlpha = o.a * fl * dim;
+      ctx.drawImage(BOKEH[lvl(o.temp)], o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
+    }
+
+    // 2. brasas: halo + rastro de movimento + núcleo
     for (var i = 0; i < embers.length; i++) {
       var e = embers[i];
-      var lifeK = e.life / e.maxLife;
-      var fade = Math.min(1, e.life * 1.5) * (1 - Math.pow(lifeK, 3));
-      var flicker = 0.7 + 0.3 * Math.sin(t * e.flick + e.phase);
-      // Esfriam enquanto caem: amarelo → laranja → vermelho
-      var cool = Math.min(2, Math.floor((e.heat * 0.5 + lifeK) * 2));
-      ctx.globalAlpha = Math.max(0, fade * flicker * (dark ? 0.95 : 0.8));
-      var size = e.r * 7 * (1 - lifeK * 0.35);
-      ctx.drawImage(set[cool], e.x - size / 2, e.y - size / 2, size, size);
+      var fadeIn = Math.min(1, e.life * 2);
+      var fadeOut = Math.min(1, e.temp / 0.18);
+      // cintilação irregular: duas frequências + "estalo" ocasional
+      var fl = 0.72 + 0.18 * Math.sin(t * e.flick + e.seed) + 0.1 * Math.sin(t * e.flick * 2.7 + e.seed * 3);
+      var a = fadeIn * fadeOut * fl * dim;
+      if (a <= 0.01) continue;
+      var k = e.temp * (0.9 + 0.1 * fl);
+      var c = rampColor(k);
+
+      var halo = e.r * (6 + e.temp * 7);
+      ctx.globalAlpha = a * (0.35 + e.z * 0.4);
+      ctx.drawImage(HALOS[lvl(k)], e.x - halo, e.y - halo, halo * 2, halo * 2);
+
+      // rastro: alinhado à velocidade, mais longo quanto mais rápido
+      var dx = e.x - e.px, dy = e.y - e.py;
+      var len = Math.sqrt(dx * dx + dy * dy);
+      var stretch = Math.min(3.2, 1 + len * 0.9);
+      var tx = e.x - dx * stretch, ty = e.y - dy * stretch;
+      ctx.globalAlpha = a * 0.55;
+      ctx.strokeStyle = rgba(rampColor(k * 0.8), 1);
+      ctx.lineWidth = e.r * 1.1;
+      ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(e.x, e.y); ctx.stroke();
+
+      // núcleo irregular: elipse que gira (fragmento de carvão, não bolinha)
+      ctx.globalAlpha = a;
+      ctx.fillStyle = rgba(rampColor(Math.min(1, k + 0.12)), 1);
+      ctx.save();
+      ctx.translate(e.x, e.y);
+      ctx.rotate(e.tumble);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, e.r * 1.25, e.r * 0.7, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
     }
+
+    // 3. faíscas de forja: riscos brilhantes que caem
     for (var j = 0; j < sparks.length; j++) {
       var s = sparks[j];
-      var k = 1 - s.life / s.maxLife;
-      ctx.globalAlpha = Math.max(0, k);
-      var sz = s.r * 9 * (0.5 + k * 0.5);
-      ctx.drawImage(s.purple ? SPRITE_S : set[0], s.x - sz / 2, s.y - sz / 2, sz, sz);
+      var kk = 1 - s.life / s.maxLife;
+      var sc = s.violet ? [225, 200, 255] : rampColor(0.55 + kk * 0.45);
+      ctx.globalAlpha = Math.max(0, kk) * dim;
+      ctx.strokeStyle = rgba(sc, 1);
+      ctx.lineWidth = s.r * (0.6 + kk * 0.8);
+      var sx = s.x - (s.x - s.px) * 2.5, sy = s.y - (s.y - s.py) * 2.5;
+      ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(s.x, s.y); ctx.stroke();
+      var hs = s.r * 7 * kk;
+      ctx.globalAlpha = Math.max(0, kk) * 0.6 * dim;
+      ctx.drawImage(s.violet ? VIOLET : HALOS[lvl(0.6 + kk * 0.4)], s.x - hs, s.y - hs, hs * 2, hs * 2);
     }
+
     ctx.globalAlpha = 1;
     ctx.globalCompositeOperation = 'source-over';
   }
-  var SPRITE_S = makeSprite('rgba(235,215,255,1)', 'rgba(155,107,214,.6)');
 
-  function frame(now) {
-    if (!running) return;
-    var dt = Math.min(0.05, (now - (last || now)) / 1000);
-    last = now;
-    step(dt);
-    draw();
-    requestAnimationFrame(frame);
-  }
+  // ---------- Ciclo ----------
   function start() {
+    if (!enabled) return;
     if (reduce) { draw(); return; }
+    if (running) return;
     running = true;
     last = 0;
-    requestAnimationFrame(frame);
+    var id = ++loopId;
+    requestAnimationFrame(function frame(now) {
+      if (!running || id !== loopId) return;
+      var dt = Math.min(0.05, (now - (last || now)) / 1000);
+      last = now;
+      step(dt);
+      draw();
+      requestAnimationFrame(frame);
+    });
+  }
+  function stop() {
+    running = false;
+    loopId++;
+    sparks.length = 0;
+    ctx.clearRect(0, 0, W, H);
+  }
+  function setEnabled(on) {
+    enabled = !!on;
+    document.documentElement.classList.toggle('forja-on', enabled);
+    if (forjaSwitch) forjaSwitch.setAttribute('aria-checked', String(enabled));
+    try { localStorage.setItem(FORJA_KEY, enabled ? '1' : '0'); } catch (err) {}
+    if (enabled) {
+      resize();
+      // aquece a simulação para não começar com tudo parado
+      if (!reduce) for (var w = 0; w < 40; w++) step(1 / 30);
+      start();
+    } else {
+      stop();
+    }
   }
 
-  resize();
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', function () { if (enabled) resize(); });
   document.addEventListener('visibilitychange', function () {
-    if (document.hidden) { running = false; } else if (!reduce) { start(); }
+    if (document.hidden) { stop(); } else { start(); }
   });
-  if (reduce) { draw(); } else { start(); }
+  if (forjaSwitch) forjaSwitch.addEventListener('click', function () { setEnabled(!enabled); });
+  setEnabled(enabled);
 
   window.Forja = {
     sparksAt: function (el, color) {
       if (!el || !el.getBoundingClientRect) return;
       var r = el.getBoundingClientRect();
       burst(r.left + r.width / 2, r.top + r.height / 2, 30, color);
-    }
+    },
+    setEnabled: setEnabled
   };
 })();
 </script>
