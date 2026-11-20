@@ -267,7 +267,7 @@
   /* =========================================================
      4. Cartões
      ========================================================= */
-  .panel, .result, .compare, .vantagens, .production, .magicos {
+  .panel, .result, .compare, .vantagens, .production, .magicos, .lista {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--r-lg);
@@ -714,7 +714,59 @@
     color: var(--text-dim);
   }
   .result.is-empty .result-value { color: var(--text-dim); opacity: .45; }
-  .result.is-empty .receipt, .result.is-empty .result-props { display: none; }
+  .result.is-empty .receipt, .result.is-empty .result-props, .result.is-empty .result-actions { display: none; }
+
+  /* Ações do resultado */
+  .result-actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+  .result-actions .btn-ghost { flex: 1 1 auto; }
+  .btn-strong {
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    color: var(--text);
+  }
+  .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 20%, transparent); border-color: var(--accent); }
+
+  /* Lista da sessão */
+  .lista { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-3); }
+  .lista-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--sp-2) var(--sp-3); }
+  .lista-title {
+    margin: 0;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .lista-actions { display: flex; align-items: center; gap: var(--sp-3); }
+  .lista-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .lista-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 36px;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3) 0;
+    border-top: 1px solid var(--border);
+    animation: slide-in .3s var(--ease);
+  }
+  .lista-item:first-child { border-top: none; padding-top: 0; }
+  .li-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .li-nome { font-weight: 600; font-size: var(--fs-md); }
+  .li-sub { font-size: var(--fs-xs); color: var(--text-dim); }
+  .li-nums { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+  .li-valor { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+  .li-horas { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); white-space: nowrap; }
+  .lista-item .btn-remove { height: 36px; }
+  .lista-total {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px var(--sp-3);
+    align-items: baseline;
+    padding-top: var(--sp-3);
+    border-top: 2px solid var(--text-dim);
+  }
+  .lt-label { font-weight: 700; }
+  .lt-valor { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 700; font-size: var(--fs-lg); color: var(--accent); }
+  .lt-horas { grid-column: 1 / -1; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); }
   .result.is-empty .kpi-time { border-bottom: none; padding-bottom: 0; }
   .cost-bar.is-empty .cb-value { color: var(--text-dim); }
   .cost-bar.is-empty #cb-value { font-size: 0; }
@@ -989,7 +1041,7 @@
   @media (min-width: 1060px) { .cost-bar { display: none; } }
 
   @media (max-width: 480px) {
-    .form-section, .compare, .vantagens, .production { padding: var(--sp-4); }
+    .form-section, .compare, .vantagens, .production, .lista { padding: var(--sp-4); }
     .setting { padding: var(--sp-3); }
     .magicos-summary { padding: var(--sp-4); }
     .magicos-body { padding: 0 var(--sp-4) var(--sp-4); }
@@ -1282,6 +1334,10 @@
       <span class="kpi-time-value"><strong id="result-time">—</strong> <span id="result-time-sub"></span></span>
     </div>
     <div class="result-props" id="result-props" hidden></div>
+    <div class="result-actions">
+      <button type="button" class="btn-ghost btn-strong" id="add-lista-btn">+ Adicionar à lista</button>
+      <button type="button" class="btn-ghost" id="copy-btn">Copiar resultado</button>
+    </div>
     <div class="receipt">
       <p class="receipt-title">A conta</p>
       <div class="breakdown" id="breakdown"></div>
@@ -1303,6 +1359,18 @@
     <p class="production-title">Tempo de Produção</p>
     <p class="production-note" id="production-note"></p>
     <div id="production-rows"></div>
+  </section>
+
+  <section class="lista" id="lista-section" aria-labelledby="lista-title" hidden>
+    <div class="lista-head">
+      <p class="lista-title" id="lista-title">Lista da sessão</p>
+      <div class="lista-actions">
+        <button type="button" class="btn-ghost" id="lista-copy-btn">Copiar lista</button>
+        <button type="button" class="btn-reset" id="lista-clear-btn">limpar</button>
+      </div>
+    </div>
+    <ul class="lista-items" id="lista-items"></ul>
+    <div class="lista-total" id="lista-total"></div>
   </section>
 
   <details class="magicos" id="magicos-details">
@@ -1432,8 +1500,8 @@
 </button>
 <p class="sr-only" id="live-result" aria-live="polite"></p>
 <div class="toast" id="toast" role="status" hidden>
-  <span>Valores restaurados para o padrão.</span>
-  <button type="button" class="toast-btn" id="toast-undo">Desfazer</button>
+  <span id="toast-msg"></span>
+  <button type="button" class="toast-btn" id="toast-undo" hidden></button>
 </div>
 
 <script>
@@ -1875,6 +1943,7 @@
   var productionNoteEl = document.getElementById('production-note');
   var resultTimeEl = document.getElementById('result-time');
   var resultTimeSubEl = document.getElementById('result-time-sub');
+  var lastForjadorHoras = null;
   var resultEmptyEl = document.getElementById('result-empty');
   var compareSection = document.getElementById('compare-section');
   var cbTime = document.getElementById('cb-time');
@@ -2355,6 +2424,7 @@
         productionNoteEl.textContent = 'Escolha um Tier para cada material (preenchido automaticamente ao selecionar da lista) para calcular o tempo de produção.';
         resultTimeEl.textContent = '—';
         resultTimeSubEl.textContent = 'escolha o tier';
+        lastForjadorHoras = null;
         return;
       }
 
@@ -2383,6 +2453,7 @@
     var comumHoras = totalHoras * timeFactor;
     var comumAjudanteHoras = comumHoras / 2;
 
+    lastForjadorHoras = forjadorHoras;
     var diasForjador = Math.ceil(forjadorHoras / FORJADOR_HORAS_DIA);
     resultTimeEl.textContent = fmt(forjadorHoras) + 'h';
     resultTimeSubEl.textContent = '· ' + diasForjador + (diasForjador === 1 ? ' dia' : ' dias');
@@ -3142,34 +3213,252 @@
     btn.addEventListener('click', function () { setTipo(btn.dataset.tipo); });
   });
 
-  // Restaurar padrão com "Desfazer" (some sozinho em 8s)
+  // --- Aviso flutuante (com ação opcional, como "Desfazer") ---
   var toastEl = document.getElementById('toast');
-  var toastUndo = document.getElementById('toast-undo');
-  var undoSnapshot = null, toastTimer = 0;
+  var toastMsg = document.getElementById('toast-msg');
+  var toastAction = document.getElementById('toast-undo');
+  var toastFn = null, toastTimer = 0;
   function hideToast() {
     clearTimeout(toastTimer);
     toastEl.classList.remove('show');
     toastTimer = setTimeout(function () { toastEl.hidden = true; }, 250);
-    undoSnapshot = null;
+    toastFn = null;
   }
-  resetBtn.addEventListener('click', function () {
-    undoSnapshot = JSON.stringify(state);
-    state = JSON.parse(JSON.stringify(DEFAULTS));
-    saveState();
-    hydrateForm();
+  function showToast(msg, actionLabel, actionFn, ms) {
     clearTimeout(toastTimer);
+    toastMsg.textContent = msg;
+    toastFn = actionFn || null;
+    toastAction.hidden = !actionFn;
+    toastAction.textContent = actionLabel || '';
     toastEl.hidden = false;
     void toastEl.offsetWidth;
     toastEl.classList.add('show');
-    toastTimer = setTimeout(hideToast, 8000);
+    toastTimer = setTimeout(hideToast, ms || (actionFn ? 8000 : 3000));
+  }
+  toastAction.addEventListener('click', function () {
+    var fn = toastFn;
+    hideToast();
+    if (fn) fn();
   });
-  toastUndo.addEventListener('click', function () {
-    if (!undoSnapshot) return;
-    state = JSON.parse(undoSnapshot);
+
+  // Restaurar padrão com "Desfazer"
+  resetBtn.addEventListener('click', function () {
+    var snapshot = JSON.stringify(state);
+    state = JSON.parse(JSON.stringify(DEFAULTS));
     saveState();
     hydrateForm();
-    hideToast();
+    showToast('Valores restaurados para o padrão.', 'Desfazer', function () {
+      state = JSON.parse(snapshot);
+      saveState();
+      hydrateForm();
+    });
   });
+
+  // --- Resumo do item atual (para copiar e para a lista) ---
+  var SITE_URL = 'https://gabriel-sbs.github.io/calculadora-forjador/';
+  var TIPO_NOME = { arma: 'Arma', armadura: 'Armadura', municao: 'Munição', polvora: 'Pólvora' };
+
+  function fmtHorasForjador(h) {
+    if (h == null || !isFinite(h)) return '';
+    var dias = Math.ceil(h / FORJADOR_HORAS_DIA);
+    return fmt(h) + 'h (' + dias + (dias === 1 ? ' dia' : ' dias') + ' de ' + FORJADOR_HORAS_DIA + 'h)';
+  }
+  function fmtMod(m) { return (m >= 0 ? '+' : '−') + Math.abs(m); }
+
+  function resumoAtual() {
+    var c = calculate();
+    if (emptyReason(c)) return null;
+    var props = itemProps();
+    var mats = state.tipoItem === 'polvora' ? [] : state.materials
+      .filter(function (m) { return m.name || m.materialId; })
+      .map(function (m) {
+        var db = m.materialId ? materialById(m.materialId) : null;
+        return (db ? db.nome : m.name) + (m.tier ? ' (' + m.tier + ')' : '');
+      });
+    return {
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      nome: state.equipNome || (TIPO_NOME[state.tipoItem] || 'Item') + ' (PDE ' + fmt(num(state.pde, 0)) + ')',
+      mats: mats,
+      mods: (state.mods || []).map(function (i) { return MODS_DB[i] && MODS_DB[i][0]; }).filter(Boolean),
+      valor: c.final,
+      venda: state.modo === 'vendido',
+      horas: lastForjadorHoras,
+      dureza: props && state.mostrarDureza ? props.dureza : null,
+      mod: props ? props.mod : null,
+      obra: !!(props && props.obra),
+      pressa: !!state.pressa,
+      rende: state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
+    };
+  }
+
+  function linhaTitulo(r) {
+    return r.nome + (r.mats.length ? ' — ' + r.mats.join(' + ') : '');
+  }
+
+  function textoResumo(r) {
+    var linhas = ['⚒️ ' + linhaTitulo(r)];
+    linhas.push((r.venda ? 'Preço de venda: ' : 'Custo para forjar: ') + fmt(r.valor) + ' po' + (r.rende ? ' (rende ' + r.rende + ')' : ''));
+    if (r.horas != null) linhas.push('Tempo do Forjador: ' + fmtHorasForjador(r.horas));
+    var props = [];
+    var tags = [r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : ''].filter(Boolean);
+    if (r.mod != null) props.push('Modificador ' + fmtMod(r.mod) + (tags.length ? ' (' + tags.join(', ') + ')' : ''));
+    if (r.dureza) props.push('Dureza ' + r.dureza);
+    if (props.length) linhas.push(props.join(' · '));
+    if (r.mods.length) linhas.push('Modificações: ' + r.mods.join(', '));
+    return linhas.join('\n');
+  }
+
+  function copiarTexto(texto) {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(texto);
+    }
+    return new Promise(function (resolve, reject) {
+      var ta = document.createElement('textarea');
+      ta.value = texto;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:-1000px;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      if (ok) resolve(); else reject(new Error('copy'));
+    });
+  }
+
+  document.getElementById('copy-btn').addEventListener('click', function () {
+    var r = resumoAtual();
+    if (!r) return;
+    copiarTexto(textoResumo(r) + '\n' + SITE_URL).then(function () {
+      showToast('Resultado copiado. É só colar no chat da mesa.');
+    }, function () {
+      showToast('Não consegui copiar automaticamente neste navegador.');
+    });
+  });
+
+  // --- Lista da sessão: vários itens, com total de custo e tempo ---
+  var LISTA_KEY = 'forjador-lista-v1';
+  var listaSection = document.getElementById('lista-section');
+  var listaItemsEl = document.getElementById('lista-items');
+  var listaTotalEl = document.getElementById('lista-total');
+  var lista = [];
+  try { lista = JSON.parse(localStorage.getItem(LISTA_KEY) || '[]'); } catch (e) { lista = []; }
+  if (!Array.isArray(lista)) lista = [];
+
+  function salvarLista() {
+    try { localStorage.setItem(LISTA_KEY, JSON.stringify(lista)); } catch (e) {}
+  }
+  function totaisLista() {
+    var po = 0, horas = 0, semTempo = 0;
+    lista.forEach(function (r) {
+      po += r.valor || 0;
+      if (r.horas != null) horas += r.horas; else semTempo++;
+    });
+    return { po: po, horas: horas, semTempo: semTempo };
+  }
+
+  function renderLista() {
+    listaSection.hidden = !lista.length;
+    listaItemsEl.innerHTML = '';
+    lista.forEach(function (r, idx) {
+      var li = document.createElement('li');
+      li.className = 'lista-item';
+      var info = document.createElement('div');
+      info.className = 'li-info';
+      var nome = document.createElement('span');
+      nome.className = 'li-nome';
+      nome.textContent = r.nome + (r.mod != null ? ' ' + fmtMod(r.mod) : '');
+      var sub = document.createElement('span');
+      sub.className = 'li-sub';
+      sub.textContent = [r.mats.join(' + '), r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : '', r.mods.length ? r.mods.length + (r.mods.length === 1 ? ' modificação' : ' modificações') : '', r.rende ? 'rende ' + r.rende : '']
+        .filter(Boolean).join(' · ');
+      info.appendChild(nome);
+      if (sub.textContent) info.appendChild(sub);
+      var nums = document.createElement('div');
+      nums.className = 'li-nums';
+      var v = document.createElement('span');
+      v.className = 'li-valor';
+      v.textContent = fmt(r.valor) + ' po' + (r.venda ? ' (venda)' : '');
+      var h = document.createElement('span');
+      h.className = 'li-horas';
+      h.textContent = r.horas != null ? fmt(r.horas) + 'h' : 'tempo: Mestre';
+      nums.appendChild(v);
+      nums.appendChild(h);
+      var rm = document.createElement('button');
+      rm.type = 'button';
+      rm.className = 'btn-remove';
+      rm.textContent = '×';
+      rm.setAttribute('aria-label', 'Tirar ' + r.nome + ' da lista');
+      rm.addEventListener('click', function () {
+        var removido = lista.splice(idx, 1)[0];
+        salvarLista();
+        renderLista();
+        showToast(removido.nome + ' saiu da lista.', 'Desfazer', function () {
+          lista.splice(Math.min(idx, lista.length), 0, removido);
+          salvarLista();
+          renderLista();
+        });
+      });
+      li.appendChild(info);
+      li.appendChild(nums);
+      li.appendChild(rm);
+      listaItemsEl.appendChild(li);
+    });
+    var t = totaisLista();
+    listaTotalEl.innerHTML = '';
+    var tl = document.createElement('span');
+    tl.className = 'lt-label';
+    tl.textContent = 'Total · ' + lista.length + (lista.length === 1 ? ' item' : ' itens');
+    var tv = document.createElement('span');
+    tv.className = 'lt-valor';
+    tv.textContent = fmt(t.po) + ' po';
+    var th = document.createElement('span');
+    th.className = 'lt-horas';
+    th.textContent = (t.horas ? fmtHorasForjador(t.horas) + ' de forja, um item após o outro' : '') +
+      (t.semTempo ? (t.horas ? ' · ' : '') + t.semTempo + ' sem tempo definido' : '');
+    listaTotalEl.appendChild(tl);
+    listaTotalEl.appendChild(tv);
+    if (th.textContent) listaTotalEl.appendChild(th);
+  }
+
+  document.getElementById('add-lista-btn').addEventListener('click', function () {
+    var r = resumoAtual();
+    if (!r) return;
+    lista.push(r);
+    salvarLista();
+    renderLista();
+    var t = totaisLista();
+    showToast('Adicionado. Lista: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmt(t.po) + ' po.', 'Ver lista', function () {
+      listaSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    }, 5000);
+  });
+
+  document.getElementById('lista-copy-btn').addEventListener('click', function () {
+    if (!lista.length) return;
+    var t = totaisLista();
+    var partes = lista.map(textoResumo);
+    partes.push('Total: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmt(t.po) + ' po' +
+      (t.horas ? ' · ' + fmtHorasForjador(t.horas) : ''));
+    copiarTexto(partes.join('\n\n') + '\n' + SITE_URL).then(function () {
+      showToast('Lista copiada.');
+    }, function () {
+      showToast('Não consegui copiar automaticamente neste navegador.');
+    });
+  });
+
+  document.getElementById('lista-clear-btn').addEventListener('click', function () {
+    var copia = lista.slice();
+    lista = [];
+    salvarLista();
+    renderLista();
+    showToast('Lista limpa.', 'Desfazer', function () {
+      lista = copia;
+      salvarLista();
+      renderLista();
+    });
+  });
+
+  renderLista();
 
   function hydrateForm() {
     if (state.mostrarDureza === undefined) state.mostrarDureza = true;
@@ -3630,6 +3919,13 @@
     setEnabled: setEnabled
   };
 })();
+</script>
+
+<script>
+// Funciona sem internet quando servida pela web (GitHub Pages); aberta como arquivo, não precisa
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+}
 </script>
 
 </body>

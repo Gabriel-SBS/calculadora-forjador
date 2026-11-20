@@ -4,7 +4,7 @@ Fiz esta calculadora para a minha mesa de D&D 5e, onde jogo com a classe **Forja
 
 **Usar online:** https://gabriel-sbs.github.io/calculadora-forjador/
 
-É um único arquivo HTML, sem instalação. Também dá para baixar o `index.html` e abrir direto no navegador, inclusive sem internet. No celular, dá para adicionar à tela inicial e ela abre como app.
+É um único arquivo HTML, sem instalação. Também dá para baixar o `index.html` e abrir direto no navegador, inclusive sem internet. No celular, dá para adicionar à tela inicial e ela abre como app; depois da primeira visita, ela continua abrindo mesmo sem internet.
 
 ## Como usar
 
@@ -14,6 +14,11 @@ Fiz esta calculadora para a minha mesa de D&D 5e, onde jogo com a classe **Forja
 4. O custo e o tempo do Forjador aparecem no painel de resultado (no computador ele fica fixo na lateral; no celular, uma barra no rodapé mostra os dois enquanto você rola). Logo abaixo vêm a conta passo a passo, a comparação com um ferreiro comum e o tempo de produção em detalhe.
 
 Os valores ficam salvos no seu navegador, então dá para fechar a página e voltar depois.
+
+### Copiar e montar uma lista
+
+- **Copiar resultado** gera um texto pronto para colar no Discord ou no WhatsApp da mesa, com item, materiais, custo, tempo, modificador e dureza.
+- **Adicionar à lista** guarda o item atual na **Lista da sessão**, que soma o custo e o tempo de todos os itens (o tempo considera um item feito depois do outro). Serve para quando o grupo encomenda vários equipamentos de uma vez. A lista também pode ser copiada inteira e fica salva no navegador até você limpar.
 
 ## Aparência
 
