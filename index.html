@@ -2,6 +2,10 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<script>
+  // Aplica o tema salvo antes de desenhar a página (evita piscar)
+  try { var tema = localStorage.getItem('forjador-tema'); if (tema === 'light' || tema === 'dark') document.documentElement.setAttribute('data-theme', tema); } catch (e) {}
+</script>
 <title>Calculadora do Forjador</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#b85c26">
@@ -33,11 +37,11 @@
     --good: #4f7a45;
     --ember: #e2621b;
     --ember-hot: #ffc46b;
-    --tier-d: #8a8178;
-    --tier-c: #b07a45;
-    --tier-b: #5f7f96;
-    --tier-a: #b8911a;
-    --tier-s: #8d5ccc;
+    --tier-d: #6e665d;
+    --tier-c: #8a5826;
+    --tier-b: #48667c;
+    --tier-a: #7a5f06;
+    --tier-s: #7a48b8;
     --shadow: 0 1px 2px rgba(43,36,28,.06), 0 4px 14px rgba(43,36,28,.06);
     --shadow-lift: 0 8px 28px rgba(43,36,28,.18);
 
@@ -134,6 +138,22 @@
     overflow-x: hidden;
   }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Troca de tema em onda (View Transitions) */
+  :root.theme-wave::view-transition-old(root),
+  :root.theme-wave::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  :root.theme-wave::view-transition-new(root) { z-index: 2; }
 
   .page {
     position: relative;
@@ -181,6 +201,27 @@
     white-space: nowrap;
   }
   .view-switch + .view-switch { border-left: 1px solid var(--border); }
+
+  /* Botão de tema: lua no claro, sol no escuro */
+  .theme-btn {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: color var(--t-fast), background-color var(--t-fast);
+  }
+  .theme-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .theme-btn svg { grid-area: 1 / 1; transition: transform .35s var(--ease), opacity .2s; }
+  .theme-btn .i-sun { opacity: 0; transform: rotate(-90deg) scale(.6); }
+  .theme-btn[data-current="dark"] .i-sun { opacity: 1; transform: none; }
+  .theme-btn[data-current="dark"] .i-moon { opacity: 0; transform: rotate(90deg) scale(.6); }
+  .theme-btn + .view-switch { border-left: 1px solid var(--border); }
   .view-switch .switch { width: 36px; height: 22px; }
   .view-switch .switch .knob { width: 16px; height: 16px; }
   .view-switch .switch[aria-checked="true"] .knob { transform: translateX(14px); }
@@ -291,7 +332,7 @@
      5. Campos
      ========================================================= */
   .field-group { display: flex; flex-direction: column; gap: var(--sp-2); }
-  label {
+  label, .label {
     font-size: var(--fs-sm);
     font-weight: 600;
     color: var(--text-dim);
@@ -863,7 +904,12 @@
     transform: translateY(140%);
     transition: transform .35s var(--ease);
   }
+  .cost-bar { font: inherit; color: var(--text); text-align: left; cursor: pointer; align-items: center; }
   .cost-bar.show { transform: none; }
+  .cost-bar:active { transform: scale(.99); }
+  .cb-left { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .cb-time { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--text-dim); }
+  .cb-time:empty { display: none; }
   .cb-label { font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); }
   .cb-value { font-family: var(--font-mono); font-weight: 700; font-size: var(--fs-xl); color: var(--accent); font-variant-numeric: tabular-nums; }
   @media (min-width: 1060px) { .cost-bar { display: none; } }
@@ -877,8 +923,22 @@
     .segmented.seg-4 { grid-template-columns: 1fr 1fr; }
     .segmented.seg-3 .seg-btn { font-size: var(--fs-xs); padding: var(--sp-2) var(--sp-1); }
   }
-  @media (max-width: 420px) {
-    .mat-row-top { grid-template-columns: 1fr 48px 72px 36px; }
+  /* Celular: nome do material ocupa a linha toda; tier e multiplicador embaixo */
+  @media (max-width: 480px) {
+    .mat-row-top { grid-template-columns: 64px minmax(0, 1fr) 40px; }
+    .mat-row-top > :nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
+    .mat-row-top > :nth-child(2) { grid-column: 1; grid-row: 2; }
+    .mat-row-top > :nth-child(3) { grid-column: 2 / 4; grid-row: 2; }
+    .mat-row-top > :nth-child(4) { grid-column: 3; grid-row: 1; width: 40px; }
+    .material-row + .material-row { padding-top: var(--sp-2); }
+    .hero { align-items: flex-start; }
+  }
+
+  /* Telas de toque: alvos maiores */
+  @media (pointer: coarse) {
+    .seg-btn { min-height: 40px; }
+    .btn-ghost { height: 40px; }
+    .theme-btn { width: 36px; height: 36px; }
   }
 
   /* =========================================================
@@ -926,6 +986,10 @@
       <p class="sub">Custo de criação de um item, combinando o desconto de Artesão com a mão de obra dispensada pelo Forjador.</p>
     </div>
     <div class="view-bar" role="group" aria-label="Exibição">
+      <button type="button" class="theme-btn" id="theme-btn" aria-label="Mudar para tema noturno" title="Mudar para tema noturno">
+        <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></svg>
+      </button>
       <span class="view-switch" title="Regra de quebra de equipamentos é opcional">
         <span id="dureza-label">Mostrar dureza</span>
         <button type="button" class="switch" id="dureza-switch" role="switch" aria-checked="true" aria-labelledby="dureza-label">
@@ -953,7 +1017,7 @@
       </header>
 
       <div class="field-group">
-        <label id="equip-label">Equipamento do Guia (opcional)</label>
+        <span class="label" id="equip-label">Equipamento do Guia (opcional)</span>
         <div id="equip-wrap"></div>
         <p class="equip-info" id="equip-info" hidden></p>
       </div>
@@ -964,21 +1028,21 @@
       </div>
 
       <div class="field-group">
-        <label>Tipo de Item</label>
-        <div class="segmented seg-4" id="tipo-segmented" role="tablist" aria-label="Tipo de item">
-          <button type="button" class="seg-btn" data-tipo="arma" role="tab">Arma</button>
-          <button type="button" class="seg-btn" data-tipo="armadura" role="tab">Armadura</button>
-          <button type="button" class="seg-btn" data-tipo="municao" role="tab">Munição</button>
-          <button type="button" class="seg-btn" data-tipo="polvora" role="tab">Pólvora</button>
+        <span class="label" id="tipo-label">Tipo de item</span>
+        <div class="segmented seg-4" id="tipo-segmented" role="radiogroup" aria-label="Tipo de item">
+          <button type="button" class="seg-btn" data-tipo="arma" role="radio">Arma</button>
+          <button type="button" class="seg-btn" data-tipo="armadura" role="radio">Armadura</button>
+          <button type="button" class="seg-btn" data-tipo="municao" role="radio">Munição</button>
+          <button type="button" class="seg-btn" data-tipo="polvora" role="radio">Pólvora</button>
         </div>
       </div>
 
       <div class="field-group" id="peso-wrap">
-        <label>Peso do item (tempo de criação)</label>
-        <div class="segmented seg-3" id="peso-segmented" role="tablist" aria-label="Peso do item">
-          <button type="button" class="seg-btn" data-peso="leve" role="tab">Leve (−8h)</button>
-          <button type="button" class="seg-btn" data-peso="" role="tab">Normal</button>
-          <button type="button" class="seg-btn" data-peso="pesado" role="tab">Pesado (+8h)</button>
+        <span class="label" id="peso-label">Peso do item (tempo de criação)</span>
+        <div class="segmented seg-3" id="peso-segmented" role="radiogroup" aria-label="Peso do item">
+          <button type="button" class="seg-btn" data-peso="leve" role="radio">Leve (−8h)</button>
+          <button type="button" class="seg-btn" data-peso="" role="radio">Normal</button>
+          <button type="button" class="seg-btn" data-peso="pesado" role="radio">Pesado (+8h)</button>
         </div>
       </div>
 
@@ -1048,10 +1112,10 @@
             </button>
           </div>
           <div class="field-group setting-sub" id="artesao-modo-wrap">
-            <label>Como o desconto do Artesão entra</label>
-            <div class="segmented" id="artesao-modo" role="tablist" aria-label="Modo do desconto do Artesão">
-              <button type="button" class="seg-btn" data-artmodo="duplo" role="tab">Duas compras (−36%)</button>
-              <button type="button" class="seg-btn" data-artmodo="simples" role="tab">Uma compra (−20%)</button>
+            <span class="label" id="artmodo-label">Como o desconto do Artesão entra</span>
+            <div class="segmented" id="artesao-modo" role="radiogroup" aria-label="Modo do desconto do Artesão">
+              <button type="button" class="seg-btn" data-artmodo="duplo" role="radio">Duas compras (−36%)</button>
+              <button type="button" class="seg-btn" data-artmodo="simples" role="radio">Uma compra (−20%)</button>
             </div>
             <p class="magicos-note" id="artesao-explica"></p>
           </div>
@@ -1119,9 +1183,9 @@
       </header>
 
       <div class="mode">
-        <div class="segmented" id="mode-segmented" role="tablist" aria-label="Modo de cálculo">
-          <button type="button" class="seg-btn" data-mode="proprio" role="tab">Item Próprio</button>
-          <button type="button" class="seg-btn" data-mode="vendido" role="tab">Item para Venda</button>
+        <div class="segmented" id="mode-segmented" role="radiogroup" aria-label="Modo de cálculo">
+          <button type="button" class="seg-btn" data-mode="proprio" role="radio">Item Próprio</button>
+          <button type="button" class="seg-btn" data-mode="vendido" role="radio">Item para Venda</button>
         </div>
         <div class="field-group" id="lucro-wrap" hidden>
           <label for="lucro">Margem de lucro (%)</label>
@@ -1264,11 +1328,11 @@
         </div>
         <div class="mg-grid">
           <div class="field-group">
-            <label>Material de origem</label>
+            <span class="label" id="origem-label">Material de origem</span>
             <div id="transmut-origem-wrap"></div>
           </div>
           <div class="field-group">
-            <label>Material de destino</label>
+            <span class="label" id="destino-label">Material de destino</span>
             <div id="transmut-destino-wrap"></div>
           </div>
         </div>
@@ -1284,10 +1348,14 @@
   </footer>
 </div>
 
-<div class="cost-bar" id="cost-bar" aria-live="polite">
-  <span class="cb-label" id="cb-label">Custo para forjar</span>
+<button type="button" class="cost-bar" id="cost-bar" title="Ver a conta completa">
+  <span class="cb-left">
+    <span class="cb-label" id="cb-label">Custo para forjar</span>
+    <span class="cb-time" id="cb-time"></span>
+  </span>
   <span class="cb-value"><span id="cb-value">0</span> po</span>
-</div>
+</button>
+<p class="sr-only" id="live-result" aria-live="polite"></p>
 
 <script>
 (function () {
@@ -1713,6 +1781,9 @@
   var productionNoteEl = document.getElementById('production-note');
   var resultTimeEl = document.getElementById('result-time');
   var resultTimeSubEl = document.getElementById('result-time-sub');
+  var cbTime = document.getElementById('cb-time');
+  var liveEl = document.getElementById('live-result');
+  var liveTimer = 0;
   var pressaSwitch = document.getElementById('pressa-switch');
   var formulaNote = document.getElementById('formula-note');
   var resetBtn = document.getElementById('reset-btn');
@@ -2332,7 +2403,7 @@
     resultPropsEl.appendChild(modChip);
   }
 
-  function buildSimpleCombo(placeholder, initialId, onPick) {
+  function buildSimpleCombo(placeholder, initialId, onPick, labelId) {
     var wrap = document.createElement('div');
     wrap.className = 'mat-combo';
 
@@ -2341,6 +2412,7 @@
     input.className = 'mat-search';
     input.autocomplete = 'off';
     input.placeholder = placeholder;
+    if (labelId) input.setAttribute('aria-labelledby', labelId);
     var initial = initialId ? materialById(initialId) : null;
     input.value = initial ? initial.nome : '';
 
@@ -2412,13 +2484,13 @@
       state.transmutOrigemId = id;
       saveState();
       updateMagicos();
-    }));
+    }, 'origem-label'));
     transmutDestinoWrap.innerHTML = '';
     transmutDestinoWrap.appendChild(buildSimpleCombo('Buscar material', state.transmutDestinoId, function (id) {
       state.transmutDestinoId = id;
       saveState();
       updateMagicos();
-    }));
+    }, 'destino-label'));
   }
 
   function mgLine(label, value) {
@@ -2645,6 +2717,15 @@
     renderResultProps();
     renderJuncao();
     updateMagicos();
+
+    // Tempo na barra de custo + aviso para leitor de tela (só o valor final, sem a contagem animada)
+    var temTempo = resultTimeEl.textContent !== '—';
+    cbTime.textContent = temTempo ? resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent : '';
+    clearTimeout(liveTimer);
+    liveTimer = setTimeout(function () {
+      liveEl.textContent = resultLabel.textContent + ': ' + fmt(c.final) + ' po' +
+        (temTempo ? '. Tempo do Forjador: ' + resultTimeEl.textContent + resultTimeSubEl.textContent.replace('·', ',') : '');
+    }, 700);
   }
 
   // --- Equipamento do Guia: preenche PDE, tipo e peso ---
@@ -2673,6 +2754,7 @@
     input.className = 'mat-search';
     input.autocomplete = 'off';
     input.placeholder = 'Buscar arma, armadura, escudo, munição ou pólvora';
+    input.setAttribute('aria-labelledby', 'equip-label');
     input.value = state.equipNome || '';
     var dropdown = document.createElement('div');
     dropdown.className = 'mat-dropdown';
@@ -2781,7 +2863,7 @@
     pesoBtns.forEach(function (btn) {
       var active = btn.dataset.peso === state.peso;
       btn.classList.toggle('active', active);
-      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
     saveState();
     update();
@@ -2798,7 +2880,7 @@
     artesaoModoBtns.forEach(function (btn) {
       var active = btn.dataset.artmodo === state.artesaoModo;
       btn.classList.toggle('active', active);
-      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
     artesaoExplica.textContent = ARTESAO_EXPLICA[state.artesaoModo];
     artesaoModoWrap.hidden = !state.artesao;
@@ -2811,7 +2893,7 @@
     segBtns.forEach(function (btn) {
       var active = btn.dataset.mode === mode;
       btn.classList.toggle('active', active);
-      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
     lucroWrap.hidden = mode !== 'vendido';
     saveState();
@@ -2823,7 +2905,7 @@
     tipoBtns.forEach(function (btn) {
       var active = btn.dataset.tipo === tipo;
       btn.classList.toggle('active', active);
-      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
     fracaoWrap.hidden = tipo !== 'armadura';
     pesoWrap.hidden = tipo === 'municao' || tipo === 'polvora';
@@ -2988,12 +3070,104 @@
   state = loadState();
   hydrateForm();
 
+  // Barra de custo (celular): aparece quando o resultado sai da tela; toque leva até ele
   var costBar = document.getElementById('cost-bar');
+  function setCostBar(show) {
+    costBar.classList.toggle('show', show);
+    costBar.tabIndex = show ? 0 : -1;
+    costBar.setAttribute('aria-hidden', show ? 'false' : 'true');
+  }
+  setCostBar(false);
+  costBar.addEventListener('click', function () {
+    resultCard.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  });
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
-      costBar.classList.toggle('show', !entries[0].isIntersecting);
+      setCostBar(!entries[0].isIntersecting);
     }, { threshold: 0.15 }).observe(resultCard);
   }
+
+})();
+
+// Grupos de opção (botões segmentados): setas do teclado e um só ponto de foco por grupo
+(function () {
+  'use strict';
+  var groups = document.querySelectorAll('.segmented[role="radiogroup"]');
+  Array.prototype.forEach.call(groups, function (group) {
+    var btns = Array.prototype.slice.call(group.querySelectorAll('[role="radio"]'));
+    function syncTabs() {
+      var checked = btns.filter(function (b) { return b.getAttribute('aria-checked') === 'true'; })[0] || btns[0];
+      btns.forEach(function (b) { b.tabIndex = b === checked ? 0 : -1; });
+    }
+    group.addEventListener('keydown', function (ev) {
+      var i = btns.indexOf(document.activeElement);
+      if (i < 0) return;
+      var next = null;
+      if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') next = btns[(i + 1) % btns.length];
+      else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp') next = btns[(i - 1 + btns.length) % btns.length];
+      else if (ev.key === 'Home') next = btns[0];
+      else if (ev.key === 'End') next = btns[btns.length - 1];
+      if (!next) return;
+      ev.preventDefault();
+      next.click();
+      next.focus();
+    });
+    new MutationObserver(syncTabs).observe(group, { subtree: true, attributes: true, attributeFilter: ['aria-checked'] });
+    syncTabs();
+  });
+})();
+</script>
+<script>
+// Tema claro / escuro: segue o sistema até a pessoa escolher, depois lembra
+(function () {
+  'use strict';
+  var btn = document.getElementById('theme-btn');
+  if (!btn) return;
+  var root = document.documentElement;
+  var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
+
+  function current() {
+    var forced = root.getAttribute('data-theme');
+    if (forced === 'light' || forced === 'dark') return forced;
+    return mq && mq.matches ? 'dark' : 'light';
+  }
+  function sync() {
+    var t = current();
+    btn.setAttribute('data-current', t);
+    var label = t === 'dark' ? 'Mudar para tema diurno' : 'Mudar para tema noturno';
+    btn.setAttribute('aria-label', label);
+    btn.title = label;
+    if (themeMeta) themeMeta.setAttribute('content', t === 'dark' ? '#1a1815' : '#ede6d9');
+  }
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function apply(next) {
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('forjador-tema', next); } catch (e) {}
+    sync();
+  }
+
+  btn.addEventListener('click', function () {
+    var next = current() === 'dark' ? 'light' : 'dark';
+    if (!document.startViewTransition || reduce) { apply(next); return; }
+
+    // Onda: o tema novo nasce no botão e se expande até cobrir a tela
+    var r = btn.getBoundingClientRect();
+    var x = r.left + r.width / 2, y = r.top + r.height / 2;
+    var raio = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+    root.classList.add('theme-wave');
+    var transition = document.startViewTransition(function () { apply(next); });
+    transition.ready.then(function () {
+      root.animate(
+        { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + raio + 'px at ' + x + 'px ' + y + 'px)'] },
+        { duration: 700, easing: 'cubic-bezier(.65,0,.35,1)', pseudoElement: '::view-transition-new(root)' }
+      );
+    }).catch(function () {});
+    transition.finished.then(function () { root.classList.remove('theme-wave'); }, function () { root.classList.remove('theme-wave'); });
+  });
+  if (mq && mq.addEventListener) mq.addEventListener('change', sync);
+  sync();
 })();
 </script>
 <script>
