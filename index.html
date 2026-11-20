@@ -685,6 +685,61 @@
 
   .kpi-main { display: flex; flex-direction: column; gap: var(--sp-1); }
 
+  /* Conta incompleta */
+  .result-empty {
+    margin: 0;
+    padding: var(--sp-3) var(--sp-4);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--r-sm);
+    font-size: var(--fs-md);
+    color: var(--text-dim);
+  }
+  .result.is-empty .result-value { color: var(--text-dim); opacity: .45; }
+  .result.is-empty .receipt, .result.is-empty .result-props { display: none; }
+  .result.is-empty .kpi-time { border-bottom: none; padding-bottom: 0; }
+  .cost-bar.is-empty .cb-value { color: var(--text-dim); }
+  .cost-bar.is-empty #cb-value { font-size: 0; }
+  .cost-bar.is-empty #cb-value::before { content: '—'; font-size: var(--fs-xl); }
+
+  /* Aviso com "Desfazer" */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(var(--sp-5) + env(safe-area-inset-bottom));
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    max-width: calc(100% - 2 * var(--sp-3));
+    padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4);
+    border-radius: var(--r-lg);
+    background: var(--text);
+    color: var(--bg);
+    font-size: var(--fs-md);
+    box-shadow: var(--shadow-lift);
+    opacity: 0;
+    transform: translate(-50%, 16px);
+    transition: opacity .2s, transform .25s var(--ease);
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast-btn {
+    flex-shrink: 0;
+    height: 34px;
+    padding: 0 var(--sp-3);
+    border: none;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .toast-btn:focus-visible { outline-color: var(--bg); }
+  .toast-btn:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
+  @media (max-width: 1059.98px) { .toast { bottom: calc(96px + env(safe-area-inset-bottom)); } }
+
   /* Tempo: segundo número do painel */
   .kpi-time {
     display: flex;
@@ -1202,6 +1257,7 @@
       <p class="result-label" id="result-label">Custo para forjar</p>
       <p class="result-value"><span id="result">0</span><span class="unit">po</span></p>
     </div>
+    <p class="result-empty" id="result-empty" hidden></p>
     <div class="kpi-time">
       <span class="kpi-time-label">Tempo do Forjador</span>
       <span class="kpi-time-value"><strong id="result-time">—</strong> <span id="result-time-sub"></span></span>
@@ -1213,7 +1269,7 @@
     </div>
   </section>
 
-  <section class="compare">
+  <section class="compare" id="compare-section">
     <p class="compare-title">Comparativo</p>
     <div id="compare-rows"></div>
   </section>
@@ -1356,6 +1412,10 @@
   <span class="cb-value"><span id="cb-value">0</span> po</span>
 </button>
 <p class="sr-only" id="live-result" aria-live="polite"></p>
+<div class="toast" id="toast" role="status" hidden>
+  <span>Valores restaurados para o padrão.</span>
+  <button type="button" class="toast-btn" id="toast-undo">Desfazer</button>
+</div>
 
 <script>
 (function () {
@@ -1781,6 +1841,8 @@
   var productionNoteEl = document.getElementById('production-note');
   var resultTimeEl = document.getElementById('result-time');
   var resultTimeSubEl = document.getElementById('result-time-sub');
+  var resultEmptyEl = document.getElementById('result-empty');
+  var compareSection = document.getElementById('compare-section');
   var cbTime = document.getElementById('cb-time');
   var liveEl = document.getElementById('live-result');
   var liveTimer = 0;
@@ -2639,8 +2701,24 @@
     })(t0);
   }
 
+  // Conta incompleta: diz o que falta em vez de mostrar uma coluna de zeros
+  function emptyReason(c) {
+    if (!(c.pde > 0)) {
+      if (state.modExistente) return 'Marque pelo menos uma modificação para calcular o custo.';
+      return 'Informe o PDE ou escolha um equipamento do Guia para calcular o custo.';
+    }
+    if (!(c.sumMat > 0)) return 'Escolha pelo menos um material (ou digite o multiplicador) para calcular o custo.';
+    return '';
+  }
+
   function update() {
     var c = calculate();
+    var vazio = emptyReason(c);
+    resultCard.classList.toggle('is-empty', !!vazio);
+    resultEmptyEl.hidden = !vazio;
+    resultEmptyEl.textContent = vazio;
+    compareSection.hidden = !!vazio;
+    document.getElementById('cost-bar').classList.toggle('is-empty', !!vazio);
 
     animateResult(c.final);
     resultLabel.textContent = state.modo === 'vendido' ? 'Preço de venda' : 'Custo para forjar';
@@ -2723,6 +2801,7 @@
     cbTime.textContent = temTempo ? resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent : '';
     clearTimeout(liveTimer);
     liveTimer = setTimeout(function () {
+      if (vazio) { liveEl.textContent = vazio; return; }
       liveEl.textContent = resultLabel.textContent + ': ' + fmt(c.final) + ' po' +
         (temTempo ? '. Tempo do Forjador: ' + resultTimeEl.textContent + resultTimeSubEl.textContent.replace('·', ',') : '');
     }, 700);
@@ -3029,10 +3108,33 @@
     btn.addEventListener('click', function () { setTipo(btn.dataset.tipo); });
   });
 
+  // Restaurar padrão com "Desfazer" (some sozinho em 8s)
+  var toastEl = document.getElementById('toast');
+  var toastUndo = document.getElementById('toast-undo');
+  var undoSnapshot = null, toastTimer = 0;
+  function hideToast() {
+    clearTimeout(toastTimer);
+    toastEl.classList.remove('show');
+    toastTimer = setTimeout(function () { toastEl.hidden = true; }, 250);
+    undoSnapshot = null;
+  }
   resetBtn.addEventListener('click', function () {
+    undoSnapshot = JSON.stringify(state);
     state = JSON.parse(JSON.stringify(DEFAULTS));
     saveState();
     hydrateForm();
+    clearTimeout(toastTimer);
+    toastEl.hidden = false;
+    void toastEl.offsetWidth;
+    toastEl.classList.add('show');
+    toastTimer = setTimeout(hideToast, 8000);
+  });
+  toastUndo.addEventListener('click', function () {
+    if (!undoSnapshot) return;
+    state = JSON.parse(undoSnapshot);
+    saveState();
+    hydrateForm();
+    hideToast();
   });
 
   function hydrateForm() {
