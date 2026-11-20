@@ -10,10 +10,20 @@ Fiz esta calculadora para a minha mesa de D&D 5e, onde jogo com a classe **Forja
 
 1. Em **Equipamento do Guia**, digite o nome do item (por exemplo "espada longa" ou "cota de malha"). O PDE, o tipo e o peso são preenchidos sozinhos. Se o item não estiver na lista, digite o PDE à mão.
 2. Em **Materiais**, busque o material ("aço", "prata", "coral"...). O multiplicador e o tier vêm da tabela do Guia. Dá para juntar até 4 materiais no mesmo item.
-3. Ligue o que vale para o seu personagem: talento Artesão (e se o desconto entra uma ou duas vezes), se você já tem os materiais, Pressa, Obra-Prima.
-4. O custo aparece no topo (no computador ele fica fixo na lateral). Logo abaixo vêm a conta passo a passo, a comparação com um ferreiro comum e o tempo de produção.
+3. Em **O Forjador**, ligue o que vale para o seu personagem: talento Artesão (e se o desconto entra uma ou duas vezes), se você já tem os materiais, Pressa, Obra-Prima.
+4. O custo e o tempo do Forjador aparecem no painel de resultado (no computador ele fica fixo na lateral; no celular, uma barra no rodapé mostra os dois enquanto você rola). Logo abaixo vêm a conta passo a passo, a comparação com um ferreiro comum e o tempo de produção em detalhe.
 
 Os valores ficam salvos no seu navegador, então dá para fechar a página e voltar depois.
+
+## Aparência
+
+No topo da página há três controles:
+
+- **Tema (lua / sol):** troca entre o tema diurno e o noturno, numa onda que sai do botão. Na primeira visita a calculadora segue o tema do seu sistema; depois lembra a sua escolha.
+- **Mostrar dureza:** esconde a Dureza do item pronto, para mesas que não usam a regra opcional de quebra de equipamentos.
+- **Modo forja:** liga brasas subindo pelo fundo da página. Vem desligado e é só enfeite: não muda nenhuma conta.
+
+Se o sistema estiver com "reduzir movimento" ligado, a troca de tema é instantânea e as brasas ficam paradas. No Firefox a troca de tema também é instantânea, porque ele ainda não tem suporte à animação.
 
 ## O que ela calcula
 
