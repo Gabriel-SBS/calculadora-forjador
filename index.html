@@ -72,7 +72,10 @@
     --control-h: 42px;
 
     /* Movimento */
-    --ease: cubic-bezier(.2,.7,.2,1);
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);      /* entrar/sair, resposta a clique */
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);  /* movimento na tela */
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);   /* gaveta (barra de custo) */
+    --t-press: 160ms;
     --t-fast: .15s;
     --t-med: .3s;
   }
@@ -244,10 +247,9 @@
     background: transparent;
     color: var(--text-dim);
     cursor: pointer;
-    transition: color var(--t-fast), background-color var(--t-fast);
+    transition: color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .theme-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
-  .theme-btn svg { grid-area: 1 / 1; transition: transform .35s var(--ease), opacity .2s; }
+  .theme-btn svg { grid-area: 1 / 1; transition: transform 250ms var(--ease-out), opacity 200ms ease; }
   .theme-btn .i-sun { opacity: 0; transform: rotate(-90deg) scale(.6); }
   .theme-btn[data-current="dark"] .i-sun { opacity: 1; transform: none; }
   .theme-btn[data-current="dark"] .i-moon { opacity: 0; transform: rotate(90deg) scale(.6); }
@@ -397,9 +399,8 @@
     padding: 0 var(--sp-3);
     border-radius: var(--r-sm);
     cursor: pointer;
-    transition: border-color var(--t-fast), background-color var(--t-fast);
+    transition: border-color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .btn-ghost:hover:not(:disabled) { border-color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 8%, transparent); }
   .btn-ghost:disabled { opacity: .4; cursor: not-allowed; }
 
   .btn-remove {
@@ -415,9 +416,8 @@
     cursor: pointer;
     font-size: var(--fs-lg);
     line-height: 1;
-    transition: color var(--t-fast), border-color var(--t-fast);
+    transition: color var(--t-fast), border-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .btn-remove:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
   .btn-remove:disabled { opacity: .3; cursor: not-allowed; }
 
   .btn-reset {
@@ -456,11 +456,11 @@
     background: transparent;
     color: var(--text-dim);
     cursor: pointer;
-    transition: background-color var(--t-fast), color var(--t-fast);
+    transition: background-color var(--t-fast), color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .seg-btn:hover:not(.active) { color: var(--text); background: color-mix(in srgb, var(--text) 5%, transparent); }
   .seg-btn.active { background: var(--accent); color: var(--accent-ink); }
-  .seg-btn:active { transform: scale(.98); }
+  .seg-btn:active, .btn-ghost:active:not(:disabled), .btn-remove:active:not(:disabled),
+  .theme-btn:active, .toast-btn:active, .switch:active { transform: scale(0.97); }
 
   /* Interruptor */
   .toggle-row {
@@ -482,7 +482,7 @@
     border: 1px solid var(--border-strong);
     cursor: pointer;
     padding: 0;
-    transition: background-color var(--t-fast), border-color var(--t-fast);
+    transition: background-color var(--t-fast), border-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
   .switch .knob {
     position: absolute;
@@ -492,7 +492,7 @@
     height: 20px;
     border-radius: 50%;
     background: var(--text-dim);
-    transition: transform var(--t-fast) var(--ease), background-color var(--t-fast);
+    transition: transform var(--t-fast) var(--ease-out), background-color var(--t-fast);
   }
   .switch[aria-checked="true"] { background: var(--accent); border-color: var(--accent); }
   .switch[aria-checked="true"] .knob { transform: translateX(18px); background: var(--accent-ink); }
@@ -511,7 +511,7 @@
   .material-row[data-tier="B"], .mat-group-label[data-tier="B"] { --tier-color: var(--tier-b); }
   .material-row[data-tier="A"], .mat-group-label[data-tier="A"] { --tier-color: var(--tier-a); }
   .material-row[data-tier="S"], .mat-group-label[data-tier="S"] { --tier-color: var(--tier-s); }
-  .material-row.is-new { animation: slide-in .3s var(--ease); }
+  .material-row.is-new { animation: slide-in 220ms var(--ease-out); }
 
   .mat-row-top {
     display: grid;
@@ -545,7 +545,7 @@
     box-shadow: var(--shadow-lift);
     padding: var(--sp-1);
     transform-origin: top;
-    animation: drop .14s ease-out;
+    animation: drop 150ms var(--ease-out);
   }
   .mat-group-label {
     font-family: var(--font-mono);
@@ -643,7 +643,7 @@
     border-right: 1.5px solid currentColor;
     border-bottom: 1.5px solid currentColor;
     transform: translateY(-2px) rotate(-45deg);
-    transition: transform var(--t-fast);
+    transition: transform 200ms var(--ease-out);
     align-self: center;
   }
   .mods[open] .mods-summary::before, .magicos[open] .magicos-summary::before { transform: translateY(-3px) rotate(45deg); }
@@ -665,7 +665,6 @@
       radial-gradient(80% 60% at 0% 0%, color-mix(in srgb, var(--ember) 8%, transparent), transparent 70%),
       var(--surface);
   }
-  .result.pulse { animation: pulse .6s ease-out; }
   .result-value {
     margin: 0;
     display: flex;
@@ -755,7 +754,7 @@
     gap: var(--sp-3);
     padding: var(--sp-3) 0;
     border-top: 1px solid var(--border);
-    animation: slide-in .3s var(--ease);
+    animation: slide-in 220ms var(--ease-out);
   }
   .lista-item:first-child { border-top: none; padding-top: 0; }
   .li-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -799,9 +798,10 @@
     box-shadow: var(--shadow-lift);
     opacity: 0;
     transform: translate(-50%, 16px);
-    transition: opacity .2s, transform .25s var(--ease);
+    transition: opacity 400ms ease, transform 400ms ease;
   }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast:not(.show) { transition-duration: 200ms; }
   .toast-btn {
     flex-shrink: 0;
     height: 34px;
@@ -815,9 +815,9 @@
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
+    transition: background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
   .toast-btn:focus-visible { outline-color: var(--bg); }
-  .toast-btn:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
   @media (max-width: 1059.98px) { .toast { bottom: calc(96px + env(safe-area-inset-bottom)); } }
 
   /* Tempo: segundo número do painel */
@@ -894,10 +894,12 @@
   .c-bar span {
     display: block;
     height: 100%;
-    width: 0;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
     border-radius: inherit;
     background: color-mix(in srgb, var(--text-dim) 55%, transparent);
-    transition: width .5s var(--ease);
+    transition: transform 300ms var(--ease-out);
   }
   .compare-row.c-highlight .c-bar span { background: var(--accent); }
   .p-row {
@@ -1037,10 +1039,11 @@
     border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
     box-shadow: var(--shadow-lift);
     transform: translateY(140%);
-    transition: transform .35s var(--ease);
+    transition: transform 400ms var(--ease-drawer);
   }
   .cost-bar { font: inherit; color: var(--text); text-align: left; cursor: pointer; align-items: center; }
   .cost-bar.show { transform: none; }
+  .cost-bar:not(.show) { transition-duration: 250ms; }
   .cost-bar:active { transform: scale(.99); }
   .cb-left { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .cb-time { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--text-dim); }
@@ -1092,21 +1095,43 @@
   /* =========================================================
      13. Animações
      ========================================================= */
-  .hero, .panel, .side, .vantagens, .production, .magicos, .foot { animation: rise .45s var(--ease) both; }
-  .panel { animation-delay: .04s; } .side { animation-delay: .08s; } .vantagens { animation-delay: .12s; }
-  .production { animation-delay: .16s; } .magicos { animation-delay: .2s; }
-
-  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   @keyframes slide-in { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
-  @keyframes drop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-  @keyframes pulse { 0% { box-shadow: var(--shadow), 0 0 0 0 color-mix(in srgb, var(--accent) 35%, transparent); } 100% { box-shadow: var(--shadow), 0 0 0 12px transparent; } }
+  @keyframes drop { from { opacity: 0; transform: translateY(-4px) scale(0.98); } to { opacity: 1; transform: none; } }
   @keyframes shine { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
   @keyframes forge-breathe { 0%, 100% { opacity: .5; } 50% { opacity: .85; } }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-    .cost-bar { transform: none; }
-    .cost-bar:not(.show) { display: none; }
+    /* entradas viram fade, sem deslocamento */
+    .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]) { animation-name: fade-in; }
+    /* efeitos decorativos param */
+    .prop-chip.chip-obra::after, .forja-on .forge-glow { animation: none; }
+    /* nada se move: só cor e opacidade mudam */
+    .switch .knob, .theme-btn svg, .c-bar span, .mods-summary::before, .magicos-summary::before {
+      transition-property: opacity, background-color, color, border-color;
+    }
+    .seg-btn:active, .btn-ghost:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .switch:active, .cost-bar:active { transform: none; }
+    .theme-btn svg { transform: none !important; }
+    .toast, .toast.show { transform: translate(-50%, 0); }
+    .cost-bar { transform: none; opacity: 0; pointer-events: none; transition: opacity 200ms ease; }
+    .cost-bar.show { opacity: 1; pointer-events: auto; }
+  }
+  @keyframes fade-in { from { opacity: 0; } }
+
+  /* Hover só em aparelhos com mouse (no toque o hover gruda depois do toque) */
+  @media (hover: hover) and (pointer: fine) {
+    .view-switch:hover { color: var(--text); }
+    .theme-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+    input:hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--border-strong); }
+    .btn-info:hover { color: var(--accent); }
+    .btn-ghost:hover:not(:disabled) { border-color: var(--border-strong); background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .btn-remove:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
+    .btn-reset:hover { color: var(--accent); }
+    .seg-btn:hover:not(.active) { color: var(--text); background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .mat-option:hover { background: var(--surface-2); }
+    .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+    .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 20%, transparent); border-color: var(--accent); }
+    .toast-btn:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
+    .magicos-summary:hover { color: var(--text); }
   }
 </style>
 </head>
@@ -2341,7 +2366,7 @@
     Array.prototype.forEach.call(rows, function (r) { max = Math.max(max, parseFloat(r.dataset.value) || 0); });
     Array.prototype.forEach.call(rows, function (r) {
       var v = parseFloat(r.dataset.value) || 0;
-      r.querySelector('.c-bar span').style.width = (max > 0 ? Math.max(1.5, v / max * 100) : 0) + '%';
+      r.querySelector('.c-bar span').style.transform = 'scaleX(' + (max > 0 ? Math.max(0.015, v / max) : 0) + ')';
     });
   }
 
@@ -2795,20 +2820,22 @@
   var cbValue = document.getElementById('cb-value');
   var cbLabel = document.getElementById('cb-label');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Digitar num campo muda o resultado a cada tecla: aí o número troca na hora, sem contagem
+  var lastTypedAt = 0;
+  document.addEventListener('input', function (e) {
+    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) lastTypedAt = performance.now();
+  }, true);
   function animateResult(target) {
     cbLabel.textContent = state.modo === 'vendido' ? 'Preço de venda' : 'Custo para forjar';
-    if (shownValue === null || reduceMotion || !isFinite(target)) {
+    if (shownValue === null || reduceMotion || !isFinite(target) || performance.now() - lastTypedAt < 400) {
       shownValue = target;
-      resultEl.textContent = fmt(target);
-      cbValue.textContent = fmt(target);
+      resultEl.innerHTML = htmlMoeda(target);
+      cbValue.textContent = fmtMoeda(target);
       return;
     }
     if (Math.abs(target - shownValue) < 0.005) return;
-    var from = shownValue, t0 = performance.now(), dur = 520, id = ++animId;
+    var from = shownValue, t0 = performance.now(), dur = 280, id = ++animId;
     shownValue = target;
-    resultCard.classList.remove('pulse');
-    void resultCard.offsetWidth;
-    resultCard.classList.add('pulse');
     (function tick(now) {
       if (id !== animId) return;
       var k = Math.min(1, (now - t0) / dur);
