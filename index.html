@@ -33,7 +33,7 @@
     --text-dim: #6b5f4f;
     --accent: #b0551f;
     --accent-ink: #fff8f0;
-    --accent-2: #3f6178;
+    --danger: #b3261e;
     --good: #4f7a45;
     --ember: #e2621b;
     --ember-hot: #ffc46b;
@@ -90,7 +90,7 @@
       --text-dim: #a3947e;
       --accent: #e08a44;
       --accent-ink: #1a1512;
-      --accent-2: #86adc2;
+      --danger: #f2867b;
       --good: #8fbb83;
       --tier-d: #a39a90;
       --tier-c: #cf9a62;
@@ -111,7 +111,7 @@
     --text-dim: #a3947e;
     --accent: #e08a44;
     --accent-ink: #1a1512;
-    --accent-2: #86adc2;
+    --danger: #f2867b;
     --good: #8fbb83;
     --tier-d: #a39a90;
     --tier-c: #cf9a62;
@@ -261,7 +261,7 @@
     margin: 0;
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(var(--fs-2xl), 8vw, var(--fs-3xl));
+    font-size: clamp(var(--fs-2xl), 6vw, 40px);
     letter-spacing: .01em;
     line-height: 1;
     text-transform: uppercase;
@@ -376,8 +376,34 @@
     transition: border-color var(--t-fast), background-color var(--t-fast);
   }
   input[type="number"] { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
-  input:hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--border-strong); }
   input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+  input[aria-invalid="true"] { border-color: var(--danger); }
+  input[aria-invalid="true"]:focus-visible { outline-color: var(--danger); }
+  .label-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); }
+  .btn-info {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px var(--sp-1); border: none; border-radius: 4px; background: none;
+    font: inherit; font-size: var(--fs-xs); font-weight: 600; color: var(--text-dim); cursor: pointer;
+    transition: color var(--t-fast), transform var(--t-press) var(--ease-out);
+  }
+  .btn-info[aria-expanded="true"] { color: var(--accent); }
+  .btn-info:active { transform: scale(0.97); }
+  .btn-info .ico { font-size: 14px; }
+  .tipo-info {
+    padding: var(--sp-3) var(--sp-4); border: 1px solid var(--border); border-radius: var(--r-sm);
+    background: var(--surface-2); font-size: var(--fs-sm); line-height: 1.5;
+    animation: drop 150ms var(--ease-out);
+  }
+  .tipo-info h3 { margin: 0 0 var(--sp-2); font-size: var(--fs-md); }
+  .tipo-info ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
+  .tipo-info li::marker { color: var(--accent); }
+  .tipo-info .src { margin: var(--sp-2) 0 0; font-size: var(--fs-xs); color: var(--text-dim); }
+  .locked-note {
+    margin: 0; padding: var(--sp-3) var(--sp-4); border: 1px dashed var(--border-strong); border-radius: var(--r-sm);
+    font-size: var(--fs-sm); color: var(--text-dim);
+  }
+  .field-hint { margin: 0; font-size: var(--fs-xs); color: var(--text-dim); font-family: var(--font-mono); }
+  .field-error { margin: 0; font-size: var(--fs-xs); font-weight: 600; color: var(--danger); }
   input::placeholder { color: var(--text-dim); opacity: .7; }
   input:disabled, select:disabled { opacity: .5; cursor: not-allowed; }
 
@@ -392,7 +418,7 @@
     height: 34px;
     background: none;
     border: 1px solid var(--border);
-    color: var(--accent-2);
+    color: var(--text);
     font-family: var(--font-body);
     font-weight: 600;
     font-size: var(--fs-sm);
@@ -593,8 +619,9 @@
     flex-direction: column;
     gap: var(--sp-1);
   }
-  .juncao strong { color: var(--accent-2); }
-  .juncao .jw { color: var(--accent); }
+  .juncao strong { color: var(--text); }
+  .juncao .jw { color: var(--accent); display: flex; align-items: flex-start; gap: 6px; }
+  .juncao .jw .ico { margin-top: 3px; }
 
   /* Modificações */
   .mods {
@@ -2571,7 +2598,8 @@
     warn.forEach(function (w) {
       var d = document.createElement('div');
       d.className = 'jw';
-      d.textContent = '⚠ ' + w;
+      d.innerHTML = ICON_WARN;
+      d.appendChild(document.createTextNode(w));
       juncaoInfo.appendChild(d);
     });
   }
@@ -3337,8 +3365,8 @@
   }
 
   function textoResumo(r) {
-    var linhas = ['⚒️ ' + linhaTitulo(r)];
-    linhas.push((r.venda ? 'Preço de venda: ' : 'Custo para forjar: ') + fmt(r.valor) + ' po' + (r.rende ? ' (rende ' + r.rende + ')' : ''));
+    var linhas = [linhaTitulo(r)];
+    linhas.push((r.venda ? 'Preço de venda: ' : 'Custo para forjar: ') + fmtMoeda(r.valor) + (r.rende ? ' (rende ' + r.rende + ')' : ''));
     if (r.horas != null) linhas.push('Tempo do Forjador: ' + fmtHorasForjador(r.horas));
     var props = [];
     var tags = [r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : ''].filter(Boolean);
@@ -3553,6 +3581,36 @@
     }, { threshold: 0.15 }).observe(resultCard);
   }
 
+})();
+
+// Campos numéricos: valor negativo ou inválido ganha aviso junto ao campo
+(function () {
+  'use strict';
+  function check(input) {
+    var min = parseFloat(input.getAttribute('min'));
+    var raw = input.value, v = parseFloat(raw);
+    var bad = raw !== '' && (!isFinite(v) || (isFinite(min) && v < min));
+    input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    var group = input.parentElement && input.parentElement.classList.contains('field-group') ? input.parentElement : null;
+    if (!group) { input.title = bad ? 'O valor não pode ser negativo.' : ''; return; }
+    var msg = group.querySelector('.field-error');
+    if (bad && !msg) {
+      msg = document.createElement('p');
+      msg.className = 'field-error';
+      msg.id = (input.id || 'campo') + '-erro';
+      msg.textContent = 'O valor não pode ser negativo.';
+      group.appendChild(msg);
+      input.setAttribute('aria-describedby', ((input.getAttribute('aria-describedby') || '') + ' ' + msg.id).trim());
+    } else if (!bad && msg) {
+      var ids = (input.getAttribute('aria-describedby') || '').split(/\s+/).filter(function (x) { return x && x !== msg.id; });
+      msg.remove();
+      if (ids.length) input.setAttribute('aria-describedby', ids.join(' ')); else input.removeAttribute('aria-describedby');
+    }
+  }
+  document.addEventListener('input', function (e) {
+    if (e.target && e.target.matches && e.target.matches('input[type="number"][min]')) check(e.target);
+  }, true);
+  Array.prototype.forEach.call(document.querySelectorAll('input[type="number"][min]'), check);
 })();
 
 // Grupos de opção (botões segmentados): setas do teclado e um só ponto de foco por grupo
