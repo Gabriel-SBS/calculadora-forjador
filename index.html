@@ -138,6 +138,15 @@
     overflow-x: hidden;
   }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Detalhes do navegador com o tema da página */
+  ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--text); }
+  input, select { caret-color: var(--accent); }
+  html { scrollbar-color: var(--border-strong) var(--bg); }
+  .mat-dropdown, .mods-list { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+
+  /* Ícones desenhados */
+  .ico { width: 1em; height: 1em; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -218,6 +227,8 @@
     font-weight: 600;
     color: var(--text-dim);
     white-space: nowrap;
+    cursor: pointer;
+    transition: color var(--t-fast);
   }
   .view-switch + .view-switch { border-left: 1px solid var(--border); }
 
@@ -244,14 +255,6 @@
   .view-switch .switch { width: 36px; height: 22px; }
   .view-switch .switch .knob { width: 16px; height: 16px; }
   .view-switch .switch[aria-checked="true"] .knob { transform: translateX(14px); }
-  .eyebrow {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: var(--fs-xs);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--accent-2);
-  }
   h1 {
     margin: 0;
     font-family: var(--font-display);
@@ -322,8 +325,10 @@
   .setting + .setting { border-top: 1px solid var(--border); }
   .setting-sub {
     margin-top: var(--sp-3);
-    padding-left: var(--sp-3);
-    border-left: 2px solid var(--border-strong);
+    padding: var(--sp-3);
+    border-radius: var(--r-sm);
+    background: color-mix(in srgb, var(--surface-2) 70%, var(--surface));
+    border: 1px solid var(--border);
   }
   .compare, .vantagens, .production { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-1); }
 
@@ -378,6 +383,10 @@
      6. Botões
      ========================================================= */
   .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     height: 34px;
     background: none;
     border: 1px solid var(--border);
@@ -394,6 +403,9 @@
   .btn-ghost:disabled { opacity: .4; cursor: not-allowed; }
 
   .btn-remove {
+    display: grid;
+    place-items: center;
+    padding: 0;
     width: 36px;
     height: var(--control-h);
     background: none;
@@ -493,9 +505,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--sp-2);
-    border-left: 3px solid var(--tier-color, var(--border));
-    padding-left: var(--sp-2);
-    transition: border-color var(--t-med);
   }
   .material-row[data-tier="D"], .mat-group-label[data-tier="D"] { --tier-color: var(--tier-d); }
   .material-row[data-tier="C"], .mat-group-label[data-tier="C"] { --tier-color: var(--tier-c); }
@@ -937,7 +946,7 @@
   .v-name { font-weight: 700; font-size: var(--fs-md); }
   .v-tag { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); white-space: nowrap; }
   .v-row { display: flex; gap: var(--sp-2); font-size: var(--fs-sm); line-height: 1.45; }
-  .v-row .v-icon { flex-shrink: 0; width: 16px; text-align: center; }
+  .v-row .v-icon { flex-shrink: 0; width: 16px; height: 1.45em; display: grid; place-items: center; font-size: 14px; }
   .v-row.v-pro .v-icon { color: var(--good); }
   .v-row.v-con .v-icon { color: var(--accent); }
   .v-row .v-text { color: var(--text-dim); }
@@ -1107,7 +1116,6 @@
 <div class="page">
   <header class="hero">
     <div class="hero-text">
-      <p class="eyebrow">Materiais e Criação de Equipamento</p>
       <h1>Calculadora do Forjador</h1>
       <p class="sub">Custo de criação de um item, combinando o desconto de Artesão com a mão de obra dispensada pelo Forjador.</p>
     </div>
@@ -1116,18 +1124,18 @@
         <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
         <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></svg>
       </button>
-      <span class="view-switch" title="Regra de quebra de equipamentos é opcional">
+      <label class="view-switch" title="Regra de quebra de equipamentos é opcional">
         <span id="dureza-label">Mostrar dureza</span>
         <button type="button" class="switch" id="dureza-switch" role="switch" aria-checked="true" aria-labelledby="dureza-label">
           <span class="knob"></span>
         </button>
-      </span>
-      <span class="view-switch" title="Brasas animadas no fundo">
+      </label>
+      <label class="view-switch" title="Brasas animadas no fundo">
         <span id="forja-label">Modo forja</span>
         <button type="button" class="switch" id="forja-switch" role="switch" aria-checked="false" aria-labelledby="forja-label">
           <span class="knob"></span>
         </button>
-      </span>
+      </label>
     </div>
   </header>
 
@@ -1325,8 +1333,8 @@
   <aside class="side" id="side">
   <section class="result" id="result-card">
     <div class="kpi-main">
-      <p class="result-label" id="result-label">Custo para forjar</p>
-      <p class="result-value"><span id="result">0</span><span class="unit">po</span></p>
+      <h2 class="result-label" id="result-label">Custo para forjar</h2>
+      <p class="result-value" id="result">0</p>
     </div>
     <p class="result-empty" id="result-empty" hidden></p>
     <div class="kpi-time">
@@ -1335,35 +1343,35 @@
     </div>
     <div class="result-props" id="result-props" hidden></div>
     <div class="result-actions">
-      <button type="button" class="btn-ghost btn-strong" id="add-lista-btn">+ Adicionar à lista</button>
+      <button type="button" class="btn-ghost btn-strong" id="add-lista-btn"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg> Adicionar à lista</button>
       <button type="button" class="btn-ghost" id="copy-btn">Copiar resultado</button>
     </div>
     <div class="receipt">
-      <p class="receipt-title">A conta</p>
+      <h3 class="receipt-title">A conta</h3>
       <div class="breakdown" id="breakdown"></div>
     </div>
   </section>
 
   <section class="compare" id="compare-section">
-    <p class="compare-title">Comparativo</p>
+    <h2 class="compare-title">Comparativo</h2>
     <div id="compare-rows"></div>
   </section>
   </aside>
 
   <section class="vantagens" id="vantagens-section">
-    <p class="vantagens-title">Vantagens e desvantagens dos materiais</p>
+    <h2 class="vantagens-title">Vantagens e desvantagens dos materiais</h2>
     <div id="vantagens-rows"></div>
   </section>
 
   <section class="production">
-    <p class="production-title">Tempo de Produção</p>
+    <h2 class="production-title">Tempo de Produção</h2>
     <p class="production-note" id="production-note"></p>
     <div id="production-rows"></div>
   </section>
 
   <section class="lista" id="lista-section" aria-labelledby="lista-title" hidden>
     <div class="lista-head">
-      <p class="lista-title" id="lista-title">Lista da sessão</p>
+      <h2 class="lista-title" id="lista-title">Lista da sessão</h2>
       <div class="lista-actions">
         <button type="button" class="btn-ghost" id="lista-copy-btn">Copiar lista</button>
         <button type="button" class="btn-reset" id="lista-clear-btn">limpar</button>
@@ -1510,6 +1518,12 @@
   // Tempo de Produção: baseado na tabela Tempo de Criação (Materiais e Criação) + Trabalhador Itinerante (Forjador).
 
   var STORAGE_KEY = 'forjador-calc-v5';
+
+  // Ícones (mesmo traço do sol e da lua do tema)
+  var ICON_X = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  var ICON_PLUS = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>';
+  var ICON_WARN = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5 21.5 20h-19zM12 10v4.5M12 17.2v.3"/></svg>';
+  var ICON_MINUS = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg>';
 
   // [id, categoria, tier, nome, multiplicador, dureza, modificador, vantagens, desvantagens]
   var MATERIALS_DB = [
@@ -2179,7 +2193,7 @@
       var removeBtn = document.createElement('button');
       removeBtn.type = 'button';
       removeBtn.className = 'btn-remove';
-      removeBtn.textContent = '×';
+      removeBtn.innerHTML = ICON_X;
       removeBtn.setAttribute('aria-label', 'Remover material ' + (idx + 1));
       removeBtn.disabled = state.materials.length <= 1;
       removeBtn.addEventListener('click', function () {
@@ -2364,14 +2378,14 @@
 
       var pro = document.createElement('div');
       pro.className = 'v-row v-pro';
-      pro.innerHTML = '<span class="v-icon">+</span><span class="v-text"></span>';
+      pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
       pro.querySelector('.v-text').textContent = m.vantagens || 'Sem propriedade mecânica adicional além do bônus.';
       item.appendChild(pro);
 
       if (m.desvantagens) {
         var con = document.createElement('div');
         con.className = 'v-row v-con';
-        con.innerHTML = '<span class="v-icon">−</span><span class="v-text"></span>';
+        con.innerHTML = '<span class="v-icon">' + ICON_MINUS + '</span><span class="v-text"></span>';
         con.querySelector('.v-text').textContent = m.desvantagens;
         item.appendChild(con);
       }
@@ -3387,7 +3401,7 @@
       var rm = document.createElement('button');
       rm.type = 'button';
       rm.className = 'btn-remove';
-      rm.textContent = '×';
+      rm.innerHTML = ICON_X;
       rm.setAttribute('aria-label', 'Tirar ' + r.nome + ' da lista');
       rm.addEventListener('click', function () {
         var removido = lista.splice(idx, 1)[0];
