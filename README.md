@@ -9,9 +9,12 @@ Fiz esta calculadora para a minha mesa de D&D 5e, onde jogo com a classe **Forja
 ## Como usar
 
 1. Em **Equipamento do Guia**, digite o nome do item (por exemplo "espada longa", "cota de malha" ou "orbe"). A lista tem as armas, escudos, armaduras, munições, pólvoras e focos de conjuração do Guia. O PDE, o tipo e o peso são preenchidos sozinhos. Se o item não estiver na lista, digite o PDE à mão.
+   O botão **Como funciona?**, ao lado do tipo de item, resume as regras de criação daquele tipo (arma, armadura, munição ou pólvora) com as páginas do Guia. O que não vale para o tipo escolhido some da tela: a pólvora, por exemplo, não usa materiais nem modificações.
 2. Em **Materiais**, busque o material ("aço", "prata", "coral"...). O multiplicador e o tier vêm da tabela do Guia. Dá para juntar até 4 materiais no mesmo item.
-3. Em **O Forjador**, ligue o que vale para o seu personagem: talento Artesão (e se o desconto entra uma ou duas vezes), se você já tem os materiais, Pressa, Obra-Prima.
+3. Em **O Forjador**, ligue o que vale para o seu personagem. Em **Custo** ficam o talento Artesão (e se o desconto entra uma ou duas vezes) e se você já tem os materiais; em **Tempo e qualidade**, Pressa, Obra-Prima e O Melhor dos Melhores.
 4. O custo e o tempo do Forjador aparecem no painel de resultado (no computador ele fica fixo na lateral; no celular, uma barra no rodapé mostra os dois enquanto você rola). Logo abaixo vêm a conta passo a passo, a comparação com um ferreiro comum e o tempo de produção em detalhe.
+
+Os valores aparecem em moedas do D&D: peças de ouro (po), prata (pp) e cobre (pc), arredondados para a peça de cobre. Uma flecha, por exemplo, custa 5 pc, e não 0,05 po. Electro e platina ficam de fora porque o Livro do Jogador diz que são incomuns em transações. Os campos de preço continuam em po, como os preços do Guia.
 
 Os valores ficam salvos no seu navegador, então dá para fechar a página e voltar depois.
 

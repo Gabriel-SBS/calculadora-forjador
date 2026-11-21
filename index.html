@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADXElEQVR4nO3dMW7UQBiGYSfiBEg0HMIFdFtxKU7BpajSQbEnoo1EvsDaY/ufmefpEqRIa7/ze7Jrh6fPnz4u8JbnN78L4uA9JgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxEH/I/sd3L9y+vv7z9+L10yOQ4vIzlre90QRyNvYQOeuxDHC29vFtAd32Ig0gcROIgEgeROFq6vft+RnfvdoijsVsooLsyxHGI218d9FjGsixP/gNAEpcVInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4uCKh5ruv34e98N5bf27benlI3tZjBFK4zhkMVIlzeKQxXihNIhDFqNWsj0OTQwfypbfVmQxyQh5LA5ZTHVx+d84ZDHhtuPfcchi2g3p81XvvnG+R0/lA7+tGCFd27DIH/jgzQjp17Zz99insvro0eaztvFNMJeYXuxZzxvv5zBCurDzNO39bMUIKWv/At57J5gRUlOT89LgNkF9VNPqjLS82cclpoKGa7XlDcZGyOXanoLGd5/r40LND/5RfxPMJeZkRyzLo55bMULO1NOjCZc7f26tI352PeYTbyefqnXEMoaNgybEQSQO5ovjtH3AOuiGY+Q42E8cROJgyjhO2A2s4244Bo+DncTBrHEcOvbXoa8p48fBHuIgEgcTx3HQzmAdfcMxRRxsJg4icTB3HM33B+sEG45Z4mAbcRCJg2X2OBruEtY5NhzVH2qa4ZnKtXBqs0wOhopjhrGx1H6ZdePgckXjqLyemiv7YovGQQUV4yi7kmZ7yRXjoAhx0E8cNQfsnC+8XBzUUSuOgqtn5pdfKw5KEQc9xFFtqF6i1EEoFAfVVImj1Iq51r3MoagSBwWViKPOWiniXuOAlIiDmsRB4TiKjNBq7gUOy/VxUNbFcVRYH2Xdrz44Jgcl47h8ZdR3v/QQmRz0+Tgk1zI5iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHCzJH0BUW+WfhdlIAwAAAABJRU5ErkJggg==">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Work+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   /* =========================================================
      1. Tokens
@@ -292,29 +292,12 @@
   .section-head > div { flex: 1; min-width: 0; }
   .section-head h2 {
     margin: 0;
-    font-family: var(--font-display);
     font-weight: 700;
     font-size: var(--fs-xl);
-    letter-spacing: .03em;
+    letter-spacing: -0.01em;
     line-height: 1.2;
-    text-transform: uppercase;
   }
   .section-head p { margin: 2px 0 0; font-size: var(--fs-sm); color: var(--text-dim); }
-  .step {
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    margin-top: -1px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    font-family: var(--font-mono);
-    font-size: var(--fs-sm);
-    font-weight: 600;
-    color: var(--accent);
-    border: 1.5px solid color-mix(in srgb, var(--accent) 55%, var(--border));
-    background: color-mix(in srgb, var(--accent) 8%, transparent);
-  }
   .section-action { align-self: center; flex-shrink: 0; }
 
   /* Lista de ajustes (interruptores agrupados) */
@@ -457,7 +440,6 @@
     cursor: pointer;
     padding: var(--sp-1);
   }
-  .btn-reset:hover { color: var(--accent); }
 
   /* Controle segmentado */
   .segmented {
@@ -592,7 +574,7 @@
     cursor: pointer;
     font-size: var(--fs-md);
   }
-  .mat-option:hover, .mat-option.active { background: var(--surface-2); }
+  .mat-option.active { background: var(--surface-2); }
   .mat-option .mo-mult {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
@@ -604,7 +586,7 @@
     padding: var(--sp-2);
     font-size: var(--fs-sm);
     color: var(--text-dim);
-    font-style: italic;
+    
   }
   .mat-cap-note { margin-top: var(--sp-2); }
 
@@ -654,7 +636,6 @@
     cursor: pointer;
     transition: background-color var(--t-fast);
   }
-  .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
   .mod-item input { margin-top: 3px; accent-color: var(--accent); }
   .mod-name { font-weight: 600; }
   .mod-cost { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); white-space: nowrap; }
@@ -727,7 +708,7 @@
     font-size: var(--fs-sm);
   }
   .prop-chip .p-k { color: var(--text-dim); font-weight: 600; }
-  .prop-chip .p-v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 700; }
+  .prop-chip .p-v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; }
   .prop-chip.chip-obra { border-color: var(--tier-a); }
   .prop-chip.chip-obra .p-v { color: var(--tier-a); }
   .prop-chip.chip-obra::after {
@@ -762,7 +743,6 @@
     border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
     color: var(--text);
   }
-  .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 20%, transparent); border-color: var(--accent); }
 
   /* Lista da sessão */
   .lista { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-3); }
@@ -803,7 +783,7 @@
     border-top: 2px solid var(--text-dim);
   }
   .lt-label { font-weight: 700; }
-  .lt-valor { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 700; font-size: var(--fs-lg); color: var(--accent); }
+  .lt-valor { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; font-size: var(--fs-lg); color: var(--accent); }
   .lt-horas { grid-column: 1 / -1; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); }
   .result.is-empty .kpi-time { border-bottom: none; padding-bottom: 0; }
   .cost-bar.is-empty .cb-value { color: var(--text-dim); }
@@ -902,7 +882,7 @@
   }
   .b-row:has(+ .b-row.b-final) { border-bottom: none; }
   .b-row.b-final .b-label { color: var(--text); font-weight: 700; font-size: var(--fs-md); }
-  .b-row.b-final .b-value { color: var(--accent); font-weight: 700; font-size: var(--fs-lg); }
+  .b-row.b-final .b-value { color: var(--accent); font-weight: 600; font-size: var(--fs-lg); }
 
   /* Linhas de lista (comparativo, tempo) */
   .compare-row {
@@ -944,7 +924,7 @@
   .compare-row .c-label, .p-row .p-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .compare-row .c-name, .p-row .p-name { font-size: var(--fs-md); font-weight: 600; }
   .compare-row .c-formula, .p-row .p-sub { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); }
-  .compare-row .c-formula { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
   .compare-row .c-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
   .compare-row .c-value, .p-row .p-value {
     font-family: var(--font-mono);
@@ -982,7 +962,7 @@
   .v-row.v-pro .v-icon { color: var(--good); }
   .v-row.v-con .v-icon { color: var(--accent); }
   .v-row .v-text { color: var(--text-dim); }
-  .v-empty { font-size: var(--fs-sm); color: var(--text-dim); font-style: italic; }
+  .v-empty { font-size: var(--fs-sm); color: var(--text-dim);  }
 
   /* =========================================================
      9. Itens mágicos
@@ -996,7 +976,6 @@
     align-items: baseline;
     gap: var(--sp-2);
   }
-  .magicos-summary:hover { color: var(--text); }
   .magicos-sub { text-transform: none; font-weight: 400; letter-spacing: 0; }
   .magicos-body { padding: 0 var(--sp-5) var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-5); }
   .magicos-block {
@@ -1034,6 +1013,33 @@
     padding-top: var(--sp-2);
   }
   .foot p { margin: 0; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); }
+
+  /* Seções secundárias planas: o resultado é o único cartão em destaque ao lado do formulário */
+  .compare, .vantagens, .production, .lista, .magicos {
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    box-shadow: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .magicos-summary { padding-left: 0; padding-right: 0; }
+  .magicos-body { padding-left: 0; padding-right: 0; }
+
+  /* Grupos da seção O Forjador e explicações sob demanda */
+  .group-label { margin: 0 0 calc(-1 * var(--sp-2)); font-size: var(--fs-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); }
+  .explain > summary {
+    cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px;
+    font-size: var(--fs-xs); font-weight: 600; color: var(--text-dim);
+  }
+  .explain > summary::-webkit-details-marker { display: none; }
+  .explain > summary::before {
+    content: ''; width: 5px; height: 5px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+    transform: rotate(-45deg); transition: transform 200ms var(--ease-out);
+  }
+  .explain[open] > summary::before { transform: rotate(45deg); }
+  .explain > p { margin-top: var(--sp-2); }
 
   /* =========================================================
      11. Layout: lateral fixa no computador
@@ -1079,7 +1085,7 @@
   .cb-time { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--text-dim); }
   .cb-time:empty { display: none; }
   .cb-label { font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); }
-  .cb-value { font-family: var(--font-mono); font-weight: 700; font-size: var(--fs-xl); color: var(--accent); font-variant-numeric: tabular-nums; }
+  .cb-value { font-family: var(--font-mono); font-weight: 600; font-size: var(--fs-xl); color: var(--accent); font-variant-numeric: tabular-nums; }
   @media (min-width: 1060px) { .cost-bar { display: none; } }
 
   @media (max-width: 480px) {
@@ -1198,7 +1204,6 @@
 
     <section class="form-section" aria-labelledby="sec-item">
       <header class="section-head">
-        <span class="step" aria-hidden="true">1</span>
         <div>
           <h2 id="sec-item">Item</h2>
           <p>Escolha do Guia ou digite o PDE à mão</p>
@@ -1289,14 +1294,14 @@
 
     <section class="form-section" aria-labelledby="sec-forj">
       <header class="section-head">
-        <span class="step" aria-hidden="true">3</span>
         <div>
           <h2 id="sec-forj">O Forjador</h2>
           <p>Talentos e características que mudam custo e tempo</p>
         </div>
       </header>
 
-      <div class="settings-list">
+      <p class="group-label" id="grp-custo">Custo</p>
+      <div class="settings-list" role="group" aria-labelledby="grp-custo">
         <div class="setting">
           <div class="toggle-row">
             <div class="toggle-label">
@@ -1313,7 +1318,10 @@
               <button type="button" class="seg-btn" data-artmodo="duplo" role="radio">Duas compras (−36%)</button>
               <button type="button" class="seg-btn" data-artmodo="simples" role="radio">Uma compra (−20%)</button>
             </div>
-            <p class="magicos-note" id="artesao-explica"></p>
+            <details class="explain">
+              <summary>Por que esse desconto?</summary>
+              <p class="magicos-note" id="artesao-explica"></p>
+            </details>
           </div>
         </div>
 
@@ -1329,6 +1337,10 @@
           </div>
         </div>
 
+        </div>
+
+      <p class="group-label" id="grp-tempo">Tempo e qualidade</p>
+      <div class="settings-list" role="group" aria-labelledby="grp-tempo">
         <div class="setting">
           <div class="toggle-row">
             <div class="toggle-label">
@@ -1366,12 +1378,11 @@
         </div>
       </div>
 
-      <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2 — nenhuma característica da classe altera essa proporção para itens mundanos.</p>
+      <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2.</p>
     </section>
 
     <section class="form-section" aria-labelledby="sec-fim">
       <header class="section-head">
-        <span class="step" aria-hidden="true">4</span>
         <div>
           <h2 id="sec-fim">Finalidade</h2>
           <p>Para uso próprio ou para vender com margem</p>
