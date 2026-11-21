@@ -704,6 +704,9 @@
     line-height: 1.1;
     color: var(--accent);
   }
+  .result-value { flex-wrap: wrap; column-gap: var(--sp-3); row-gap: 0; }
+  .result-value .coin { display: inline-flex; align-items: baseline; gap: 6px; }
+  .result-value .coin-sm .coin-n { font-size: var(--fs-2xl); }
   .result-value .unit {
     font-family: var(--font-body);
     font-weight: 600;
@@ -1210,7 +1213,8 @@
 
       <div class="field-group">
         <label for="pde" id="pde-label">PDE — Preço de Equipamento (po)</label>
-        <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" />
+        <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" aria-describedby="pde-moeda" />
+        <p class="field-hint" id="pde-moeda" hidden></p>
       </div>
 
       <div class="field-group">
@@ -1556,7 +1560,7 @@
     <span class="cb-label" id="cb-label">Custo para forjar</span>
     <span class="cb-time" id="cb-time"></span>
   </span>
-  <span class="cb-value"><span id="cb-value">0</span> po</span>
+  <span class="cb-value" id="cb-value">0 po</span>
 </button>
 <p class="sr-only" id="live-result" aria-live="polite"></p>
 <div class="toast" id="toast" role="status" hidden>
@@ -1968,6 +1972,30 @@
     return rounded.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   }
 
+  // Moedas do D&D (Livro do Jogador): 1 po = 10 pp = 100 pc. Electro e platina ficam de fora,
+  // como o próprio livro sugere (são incomuns em transações). Arredonda para a peça de cobre.
+  function moedas(n) {
+    var c = Math.round(Math.abs(isFinite(n) ? n : 0) * 100);
+    var partes = [];
+    var po = Math.floor(c / 100), pp = Math.floor((c % 100) / 10), pc = c % 10;
+    if (po) partes.push([po.toLocaleString('pt-BR'), 'po']);
+    if (pp) partes.push([String(pp), 'pp']);
+    if (pc) partes.push([String(pc), 'pc']);
+    if (!partes.length) partes.push(['0', 'po']);
+    return { neg: n < 0 && c > 0, partes: partes };
+  }
+  function fmtMoeda(n) {
+    var m = moedas(n);
+    return (m.neg ? '−' : '') + m.partes.map(function (p) { return p[0] + ' ' + p[1]; }).join(' ');
+  }
+  // Versão do número grande: a primeira moeda em destaque, as outras menores
+  function htmlMoeda(n) {
+    var m = moedas(n);
+    return m.partes.map(function (p, i) {
+      return '<span class="coin' + (i ? ' coin-sm' : '') + '"><span class="coin-n">' + (i === 0 && m.neg ? '−' : '') + p[0] + '</span><span class="unit">' + p[1] + '</span></span>';
+    }).join('');
+  }
+
   function num(v, fallback) {
     var n = parseFloat(v);
     return isFinite(n) ? n : (fallback || 0);
@@ -2365,7 +2393,7 @@
     right.className = 'c-right';
     var valueEl = document.createElement('span');
     valueEl.className = 'c-value';
-    valueEl.textContent = fmt(value) + ' po';
+    valueEl.textContent = fmtMoeda(value);
     right.appendChild(valueEl);
     if (delta) {
       var deltaEl = document.createElement('span');
@@ -2780,12 +2808,12 @@
 
     magicoResultEl.innerHTML = '';
     var custoItem = state.encantarExistente ? 0 : calculate().final;
-    magicoResultEl.appendChild(mgLine('Custo do encantamento', fmt(custoEnc) + ' po' + (state.peritoItensMagicos ? ' (÷2 Perito)' : '')));
+    magicoResultEl.appendChild(mgLine('Custo do encantamento', fmtMoeda(custoEnc) + (state.peritoItensMagicos ? ' (÷2 Perito)' : '')));
     magicoResultEl.appendChild(mgLine(
       state.encantarExistente ? 'Item base (já possui)' : 'Fabricação do item (resultado acima)',
-      fmt(custoItem) + ' po'
+      fmtMoeda(custoItem)
     ));
-    magicoResultEl.appendChild(mgLine('Custo total', fmt(custoEnc + custoItem) + ' po'));
+    magicoResultEl.appendChild(mgLine('Custo total', fmtMoeda(custoEnc + custoItem)));
     magicoResultEl.appendChild(mgLine('Tempo do encantamento', fmtHorasDias(horas) + (notasTempo.length ? ' · ' + notasTempo.join(', ') : '')));
     if (!state.encantarExistente) {
       magicoResultEl.appendChild(mgLine('Tempo de fabricação do item', 'veja Tempo de Produção, somado ao do encantamento'));
@@ -2832,7 +2860,7 @@
     var notaCusto = 'metade do PDE × material de destino';
     if (nivel >= 13 && rDestino <= 2 && rOrigem <= 2) { custoTransmut = 0; notaCusto = 'Transmutação Suprema: grátis até Tier B'; }
 
-    transmutResultEl.appendChild(mgLine('Custo (' + notaCusto + ')', fmt(custoTransmut) + ' po'));
+    transmutResultEl.appendChild(mgLine('Custo (' + notaCusto + ')', fmtMoeda(custoTransmut)));
     transmutResultEl.appendChild(mgLine('Tempo de trabalho', fmt(tempoTransmut) + 'h' + (complexa ? ' (transmutação complexa: 8h por material)' : '')));
   }
 
@@ -2869,8 +2897,8 @@
       var k = Math.min(1, (now - t0) / dur);
       var e = 1 - Math.pow(1 - k, 3);
       var v = from + (target - from) * e;
-      resultEl.textContent = fmt(v);
-      cbValue.textContent = fmt(v);
+      resultEl.innerHTML = htmlMoeda(v);
+      cbValue.textContent = fmtMoeda(v);
       if (k < 1) requestAnimationFrame(tick);
     })(t0);
   }
@@ -2885,8 +2913,13 @@
     return '';
   }
 
+  var pdeMoedaEl = document.getElementById('pde-moeda');
   function update() {
     var c = calculate();
+    // PDE com centavos (munições, por exemplo): mostra em moedas do D&D
+    var pdeNum = num(state.pde, 0);
+    pdeMoedaEl.hidden = !(pdeNum > 0 && Math.round(pdeNum * 100) % 100 !== 0);
+    pdeMoedaEl.textContent = fmt(pdeNum) + ' po = ' + fmtMoeda(pdeNum);
     var vazio = emptyReason(c);
     resultCard.classList.toggle('is-empty', !!vazio);
     resultEmptyEl.hidden = !vazio;
@@ -2899,7 +2932,7 @@
 
     breakdownEl.innerHTML = '';
     if (c.baseNota) {
-      breakdownEl.appendChild(bRow('Valor-base (' + c.baseNota + ')', fmt(c.pde) + ' po'));
+      breakdownEl.appendChild(bRow('Valor-base (' + c.baseNota + ')', fmtMoeda(c.pde)));
     }
     if (state.melhorDosMelhores && state.tipoItem !== 'polvora') {
       breakdownEl.appendChild(bRow('O Melhor dos Melhores: dobro de materiais', 'Σ × 2 = ' + fmt(c.sumMat)));
@@ -2907,31 +2940,31 @@
     if (c.usaFracaoFixa) {
       breakdownEl.appendChild(bRow(
         'Preço cheio, fração fixa (' + fmt((1 - ARMADURA_FRACAO) * 100) + '% fixo + ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ materiais)',
-        fmt(c.cheio) + ' po'
+        fmtMoeda(c.cheio)
       ));
-      breakdownEl.appendChild(bRow('Preço padrão do livro, para referência (PDE × Σ materiais)', fmt(c.cheioPadrao) + ' po'));
+      breakdownEl.appendChild(bRow('Preço padrão do livro, para referência (PDE × Σ materiais)', fmtMoeda(c.cheioPadrao)));
       if (c.possuidos) {
         breakdownEl.appendChild(bRow('Materiais já em posse (Trabalhador Itinerante)', 'grátis — só o tempo'));
       } else {
-        breakdownEl.appendChild(bRow('Com desconto (' + fmt(c.cheio) + ' × ' + (100 - c.desconto) + '%' + (c.duplo ? ' × ' + (100 - c.desconto) + '%' : '') + ')', fmt(c.subtotal) + ' po'));
-        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmt(c.proprio) + ' po'));
+        breakdownEl.appendChild(bRow('Com desconto (' + fmtMoeda(c.cheio) + ' × ' + (100 - c.desconto) + '%' + (c.duplo ? ' × ' + (100 - c.desconto) + '%' : '') + ')', fmtMoeda(c.subtotal)));
+        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmtMoeda(c.proprio)));
       }
     } else {
-      breakdownEl.appendChild(bRow('Preço cheio, sem desconto (PDE × Σ materiais)', fmt(c.cheio) + ' po'));
+      breakdownEl.appendChild(bRow('Preço cheio, sem desconto (PDE × Σ materiais)', fmtMoeda(c.cheio)));
       if (c.possuidos) {
         breakdownEl.appendChild(bRow('Materiais já em posse (Trabalhador Itinerante)', 'grátis — só o tempo'));
       } else {
-        breakdownEl.appendChild(bRow('PDE com desconto (' + fmt(c.pde) + ' × ' + (100 - c.desconto) + '%)', fmt(c.pdeDesc) + ' po'));
+        breakdownEl.appendChild(bRow('PDE com desconto (' + fmtMoeda(c.pde) + ' × ' + (100 - c.desconto) + '%)', fmtMoeda(c.pdeDesc)));
         breakdownEl.appendChild(bRow(c.duplo
           ? 'Σ materiais com desconto (' + fmt(c.sumMat) + ' × ' + (100 - c.desconto) + '%)'
           : 'Σ materiais (desconto só uma vez)', fmt(c.matDesc)));
-        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmt(c.proprio) + ' po'));
+        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmtMoeda(c.proprio)));
       }
     }
     if (state.modo === 'vendido') {
-      breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(c.lucro) + '%)', '+' + fmt(c.lucroValor) + ' po'));
+      breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(c.lucro) + '%)', '+' + fmtMoeda(c.lucroValor)));
     }
-    breakdownEl.appendChild(bRow(state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmt(c.final) + ' po', true));
+    breakdownEl.appendChild(bRow(state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(c.final), true));
 
     var formulaStr = c.possuidos
       ? 'materiais em posse — grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
@@ -2976,7 +3009,7 @@
     clearTimeout(liveTimer);
     liveTimer = setTimeout(function () {
       if (vazio) { liveEl.textContent = vazio; return; }
-      liveEl.textContent = resultLabel.textContent + ': ' + fmt(c.final) + ' po' +
+      liveEl.textContent = resultLabel.textContent + ': ' + fmtMoeda(c.final) +
         (temTempo ? '. Tempo do Forjador: ' + resultTimeEl.textContent + resultTimeSubEl.textContent.replace('·', ',') : '');
     }, 700);
   }
@@ -2992,7 +3025,7 @@
     var e = null;
     EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) e = x; });
     if (!e) { equipInfo.hidden = true; return; }
-    var partes = [e.grupo, 'PDE ' + fmt(e.pde) + ' po'];
+    var partes = [e.grupo, 'PDE ' + fmtMoeda(e.pde)];
     if (e.peso) partes.push(e.peso === 'leve' ? 'Leve (−8h)' : 'Pesado (+8h)');
     if (e.maestria) partes.push('Maestria: ' + e.maestria);
     equipInfo.textContent = partes.join(' · ');
@@ -3046,7 +3079,7 @@
         n.textContent = e.nome;
         var p = document.createElement('span');
         p.className = 'mo-mult';
-        p.textContent = fmt(e.pde) + ' po';
+        p.textContent = fmtMoeda(e.pde);
         opt.appendChild(n);
         opt.appendChild(p);
         opt.addEventListener('mousedown', function (ev) { ev.preventDefault(); pick(e); });
@@ -3447,7 +3480,7 @@
       nums.className = 'li-nums';
       var v = document.createElement('span');
       v.className = 'li-valor';
-      v.textContent = fmt(r.valor) + ' po' + (r.venda ? ' (venda)' : '');
+      v.textContent = fmtMoeda(r.valor) + (r.venda ? ' (venda)' : '');
       var h = document.createElement('span');
       h.className = 'li-horas';
       h.textContent = r.horas != null ? fmt(r.horas) + 'h' : 'tempo: Mestre';
@@ -3480,7 +3513,7 @@
     tl.textContent = 'Total · ' + lista.length + (lista.length === 1 ? ' item' : ' itens');
     var tv = document.createElement('span');
     tv.className = 'lt-valor';
-    tv.textContent = fmt(t.po) + ' po';
+    tv.textContent = fmtMoeda(t.po);
     var th = document.createElement('span');
     th.className = 'lt-horas';
     th.textContent = (t.horas ? fmtHorasForjador(t.horas) + ' de forja, um item após o outro' : '') +
@@ -3497,7 +3530,7 @@
     salvarLista();
     renderLista();
     var t = totaisLista();
-    showToast('Adicionado. Lista: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmt(t.po) + ' po.', 'Ver lista', function () {
+    showToast('Adicionado. Lista: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) + '.', 'Ver lista', function () {
       listaSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     }, 5000);
   });
@@ -3506,7 +3539,7 @@
     if (!lista.length) return;
     var t = totaisLista();
     var partes = lista.map(textoResumo);
-    partes.push('Total: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmt(t.po) + ' po' +
+    partes.push('Total: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) +
       (t.horas ? ' · ' + fmtHorasForjador(t.horas) : ''));
     copiarTexto(partes.join('\n\n') + '\n' + SITE_URL).then(function () {
       showToast('Lista copiada.');
