@@ -1218,7 +1218,10 @@
       </div>
 
       <div class="field-group">
-        <span class="label" id="tipo-label">Tipo de item</span>
+        <div class="label-row">
+          <span class="label" id="tipo-label">Tipo de item</span>
+          <button type="button" class="btn-info" id="tipo-info-btn" aria-expanded="false" aria-controls="tipo-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona?</button>
+        </div>
         <div class="segmented seg-4" id="tipo-segmented" role="radiogroup" aria-label="Tipo de item">
           <button type="button" class="seg-btn" data-tipo="arma" role="radio">Arma</button>
           <button type="button" class="seg-btn" data-tipo="armadura" role="radio">Armadura</button>
@@ -1234,6 +1237,7 @@
           <button type="button" class="seg-btn" data-peso="" role="radio">Normal</button>
           <button type="button" class="seg-btn" data-peso="pesado" role="radio">Pesado (+8h)</button>
         </div>
+        <div class="tipo-info" id="tipo-info" role="region" aria-labelledby="tipo-info-titulo" hidden></div>
       </div>
 
       <div class="toggle-row" id="fracao-wrap" hidden>
@@ -1249,15 +1253,16 @@
 
     <section class="form-section" aria-labelledby="sec-mat">
       <header class="section-head">
-        <span class="step" aria-hidden="true">2</span>
         <div>
           <h2 id="sec-mat">Materiais</h2>
-          <p>Até 4 materiais; cada um multiplica o PDE</p>
+          <p id="mat-sub">Até 4 materiais; cada um multiplica o PDE</p>
         </div>
-        <button type="button" id="add-material" class="btn-ghost section-action">+ material</button>
+        <button type="button" id="add-material" class="btn-ghost section-action"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg> material</button>
       </header>
 
-      <div class="materials">
+      <p class="locked-note" id="mat-lock-note" hidden></p>
+
+      <div class="materials" id="materials-wrap">
         <div id="material-rows"></div>
         <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais — além disso, não altera o custo.</p>
         <div class="juncao" id="juncao-info" hidden></div>
@@ -1279,6 +1284,7 @@
           <div class="mods-list" id="mods-list"></div>
         </div>
       </details>
+      <p class="locked-note" id="mods-lock-note" hidden></p>
     </section>
 
     <section class="form-section" aria-labelledby="sec-forj">
@@ -2647,7 +2653,7 @@
   }
 
   function renderResultProps() {
-    var props = itemProps();
+    var props = state.tipoItem === 'polvora' ? null : itemProps();
     resultPropsEl.innerHTML = '';
     if (!props) {
       resultPropsEl.hidden = true;
@@ -3186,8 +3192,97 @@
     update();
   }
 
+  // Como funciona a criação de cada tipo (Guia de Xyleff Sualky, p. 124-125 e 170-172)
+  var COMO_FUNCIONA = {
+    arma: {
+      titulo: 'Criar uma arma',
+      itens: [
+        'Custo: PDE × a soma dos multiplicadores dos materiais. O Forjador paga só a matéria-prima, metade do preço; se já tem os materiais, não paga nada.',
+        'Modificações somam ao PDE antes de multiplicar pelo material (p. 163).',
+        'Tempo por tier: C/D 24h, B 48h, A 96h, S 192h. Com mais de um material, o tempo de cada um se soma.',
+        'Leve tira 8h, Pesada soma 8h. O Forjador trabalha em 2/3 do tempo e aguenta 12h por dia.',
+        'Até 4 materiais: dureza e bônus ficam com o maior. Pressa corta o tempo pela metade e dá −1.',
+        'Obra-Prima com 20 natural (17–20 com Prodígio): +1, até +3.'
+      ],
+      fonte: 'p. 124–125, 163 e 170–172'
+    },
+    armadura: {
+      titulo: 'Criar uma armadura ou escudo',
+      itens: [
+        'Mesmas regras da arma: PDE × materiais, o Forjador paga metade, e o tempo por tier se soma entre os materiais.',
+        'Armadura leve tira 8h; armadura pesada soma 8h. Escudos entram aqui.',
+        'O modificador do material vira bônus (ou penalidade) de CA.',
+        'Fração fixa é uma regra opcional desta calculadora, fora do Guia: só 20% do PDE é multiplicado pelo material, para suavizar armaduras caras.'
+      ],
+      fonte: 'p. 169–172'
+    },
+    municao: {
+      titulo: 'Criar munições',
+      itens: [
+        'Você paga o preço de 4 munições (× materiais) e rola 2d4 para saber quantas fez.',
+        'Tempo por tier: C/D 1h, B 6h, A 12h, S 24h.',
+        'Leve e Pesado não se aplicam.',
+        'As modificações de arma não valem para munição; munições têm uma lista própria (p. 160), que a calculadora ainda não calcula.',
+        'O modificador do material vale só no dano.'
+      ],
+      fonte: 'p. 160, 169 e 171'
+    },
+    polvora: {
+      titulo: 'Criar pólvora',
+      itens: [
+        'Você paga o preço de 2 pólvoras e rola 1d4 para saber quantas fez.',
+        'Leva 8 horas, qualquer que seja o tipo de pólvora.',
+        'Materiais, peso, modificações e Obra-Prima não se aplicam: o custo vem só do preço da pólvora.'
+      ],
+      fonte: 'p. 159 e 171'
+    }
+  };
+  var tipoInfoBtn = document.getElementById('tipo-info-btn');
+  var tipoInfoEl = document.getElementById('tipo-info');
+  function renderTipoInfo() {
+    var info = COMO_FUNCIONA[state.tipoItem] || COMO_FUNCIONA.arma;
+    tipoInfoEl.innerHTML = '';
+    var h = document.createElement('h3'); h.id = 'tipo-info-titulo'; h.textContent = info.titulo;
+    var ul = document.createElement('ul');
+    info.itens.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+    var src = document.createElement('p'); src.className = 'src'; src.textContent = 'Guia de Xyleff Sualky, ' + info.fonte + '.';
+    tipoInfoEl.appendChild(h); tipoInfoEl.appendChild(ul); tipoInfoEl.appendChild(src);
+  }
+  tipoInfoBtn.addEventListener('click', function () {
+    var abrir = tipoInfoEl.hidden;
+    if (abrir) renderTipoInfo();
+    tipoInfoEl.hidden = !abrir;
+    tipoInfoBtn.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+  });
+
+  // Bloqueios: o que não vale para o tipo some, com uma frase dizendo por quê
+  var materialsWrap = document.getElementById('materials-wrap');
+  var matLockNote = document.getElementById('mat-lock-note');
+  var modsLockNote = document.getElementById('mods-lock-note');
+  var modsDetailsEl = document.getElementById('mods-details');
+  var obraSetting = document.getElementById('obra-switch').closest('.setting');
+  var melhorSetting = document.getElementById('melhor-switch').closest('.setting');
+  var vantagensSection = document.getElementById('vantagens-section');
+  var addMaterialBtn = document.getElementById('add-material');
+  function applyTipoLocks(tipo) {
+    var polvora = tipo === 'polvora', municao = tipo === 'municao';
+    materialsWrap.hidden = polvora;
+    addMaterialBtn.hidden = polvora;
+    matLockNote.hidden = !polvora;
+    document.getElementById('mat-sub').textContent = polvora ? 'Não se aplica à pólvora' : 'Até 4 materiais; cada um multiplica o PDE';
+    matLockNote.textContent = polvora ? 'A pólvora não usa materiais: o custo é o preço de 2 pólvoras, e ela rende 1d4 em 8 horas (p. 171).' : '';
+    modsDetailsEl.hidden = polvora || municao;
+    modsLockNote.hidden = !municao;
+    modsLockNote.textContent = municao ? 'As modificações de arma não valem para munição. Munições têm uma lista própria (p. 160), que a calculadora ainda não calcula.' : '';
+    obraSetting.hidden = polvora;
+    melhorSetting.hidden = polvora;
+    vantagensSection.hidden = polvora;
+    if (!tipoInfoEl.hidden) renderTipoInfo();
+  }
+
   function setTipo(tipo) {
     state.tipoItem = tipo;
+    applyTipoLocks(tipo);
     tipoBtns.forEach(function (btn) {
       var active = btn.dataset.tipo === tipo;
       btn.classList.toggle('active', active);
