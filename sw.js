@@ -1,7 +1,7 @@
 // Calculadora do Forjador: funciona sem internet depois da primeira visita.
 // A página vem da rede quando há conexão (para pegar atualizações) e do
 // cache quando não há. As fontes do Google ficam guardadas depois de baixadas.
-const CACHE = 'forjador-v1';
+const CACHE = 'forjador-v2';
 const PAGINA = './index.html';
 
 self.addEventListener('install', (event) => {

@@ -250,9 +250,9 @@
     transition: color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
   .theme-btn svg { grid-area: 1 / 1; transition: transform 250ms var(--ease-out), opacity 200ms ease; }
-  .theme-btn .i-sun { opacity: 0; transform: rotate(-90deg) scale(.6); }
+  .theme-btn .i-sun { opacity: 0; transform: rotate(-90deg) scale(.9); }
   .theme-btn[data-current="dark"] .i-sun { opacity: 1; transform: none; }
-  .theme-btn[data-current="dark"] .i-moon { opacity: 0; transform: rotate(90deg) scale(.6); }
+  .theme-btn[data-current="dark"] .i-moon { opacity: 0; transform: rotate(90deg) scale(.9); }
   .theme-btn + .view-switch { border-left: 1px solid var(--border); }
   .view-switch .switch { width: 36px; height: 22px; }
   .view-switch .switch .knob { width: 16px; height: 16px; }
@@ -439,6 +439,7 @@
     text-underline-offset: 3px;
     cursor: pointer;
     padding: var(--sp-1);
+    transition: color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
 
   /* Controle segmentado */
@@ -468,7 +469,7 @@
   }
   .seg-btn.active { background: var(--accent); color: var(--accent-ink); }
   .seg-btn:active, .btn-ghost:active:not(:disabled), .btn-remove:active:not(:disabled),
-  .theme-btn:active, .toast-btn:active, .switch:active { transform: scale(0.97); }
+  .theme-btn:active, .toast-btn:active, .btn-reset:active, .switch:active { transform: scale(0.97); }
 
   /* Interruptor */
   .toggle-row {
@@ -642,6 +643,10 @@
   .mod-desc { grid-column: 2 / 4; font-size: var(--fs-xs); color: var(--text-dim); line-height: 1.4; }
 
   /* Setas dos <details> */
+  .mods-summary, .magicos-summary, .explain > summary {
+    transition: color var(--t-fast), transform var(--t-press) var(--ease-out);
+  }
+  .mods-summary:active, .magicos-summary:active, .explain > summary:active { transform: scale(0.985); }
   .mods-summary::-webkit-details-marker, .magicos-summary::-webkit-details-marker { display: none; }
   .mods-summary::before, .magicos-summary::before {
     content: '';
@@ -1112,7 +1117,9 @@
   @media (pointer: coarse) {
     .seg-btn { min-height: 40px; }
     .btn-ghost { height: 40px; }
-    .theme-btn { width: 36px; height: 36px; }
+    .theme-btn { width: 38px; height: 38px; }
+    .btn-info, .btn-reset { min-height: 36px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
+    .toast-btn { height: 38px; }
   }
 
   /* =========================================================
@@ -1138,14 +1145,14 @@
 
   @media (prefers-reduced-motion: reduce) {
     /* entradas viram fade, sem deslocamento */
-    .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]) { animation-name: fade-in; }
+    .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]), .tipo-info:not([hidden]) { animation-name: fade-in; }
     /* efeitos decorativos param */
     .prop-chip.chip-obra::after, .forja-on .forge-glow { animation: none; }
     /* nada se move: só cor e opacidade mudam */
-    .switch .knob, .theme-btn svg, .c-bar span, .mods-summary::before, .magicos-summary::before {
+    .switch .knob, .theme-btn svg, .c-bar span, .mods-summary::before, .magicos-summary::before, .explain > summary::before {
       transition-property: opacity, background-color, color, border-color;
     }
-    .seg-btn:active, .btn-ghost:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .switch:active, .cost-bar:active { transform: none; }
+    .seg-btn:active, .btn-ghost:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .btn-info:active, .btn-reset:active, .mods-summary:active, .magicos-summary:active, .explain > summary:active, .switch:active, .cost-bar:active { transform: none; }
     .theme-btn svg { transform: none !important; }
     .toast, .toast.show { transform: translate(-50%, 0); }
     .cost-bar { transform: none; opacity: 0; pointer-events: none; transition: opacity 200ms ease; }
@@ -1167,7 +1174,7 @@
     .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
     .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 20%, transparent); border-color: var(--accent); }
     .toast-btn:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
-    .magicos-summary:hover { color: var(--text); }
+    .mods-summary:hover, .magicos-summary:hover, .explain > summary:hover { color: var(--accent); }
   }
 </style>
 </head>
@@ -1397,6 +1404,30 @@
             </button>
           </div>
         </div>
+
+        <div class="setting" id="auto-forj-setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Criações Automáticas</span>
+              <span class="t-sub">Forja Arcana nível 17: ferramenta automatizada ajuda em materiais raros e itens mágicos (tempo ÷2)</span>
+            </div>
+            <button type="button" class="switch" id="auto-forj-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting" id="excalibur-setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Excalibur</span>
+              <span class="t-sub">Forjador nível 20: arma ou foco com até 6 materiais (4 Tier S + 2 Tier A ou menor), tempo de 1 Tier S e encantamento Lendário sem StarMetal (+0h)</span>
+            </div>
+            <button type="button" class="switch" id="excalibur-switch" role="switch" aria-checked="false" aria-label="Excalibur">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2.</p>
@@ -1406,19 +1437,21 @@
       <header class="section-head">
         <div>
           <h2 id="sec-fim">Finalidade</h2>
-          <p>Para uso próprio ou para vender com margem</p>
+          <p>Criar para uso próprio, vender com margem ou consertar item quebrado</p>
         </div>
       </header>
 
       <div class="mode">
-        <div class="segmented" id="mode-segmented" role="radiogroup" aria-label="Modo de cálculo">
-          <button type="button" class="seg-btn" data-mode="proprio" role="radio">Item Próprio</button>
-          <button type="button" class="seg-btn" data-mode="vendido" role="radio">Item para Venda</button>
+        <div class="segmented seg-3" id="mode-segmented" role="radiogroup" aria-label="Modo de cálculo">
+          <button type="button" class="seg-btn" data-mode="proprio" role="radio">Uso próprio</button>
+          <button type="button" class="seg-btn" data-mode="vendido" role="radio">Para venda</button>
+          <button type="button" class="seg-btn" data-mode="conserto" role="radio">Consertar quebrado</button>
         </div>
         <div class="field-group" id="lucro-wrap" hidden>
           <label for="lucro">Margem de lucro (%)</label>
           <input id="lucro" type="number" min="0" step="1" />
         </div>
+        <p class="magicos-note" id="conserto-note" hidden>Um item quebrado (penalidade −5) custa metade do valor para ser consertado (p. 173). Com o Trabalhador Itinerante (p. 124), o Forjador paga só a matéria-prima desse serviço (metade do conserto, ou grátis se já tiver o material).</p>
       </div>
     </section>
 
@@ -1625,73 +1658,74 @@
     ['metal_ouro','Metais','D','Ouro',100,'d4','-2','Não perde durabilidade por umidade ou corrosão.','Pesa o dobro do peso padrão.'],
     ['metal_bronze','Metais','C','Bronze',1,'d4','0','Não perde durabilidade por umidade ou corrosão.',''],
     ['metal_ferro','Metais','C','Ferro',1,'d6','0','Material básico, resistente e fácil de encontrar.',''],
-    ['metal_prata','Metais','C','Prata',2,'d6','0','Eficaz contra lobisomens e mortos-vivos com resistência ou imunidade a armas não-mágicas; não perde durabilidade por eletricidade.','Mais frágil, exige manutenção mais frequente.'],
-    ['metal_dlarun','Metais','C','Dlarun',30,'d4','0','+1 de dano de frio; armaduras dão resistência a frio e vantagem contra exaustão por frio; escudos ganham Parry contra dano de frio.','Desvantagem em testes de durabilidade se o motivo for calor ou fogo.'],
-    ['metal_ferro_febril','Metais','C','Ferro Febril',30,'d4','0','+1 de dano de fogo; armaduras dão resistência a fogo e vantagem contra exaustão por calor; escudos ganham Parry contra dano de fogo.','Desvantagem em testes de durabilidade se o motivo for frio.'],
+    ['metal_prata','Metais','C','Prata',2,'d6','0','Eficaz contra lobisomens e mortos-vivos com resistência ou imunidade a armas não-mágicas; armas corpo a corpo e munições não perdem durabilidade por eletricidade.','Mais frágil, exige manutenção mais frequente.'],
+    ['metal_dlarun','Metais','C','Dlarun',30,'d4','0','+1 de dano de frio (armas corpo a corpo, arremesso ou munições); armaduras dão resistência a frio e vantagem contra exaustão por frio; escudos ganham Aparar (Parry) contra ataques à distância ou em área de frio.','Desvantagem em testes de durabilidade causados por calor ou dano de fogo.'],
+    ['metal_ferro_febril','Metais','C','Ferro Febril',30,'d4','0','+1 de dano de fogo (armas corpo a corpo, arremesso ou munições); armaduras dão resistência a fogo e vantagem contra exaustão por calor; escudos ganham Aparar (Parry) contra ataques à distância ou em área de fogo.','Desvantagem em testes de durabilidade causados por frio ou dano de frio.'],
     ['metal_aco','Metais','B','Aço',30,'d8','+1','Ótimo custo-benefício, muito usado em armas e armaduras.',''],
-    ['metal_prata_alquimica','Metais','B','Prata Alquímica',35,'d6','+1','Como a prata, mas monstros afetados por prata também são afetados por este material, com +1 de dano extra.','Ainda é frágil como a prata comum.'],
-    ['metal_aco_verde_baatoriano','Metais','B','Aço Verde Baatoriano',35,'d8','+1','+2 de dano extra contra criaturas do tipo corruptores; armaduras médias/pesadas e escudos dão +1 de CA contra corruptores.','Pesa apenas metade do aço comum (sem desvantagem prática).'],
-    ['metal_virestal','Metais','B','Virestal',55,'d10','+1','Óleos e venenos aplicados na arma permanecem o dobro do tempo.',''],
+    ['metal_prata_alquimica','Metais','B','Prata Alquímica',35,'d6','+1','Monstros afetados por prata também são afetados por este material e sofrem +1 de dano extra.','Ainda é frágil como a prata comum.'],
+    ['metal_aco_verde_baatoriano','Metais','B','Aço Verde Baatoriano',35,'d8','+1','Supera resistência/imunidade de corruptores e causa +2 de dano extra contra eles; armaduras médias/pesadas e escudos dão +1 de CA contra corruptores.','Pesa metade do aço comum — sem desvantagem prática.'],
+    ['metal_virestal','Metais','B','Virestal',55,'d10','+1','Óleos e venenos aplicados em armas corpo a corpo, de arremesso ou munições permanecem o dobro do tempo.',''],
     ['metal_aco_damasco','Metais','A','Aço Damasco',150,'d20','+2','Lâminas de extrema resistência, mantêm o fio afiado por longos períodos.',''],
-    ['metal_mithral','Metais','A','Mithral',175,'d20','+2','Sem requerimento de Força; pode trocar -5 no acerto por +10 no dano; armaduras/escudos sem requerimento de Força nem desvantagem em Furtividade, dá para dormir com a armadura vestida.','Pesa metade do peso normal — sem desvantagem prática.'],
-    ['metal_starmetal','Metais','S','Starmetal',400,'d100','+3','Suporta criação de itens mágicos de raridade muito alta (raros a lendários).',''],
-    ['metal_adamante','Metais','S','Adamante',500,'∞','+3','Dano dobrado contra criaturas do tipo constructo; críticos contra o portador causam metade do dano e ele não pode ser teleportado; escudo ganha maestria Deflect.','Imune a qualquer forma de desgaste — sem desvantagem.'],
-    ['metal_aco_negro','Metais','S','Aço Negro',500,'d100','+3','Ao absorver dano elemental, ganha +2 de dano daquele elemento (arma) ou resistência (armadura) por 8h, acumulável entre os 4 tipos; margem de crítico melhora em +1.',''],
-    ['metal_ebano','Metais','S','Ébano',500,'d100','+3','Não perde durabilidade por umidade ou corrosão.','Pesa metade do peso — sem desvantagem prática.'],
-    ['metal_elementium','Metais','S','Elementium',500,'d100','+3','Escolha um dano elemental (fogo/frio/elétrico/ácido): +1d4 de dano ou substitui todo o dano físico; armaduras médias/pesadas dão imunidade a esse elemento; escudo ganha Deflect.','Se empunhado por alguém não autorizado, reage causando 1d10 de dano por turno.'],
+    ['metal_mithral','Metais','A','Mithral',175,'d20','+2','Armas sem requerimento de Força; 1x/rodada pode trocar −5 no acerto por +10 no dano (corpo a corpo, arremesso ou com Munição); armaduras e escudos sem requerimento de Força nem desvantagem em Furtividade, permitindo dormir de armadura.','Pesa metade do peso normal (arredondado para baixo) — sem desvantagem prática.'],
+    ['metal_starmetal','Metais','S','Starmetal',400,'d100','+3','Permite criar itens mágicos de raridade rara, muito rara ou lendária.','Em itens muito raros ou lendários muito fortes, o Mestre pode reduzir o bônus do material para balancear.'],
+    ['metal_adamante','Metais','S','Adamante',500,'∞','+3','Armas/munições superam resistências e imunidades, causam dano dobrado em estruturas e +2 de dano contra constructos; armaduras médias/pesadas reduzem críticos sofridos pela metade e impedem teletransporte involuntário; escudo ganha Defletir contra energia, soma proficiência em TR de área de energia e dá imunidade a mísseis mágicos.','Imune a qualquer desgaste ou transformação (nem Desejo altera) — sem desvantagem.'],
+    ['metal_aco_negro','Metais','S','Aço Negro',500,'d100','+3','Ao sofrer ou canalizar dano elemental (fogo, frio, elétrico ou ácido) por 8h: armas/munições ganham +2 de dano desse elemento (substituindo o anterior) e podem trocar todo o dano físico pelo elemental; armaduras acumulam resistência e escudos acumulam Aparar (Parry) à distância/área para até os 4 elementos; não perde durabilidade pelos 4 elementos nem por umidade.',''],
+    ['metal_ebano','Metais','S','Ébano',500,'d100','+3','Armas corpo a corpo, de arremesso ou à distância ganham a maestria adicional Crítico (Critic); armaduras e escudos permitem 3x/dia rolar 1d12 e subtrair do dano sofrido, além de dormir de armadura sem penalidade; não perde durabilidade por umidade ou corrosão.','Pesa metade do peso normal (arredondado para baixo) — sem desvantagem prática.'],
+    ['metal_elementium','Metais','S','Elementium',500,'d100','+3','Material vivo elemental (fogo, frio, elétrico ou ácido): armas/munições causam +1d4 do elemento e podem trocar o dano físico por ele; armaduras médias/pesadas dão imunidade ao elemento; escudo ganha Defletir e soma proficiência em TR de área contra ele; repara-se com 1 min do elemento e move-se 1,5m/rodada até o dono.','Se empunhado por alguém não autorizado pelo dono, causa 1d10 de dano por turno.'],
 
     ['veg_madeira_podre','Vegetais','D','Madeira Podre',1,'d4','-1','Nenhuma — resultado da falta de cuidado com o item.','Modificador negativo, sem propriedade especial.'],
     ['veg_carvalho','Vegetais','C','Carvalho',1,'d6','0','Madeira comum e robusta, boa para armas e ferramentas padrão.',''],
-    ['veg_bronzewood','Vegetais','C','BronzeWood',5,'d4','0','Armaduras/escudos sem penalidade de Furtividade em florestas; não perde durabilidade por umidade.',''],
+    ['veg_bronzewood','Vegetais','C','BronzeWood',5,'d4','0','Armaduras e escudos sem penalidade de Furtividade em florestas; armas com Munição convertem 3m do alcance longo em distância normal; não perde durabilidade por umidade.',''],
     ['veg_freixo','Vegetais','B','Freixo',30,'d8','+1','Leve e resistente, bom equilíbrio entre força e manuseabilidade.',''],
-    ['veg_madeira_da_alma','Vegetais','B','Madeira da Alma',45,'d6','+1','Prende as almas de criaturas que morrem a até 4,5m, impedindo sua ressurreição até a alma ser libertada.',''],
-    ['veg_fungo_viventis','Vegetais','B','Fungo Viventis',60,'d6','+1','Regenera naturalmente +1 de durabilidade por dia; mesmo destruído, tenta se regenerar lentamente.',''],
-    ['veg_starwood','Vegetais','B','StarWood',65,'d8','+1','Permite criação de itens mágicos de raridade "rara".',''],
+    ['veg_madeira_da_alma','Vegetais','B','Madeira da Alma',45,'d6','+1','Prende as almas de criaturas que morrem a até 4,5m, facilitando ou impedindo sua ressurreição até a alma ser liberada.',''],
+    ['veg_fungo_viventis','Vegetais','B','Fungo Viventis',60,'d6','+1','Material vivo: armas com Munição produzem a própria munição para 2d6 ataques à distância por dia; regenera +1 de durabilidade por dia (se destruído, reconstitui-se em 2d4 dias).','Qualquer efeito que mate fungos mata o material e encerra a regeneração.'],
+    ['veg_starwood','Vegetais','B','StarWood',65,'d8','+1','Permite criação de itens mágicos de raridade rara.',''],
     ['veg_teixo','Vegetais','A','Teixo',150,'d20','+2','Excelente elasticidade e resistência à tração.',''],
-    ['veg_iron_wood','Vegetais','A','Iron-Wood',200,'d20','+2','Efeitos de empurrão em armas/munições aumentam +1,5m; armaduras/escudos reduzem o empurrão sofrido em +1,5m.','Pesa o dobro do normal; ganha a propriedade pesada (ou +2 no requerimento de Força se já tiver).'],
-    ['veg_nogueira','Vegetais','A','Nogueira',170,'d20','+2','Se tiver ao menos 1 ponto de feitiçaria, ganha +1 ponto extra ao sintonizar.',''],
-    ['veg_bordo','Vegetais','A','Bordo',170,'d20','+2','Se tiver ao menos 1 ponto de Ki, ganha +1 ponto extra ao sintonizar.',''],
-    ['veg_samambaia_metamorfica','Vegetais','A','Samambaia Metamórfica',185,'d20','+2','Material vivo; pode assumir 2 formas de item diferentes, alternando com ação bônus; modo furtivo 1x/rodada.','Precisa de vínculo com o portador e se alimenta de luz solar 1h/dia.'],
-    ['veg_yggdrasil','Vegetais','S','Yggdrasil',500,'∞','+3','Atinge criaturas no Plano Astral/incorpóreas; foco de conjuração dobra a distância de teletransporte; +1 em testes de Sabedoria ou Inteligência ao sintonizar.','Extremamente raro de obter — indestrutível, sem desvantagem mecânica.'],
-    ['veg_samambaia_primordial','Vegetais','S','Samambaia Primordial',500,'d100','+3','Material vivo; 1x/dia soma 2d4 a um teste próximo; pode assumir até 10 formas de item, alternando com ação bônus; recupera +1 durabilidade/dia.',''],
-    ['veg_hera_lunar','Vegetais','S','Hera Lunar',500,'d100','+3','Material vivo; gera vagens de esporos que ativam efeitos variados (espinhos, luz, veneno, feromônios) conforme a fase da lua, todos disponíveis na Lua Cheia.','Precisa de luz da lua para se alimentar.'],
+    ['veg_iron_wood','Vegetais','A','Iron-Wood',200,'d20','+2','Armas, escudos e munições aumentam efeitos de empurrão em +1,5m; armas com Munição causam +1d4 de dano ao usar a ação Preparar; armaduras e escudos reduzem empurrões sofridos em 1,5m (acumulativo).','Pesa o dobro do normal; ganha a propriedade Pesada e aumenta qualquer requerimento de Força em +2.'],
+    ['veg_nogueira','Vegetais','A','Nogueira',170,'d20','+2','Armas com Munição não têm desvantagem na distância longa; se tiver ao menos 1 ponto de feitiçaria, ganha +1 ponto extra ao sintonizar.',''],
+    ['veg_bordo','Vegetais','A','Bordo',170,'d20','+2','Armas com Munição aumentam a distância normal e longa em +3m e não têm desvantagem contra criaturas a 1,5m; se tiver ao menos 1 ponto de Ki, ganha +1 ponto extra ao sintonizar.',''],
+    ['veg_samambaia_metamorfica','Vegetais','A','Samambaia Metamórfica',185,'d20','+2','Material vivo: ao sintonizar, escolhe 2 formas de item e alterna com ação bônus; modo furtivo nas roupas 1x/rodada; Despertar: crítico no teste de criação transforma o item em Samambaia Primordial (Tier S).','Precisa de vínculo com o portador e se alimenta de luz solar 1h/dia.'],
+    ['veg_yggdrasil','Vegetais','S','Yggdrasil',500,'∞','+3','Armas corpo a corpo, de arremesso ou munições não têm desvantagem contra criaturas que você não possa ver; foco de conjuração dobra a distância e dá vantagem em magias de teletransporte; +1 em testes e TR de Sabedoria ou Inteligência ao sintonizar.','Indestrutível e inalterável (nem Desejo altera) — sem desvantagem mecânica.'],
+    ['veg_samambaia_primordial','Vegetais','S','Samambaia Primordial',500,'d100','+3','Material vivo consciente (não precisa se alimentar): ao sintonizar, 1x/dia soma 2d4 a um teste ou TR a até 1,5m; alterna entre até 10 formas de item com ação bônus; modo furtivo 1x/rodada; recupera +1 de durabilidade/dia.',''],
+    ['veg_hera_lunar','Vegetais','S','Hera Lunar',500,'d100','+3','Material vivo: gera 1d4 vagens de esporos/dia (máx. 10) e ativa efeitos conforme a fase da lua (2 na Nova, 4 na Crescente/Minguante, todos na Cheia: Escudo de Espinhos, Luminescência, Chicote de Hera, Hera Venenosa, Esporos Explosivos e Feromônios +1 Carisma).','Remover o acessório faz o item murchar em 5 rodadas; recupera +1 de durabilidade com 1h de luz da lua.'],
 
-    ['geo_pedra_gritante','Geológicos','D','Pedra Gritante',5,'d6','-1','Pode soltar um som alto e estridente ao ser usado — útil como distração.','Denuncia o usuário; ativa aleatoriamente em críticos ou disparos de munição.'],
+    ['geo_pedra_gritante','Geológicos','D','Pedra Gritante',5,'d6','-1','Produz um som alto e estridente ao ser usado (sempre ativa em críticos de arma ou disparos de munição) — útil para distração.','Barulho alto como um grito ou trovão denuncia a posição.'],
     ['geo_pedra','Geológicos','C','Pedra',1,'d6','0','Material comum e acessível, boa resistência para dano contundente.',''],
-    ['geo_silex_adormecido','Geológicos','C','Sílex Cinético Adormecido',50,'d8','0','Crítico positivo (causado ou sofrido) transforma o item no Tier S "Sílex Cinético Acordado" por 2 rodadas; não perde durabilidade por concussão.',''],
-    ['geo_obsidiana','Geológicos','C','Obsidiana',40,'d4','0','Extremamente afiada — armas de corte/perfuração ou munições ganham a maestria Bleed adicional.','Quebradiça; munições sempre quebram após o ataque.'],
-    ['geo_pedra_ana','Geológicos','B','Pedra Anã',30,'d8','+1','Grande resistência, textura quase idêntica ao mármore.','Dificulta a mobilidade.'],
-    ['geo_sal_cristalizado','Geológicos','B','Sal Cristalizado',35,'d8','+1','+2 de dano extra contra mortos-vivos (armas); +1 de CA contra mortos-vivos (armaduras/escudos pesados).',''],
-    ['geo_skip_rock','Geológicos','B','Skip Rock',30,'d6','+1','Munição de concussão ricocheteia para um segundo alvo próximo (maestria Cleave adicional).',''],
-    ['geo_pedra_cegante','Geológicos','B','Pedra Cegante',30,'d6','+1','Munição gera uma explosão de luz ao acertar, cegando por 10 min criaturas com Visão no Escuro em 6m (CD 16 Con).',''],
-    ['geo_gelo_eterno','Geológicos','B','Gelo Eterno',75,'d10','+1','+1 dano de frio em magias com foco deste material; efeitos mágicos de frio duram o dobro; só é destruído por dano físico.','O item está sempre frio ao toque.'],
-    ['geo_brasa_eterna','Geológicos','B','Brasa Eterna',75,'d10','+1','+1 dano de fogo em magias com foco deste material; efeitos mágicos de fogo duram o dobro; só é destruído por dano físico.','O item está sempre quente ao toque.'],
+    ['geo_silex_adormecido','Geológicos','C','Sílex Cinético Adormecido',50,'d8','0','Crítico positivo desperta o item para o Tier S "Sílex Cinético Acordado" (+3 e todas as propriedades: até o fim do turno em armas, fim do próximo turno em armaduras/escudos, ou 2 rodadas em focos); não perde durabilidade por concussão.',''],
+    ['geo_obsidiana','Geológicos','C','Obsidiana',40,'d4','0','Extremamente afiada — armas de corte/perfuração e munições ganham a maestria adicional Sangramento (Bleed).','Quebradiça; munições sempre quebram após o ataque.'],
+    ['geo_pedra_ana','Geológicos','B','Pedra Anã',30,'d8','+1','Grande resistência, textura quase idêntica ao mármore.','Pesada em armaduras, dificulta a mobilidade.'],
+    ['geo_sal_cristalizado','Geológicos','B','Sal Cristalizado',35,'d8','+1','Supera resistência/imunidade de mortos-vivos e causa +2 de dano extra contra eles (armas/munições); armaduras médias/pesadas e escudos dão +1 de CA contra mortos-vivos.',''],
+    ['geo_skip_rock','Geológicos','B','Skip Rock',30,'d6','+1','Munição com dano de concussão ricocheteia para um segundo alvo próximo: ganha a maestria adicional Trespassar (Cleave).',''],
+    ['geo_pedra_cegante','Geológicos','B','Pedra Cegante',30,'d6','+1','Munição gera uma explosão de luz violeta ao atingir superfície sólida: criaturas com Visão no Escuro a até 6m fazem TR de Constituição CD 16 ou perdem a Visão no Escuro por 10 min.','Não afeta a visão normal.'],
+    ['geo_gelo_eterno','Geológicos','B','Gelo Eterno',75,'d10','+1','Armas e munições causam dano de gelo no lugar do dano normal; armas com Munição causam +1 de dano de gelo; foco trata resultado 1 no dado de dano de gelo como 2; armadura dá vantagem contra exaustão por calor; escudo permite reação quando erram ataque a 1,5m para causar dano de gelo igual ao bônus de proficiência.','O item é sempre frio como gelo e nunca derrete.'],
+    ['geo_brasa_eterna','Geológicos','B','Brasa Eterna',75,'d10','+1','Armas e munições causam dano de fogo no lugar do dano normal; armas com Munição causam +1 de dano de fogo; foco trata resultado 1 no dado de dano de fogo como 2; armadura dá vantagem contra exaustão por frio; escudo permite reação quando erram ataque a 1,5m para causar dano de fogo igual ao bônus de proficiência.','O item é sempre quente como brasa e nunca se apaga.'],
     ['geo_cristal_estigio','Geológicos','A','Cristal Estígio',150,'d20','+2','Resistente e brilhante, ótima escolha para armaduras e armas de alta qualidade.',''],
-    ['geo_argila_elukiana','Geológicos','A','Argila Elukiana',175,'d20','+2','Sem desvantagem em ataques submersos; armadura dá deslocamento de natação; se ficar a 0 PV embaixo d\'água, emerge automaticamente 9m à superfície.','Não é ideal para lâminas afiadas — melhor para perfuração ou concussão.'],
-    ['geo_pedra_ana_refinada','Geológicos','A','Pedra Anã Refinada',200,'d20','+2','Pode trocar -5 no acerto por +10 no dano (corpo a corpo/arremesso); altera efeitos de empurrão conforme o uso.','Pesa o dobro do normal; ganha propriedade pesada (ou +2 no requerimento de Força se já tiver).'],
-    ['geo_glass_steel','Geológicos','A','Glass Steel',200,'d20','+2','Vantagem no primeiro ataque em penumbra; munições/armas de arremesso não deixam rastro visual; itens têm vantagem para serem escondidos.','O portador também sofre desvantagem no primeiro ataque contra ele em penumbra.'],
-    ['geo_deep_crystal','Geológicos','A','Deep Crystal',400,'d20','+2','+2 de dano psíquico (ou +5 após 10 min de meditação); armaduras dão resistência a dano psíquico e vantagem contra controle mental/leitura de mente; escudo ganha Parry contra psíquico.','Armazena memórias recentes do usuário — risco se o item for perdido ou lido por magia.'],
-    ['geo_fragmento_igneo_vorthal','Geológicos','A','Fragmento Ígneo de Vorthal',170,'d20','+2','Dano de concussão também causa fogo em área (1,5m); quem acerta a arma corpo a corpo sofre 1d4 de fogo.','Ao quebrar, explode causando 1d4 de fogo por kg do material em 3m.'],
-    ['geo_starstone','Geológicos','A','StarStone',120,'d20','+2','Permite criação de itens mágicos de raridade "rara" ou "muito rara".',''],
-    ['geo_pedra_lunar','Geológicos','S','Pedra Lunar',500,'d20','+3','Reverte criaturas polimorfadas/metamorfas ao acertar; munições e teletransportes ganham alcance/distância extra, com vantagem no d100 de "teletransporte".','Ao quebrar, causa 3d6 de dano de veneno a quem estiver a 1,5m (exceto o usuário).'],
-    ['geo_deep_crystal_alpha','Geológicos','S','Deep Crystal Alpha',500,'d20','+3','Versão superior do Deep Crystal: até +6 de dano psíquico acumulado, armazena memórias de vidas inteiras.','Uso contínuo induz amnésia gradual no usuário — arriscado para itens de combate.'],
-    ['geo_piroclasto_vorthal','Geológicos','S','Piroclasto de Vorthal',500,'d100','+3','Dano de concussão também causa fogo em área (3m); focos de conjuração aumentam o raio de magias de área em dano de fogo.','Ao quebrar, explode 1d6 de fogo por kg do material em 6m.'],
-    ['geo_quartzo_inercia','Geológicos','S','Quartzo de Inércia',500,'d100','+3','Absorve metade de um dano recebido e libera no turno seguinte; escudo empurra quem erra o ataque contra você; não perde durabilidade por concussão.',''],
-    ['geo_silex_acordado','Geológicos','S','Sílex Cinético Acordado',500,'d100','+3','Acumula cargas a cada acerto (arma) ou dano recebido (armadura/escudo); ao atingir o máximo, libera dano dobrado ou uma explosão de energia.','Se não usado por 24h, "adormece" e vira Sílex Cinético Adormecido (Tier C), perdendo as propriedades até ser reativado.'],
+    ['geo_argila_elukiana','Geológicos','A','Argila Elukiana',175,'d20','+2','Armas corpo a corpo, de arremesso ou com Munição não têm desvantagem submersas; armadura dá deslocamento de natação igual ao de caminhada; armadura ou escudo faz emergir 9m ao iniciar o turno com 0 PV embaixo d\'água.','Exige 3 dias para endurecer após o molde; pouco indicada para lâminas afiadas.'],
+    ['geo_pedra_ana_refinada','Geológicos','A','Pedra Anã Refinada',200,'d20','+2','1x/rodada pode trocar −5 no acerto por +10 no dano (armas corpo a corpo, arremesso ou com Munição); armas e escudos aumentam empurrões causados em +1,5m; armaduras e escudos reduzem empurrões sofridos em 1,5m (acumulativo).','Pesa o dobro do normal; ganha a propriedade Pesada e aumenta qualquer requerimento de Força em +2.'],
+    ['geo_glass_steel','Geológicos','A','Glass Steel',200,'d20','+2','Vantagem no primeiro ataque do combate em penumbra; munições e armas de arremesso não deixam rastro visual; criaturas têm desvantagem no primeiro ataque contra o portador de armadura/escudo em penumbra; vantagem para esconder o item.',''],
+    ['geo_deep_crystal','Geológicos','A','Deep Crystal',400,'d20','+2','+2 de dano psíquico em armas/munições (sobe para +3 por 1 min ao sofrer dano psíquico mágico ou meditar 10 min); armaduras médias/pesadas dão resistência psíquica e vantagem contra controle mental/leitura de mente; escudo ganha Aparar (Parry) contra psíquico; foco acumula +1 de dano psíquico por magia (máx. +3 por 1h).','Armazena memórias recentes por 24h e dano psíquico absorvido (liberado em quem ler a mente do item).'],
+    ['geo_fragmento_igneo_vorthal','Geológicos','A','Fragmento Ígneo de Vorthal',170,'d20','+2','Dano de concussão em armas/munições causa metade do dano como fogo em 1,5m ao redor do alvo; armas com Munição causam metade do dano como fogo em criaturas a 1,5m de você; foco aumenta o raio de magias de área em +1,5m.','Em armaduras/escudos, sofrer ataque corpo a corpo causa 1d4 de fogo a você e ao atacante; ao quebrar, explode 1d4 de fogo por kg em 3m.'],
+    ['geo_starstone','Geológicos','A','StarStone',120,'d20','+2','Permite criação de itens mágicos de raridade rara ou muito rara.',''],
+    ['geo_pedra_lunar','Geológicos','S','Pedra Lunar',500,'d20','+3','Crítico (ou toque com TR de Con CD 10 + dado da arma) reverte metamorfos e criaturas polimorfadas; munições ganham +1/4 de alcance; armaduras e focos dão +1/4 de distância em teletransportes e vantagem no d100 da magia Teletransporte.','Ao perder durabilidade (exceto munições), causa 3d6 de veneno a criaturas que respirem ar a até 1,5m (exceto o usuário).'],
+    ['geo_deep_crystal_alpha','Geológicos','S','Deep Crystal Alpha',500,'d20','+3','+2 de dano psíquico em armas/munições (sobe para +5 por 10 min ao sofrer dano psíquico mágico ou meditar 10 min); armaduras dão imunidade psíquica e sucesso automático contra controle/leitura mental; escudo ganha Defletir e soma proficiência em TR de área psíquica; foco acumula +2 por magia (máx. +6 por 1h).','Meditar apaga as últimas 24h; armaduras dão desvantagem para lembrar; uso contínuo induz amnésia gradual (10 anos de memórias por cm³).'],
+    ['geo_piroclasto_vorthal','Geológicos','S','Piroclasto de Vorthal',500,'d100','+3','Dano de concussão em armas/munições causa metade do dano como fogo em 3m ao redor do alvo; armas com Munição causam metade do dano como fogo a até 3m de você; foco aumenta a área de magias de dano em área em +50%.','Em armaduras/escudos, sofrer ataque corpo a corpo causa 1d6 de fogo a você e ao atacante; ao quebrar, explode 1d6 de fogo por kg em 6m.'],
+    ['geo_quartzo_inercia','Geológicos','S','Quartzo de Inércia',500,'d100','+3','Armas/munições podem guardar metade do dano para causar como energia no próximo turno; armas com Munição ganham +1 dado de dano em Ataque Concentrado ou Colossal; armaduras/escudos podem adiar metade do dano sofrido para o fim do próximo turno; escudo empurra 3m quem erra ataque corpo a corpo; foco absorve magia com Escudo Arcano (+1 espaço de 1º nível); não perde durabilidade por concussão.',''],
+    ['geo_silex_acordado','Geológicos','S','Sílex Cinético Acordado',500,'d100','+3','Armas corpo a corpo/arremesso acumulam até 3 cargas em acertos seguidos para dobrar os dados de dano; armas com Munição dobram os dados após 5 rodadas atacando; armaduras/escudos acumulam até 5 cargas (ao sofrer 10+ de dano) para explodir até 5d6 de concussão em 3m; foco acumula 3 cargas para subir magia em +1 nível; não perde durabilidade por concussão.','Se passar 24h sem causar (armas/focos) ou sofrer (armaduras/escudos) um crítico, adormece e vira Sílex Cinético Adormecido (Tier C).'],
+    ['geo_pedra_filosofal','Geológicos','S','Pedra Filosofal',500,'d20','+3','Exclusivo do Forjador Alquimista (17º nível, p. 131): com uma ação, permite trocar qualquer outro material do item por outro da mesma categoria e mesmo tier (exceto material vivo), alterando todos os seus benefícios.','Trocar um material que sustenta encantamento poderoso (como Starmetal) faz o item quebrar por não suportar a magia.'],
 
     ['org_couro_nd0_5','Orgânicos','C','Couro e Escamas (Nd 0-5)',1,'d6','0','Proteção modesta, fácil de encontrar e trabalhar.',''],
-    ['org_coral_morto','Orgânicos','C','Coral Morto',1,'d4','0','Sem desvantagem para ataques feitos submersos em água.','Mais rígido e propenso a lascar sob pressão que o coral vivo.'],
-    ['org_ossos_nd0_5','Orgânicos','C','Ossos (Nd 0-5)',1,'d6','0','Leves e fáceis de manusear, ideais para itens leves e flexíveis.',''],
-    ['org_inseto_treinado','Orgânicos','C','Artrópode Treinado',50,'d10','0','Material vivo e inteligente; alterna entre forma de criatura e de item por ação bônus; evolui e fortalece o vínculo com o dono.','Precisa se alimentar (1kg a cada 3 dias ou perde durabilidade); só o dono pode usá-lo.'],
-    ['org_couro_nd6_11','Orgânicos','B','Couro e Escamas (Nd 6-11)',30,'d8','+1','Escolha um tipo de dano (exceto cortante/perfurante/concussão): a armadura passa a dar resistência a esse dano.',''],
-    ['org_ossos_nd6_11','Orgânicos','B','Ossos (Nd 6-11)',30,'d6','+1','Ignoram resistência/imunidade a armas não-mágicas de criaturas do mesmo tipo; +1 dano necrótico em focos de conjuração; pesam metade do peso.',''],
-    ['org_quitina','Orgânicos','B','Quitina',45,'d8','+1','Óleos e venenos aplicados permanecem o dobro do tempo; pesa metade do peso.',''],
-    ['org_coral','Orgânicos','B','Coral',30,'d6','+1','Material vivo; armadura de coral dá deslocamento de natação e não pesa nada submersa.','Precisa ficar submerso ao menos 1h/dia ou "morre" e vira Coral Morto.'],
-    ['org_couro_nd12_17','Orgânicos','A','Couro e Escamas (Nd 12-17)',150,'d20','+2','Escolha um tipo de dano: a armadura dá resistência a esse dano, refletindo a origem poderosa da criatura.',''],
-    ['org_ossos_nd12_17','Orgânicos','A','Ossos (Nd 12-17)',150,'d20','+2','Ignoram resistência/imunidade a armas não-mágicas do mesmo tipo de criatura; +2 dano necrótico em focos; pesam metade do peso.',''],
-    ['org_couro_nd18','Orgânicos','S','Couro e Escamas (Nd 18+)',500,'d100','+3','Escolha 2 tipos de dano: reduz em -2 qualquer dano Cortante, Perfurante ou Concussão sofrido, além da resistência escolhida.',''],
-    ['org_ossos_nd18','Orgânicos','S','Ossos (Nd 18+)',500,'d100','+3','Ignoram resistência/imunidade a armas não-mágicas do mesmo tipo; +3 dano necrótico em focos; vantagem contra medo de criaturas do mesmo tipo.',''],
-    ['org_ossos_tarrasque','Orgânicos','S','Ossos de Tarrasque',500,'∞','+3','Armas ignoram resistência/imunidade a armas não-mágicas e causam o dobro de dano em estruturas; imune à presença aterradora de Tarrasques.','Indestrutível — nem magia de Desejo pode alterá-lo.']
+    ['org_coral_morto','Orgânicos','C','Coral Morto',1,'d4','0','Armas corpo a corpo, de arremesso ou com Munição não têm desvantagem em ataques submersos em água.','Mais rígido e propenso a lascar sob pressão que o coral vivo.'],
+    ['org_ossos_nd0_5','Orgânicos','C','Ossos (Nd 0-5)',1,'d6','0','Peso Leve: itens feitos de ossos pesam metade do peso normal (arredondado para baixo).',''],
+    ['org_inseto_treinado','Orgânicos','C','Artrópode Treinado',50,'d10','0','Material vivo e inteligente: alterna entre criatura (ND máx. 1/4) e item com ação bônus; evolui conforme o nível sugerido (5º: +1 / d12; 9º: +2 / d20; 13º: +3 / d100).','Exclusivo do dono; precisa ingerir 1 kg de alimento a cada 3 dias ou perde 1 ponto de durabilidade.'],
+    ['org_couro_nd6_11','Orgânicos','B','Couro e Escamas (Nd 6-11)',30,'d8','+1','Armaduras: se a criatura tiver imunidades (exceto cortante, perfurante e concussão), escolha uma na fabricação para receber resistência a esse dano.',''],
+    ['org_ossos_nd6_11','Orgânicos','B','Ossos (Nd 6-11)',30,'d6','+1','Armas/munições ignoram resistência/imunidade não-mágica de criaturas do mesmo tipo; armas com Munição sem desvantagem a 1,5m; foco dá +1 de dano necrótico; vantagem contra medo do mesmo tipo de criatura; não perde durabilidade pelos danos a que a criatura era resistente/imune; pesa metade do peso.',''],
+    ['org_quitina','Orgânicos','B','Quitina',45,'d8','+1','Óleos e venenos em armas/munições permanecem o dobro do tempo; pesa metade do peso normal (arredondado para baixo).',''],
+    ['org_coral','Orgânicos','B','Coral',30,'d6','+1','Material vivo: armas corpo a corpo, de arremesso ou com Munição sem desvantagem submersas; armadura dá deslocamento de natação igual ao de caminhada; não tem peso quando submerso em água.','Precisa ficar submerso em água ao menos 1h/dia ou morre e vira Coral Morto.'],
+    ['org_couro_nd12_17','Orgânicos','A','Couro e Escamas (Nd 12-17)',150,'d20','+2','Armaduras dão resistência a um tipo de dano ao qual a criatura era imune (exceto físico); ao sintonizar, vantagem contra ser amedrontado por criaturas do mesmo tipo.',''],
+    ['org_ossos_nd12_17','Orgânicos','A','Ossos (Nd 12-17)',150,'d20','+2','Armas/munições ignoram resistência/imunidade não-mágica do mesmo tipo; armas com Munição sem desvantagem a 1,5m; armaduras/escudos reduzem em −2 dois tipos de dano aos quais a criatura resistia; foco dá +2 de dano necrótico; vantagem contra medo do mesmo tipo; pesa metade do peso.',''],
+    ['org_couro_nd18','Orgânicos','S','Couro e Escamas (Nd 18+)',500,'d100','+3','Armaduras dão resistência a um dano ao qual a criatura era imune (exceto físico) e reduzem em −3 todo dano Cortante, Perfurante e Concussão sofrido; vantagem contra medo de criaturas do mesmo tipo ao sintonizar.',''],
+    ['org_ossos_nd18','Orgânicos','S','Ossos (Nd 18+)',500,'d100','+3','Armas/munições ignoram resistência/imunidade não-mágica do mesmo tipo; armas com Munição sem desvantagem a 1,5m; armaduras/escudos reduzem em −3 três tipos de dano aos quais a criatura resistia; foco dá +3 de dano necrótico; vantagem contra medo do mesmo tipo; pesa metade do peso.',''],
+    ['org_ossos_tarrasque','Orgânicos','S','Ossos de Tarrasque',500,'∞','+3','Armas/munições ignoram resistência/imunidade não-mágica e causam o dobro de dano em estruturas; armaduras/escudos 1x/dia anulam (1–5 no d6) ou refletem (6 no d6) mísseis mágicos, magias de linha ou de ataque à distância; foco conjura Escudo Arcano 1x/dia como reação sem gastar espaço; imunidade à presença aterradora de Tarrasques.','Indestrutível e inalterável (nem Desejo altera) — sem desvantagem.']
   ].map(function (row) {
     return {
       id: row[0], categoria: row[1], tier: row[2], nome: row[3],
@@ -1813,6 +1847,8 @@
     ["Símbolo sagrado: Amuleto", "Focos de Conjuração", 75, "", "arma", ""],
     ["Símbolo sagrado: Emblema", "Focos de Conjuração", 75, "", "arma", ""],
     ["Símbolo sagrado: Relicário", "Focos de Conjuração", 75, "", "arma", ""],
+    ["Instrumento musical", "Instrumentos e Acessórios", 75, "", "arma", ""],
+    ["Carregador de munição (10 munições)", "Instrumentos e Acessórios", 5, "", "arma", ""],
     ["Acolchoada", "Armaduras", 10, "leve", "armadura", ""],
     ["Couro", "Armaduras", 30, "leve", "armadura", ""],
     ["Brigantina", "Armaduras", 30, "leve", "armadura", ""],
@@ -1965,6 +2001,7 @@
     municaoModExistente: false,
     obraPrima: false,
     melhorDosMelhores: false,
+    excalibur: false,
     artesao: true,
     artesaoModo: 'duplo',
     materiaisPossuidos: false,
@@ -2117,11 +2154,18 @@
     ['melhor-switch', 'melhorDosMelhores', 'main'],
     ['encantar-switch', 'encantarExistente', 'magic'],
     ['desencantado-switch', 'desencantado', 'magic'],
-    ['automaticas-switch', 'criacoesAutomaticas', 'magic'],
     ['versado-switch', 'versadoItensMagicos', 'magic']
   ];
 
-  var MAX_MATERIALS = 4;
+  var autoForjSwitch = document.getElementById('auto-forj-switch');
+  var autoMagicSwitch = document.getElementById('automaticas-switch');
+  var excaliburSwitch = document.getElementById('excalibur-switch');
+  var excaliburSetting = document.getElementById('excalibur-setting');
+  var consertoNoteEl = document.getElementById('conserto-note');
+
+  function maxMaterials() {
+    return state && state.excalibur && state.tipoItem === 'arma' ? 6 : 4;
+  }
 
   function buildMaterialCombo(idx, mat, multInput, tierSelect) {
     var wrap = document.createElement('div');
@@ -2346,8 +2390,10 @@
       rowsWrap.appendChild(row);
     });
 
-    addBtn.disabled = state.materials.length >= MAX_MATERIALS;
-    capNote.hidden = state.materials.length < MAX_MATERIALS;
+    var maxMat = maxMaterials();
+    addBtn.disabled = state.materials.length >= maxMat;
+    capNote.textContent = 'Máximo de ' + maxMat + ' materiais' + (maxMat === 6 ? ' (Excalibur)' : '') + ' — além disso, não altera o custo.';
+    capNote.hidden = state.materials.length < maxMat;
   }
 
   function modsSum() {
@@ -2380,6 +2426,7 @@
     var discFactor = 1 - (desconto / 100);
     var duplo = !!state.artesao && state.artesaoModo !== 'simples';
     var possuidos = !!state.materiaisPossuidos;
+    var conserto = state.modo === 'conserto';
 
     var cheioPadrao = pde * sumMat;
     var usaFracaoFixa = state.tipoItem === 'armadura' && !!state.fracaoFixa;
@@ -2404,7 +2451,7 @@
     var proprioItem = proprio;
     var modMun = null;
     var mm = state.tipoItem === 'municao' ? MUNICAO_MODS[state.municaoMod] : null;
-    if (mm) {
+    if (mm && !conserto) {
       var qtdMun = Math.max(1, Math.floor(num(state.municaoModQtd, 5)));
       var cheioMod = mm[1] * Math.ceil(qtdMun / mm[2]);
       var pagoMod = possuidos ? 0 : cheioMod * discFactor / divisor;
@@ -2412,9 +2459,12 @@
       proprio = modMun.existente ? pagoMod : proprio + pagoMod;
     }
 
+    var consertoCheio = cheio / 2;
     var lucroValor = 0;
     var final = proprio;
-    if (state.modo === 'vendido') {
+    if (conserto) {
+      final = proprio / 2;
+    } else if (state.modo === 'vendido') {
       lucroValor = proprio * (lucro / 100);
       final = proprio + lucroValor;
     }
@@ -2423,7 +2473,8 @@
       pde: pde, sumMat: sumMat, desconto: desconto, divisor: divisor, lucro: lucro,
       pdeDesc: pdeDesc, matDesc: matDesc, subtotal: subtotal, proprio: proprio,
       cheio: cheio, cheioPadrao: cheioPadrao, usaFracaoFixa: usaFracaoFixa,
-      lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota, duplo: duplo, modMun: modMun, proprioItem: proprioItem
+      lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota,
+      duplo: duplo, modMun: modMun, proprioItem: proprioItem, conserto: conserto, consertoCheio: consertoCheio
     };
   }
 
@@ -2597,10 +2648,15 @@
         return;
       }
 
-      totalHoras = tiers.reduce(function (sum, t) { return sum + tabela[t]; }, 0);
-      var tiersDesc = tiers.map(function (t) { return 'Tier ' + t + ' = ' + tabela[t] + 'h'; }).join(' + ');
-      noteText = (tipo === 'municao' ? 'Munições, rendem 2d4 unidades (p. 171). ' : '') +
-        'Tempo somado por material, regra de Junção de Materiais (' + tiersDesc + ' = ' + fmt(totalHoras) + 'h de base).';
+      if (state.excalibur && tipo === 'arma') {
+        totalHoras = TIER_HOURS.S;
+        noteText = 'Excalibur (20º nível, p. 128): forjar do zero leva o mesmo tempo de uma arma de um único material Tier S (' + totalHoras + 'h de base), mesmo combinando até 6 materiais.';
+      } else {
+        totalHoras = tiers.reduce(function (sum, t) { return sum + tabela[t]; }, 0);
+        var tiersDesc = tiers.map(function (t) { return 'Tier ' + t + ' = ' + tabela[t] + 'h'; }).join(' + ');
+        noteText = (tipo === 'municao' ? 'Munições, rendem 2d4 unidades (p. 171). ' : '') +
+          'Tempo somado por material, regra de Junção de Materiais (' + tiersDesc + ' = ' + fmt(totalHoras) + 'h de base).';
+      }
 
       if (tipo === 'arma' || tipo === 'armadura') {
         if (state.peso === 'leve') {
@@ -2614,6 +2670,14 @@
     }
 
     var timeFactor = 1;
+    var temMaterialRaro = tipo !== 'polvora' && state.materials.some(function (m) {
+      return m.tier === 'B' || m.tier === 'A' || m.tier === 'S';
+    });
+    var usaAuto = !!(state.criacoesAutomaticas && temMaterialRaro);
+    if (usaAuto) {
+      timeFactor *= 0.5;
+      noteText += ' Criações Automáticas (p. 130): ÷2 com ajuda da ferramenta automatizada em material raro.';
+    }
     if (state.pressa) { timeFactor *= 0.5; noteText += ' Pressa: ÷2, item sai com −1 no modificador.'; }
     if (tipo === 'municao' && MUNICAO_MODS[state.municaoMod]) noteText += ' A modificação de munição não muda o tempo (o Guia não define um tempo para ela).';
     productionNoteEl.textContent = noteText;
@@ -2629,15 +2693,16 @@
     resultTimeSubEl.textContent = '· ' + diasForjador + (diasForjador === 1 ? ' dia' : ' dias');
 
     productionRowsEl.appendChild(pRow(
-      'Forjador (sozinho)',
-      'Trabalhador Itinerante: 2/3 do tempo · ' + FORJADOR_HORAS_DIA + 'h de trabalho/dia',
-      fmtTempo(forjadorHoras, FORJADOR_HORAS_DIA)
+      'Forjador (sozinho)' + (usaAuto ? ' + Criações Automáticas' : ''),
+      'Trabalhador Itinerante: 2/3 do tempo' + (usaAuto ? ' · ÷2 ferramenta automatizada' : '') + ' · ' + FORJADOR_HORAS_DIA + 'h de trabalho/dia',
+      fmtTempo(forjadorHoras, FORJADOR_HORAS_DIA),
+      usaAuto
     ));
     productionRowsEl.appendChild(pRow(
       'Forjador (com ajudante)',
       'metade do tempo do Forjador · ' + FORJADOR_HORAS_DIA + 'h/dia',
       fmtTempo(forjadorAjudanteHoras, FORJADOR_HORAS_DIA),
-      true
+      !usaAuto
     ));
     productionRowsEl.appendChild(pRow(
       'Outra classe, não-Forjador (sozinho)',
@@ -2689,7 +2754,12 @@
     var nS = mats.filter(function (m) { return m.tier === 'S'; }).length;
     var head = document.createElement('div');
     var warn = [];
-    if (nS >= 2) {
+    if (state.excalibur && state.tipoItem === 'arma') {
+      var nNaoS = mats.length - nS;
+      head.innerHTML = '<strong>Excalibur (Artefato, 20º nível, p. 128)</strong> — até 4 materiais Tier S + 2 materiais Tier A ou mais baixo, com todos os efeitos dos 6 materiais.';
+      if (nS > 4) warn.push('A Excalibur comporta no máximo 4 materiais Tier S (você selecionou ' + nS + ').');
+      if (nNaoS > 2) warn.push('Além dos até 4 materiais Tier S, a Excalibur comporta no máximo 2 materiais de Tier A ou mais baixo (você selecionou ' + nNaoS + ').');
+    } else if (nS >= 2) {
       head.innerHTML = '<strong>Equipamento Tier SS</strong> — dois materiais Tier S.';
       if (mats.length > 2) warn.push('Os materiais além dos dois Tier S só trazem propriedades “Geral” ou “Material Vivo”.');
       if (nS > 2) warn.push('Um terceiro Tier S não soma propriedades exclusivas.');
@@ -2873,15 +2943,21 @@
     var raridadeAtual = state.magicoRaridade;
     var t = RARIDADE_TABELA[raridadeAtual];
     var elegivelEspecialista = raridadeAtual === 'comum' || raridadeAtual === 'incomum';
+    var excaliburLendario = !!(state.excalibur && state.tipoItem === 'arma' && raridadeAtual === 'lendario');
 
     var custoEnc = num(state.magicoCustoBase, 0);
     if (state.peritoItensMagicos) custoEnc /= 2;
     var horas = num(state.magicoTempoBase, 0);
     var notasTempo = [];
-    if (state.especialistaItensMagicos && elegivelEspecialista) { horas /= 4; notasTempo.push('÷4 Especialista'); }
-    if (state.criacoesAutomaticas) { horas /= 2; notasTempo.push('÷2 Criações Automáticas'); }
-    if (state.versadoItensMagicos) { horas /= 2; notasTempo.push('÷2 Versado'); }
-    if (state.desencantado) { horas /= 2; notasTempo.push('÷2 item desencantado'); }
+    if (excaliburLendario) {
+      horas = 0;
+      notasTempo.push('Excalibur: +0h para o efeito lendário (p. 128)');
+    } else {
+      if (state.especialistaItensMagicos && elegivelEspecialista) { horas /= 4; notasTempo.push('÷4 Especialista'); }
+      if (state.criacoesAutomaticas) { horas /= 2; notasTempo.push('÷2 Criações Automáticas'); }
+      if (state.versadoItensMagicos) { horas /= 2; notasTempo.push('÷2 Versado'); }
+      if (state.desencantado) { horas /= 2; notasTempo.push('÷2 item desencantado'); }
+    }
 
     magicoResultEl.innerHTML = '';
     var custoItem = state.encantarExistente ? 0 : calculate().final;
@@ -2891,12 +2967,17 @@
       fmtMoeda(custoItem)
     ));
     magicoResultEl.appendChild(mgLine('Custo total', fmtMoeda(custoEnc + custoItem)));
-    magicoResultEl.appendChild(mgLine('Tempo do encantamento', fmtHorasDias(horas) + (notasTempo.length ? ' · ' + notasTempo.join(', ') : '')));
+    magicoResultEl.appendChild(mgLine('Tempo do encantamento', (excaliburLendario ? '0h' : fmtHorasDias(horas)) + (notasTempo.length ? ' · ' + notasTempo.join(', ') : '')));
     if (!state.encantarExistente) {
-      magicoResultEl.appendChild(mgLine('Tempo de fabricação do item', 'veja Tempo de Produção, somado ao do encantamento'));
+      if (lastForjadorHoras != null) {
+        var totalMagHoras = lastForjadorHoras + horas;
+        magicoResultEl.appendChild(mgLine('Tempo total (fabricação + encantamento)', fmt(totalMagHoras) + 'h (' + Math.ceil(totalMagHoras / FORJADOR_HORAS_DIA) + ' dias de ' + FORJADOR_HORAS_DIA + 'h do Forjador)'));
+      } else {
+        magicoResultEl.appendChild(mgLine('Tempo de fabricação do item', 'veja Tempo de Produção, somado ao do encantamento'));
+      }
     }
 
-    if (t && t.material) {
+    if (t && t.material && !excaliburLendario) {
       var temMaterial = state.materials.some(function (m) { return t.material.indexOf(m.materialId) !== -1; });
       if (!temMaterial) {
         magicoResultEl.appendChild(mgWarning('Raridade ' + magicoRaridadeSelect.options[magicoRaridadeSelect.selectedIndex].text +
@@ -2904,7 +2985,7 @@
       }
     }
 
-    // --- Transmutação (Forjador Alquimista 3º / 7º / 13º) ---
+    // --- Transmutação (Forjador Alquimista 3º / 7º / 13º, p. 130–131) ---
     var nivel = parseInt(state.transmutNivel, 10) || 3;
     var origem = materialById(state.transmutOrigemId);
     var destino = materialById(state.transmutDestinoId);
@@ -2930,15 +3011,15 @@
       return;
     }
 
-    var pde = num(state.pde, 0);
+    var pde = baseValue().valor;
     var custoTransmut = 0.5 * pde * destino.mult;
-    var complexa = rOrigem >= 2 || rDestino >= 2 || origem.categoria !== destino.categoria;
+    var complexa = rOrigem >= 2 || rDestino >= 2;
     var tempoTransmut = complexa ? 8 : 1 + (rDestino - rOrigem);
-    var notaCusto = 'metade do PDE × material de destino';
+    var notaCusto = 'metade do valor do equipamento no material de destino';
     if (nivel >= 13 && rDestino <= 2 && rOrigem <= 2) { custoTransmut = 0; notaCusto = 'Transmutação Suprema: grátis até Tier B'; }
 
     transmutResultEl.appendChild(mgLine('Custo (' + notaCusto + ')', fmtMoeda(custoTransmut)));
-    transmutResultEl.appendChild(mgLine('Tempo de trabalho', fmt(tempoTransmut) + 'h' + (complexa ? ' (transmutação complexa: 8h por material)' : '')));
+    transmutResultEl.appendChild(mgLine('Tempo de trabalho', fmt(tempoTransmut) + 'h' + (complexa ? ' (Tier B ou A: 8h por material transformado)' : ' (Tier D/C: 1h + 1h por tier acima)')));
   }
 
   function deltaPct(value, cheio) {
@@ -2958,8 +3039,13 @@
   document.addEventListener('input', function (e) {
     if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) lastTypedAt = performance.now();
   }, true);
+  function modeLabel() {
+    if (state.modo === 'vendido') return 'Preço de venda';
+    if (state.modo === 'conserto') return 'Custo para consertar';
+    return 'Custo para forjar';
+  }
   function animateResult(target) {
-    cbLabel.textContent = state.modo === 'vendido' ? 'Preço de venda' : 'Custo para forjar';
+    cbLabel.textContent = modeLabel();
     if (shownValue === null || reduceMotion || !isFinite(target) || performance.now() - lastTypedAt < 400) {
       shownValue = target;
       resultEl.innerHTML = htmlMoeda(target);
@@ -3007,7 +3093,7 @@
     document.getElementById('cost-bar').classList.toggle('is-empty', !!vazio);
 
     animateResult(c.final);
-    resultLabel.textContent = state.modo === 'vendido' ? 'Preço de venda' : 'Custo para forjar';
+    resultLabel.textContent = modeLabel();
 
     breakdownEl.innerHTML = '';
     if (c.baseNota) {
@@ -3049,32 +3135,43 @@
         : 'Modificação' + (c.desconto ? ' com desconto (' + (100 - c.desconto) + '%)' : '') + ' ÷ ' + fmt(c.divisor) + ' de mão de obra',
         c.possuidos ? 'grátis' : (c.modMun.existente ? '' : '+') + fmtMoeda(c.modMun.pago)));
     }
+    if (c.conserto && !c.possuidos) {
+      breakdownEl.appendChild(bRow('Conserto de item quebrado (metade do valor do item, p. 173)', '÷ 2'));
+    }
     if (state.modo === 'vendido') {
       breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(c.lucro) + '%)', '+' + fmtMoeda(c.lucroValor)));
     }
-    breakdownEl.appendChild(bRow(state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(c.final), true));
+    breakdownEl.appendChild(bRow(c.conserto ? 'Custo do conserto' : state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(c.final), true));
 
     var formulaStr = c.possuidos
       ? 'materiais em posse — grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
-      : c.modMun && c.modMun.existente
-        ? 'modificação × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
-        : c.usaFracaoFixa
-          ? '(PDE × ' + fmt((1 - ARMADURA_FRACAO) * 100) + '% + PDE × ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ multiplicadores) × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
-          : (c.duplo ? '(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor' : '(PDE × desconto) × Σ multiplicadores ÷ divisor') + (c.modMun ? ' + modificação' : '') + (state.modo === 'vendido' ? ' + lucro' : '');
+      : c.conserto
+        ? (c.usaFracaoFixa
+          ? '((PDE × ' + fmt((1 - ARMADURA_FRACAO) * 100) + '% + PDE × ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ multiplicadores) × desconto ÷ 2 conserto) ÷ divisor'
+          : ((c.duplo ? '(PDE × desconto) × (Σ multiplicadores × desconto)' : '(PDE × desconto) × Σ multiplicadores') + ' ÷ 2 conserto ÷ divisor'))
+        : c.modMun && c.modMun.existente
+          ? 'modificação × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
+          : c.usaFracaoFixa
+            ? '(PDE × ' + fmt((1 - ARMADURA_FRACAO) * 100) + '% + PDE × ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ multiplicadores) × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
+            : (c.duplo ? '(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor' : '(PDE × desconto) × Σ multiplicadores ÷ divisor') + (c.modMun ? ' + modificação' : '') + (state.modo === 'vendido' ? ' + lucro' : '');
     formulaNote.textContent = formulaStr;
 
-    var comMaterial = c.cheio / 2;
+    var baseRef = c.conserto ? c.consertoCheio : c.cheio;
+    var comMaterial = baseRef / 2;
     compareRowsEl.innerHTML = '';
-    if (c.usaFracaoFixa) {
+    if (c.conserto) {
+      compareRowsEl.appendChild(cRow('Valor cheio do item novo', 'PDE × Σ materiais', c.cheio, ''));
+      compareRowsEl.appendChild(cRow('Ferreiro comum (conserto de item quebrado, p. 173)', '(PDE × Σ materiais) ÷ 2', c.consertoCheio, ''));
+    } else if (c.usaFracaoFixa) {
       compareRowsEl.appendChild(cRow('Preço padrão do livro (sem fração fixa)', 'PDE × Σ materiais', c.cheioPadrao, ''));
       compareRowsEl.appendChild(cRow('Ferreiro comum (com fração fixa)', fmt((1 - ARMADURA_FRACAO) * 100) + '% fixo + ' + fmt(ARMADURA_FRACAO * 100) + '% × material', c.cheio, deltaPct(c.cheio, c.cheioPadrao)));
     } else {
       compareRowsEl.appendChild(cRow('Ferreiro comum', 'PDE × Σ materiais', c.cheio, ''));
     }
-    if (state.artesao) {
+    if (state.artesao && !c.conserto) {
       compareRowsEl.appendChild(cRow('Ferreiro, levando o material pronto', '(PDE × Σ materiais) ÷ 2', comMaterial, deltaPct(comMaterial, c.cheio)));
     }
-    var seuLabel = (state.modo === 'vendido' ? 'Seu preço de venda' : 'Seu custo') +
+    var seuLabel = (c.conserto ? 'Seu custo para consertar' : state.modo === 'vendido' ? 'Seu preço de venda' : 'Seu custo') +
       (c.possuidos
         ? ' (materiais em posse)'
         : ' (Forjador' + (state.artesao ? ' + Artesão' : ', sem Artesão') + ')');
@@ -3082,7 +3179,7 @@
       seuLabel,
       formulaStr,
       c.final,
-      deltaPct(c.final, c.cheio),
+      deltaPct(c.final, baseRef),
       true
     ));
     scaleCompareBars();
@@ -3129,7 +3226,7 @@
     input.type = 'text';
     input.className = 'mat-search';
     input.autocomplete = 'off';
-    input.placeholder = 'Buscar arma, armadura, escudo, munição ou pólvora';
+    input.placeholder = 'Buscar arma, armadura, escudo, foco, instrumento ou munição';
     input.setAttribute('aria-labelledby', 'equip-label');
     input.value = state.equipNome || '';
     var dropdown = document.createElement('div');
@@ -3318,6 +3415,7 @@
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
     lucroWrap.hidden = mode !== 'vendido';
+    consertoNoteEl.hidden = mode !== 'conserto';
     saveState();
     update();
   }
@@ -3394,12 +3492,14 @@
   var melhorSetting = document.getElementById('melhor-switch').closest('.setting');
   var vantagensSection = document.getElementById('vantagens-section');
   var addMaterialBtn = document.getElementById('add-material');
+  var autoForjSetting = document.getElementById('auto-forj-setting');
   function applyTipoLocks(tipo) {
     var polvora = tipo === 'polvora', municao = tipo === 'municao';
+    var maxMat = maxMaterials();
     materialsWrap.hidden = polvora;
     addMaterialBtn.hidden = polvora;
     matLockNote.hidden = !polvora;
-    document.getElementById('mat-sub').textContent = polvora ? 'Não se aplica à pólvora' : 'Até 4 materiais; cada um multiplica o PDE';
+    document.getElementById('mat-sub').textContent = polvora ? 'Não se aplica à pólvora' : 'Até ' + maxMat + ' materiais; cada um multiplica o PDE';
     matLockNote.textContent = polvora ? 'A pólvora não usa materiais: o custo é o preço de 2 pólvoras, e ela rende 1d4 em 8 horas (p. 171).' : '';
     modsDetailsEl.hidden = polvora || municao;
     modsLockNote.hidden = !municao;
@@ -3407,13 +3507,19 @@
     modsLockNote.textContent = municao ? 'As modificações de arma não valem para munição; use a lista própria de munições logo abaixo (p. 160).' : '';
     obraSetting.hidden = polvora;
     melhorSetting.hidden = polvora;
+    autoForjSetting.hidden = polvora;
+    excaliburSetting.hidden = tipo !== 'arma';
     vantagensSection.hidden = polvora;
     if (!tipoInfoEl.hidden) renderTipoInfo();
   }
 
   function setTipo(tipo) {
     state.tipoItem = tipo;
+    if (tipo !== 'arma' && state.materials.length > 4) {
+      state.materials = state.materials.slice(0, 4);
+    }
     applyTipoLocks(tipo);
+    renderMaterials();
     tipoBtns.forEach(function (btn) {
       var active = btn.dataset.tipo === tipo;
       btn.classList.toggle('active', active);
@@ -3502,6 +3608,34 @@
     update();
   });
 
+  function syncAutoSwitches() {
+    var val = state.criacoesAutomaticas ? 'true' : 'false';
+    autoForjSwitch.setAttribute('aria-checked', val);
+    autoMagicSwitch.setAttribute('aria-checked', val);
+  }
+  function toggleCriacoesAutomaticas() {
+    state.criacoesAutomaticas = !state.criacoesAutomaticas;
+    syncAutoSwitches();
+    saveState();
+    update();
+    updateMagicos();
+  }
+  autoForjSwitch.addEventListener('click', toggleCriacoesAutomaticas);
+  autoMagicSwitch.addEventListener('click', toggleCriacoesAutomaticas);
+
+  excaliburSwitch.addEventListener('click', function () {
+    state.excalibur = !state.excalibur;
+    excaliburSwitch.setAttribute('aria-checked', state.excalibur ? 'true' : 'false');
+    if (!state.excalibur && state.materials.length > 4) {
+      state.materials = state.materials.slice(0, 4);
+    }
+    applyTipoLocks(state.tipoItem);
+    saveState();
+    renderMaterials();
+    update();
+    updateMagicos();
+  });
+
   SIMPLE_SWITCHES.forEach(function (sw) {
     var el = document.getElementById(sw[0]);
     el.addEventListener('click', function () {
@@ -3526,7 +3660,7 @@
   });
 
   addBtn.addEventListener('click', function () {
-    if (state.materials.length >= MAX_MATERIALS) return;
+    if (state.materials.length >= maxMaterials()) return;
     state.materials.push({ materialId: '', name: '', mult: '', tier: '' });
     newRowIndex = state.materials.length - 1;
     saveState();
@@ -3545,7 +3679,29 @@
   var toastEl = document.getElementById('toast');
   var toastMsg = document.getElementById('toast-msg');
   var toastAction = document.getElementById('toast-undo');
-  var toastFn = null, toastTimer = 0;
+  var toastFn = null, toastTimer = 0, toastEndAt = 0, toastRem = 0, toastHover = false;
+  function scheduleToast(ms) {
+    clearTimeout(toastTimer);
+    toastRem = ms;
+    toastEndAt = performance.now() + ms;
+    if (!toastHover && !document.hidden) {
+      toastTimer = setTimeout(hideToast, ms);
+    }
+  }
+  function pauseToast() {
+    if (toastEl.hidden || !toastEl.classList.contains('show')) return;
+    clearTimeout(toastTimer);
+    toastRem = Math.max(800, toastEndAt - performance.now());
+  }
+  function resumeToast() {
+    if (toastEl.hidden || !toastEl.classList.contains('show') || toastHover || document.hidden) return;
+    scheduleToast(toastRem || 2500);
+  }
+  toastEl.addEventListener('mouseenter', function () { toastHover = true; pauseToast(); });
+  toastEl.addEventListener('mouseleave', function () { toastHover = false; resumeToast(); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) pauseToast(); else resumeToast();
+  });
   function hideToast() {
     clearTimeout(toastTimer);
     toastEl.classList.remove('show');
@@ -3561,7 +3717,7 @@
     toastEl.hidden = false;
     void toastEl.offsetWidth;
     toastEl.classList.add('show');
-    toastTimer = setTimeout(hideToast, ms || (actionFn ? 8000 : 3000));
+    scheduleToast(ms || (actionFn ? 8000 : 3000));
   }
   toastAction.addEventListener('click', function () {
     var fn = toastFn;
@@ -3613,22 +3769,25 @@
         : (state.mods || []).map(function (i) { return MODS_DB[i] && MODS_DB[i][0]; }).filter(Boolean),
       valor: c.final,
       venda: state.modo === 'vendido',
+      conserto: state.modo === 'conserto',
+      excalibur: !!(state.excalibur && state.tipoItem === 'arma'),
       horas: lastForjadorHoras,
       dureza: props && state.mostrarDureza ? props.dureza : null,
       mod: props ? props.mod : null,
       obra: !!(props && props.obra),
       pressa: !!state.pressa,
-      rende: soModMun ? '' : state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
+      rende: soModMun || state.modo === 'conserto' ? '' : state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
     };
   }
 
   function linhaTitulo(r) {
-    return r.nome + (r.mats.length ? ' — ' + r.mats.join(' + ') : '');
+    return r.nome + (r.excalibur ? ' [Excalibur]' : '') + (r.mats.length ? ' — ' + r.mats.join(' + ') : '');
   }
 
   function textoResumo(r) {
     var linhas = [linhaTitulo(r)];
-    linhas.push((r.venda ? 'Preço de venda: ' : 'Custo para forjar: ') + fmtMoeda(r.valor) + (r.rende ? ' (rende ' + r.rende + ')' : ''));
+    var prefixo = r.conserto ? 'Custo para consertar: ' : r.venda ? 'Preço de venda: ' : 'Custo para forjar: ';
+    linhas.push(prefixo + fmtMoeda(r.valor) + (r.rende ? ' (rende ' + r.rende + ')' : ''));
     if (r.horas != null) linhas.push('Tempo do Forjador: ' + fmtHorasForjador(r.horas));
     var props = [];
     var tags = [r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : ''].filter(Boolean);
@@ -3701,7 +3860,7 @@
       nome.textContent = r.nome + (r.mod != null ? ' ' + fmtMod(r.mod) : '');
       var sub = document.createElement('span');
       sub.className = 'li-sub';
-      sub.textContent = [r.mats.join(' + '), r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : '', r.mods.length ? r.mods.length + (r.mods.length === 1 ? ' modificação' : ' modificações') : '', r.rende ? 'rende ' + r.rende : '']
+      sub.textContent = [r.excalibur ? 'Excalibur' : '', r.mats.join(' + '), r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : '', r.mods.length ? r.mods.length + (r.mods.length === 1 ? ' modificação' : ' modificações') : '', r.rende ? 'rende ' + r.rende : '']
         .filter(Boolean).join(' · ');
       info.appendChild(nome);
       if (sub.textContent) info.appendChild(sub);
@@ -3709,7 +3868,7 @@
       nums.className = 'li-nums';
       var v = document.createElement('span');
       v.className = 'li-valor';
-      v.textContent = fmtMoeda(r.valor) + (r.venda ? ' (venda)' : '');
+      v.textContent = fmtMoeda(r.valor) + (r.conserto ? ' (conserto)' : r.venda ? ' (venda)' : '');
       var h = document.createElement('span');
       h.className = 'li-horas';
       h.textContent = r.horas != null ? fmt(r.horas) + 'h' : 'tempo: Mestre';
@@ -3804,6 +3963,8 @@
     magicoRaridadeSelect.value = state.magicoRaridade || 'comum';
     peritoSwitch.setAttribute('aria-checked', state.peritoItensMagicos ? 'true' : 'false');
     especialistaSwitch.setAttribute('aria-checked', state.especialistaItensMagicos ? 'true' : 'false');
+    syncAutoSwitches();
+    excaliburSwitch.setAttribute('aria-checked', state.excalibur ? 'true' : 'false');
     SIMPLE_SWITCHES.forEach(function (sw) {
       document.getElementById(sw[0]).setAttribute('aria-checked', state[sw[1]] ? 'true' : 'false');
     });
