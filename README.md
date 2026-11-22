@@ -82,6 +82,7 @@ Achou um número diferente do livro? Abra uma issue dizendo o item, os materiais
 - Entraram um ícone de bigorna no topo (que acende junto com o Modo forja), fio duplo de livro-caixa nos totais do recibo e da lista, barra em cor de brasa com a porcentagem economizada no comparativo e relevo nos botões e interruptores.
 - Os botões de seleção (*Arma / Armadura / Munição / Pólvora*, *Peso* e *Finalidade*) agora têm uma pílula que desliza de uma opção para outra no clique, mas muda na hora quando você usa as setas do teclado.
 - As gavetas de Modificações e de Itens Mágicos abrem e fecham deslizando (`220ms` para abrir, `165ms` para fechar), as linhas saem suavemente quando você apaga um material ou item da lista e os botões de copiar e adicionar mostram um `✓` de confirmação.
+- No celular, a barra do topo cabe sempre numa linha só, o menu de busca de materiais e equipamentos foi ajustado para não ficar atrás do teclado virtual, a barra fixa de custo ganhou fundo translúcido e o aviso de *Desfazer* também pausa quando você encosta nele.
 
 ### v2
 - Conferi os 68 materiais com o livro completo de 239 páginas (p. 174–197), atualizando os efeitos de armas com a propriedade Munição e a regra *Despertar* da Samambaia Metamórfica.
