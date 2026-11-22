@@ -17,7 +17,7 @@
 <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADXElEQVR4nO3dMW7UQBiGYSfiBEg0HMIFdFtxKU7BpajSQbEnoo1EvsDaY/ufmefpEqRIa7/ze7Jrh6fPnz4u8JbnN78L4uA9JgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxEH/I/sd3L9y+vv7z9+L10yOQ4vIzlre90QRyNvYQOeuxDHC29vFtAd32Ig0gcROIgEgeROFq6vft+RnfvdoijsVsooLsyxHGI218d9FjGsixP/gNAEpcVInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4uCKh5ruv34e98N5bf27benlI3tZjBFK4zhkMVIlzeKQxXihNIhDFqNWsj0OTQwfypbfVmQxyQh5LA5ZTHVx+d84ZDHhtuPfcchi2g3p81XvvnG+R0/lA7+tGCFd27DIH/jgzQjp17Zz99insvro0eaztvFNMJeYXuxZzxvv5zBCurDzNO39bMUIKWv/At57J5gRUlOT89LgNkF9VNPqjLS82cclpoKGa7XlDcZGyOXanoLGd5/r40LND/5RfxPMJeZkRyzLo55bMULO1NOjCZc7f26tI352PeYTbyefqnXEMoaNgybEQSQO5ovjtH3AOuiGY+Q42E8cROJgyjhO2A2s4244Bo+DncTBrHEcOvbXoa8p48fBHuIgEgcTx3HQzmAdfcMxRRxsJg4icTB3HM33B+sEG45Z4mAbcRCJg2X2OBruEtY5NhzVH2qa4ZnKtXBqs0wOhopjhrGx1H6ZdePgckXjqLyemiv7YovGQQUV4yi7kmZ7yRXjoAhx0E8cNQfsnC+8XBzUUSuOgqtn5pdfKw5KEQc9xFFtqF6i1EEoFAfVVImj1Iq51r3MoagSBwWViKPOWiniXuOAlIiDmsRB4TiKjNBq7gUOy/VxUNbFcVRYH2Xdrz44Jgcl47h8ZdR3v/QQmRz0+Tgk1zI5iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHCzJH0BUW+WfhdlIAwAAAABJRU5ErkJggg==">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Work+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   /* =========================================================
      1. Tokens
@@ -33,7 +33,7 @@
     --text-dim: #6b5f4f;
     --accent: #b0551f;
     --accent-ink: #fff8f0;
-    --accent-2: #3f6178;
+    --danger: #b3261e;
     --good: #4f7a45;
     --ember: #e2621b;
     --ember-hot: #ffc46b;
@@ -72,7 +72,10 @@
     --control-h: 42px;
 
     /* Movimento */
-    --ease: cubic-bezier(.2,.7,.2,1);
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);      /* entrar/sair, resposta a clique */
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);  /* movimento na tela */
+    --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);   /* gaveta (barra de custo) */
+    --t-press: 160ms;
     --t-fast: .15s;
     --t-med: .3s;
   }
@@ -87,7 +90,7 @@
       --text-dim: #a3947e;
       --accent: #e08a44;
       --accent-ink: #1a1512;
-      --accent-2: #86adc2;
+      --danger: #f2867b;
       --good: #8fbb83;
       --tier-d: #a39a90;
       --tier-c: #cf9a62;
@@ -108,7 +111,7 @@
     --text-dim: #a3947e;
     --accent: #e08a44;
     --accent-ink: #1a1512;
-    --accent-2: #86adc2;
+    --danger: #f2867b;
     --good: #8fbb83;
     --tier-d: #a39a90;
     --tier-c: #cf9a62;
@@ -138,6 +141,15 @@
     overflow-x: hidden;
   }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Detalhes do navegador com o tema da página */
+  ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--text); }
+  input, select { caret-color: var(--accent); }
+  html { scrollbar-color: var(--border-strong) var(--bg); }
+  .mat-dropdown, .mods-list { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+
+  /* Ícones desenhados */
+  .ico { width: 1em; height: 1em; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .sr-only {
     position: absolute;
     width: 1px;
@@ -218,6 +230,8 @@
     font-weight: 600;
     color: var(--text-dim);
     white-space: nowrap;
+    cursor: pointer;
+    transition: color var(--t-fast);
   }
   .view-switch + .view-switch { border-left: 1px solid var(--border); }
 
@@ -233,30 +247,21 @@
     background: transparent;
     color: var(--text-dim);
     cursor: pointer;
-    transition: color var(--t-fast), background-color var(--t-fast);
+    transition: color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .theme-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
-  .theme-btn svg { grid-area: 1 / 1; transition: transform .35s var(--ease), opacity .2s; }
-  .theme-btn .i-sun { opacity: 0; transform: rotate(-90deg) scale(.6); }
+  .theme-btn svg { grid-area: 1 / 1; transition: transform 250ms var(--ease-out), opacity 200ms ease; }
+  .theme-btn .i-sun { opacity: 0; transform: rotate(-90deg) scale(.9); }
   .theme-btn[data-current="dark"] .i-sun { opacity: 1; transform: none; }
-  .theme-btn[data-current="dark"] .i-moon { opacity: 0; transform: rotate(90deg) scale(.6); }
+  .theme-btn[data-current="dark"] .i-moon { opacity: 0; transform: rotate(90deg) scale(.9); }
   .theme-btn + .view-switch { border-left: 1px solid var(--border); }
   .view-switch .switch { width: 36px; height: 22px; }
   .view-switch .switch .knob { width: 16px; height: 16px; }
   .view-switch .switch[aria-checked="true"] .knob { transform: translateX(14px); }
-  .eyebrow {
-    margin: 0;
-    font-family: var(--font-mono);
-    font-size: var(--fs-xs);
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: var(--accent-2);
-  }
   h1 {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(var(--fs-2xl), 8vw, var(--fs-3xl));
+    font-size: clamp(var(--fs-2xl), 6vw, 40px);
     letter-spacing: .01em;
     line-height: 1;
     text-transform: uppercase;
@@ -287,29 +292,12 @@
   .section-head > div { flex: 1; min-width: 0; }
   .section-head h2 {
     margin: 0;
-    font-family: var(--font-display);
     font-weight: 700;
     font-size: var(--fs-xl);
-    letter-spacing: .03em;
+    letter-spacing: -0.01em;
     line-height: 1.2;
-    text-transform: uppercase;
   }
   .section-head p { margin: 2px 0 0; font-size: var(--fs-sm); color: var(--text-dim); }
-  .step {
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    margin-top: -1px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    font-family: var(--font-mono);
-    font-size: var(--fs-sm);
-    font-weight: 600;
-    color: var(--accent);
-    border: 1.5px solid color-mix(in srgb, var(--accent) 55%, var(--border));
-    background: color-mix(in srgb, var(--accent) 8%, transparent);
-  }
   .section-action { align-self: center; flex-shrink: 0; }
 
   /* Lista de ajustes (interruptores agrupados) */
@@ -322,8 +310,10 @@
   .setting + .setting { border-top: 1px solid var(--border); }
   .setting-sub {
     margin-top: var(--sp-3);
-    padding-left: var(--sp-3);
-    border-left: 2px solid var(--border-strong);
+    padding: var(--sp-3);
+    border-radius: var(--r-sm);
+    background: color-mix(in srgb, var(--surface-2) 70%, var(--surface));
+    border: 1px solid var(--border);
   }
   .compare, .vantagens, .production { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-1); }
 
@@ -369,8 +359,34 @@
     transition: border-color var(--t-fast), background-color var(--t-fast);
   }
   input[type="number"] { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
-  input:hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--border-strong); }
   input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+  input[aria-invalid="true"] { border-color: var(--danger); }
+  input[aria-invalid="true"]:focus-visible { outline-color: var(--danger); }
+  .label-row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); }
+  .btn-info {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px var(--sp-1); border: none; border-radius: 4px; background: none;
+    font: inherit; font-size: var(--fs-xs); font-weight: 600; color: var(--text-dim); cursor: pointer;
+    transition: color var(--t-fast), transform var(--t-press) var(--ease-out);
+  }
+  .btn-info[aria-expanded="true"] { color: var(--accent); }
+  .btn-info:active { transform: scale(0.97); }
+  .btn-info .ico { font-size: 14px; }
+  .tipo-info {
+    padding: var(--sp-3) var(--sp-4); border: 1px solid var(--border); border-radius: var(--r-sm);
+    background: var(--surface-2); font-size: var(--fs-sm); line-height: 1.5;
+    animation: drop 150ms var(--ease-out);
+  }
+  .tipo-info h3 { margin: 0 0 var(--sp-2); font-size: var(--fs-md); }
+  .tipo-info ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
+  .tipo-info li::marker { color: var(--accent); }
+  .tipo-info .src { margin: var(--sp-2) 0 0; font-size: var(--fs-xs); color: var(--text-dim); }
+  .locked-note {
+    margin: 0; padding: var(--sp-3) var(--sp-4); border: 1px dashed var(--border-strong); border-radius: var(--r-sm);
+    font-size: var(--fs-sm); color: var(--text-dim);
+  }
+  .field-hint { margin: 0; font-size: var(--fs-xs); color: var(--text-dim); font-family: var(--font-mono); }
+  .field-error { margin: 0; font-size: var(--fs-xs); font-weight: 600; color: var(--danger); }
   input::placeholder { color: var(--text-dim); opacity: .7; }
   input:disabled, select:disabled { opacity: .5; cursor: not-allowed; }
 
@@ -378,22 +394,28 @@
      6. Botões
      ========================================================= */
   .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     height: 34px;
     background: none;
     border: 1px solid var(--border);
-    color: var(--accent-2);
+    color: var(--text);
     font-family: var(--font-body);
     font-weight: 600;
     font-size: var(--fs-sm);
     padding: 0 var(--sp-3);
     border-radius: var(--r-sm);
     cursor: pointer;
-    transition: border-color var(--t-fast), background-color var(--t-fast);
+    transition: border-color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .btn-ghost:hover:not(:disabled) { border-color: var(--accent-2); background: color-mix(in srgb, var(--accent-2) 8%, transparent); }
   .btn-ghost:disabled { opacity: .4; cursor: not-allowed; }
 
   .btn-remove {
+    display: grid;
+    place-items: center;
+    padding: 0;
     width: 36px;
     height: var(--control-h);
     background: none;
@@ -403,9 +425,8 @@
     cursor: pointer;
     font-size: var(--fs-lg);
     line-height: 1;
-    transition: color var(--t-fast), border-color var(--t-fast);
+    transition: color var(--t-fast), border-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .btn-remove:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
   .btn-remove:disabled { opacity: .3; cursor: not-allowed; }
 
   .btn-reset {
@@ -418,8 +439,8 @@
     text-underline-offset: 3px;
     cursor: pointer;
     padding: var(--sp-1);
+    transition: color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .btn-reset:hover { color: var(--accent); }
 
   /* Controle segmentado */
   .segmented {
@@ -444,11 +465,11 @@
     background: transparent;
     color: var(--text-dim);
     cursor: pointer;
-    transition: background-color var(--t-fast), color var(--t-fast);
+    transition: background-color var(--t-fast), color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .seg-btn:hover:not(.active) { color: var(--text); background: color-mix(in srgb, var(--text) 5%, transparent); }
   .seg-btn.active { background: var(--accent); color: var(--accent-ink); }
-  .seg-btn:active { transform: scale(.98); }
+  .seg-btn:active, .btn-ghost:active:not(:disabled), .btn-remove:active:not(:disabled),
+  .theme-btn:active, .toast-btn:active, .btn-reset:active, .switch:active { transform: scale(0.97); }
 
   /* Interruptor */
   .toggle-row {
@@ -470,7 +491,7 @@
     border: 1px solid var(--border-strong);
     cursor: pointer;
     padding: 0;
-    transition: background-color var(--t-fast), border-color var(--t-fast);
+    transition: background-color var(--t-fast), border-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
   .switch .knob {
     position: absolute;
@@ -480,7 +501,7 @@
     height: 20px;
     border-radius: 50%;
     background: var(--text-dim);
-    transition: transform var(--t-fast) var(--ease), background-color var(--t-fast);
+    transition: transform var(--t-fast) var(--ease-out), background-color var(--t-fast);
   }
   .switch[aria-checked="true"] { background: var(--accent); border-color: var(--accent); }
   .switch[aria-checked="true"] .knob { transform: translateX(18px); background: var(--accent-ink); }
@@ -493,16 +514,13 @@
     display: flex;
     flex-direction: column;
     gap: var(--sp-2);
-    border-left: 3px solid var(--tier-color, var(--border));
-    padding-left: var(--sp-2);
-    transition: border-color var(--t-med);
   }
   .material-row[data-tier="D"], .mat-group-label[data-tier="D"] { --tier-color: var(--tier-d); }
   .material-row[data-tier="C"], .mat-group-label[data-tier="C"] { --tier-color: var(--tier-c); }
   .material-row[data-tier="B"], .mat-group-label[data-tier="B"] { --tier-color: var(--tier-b); }
   .material-row[data-tier="A"], .mat-group-label[data-tier="A"] { --tier-color: var(--tier-a); }
   .material-row[data-tier="S"], .mat-group-label[data-tier="S"] { --tier-color: var(--tier-s); }
-  .material-row.is-new { animation: slide-in .3s var(--ease); }
+  .material-row.is-new { animation: slide-in 220ms var(--ease-out); }
 
   .mat-row-top {
     display: grid;
@@ -536,7 +554,7 @@
     box-shadow: var(--shadow-lift);
     padding: var(--sp-1);
     transform-origin: top;
-    animation: drop .14s ease-out;
+    animation: drop 150ms var(--ease-out);
   }
   .mat-group-label {
     font-family: var(--font-mono);
@@ -557,7 +575,7 @@
     cursor: pointer;
     font-size: var(--fs-md);
   }
-  .mat-option:hover, .mat-option.active { background: var(--surface-2); }
+  .mat-option.active { background: var(--surface-2); }
   .mat-option .mo-mult {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
@@ -569,7 +587,7 @@
     padding: var(--sp-2);
     font-size: var(--fs-sm);
     color: var(--text-dim);
-    font-style: italic;
+    
   }
   .mat-cap-note { margin-top: var(--sp-2); }
 
@@ -584,8 +602,9 @@
     flex-direction: column;
     gap: var(--sp-1);
   }
-  .juncao strong { color: var(--accent-2); }
-  .juncao .jw { color: var(--accent); }
+  .juncao strong { color: var(--text); }
+  .juncao .jw { color: var(--accent); display: flex; align-items: flex-start; gap: 6px; }
+  .juncao .jw .ico { margin-top: 3px; }
 
   /* Modificações */
   .mods {
@@ -618,13 +637,16 @@
     cursor: pointer;
     transition: background-color var(--t-fast);
   }
-  .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
   .mod-item input { margin-top: 3px; accent-color: var(--accent); }
   .mod-name { font-weight: 600; }
   .mod-cost { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); white-space: nowrap; }
   .mod-desc { grid-column: 2 / 4; font-size: var(--fs-xs); color: var(--text-dim); line-height: 1.4; }
 
   /* Setas dos <details> */
+  .mods-summary, .magicos-summary, .explain > summary {
+    transition: color var(--t-fast), transform var(--t-press) var(--ease-out);
+  }
+  .mods-summary:active, .magicos-summary:active, .explain > summary:active { transform: scale(0.985); }
   .mods-summary::-webkit-details-marker, .magicos-summary::-webkit-details-marker { display: none; }
   .mods-summary::before, .magicos-summary::before {
     content: '';
@@ -634,7 +656,7 @@
     border-right: 1.5px solid currentColor;
     border-bottom: 1.5px solid currentColor;
     transform: translateY(-2px) rotate(-45deg);
-    transition: transform var(--t-fast);
+    transition: transform 200ms var(--ease-out);
     align-self: center;
   }
   .mods[open] .mods-summary::before, .magicos[open] .magicos-summary::before { transform: translateY(-3px) rotate(45deg); }
@@ -656,7 +678,6 @@
       radial-gradient(80% 60% at 0% 0%, color-mix(in srgb, var(--ember) 8%, transparent), transparent 70%),
       var(--surface);
   }
-  .result.pulse { animation: pulse .6s ease-out; }
   .result-value {
     margin: 0;
     display: flex;
@@ -669,6 +690,9 @@
     line-height: 1.1;
     color: var(--accent);
   }
+  .result-value { flex-wrap: wrap; column-gap: var(--sp-3); row-gap: 0; }
+  .result-value .coin { display: inline-flex; align-items: baseline; gap: 6px; }
+  .result-value .coin-sm .coin-n { font-size: var(--fs-2xl); }
   .result-value .unit {
     font-family: var(--font-body);
     font-weight: 600;
@@ -689,7 +713,7 @@
     font-size: var(--fs-sm);
   }
   .prop-chip .p-k { color: var(--text-dim); font-weight: 600; }
-  .prop-chip .p-v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 700; }
+  .prop-chip .p-v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; }
   .prop-chip.chip-obra { border-color: var(--tier-a); }
   .prop-chip.chip-obra .p-v { color: var(--tier-a); }
   .prop-chip.chip-obra::after {
@@ -724,7 +748,6 @@
     border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
     color: var(--text);
   }
-  .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 20%, transparent); border-color: var(--accent); }
 
   /* Lista da sessão */
   .lista { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-3); }
@@ -746,7 +769,7 @@
     gap: var(--sp-3);
     padding: var(--sp-3) 0;
     border-top: 1px solid var(--border);
-    animation: slide-in .3s var(--ease);
+    animation: slide-in 220ms var(--ease-out);
   }
   .lista-item:first-child { border-top: none; padding-top: 0; }
   .li-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -765,7 +788,7 @@
     border-top: 2px solid var(--text-dim);
   }
   .lt-label { font-weight: 700; }
-  .lt-valor { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 700; font-size: var(--fs-lg); color: var(--accent); }
+  .lt-valor { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; font-size: var(--fs-lg); color: var(--accent); }
   .lt-horas { grid-column: 1 / -1; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); }
   .result.is-empty .kpi-time { border-bottom: none; padding-bottom: 0; }
   .cost-bar.is-empty .cb-value { color: var(--text-dim); }
@@ -790,9 +813,10 @@
     box-shadow: var(--shadow-lift);
     opacity: 0;
     transform: translate(-50%, 16px);
-    transition: opacity .2s, transform .25s var(--ease);
+    transition: opacity 400ms ease, transform 400ms ease;
   }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .toast:not(.show) { transition-duration: 200ms; }
   .toast-btn {
     flex-shrink: 0;
     height: 34px;
@@ -806,9 +830,9 @@
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
+    transition: background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
   .toast-btn:focus-visible { outline-color: var(--bg); }
-  .toast-btn:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
   @media (max-width: 1059.98px) { .toast { bottom: calc(96px + env(safe-area-inset-bottom)); } }
 
   /* Tempo: segundo número do painel */
@@ -863,7 +887,7 @@
   }
   .b-row:has(+ .b-row.b-final) { border-bottom: none; }
   .b-row.b-final .b-label { color: var(--text); font-weight: 700; font-size: var(--fs-md); }
-  .b-row.b-final .b-value { color: var(--accent); font-weight: 700; font-size: var(--fs-lg); }
+  .b-row.b-final .b-value { color: var(--accent); font-weight: 600; font-size: var(--fs-lg); }
 
   /* Linhas de lista (comparativo, tempo) */
   .compare-row {
@@ -885,10 +909,12 @@
   .c-bar span {
     display: block;
     height: 100%;
-    width: 0;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
     border-radius: inherit;
     background: color-mix(in srgb, var(--text-dim) 55%, transparent);
-    transition: width .5s var(--ease);
+    transition: transform 300ms var(--ease-out);
   }
   .compare-row.c-highlight .c-bar span { background: var(--accent); }
   .p-row {
@@ -903,7 +929,7 @@
   .compare-row .c-label, .p-row .p-label { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .compare-row .c-name, .p-row .p-name { font-size: var(--fs-md); font-weight: 600; }
   .compare-row .c-formula, .p-row .p-sub { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); }
-  .compare-row .c-formula { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
   .compare-row .c-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
   .compare-row .c-value, .p-row .p-value {
     font-family: var(--font-mono);
@@ -937,11 +963,11 @@
   .v-name { font-weight: 700; font-size: var(--fs-md); }
   .v-tag { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); white-space: nowrap; }
   .v-row { display: flex; gap: var(--sp-2); font-size: var(--fs-sm); line-height: 1.45; }
-  .v-row .v-icon { flex-shrink: 0; width: 16px; text-align: center; }
+  .v-row .v-icon { flex-shrink: 0; width: 16px; height: 1.45em; display: grid; place-items: center; font-size: 14px; }
   .v-row.v-pro .v-icon { color: var(--good); }
   .v-row.v-con .v-icon { color: var(--accent); }
   .v-row .v-text { color: var(--text-dim); }
-  .v-empty { font-size: var(--fs-sm); color: var(--text-dim); font-style: italic; }
+  .v-empty { font-size: var(--fs-sm); color: var(--text-dim);  }
 
   /* =========================================================
      9. Itens mágicos
@@ -955,7 +981,6 @@
     align-items: baseline;
     gap: var(--sp-2);
   }
-  .magicos-summary:hover { color: var(--text); }
   .magicos-sub { text-transform: none; font-weight: 400; letter-spacing: 0; }
   .magicos-body { padding: 0 var(--sp-5) var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-5); }
   .magicos-block {
@@ -994,6 +1019,33 @@
   }
   .foot p { margin: 0; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); }
 
+  /* Seções secundárias planas: o resultado é o único cartão em destaque ao lado do formulário */
+  .compare, .vantagens, .production, .lista, .magicos {
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    box-shadow: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .magicos-summary { padding-left: 0; padding-right: 0; }
+  .magicos-body { padding-left: 0; padding-right: 0; }
+
+  /* Grupos da seção O Forjador e explicações sob demanda */
+  .group-label { margin: 0 0 calc(-1 * var(--sp-2)); font-size: var(--fs-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); }
+  .explain > summary {
+    cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px;
+    font-size: var(--fs-xs); font-weight: 600; color: var(--text-dim);
+  }
+  .explain > summary::-webkit-details-marker { display: none; }
+  .explain > summary::before {
+    content: ''; width: 5px; height: 5px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+    transform: rotate(-45deg); transition: transform 200ms var(--ease-out);
+  }
+  .explain[open] > summary::before { transform: rotate(45deg); }
+  .explain > p { margin-top: var(--sp-2); }
+
   /* =========================================================
      11. Layout: lateral fixa no computador
      ========================================================= */
@@ -1028,16 +1080,17 @@
     border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
     box-shadow: var(--shadow-lift);
     transform: translateY(140%);
-    transition: transform .35s var(--ease);
+    transition: transform 400ms var(--ease-drawer);
   }
   .cost-bar { font: inherit; color: var(--text); text-align: left; cursor: pointer; align-items: center; }
   .cost-bar.show { transform: none; }
+  .cost-bar:not(.show) { transition-duration: 250ms; }
   .cost-bar:active { transform: scale(.99); }
   .cb-left { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .cb-time { font-family: var(--font-mono); font-size: var(--fs-sm); color: var(--text-dim); }
   .cb-time:empty { display: none; }
   .cb-label { font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-dim); }
-  .cb-value { font-family: var(--font-mono); font-weight: 700; font-size: var(--fs-xl); color: var(--accent); font-variant-numeric: tabular-nums; }
+  .cb-value { font-family: var(--font-mono); font-weight: 600; font-size: var(--fs-xl); color: var(--accent); font-variant-numeric: tabular-nums; }
   @media (min-width: 1060px) { .cost-bar { display: none; } }
 
   @media (max-width: 480px) {
@@ -1064,7 +1117,9 @@
   @media (pointer: coarse) {
     .seg-btn { min-height: 40px; }
     .btn-ghost { height: 40px; }
-    .theme-btn { width: 36px; height: 36px; }
+    .theme-btn { width: 38px; height: 38px; }
+    .btn-info, .btn-reset { min-height: 36px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
+    .toast-btn { height: 38px; }
   }
 
   /* =========================================================
@@ -1083,21 +1138,43 @@
   /* =========================================================
      13. Animações
      ========================================================= */
-  .hero, .panel, .side, .vantagens, .production, .magicos, .foot { animation: rise .45s var(--ease) both; }
-  .panel { animation-delay: .04s; } .side { animation-delay: .08s; } .vantagens { animation-delay: .12s; }
-  .production { animation-delay: .16s; } .magicos { animation-delay: .2s; }
-
-  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
   @keyframes slide-in { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
-  @keyframes drop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-  @keyframes pulse { 0% { box-shadow: var(--shadow), 0 0 0 0 color-mix(in srgb, var(--accent) 35%, transparent); } 100% { box-shadow: var(--shadow), 0 0 0 12px transparent; } }
+  @keyframes drop { from { opacity: 0; transform: translateY(-4px) scale(0.98); } to { opacity: 1; transform: none; } }
   @keyframes shine { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
   @keyframes forge-breathe { 0%, 100% { opacity: .5; } 50% { opacity: .85; } }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-    .cost-bar { transform: none; }
-    .cost-bar:not(.show) { display: none; }
+    /* entradas viram fade, sem deslocamento */
+    .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]), .tipo-info:not([hidden]) { animation-name: fade-in; }
+    /* efeitos decorativos param */
+    .prop-chip.chip-obra::after, .forja-on .forge-glow { animation: none; }
+    /* nada se move: só cor e opacidade mudam */
+    .switch .knob, .theme-btn svg, .c-bar span, .mods-summary::before, .magicos-summary::before, .explain > summary::before {
+      transition-property: opacity, background-color, color, border-color;
+    }
+    .seg-btn:active, .btn-ghost:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .btn-info:active, .btn-reset:active, .mods-summary:active, .magicos-summary:active, .explain > summary:active, .switch:active, .cost-bar:active { transform: none; }
+    .theme-btn svg { transform: none !important; }
+    .toast, .toast.show { transform: translate(-50%, 0); }
+    .cost-bar { transform: none; opacity: 0; pointer-events: none; transition: opacity 200ms ease; }
+    .cost-bar.show { opacity: 1; pointer-events: auto; }
+  }
+  @keyframes fade-in { from { opacity: 0; } }
+
+  /* Hover só em aparelhos com mouse (no toque o hover gruda depois do toque) */
+  @media (hover: hover) and (pointer: fine) {
+    .view-switch:hover { color: var(--text); }
+    .theme-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+    input:hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--border-strong); }
+    .btn-info:hover { color: var(--accent); }
+    .btn-ghost:hover:not(:disabled) { border-color: var(--border-strong); background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .btn-remove:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
+    .btn-reset:hover { color: var(--accent); }
+    .seg-btn:hover:not(.active) { color: var(--text); background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .mat-option:hover { background: var(--surface-2); }
+    .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+    .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 20%, transparent); border-color: var(--accent); }
+    .toast-btn:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
+    .mods-summary:hover, .magicos-summary:hover, .explain > summary:hover { color: var(--accent); }
   }
 </style>
 </head>
@@ -1107,7 +1184,6 @@
 <div class="page">
   <header class="hero">
     <div class="hero-text">
-      <p class="eyebrow">Materiais e Criação de Equipamento</p>
       <h1>Calculadora do Forjador</h1>
       <p class="sub">Custo de criação de um item, combinando o desconto de Artesão com a mão de obra dispensada pelo Forjador.</p>
     </div>
@@ -1116,18 +1192,18 @@
         <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
         <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></svg>
       </button>
-      <span class="view-switch" title="Regra de quebra de equipamentos é opcional">
+      <label class="view-switch" title="Regra de quebra de equipamentos é opcional">
         <span id="dureza-label">Mostrar dureza</span>
         <button type="button" class="switch" id="dureza-switch" role="switch" aria-checked="true" aria-labelledby="dureza-label">
           <span class="knob"></span>
         </button>
-      </span>
-      <span class="view-switch" title="Brasas animadas no fundo">
+      </label>
+      <label class="view-switch" title="Brasas animadas no fundo">
         <span id="forja-label">Modo forja</span>
         <button type="button" class="switch" id="forja-switch" role="switch" aria-checked="false" aria-labelledby="forja-label">
           <span class="knob"></span>
         </button>
-      </span>
+      </label>
     </div>
   </header>
 
@@ -1135,7 +1211,6 @@
 
     <section class="form-section" aria-labelledby="sec-item">
       <header class="section-head">
-        <span class="step" aria-hidden="true">1</span>
         <div>
           <h2 id="sec-item">Item</h2>
           <p>Escolha do Guia ou digite o PDE à mão</p>
@@ -1150,17 +1225,22 @@
 
       <div class="field-group">
         <label for="pde" id="pde-label">PDE — Preço de Equipamento (po)</label>
-        <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" />
+        <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" aria-describedby="pde-moeda" />
+        <p class="field-hint" id="pde-moeda" hidden></p>
       </div>
 
       <div class="field-group">
-        <span class="label" id="tipo-label">Tipo de item</span>
+        <div class="label-row">
+          <span class="label" id="tipo-label">Tipo de item</span>
+          <button type="button" class="btn-info" id="tipo-info-btn" aria-expanded="false" aria-controls="tipo-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona?</button>
+        </div>
         <div class="segmented seg-4" id="tipo-segmented" role="radiogroup" aria-label="Tipo de item">
           <button type="button" class="seg-btn" data-tipo="arma" role="radio">Arma</button>
           <button type="button" class="seg-btn" data-tipo="armadura" role="radio">Armadura</button>
           <button type="button" class="seg-btn" data-tipo="municao" role="radio">Munição</button>
           <button type="button" class="seg-btn" data-tipo="polvora" role="radio">Pólvora</button>
         </div>
+        <div class="tipo-info" id="tipo-info" role="region" aria-labelledby="tipo-info-titulo" hidden></div>
       </div>
 
       <div class="field-group" id="peso-wrap">
@@ -1185,15 +1265,16 @@
 
     <section class="form-section" aria-labelledby="sec-mat">
       <header class="section-head">
-        <span class="step" aria-hidden="true">2</span>
         <div>
           <h2 id="sec-mat">Materiais</h2>
-          <p>Até 4 materiais; cada um multiplica o PDE</p>
+          <p id="mat-sub">Até 4 materiais; cada um multiplica o PDE</p>
         </div>
-        <button type="button" id="add-material" class="btn-ghost section-action">+ material</button>
+        <button type="button" id="add-material" class="btn-ghost section-action"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg> material</button>
       </header>
 
-      <div class="materials">
+      <p class="locked-note" id="mat-lock-note" hidden></p>
+
+      <div class="materials" id="materials-wrap">
         <div id="material-rows"></div>
         <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais — além disso, não altera o custo.</p>
         <div class="juncao" id="juncao-info" hidden></div>
@@ -1215,18 +1296,40 @@
           <div class="mods-list" id="mods-list"></div>
         </div>
       </details>
+      <p class="locked-note" id="mods-lock-note" hidden></p>
+      <details class="mods" id="ammo-mods-details" hidden>
+        <summary class="mods-summary">Modificação de munição <span class="mods-total" id="ammo-mods-total"></span></summary>
+        <div class="mods-body">
+          <p class="magicos-note">Cada munição só pode ter uma modificação. O preço é por munição transformada e não passa pelo multiplicador do material (p. 160).</p>
+          <div class="mods-list" id="ammo-mods-list" role="radiogroup" aria-label="Modificação de munição"></div>
+          <div class="field-group">
+            <label for="ammo-qtd">Quantas munições transformar</label>
+            <input id="ammo-qtd" type="number" min="1" step="1" inputmode="numeric" />
+            <p class="field-hint">A criação rende 2d4 munições; a média é 5.</p>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Só transformar munições que já tenho</span>
+              <span class="t-sub">Paga só a modificação, sem criar munições novas</span>
+            </div>
+            <button type="button" class="switch" id="ammo-existente-switch" role="switch" aria-checked="false" aria-label="Só transformar munições que já tenho">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+      </details>
     </section>
 
     <section class="form-section" aria-labelledby="sec-forj">
       <header class="section-head">
-        <span class="step" aria-hidden="true">3</span>
         <div>
           <h2 id="sec-forj">O Forjador</h2>
           <p>Talentos e características que mudam custo e tempo</p>
         </div>
       </header>
 
-      <div class="settings-list">
+      <p class="group-label" id="grp-custo">Custo</p>
+      <div class="settings-list" role="group" aria-labelledby="grp-custo">
         <div class="setting">
           <div class="toggle-row">
             <div class="toggle-label">
@@ -1243,7 +1346,10 @@
               <button type="button" class="seg-btn" data-artmodo="duplo" role="radio">Duas compras (−36%)</button>
               <button type="button" class="seg-btn" data-artmodo="simples" role="radio">Uma compra (−20%)</button>
             </div>
-            <p class="magicos-note" id="artesao-explica"></p>
+            <details class="explain">
+              <summary>Por que esse desconto?</summary>
+              <p class="magicos-note" id="artesao-explica"></p>
+            </details>
           </div>
         </div>
 
@@ -1259,6 +1365,10 @@
           </div>
         </div>
 
+        </div>
+
+      <p class="group-label" id="grp-tempo">Tempo e qualidade</p>
+      <div class="settings-list" role="group" aria-labelledby="grp-tempo">
         <div class="setting">
           <div class="toggle-row">
             <div class="toggle-label">
@@ -1294,29 +1404,54 @@
             </button>
           </div>
         </div>
+
+        <div class="setting" id="auto-forj-setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Criações Automáticas</span>
+              <span class="t-sub">Forja Arcana nível 17: ferramenta automatizada ajuda em materiais raros e itens mágicos (tempo ÷2)</span>
+            </div>
+            <button type="button" class="switch" id="auto-forj-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting" id="excalibur-setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Excalibur</span>
+              <span class="t-sub">Forjador nível 20: arma ou foco com até 6 materiais (4 Tier S + 2 Tier A ou menor), tempo de 1 Tier S e encantamento Lendário sem StarMetal (+0h)</span>
+            </div>
+            <button type="button" class="switch" id="excalibur-switch" role="switch" aria-checked="false" aria-label="Excalibur">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
       </div>
 
-      <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2 — nenhuma característica da classe altera essa proporção para itens mundanos.</p>
+      <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2.</p>
     </section>
 
     <section class="form-section" aria-labelledby="sec-fim">
       <header class="section-head">
-        <span class="step" aria-hidden="true">4</span>
         <div>
           <h2 id="sec-fim">Finalidade</h2>
-          <p>Para uso próprio ou para vender com margem</p>
+          <p>Criar para uso próprio, vender com margem ou consertar item quebrado</p>
         </div>
       </header>
 
       <div class="mode">
-        <div class="segmented" id="mode-segmented" role="radiogroup" aria-label="Modo de cálculo">
-          <button type="button" class="seg-btn" data-mode="proprio" role="radio">Item Próprio</button>
-          <button type="button" class="seg-btn" data-mode="vendido" role="radio">Item para Venda</button>
+        <div class="segmented seg-3" id="mode-segmented" role="radiogroup" aria-label="Modo de cálculo">
+          <button type="button" class="seg-btn" data-mode="proprio" role="radio">Uso próprio</button>
+          <button type="button" class="seg-btn" data-mode="vendido" role="radio">Para venda</button>
+          <button type="button" class="seg-btn" data-mode="conserto" role="radio">Consertar quebrado</button>
         </div>
         <div class="field-group" id="lucro-wrap" hidden>
           <label for="lucro">Margem de lucro (%)</label>
           <input id="lucro" type="number" min="0" step="1" />
         </div>
+        <p class="magicos-note" id="conserto-note" hidden>Um item quebrado (penalidade −5) custa metade do valor para ser consertado (p. 173). Com o Trabalhador Itinerante (p. 124), o Forjador paga só a matéria-prima desse serviço (metade do conserto, ou grátis se já tiver o material).</p>
       </div>
     </section>
 
@@ -1325,8 +1460,8 @@
   <aside class="side" id="side">
   <section class="result" id="result-card">
     <div class="kpi-main">
-      <p class="result-label" id="result-label">Custo para forjar</p>
-      <p class="result-value"><span id="result">0</span><span class="unit">po</span></p>
+      <h2 class="result-label" id="result-label">Custo para forjar</h2>
+      <p class="result-value" id="result">0</p>
     </div>
     <p class="result-empty" id="result-empty" hidden></p>
     <div class="kpi-time">
@@ -1335,35 +1470,35 @@
     </div>
     <div class="result-props" id="result-props" hidden></div>
     <div class="result-actions">
-      <button type="button" class="btn-ghost btn-strong" id="add-lista-btn">+ Adicionar à lista</button>
+      <button type="button" class="btn-ghost btn-strong" id="add-lista-btn"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg> Adicionar à lista</button>
       <button type="button" class="btn-ghost" id="copy-btn">Copiar resultado</button>
     </div>
     <div class="receipt">
-      <p class="receipt-title">A conta</p>
+      <h3 class="receipt-title">A conta</h3>
       <div class="breakdown" id="breakdown"></div>
     </div>
   </section>
 
   <section class="compare" id="compare-section">
-    <p class="compare-title">Comparativo</p>
+    <h2 class="compare-title">Comparativo</h2>
     <div id="compare-rows"></div>
   </section>
   </aside>
 
   <section class="vantagens" id="vantagens-section">
-    <p class="vantagens-title">Vantagens e desvantagens dos materiais</p>
+    <h2 class="vantagens-title">Vantagens e desvantagens dos materiais</h2>
     <div id="vantagens-rows"></div>
   </section>
 
   <section class="production">
-    <p class="production-title">Tempo de Produção</p>
+    <h2 class="production-title">Tempo de Produção</h2>
     <p class="production-note" id="production-note"></p>
     <div id="production-rows"></div>
   </section>
 
   <section class="lista" id="lista-section" aria-labelledby="lista-title" hidden>
     <div class="lista-head">
-      <p class="lista-title" id="lista-title">Lista da sessão</p>
+      <h2 class="lista-title" id="lista-title">Lista da sessão</h2>
       <div class="lista-actions">
         <button type="button" class="btn-ghost" id="lista-copy-btn">Copiar lista</button>
         <button type="button" class="btn-reset" id="lista-clear-btn">limpar</button>
@@ -1496,7 +1631,7 @@
     <span class="cb-label" id="cb-label">Custo para forjar</span>
     <span class="cb-time" id="cb-time"></span>
   </span>
-  <span class="cb-value"><span id="cb-value">0</span> po</span>
+  <span class="cb-value" id="cb-value">0 po</span>
 </button>
 <p class="sr-only" id="live-result" aria-live="polite"></p>
 <div class="toast" id="toast" role="status" hidden>
@@ -1511,79 +1646,86 @@
 
   var STORAGE_KEY = 'forjador-calc-v5';
 
+  // Ícones (mesmo traço do sol e da lua do tema)
+  var ICON_X = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  var ICON_PLUS = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>';
+  var ICON_WARN = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5 21.5 20h-19zM12 10v4.5M12 17.2v.3"/></svg>';
+  var ICON_MINUS = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg>';
+
   // [id, categoria, tier, nome, multiplicador, dureza, modificador, vantagens, desvantagens]
   var MATERIALS_DB = [
     ['metal_cobre','Metais','D','Cobre',2,'d4','-1','Não perde durabilidade por eletricidade.',''],
     ['metal_ouro','Metais','D','Ouro',100,'d4','-2','Não perde durabilidade por umidade ou corrosão.','Pesa o dobro do peso padrão.'],
     ['metal_bronze','Metais','C','Bronze',1,'d4','0','Não perde durabilidade por umidade ou corrosão.',''],
     ['metal_ferro','Metais','C','Ferro',1,'d6','0','Material básico, resistente e fácil de encontrar.',''],
-    ['metal_prata','Metais','C','Prata',2,'d6','0','Eficaz contra lobisomens e mortos-vivos com resistência ou imunidade a armas não-mágicas; não perde durabilidade por eletricidade.','Mais frágil, exige manutenção mais frequente.'],
-    ['metal_dlarun','Metais','C','Dlarun',30,'d4','0','+1 de dano de frio; armaduras dão resistência a frio e vantagem contra exaustão por frio; escudos ganham Parry contra dano de frio.','Desvantagem em testes de durabilidade se o motivo for calor ou fogo.'],
-    ['metal_ferro_febril','Metais','C','Ferro Febril',30,'d4','0','+1 de dano de fogo; armaduras dão resistência a fogo e vantagem contra exaustão por calor; escudos ganham Parry contra dano de fogo.','Desvantagem em testes de durabilidade se o motivo for frio.'],
+    ['metal_prata','Metais','C','Prata',2,'d6','0','Eficaz contra lobisomens e mortos-vivos com resistência ou imunidade a armas não-mágicas; armas corpo a corpo e munições não perdem durabilidade por eletricidade.','Mais frágil, exige manutenção mais frequente.'],
+    ['metal_dlarun','Metais','C','Dlarun',30,'d4','0','+1 de dano de frio (armas corpo a corpo, arremesso ou munições); armaduras dão resistência a frio e vantagem contra exaustão por frio; escudos ganham Aparar (Parry) contra ataques à distância ou em área de frio.','Desvantagem em testes de durabilidade causados por calor ou dano de fogo.'],
+    ['metal_ferro_febril','Metais','C','Ferro Febril',30,'d4','0','+1 de dano de fogo (armas corpo a corpo, arremesso ou munições); armaduras dão resistência a fogo e vantagem contra exaustão por calor; escudos ganham Aparar (Parry) contra ataques à distância ou em área de fogo.','Desvantagem em testes de durabilidade causados por frio ou dano de frio.'],
     ['metal_aco','Metais','B','Aço',30,'d8','+1','Ótimo custo-benefício, muito usado em armas e armaduras.',''],
-    ['metal_prata_alquimica','Metais','B','Prata Alquímica',35,'d6','+1','Como a prata, mas monstros afetados por prata também são afetados por este material, com +1 de dano extra.','Ainda é frágil como a prata comum.'],
-    ['metal_aco_verde_baatoriano','Metais','B','Aço Verde Baatoriano',35,'d8','+1','+2 de dano extra contra criaturas do tipo corruptores; armaduras médias/pesadas e escudos dão +1 de CA contra corruptores.','Pesa apenas metade do aço comum (sem desvantagem prática).'],
-    ['metal_virestal','Metais','B','Virestal',55,'d10','+1','Óleos e venenos aplicados na arma permanecem o dobro do tempo.',''],
+    ['metal_prata_alquimica','Metais','B','Prata Alquímica',35,'d6','+1','Monstros afetados por prata também são afetados por este material e sofrem +1 de dano extra.','Ainda é frágil como a prata comum.'],
+    ['metal_aco_verde_baatoriano','Metais','B','Aço Verde Baatoriano',35,'d8','+1','Supera resistência/imunidade de corruptores e causa +2 de dano extra contra eles; armaduras médias/pesadas e escudos dão +1 de CA contra corruptores.','Pesa metade do aço comum — sem desvantagem prática.'],
+    ['metal_virestal','Metais','B','Virestal',55,'d10','+1','Óleos e venenos aplicados em armas corpo a corpo, de arremesso ou munições permanecem o dobro do tempo.',''],
     ['metal_aco_damasco','Metais','A','Aço Damasco',150,'d20','+2','Lâminas de extrema resistência, mantêm o fio afiado por longos períodos.',''],
-    ['metal_mithral','Metais','A','Mithral',175,'d20','+2','Sem requerimento de Força; pode trocar -5 no acerto por +10 no dano; armaduras/escudos sem requerimento de Força nem desvantagem em Furtividade, dá para dormir com a armadura vestida.','Pesa metade do peso normal — sem desvantagem prática.'],
-    ['metal_starmetal','Metais','S','Starmetal',400,'d100','+3','Suporta criação de itens mágicos de raridade muito alta (raros a lendários).',''],
-    ['metal_adamante','Metais','S','Adamante',500,'∞','+3','Dano dobrado contra criaturas do tipo constructo; críticos contra o portador causam metade do dano e ele não pode ser teleportado; escudo ganha maestria Deflect.','Imune a qualquer forma de desgaste — sem desvantagem.'],
-    ['metal_aco_negro','Metais','S','Aço Negro',500,'d100','+3','Ao absorver dano elemental, ganha +2 de dano daquele elemento (arma) ou resistência (armadura) por 8h, acumulável entre os 4 tipos; margem de crítico melhora em +1.',''],
-    ['metal_ebano','Metais','S','Ébano',500,'d100','+3','Não perde durabilidade por umidade ou corrosão.','Pesa metade do peso — sem desvantagem prática.'],
-    ['metal_elementium','Metais','S','Elementium',500,'d100','+3','Escolha um dano elemental (fogo/frio/elétrico/ácido): +1d4 de dano ou substitui todo o dano físico; armaduras médias/pesadas dão imunidade a esse elemento; escudo ganha Deflect.','Se empunhado por alguém não autorizado, reage causando 1d10 de dano por turno.'],
+    ['metal_mithral','Metais','A','Mithral',175,'d20','+2','Armas sem requerimento de Força; 1x/rodada pode trocar −5 no acerto por +10 no dano (corpo a corpo, arremesso ou com Munição); armaduras e escudos sem requerimento de Força nem desvantagem em Furtividade, permitindo dormir de armadura.','Pesa metade do peso normal (arredondado para baixo) — sem desvantagem prática.'],
+    ['metal_starmetal','Metais','S','Starmetal',400,'d100','+3','Permite criar itens mágicos de raridade rara, muito rara ou lendária.','Em itens muito raros ou lendários muito fortes, o Mestre pode reduzir o bônus do material para balancear.'],
+    ['metal_adamante','Metais','S','Adamante',500,'∞','+3','Armas/munições superam resistências e imunidades, causam dano dobrado em estruturas e +2 de dano contra constructos; armaduras médias/pesadas reduzem críticos sofridos pela metade e impedem teletransporte involuntário; escudo ganha Defletir contra energia, soma proficiência em TR de área de energia e dá imunidade a mísseis mágicos.','Imune a qualquer desgaste ou transformação (nem Desejo altera) — sem desvantagem.'],
+    ['metal_aco_negro','Metais','S','Aço Negro',500,'d100','+3','Ao sofrer ou canalizar dano elemental (fogo, frio, elétrico ou ácido) por 8h: armas/munições ganham +2 de dano desse elemento (substituindo o anterior) e podem trocar todo o dano físico pelo elemental; armaduras acumulam resistência e escudos acumulam Aparar (Parry) à distância/área para até os 4 elementos; não perde durabilidade pelos 4 elementos nem por umidade.',''],
+    ['metal_ebano','Metais','S','Ébano',500,'d100','+3','Armas corpo a corpo, de arremesso ou à distância ganham a maestria adicional Crítico (Critic); armaduras e escudos permitem 3x/dia rolar 1d12 e subtrair do dano sofrido, além de dormir de armadura sem penalidade; não perde durabilidade por umidade ou corrosão.','Pesa metade do peso normal (arredondado para baixo) — sem desvantagem prática.'],
+    ['metal_elementium','Metais','S','Elementium',500,'d100','+3','Material vivo elemental (fogo, frio, elétrico ou ácido): armas/munições causam +1d4 do elemento e podem trocar o dano físico por ele; armaduras médias/pesadas dão imunidade ao elemento; escudo ganha Defletir e soma proficiência em TR de área contra ele; repara-se com 1 min do elemento e move-se 1,5m/rodada até o dono.','Se empunhado por alguém não autorizado pelo dono, causa 1d10 de dano por turno.'],
 
     ['veg_madeira_podre','Vegetais','D','Madeira Podre',1,'d4','-1','Nenhuma — resultado da falta de cuidado com o item.','Modificador negativo, sem propriedade especial.'],
     ['veg_carvalho','Vegetais','C','Carvalho',1,'d6','0','Madeira comum e robusta, boa para armas e ferramentas padrão.',''],
-    ['veg_bronzewood','Vegetais','C','BronzeWood',5,'d4','0','Armaduras/escudos sem penalidade de Furtividade em florestas; não perde durabilidade por umidade.',''],
+    ['veg_bronzewood','Vegetais','C','BronzeWood',5,'d4','0','Armaduras e escudos sem penalidade de Furtividade em florestas; armas com Munição convertem 3m do alcance longo em distância normal; não perde durabilidade por umidade.',''],
     ['veg_freixo','Vegetais','B','Freixo',30,'d8','+1','Leve e resistente, bom equilíbrio entre força e manuseabilidade.',''],
-    ['veg_madeira_da_alma','Vegetais','B','Madeira da Alma',45,'d6','+1','Prende as almas de criaturas que morrem a até 4,5m, impedindo sua ressurreição até a alma ser libertada.',''],
-    ['veg_fungo_viventis','Vegetais','B','Fungo Viventis',60,'d6','+1','Regenera naturalmente +1 de durabilidade por dia; mesmo destruído, tenta se regenerar lentamente.',''],
-    ['veg_starwood','Vegetais','B','StarWood',65,'d8','+1','Permite criação de itens mágicos de raridade "rara".',''],
+    ['veg_madeira_da_alma','Vegetais','B','Madeira da Alma',45,'d6','+1','Prende as almas de criaturas que morrem a até 4,5m, facilitando ou impedindo sua ressurreição até a alma ser liberada.',''],
+    ['veg_fungo_viventis','Vegetais','B','Fungo Viventis',60,'d6','+1','Material vivo: armas com Munição produzem a própria munição para 2d6 ataques à distância por dia; regenera +1 de durabilidade por dia (se destruído, reconstitui-se em 2d4 dias).','Qualquer efeito que mate fungos mata o material e encerra a regeneração.'],
+    ['veg_starwood','Vegetais','B','StarWood',65,'d8','+1','Permite criação de itens mágicos de raridade rara.',''],
     ['veg_teixo','Vegetais','A','Teixo',150,'d20','+2','Excelente elasticidade e resistência à tração.',''],
-    ['veg_iron_wood','Vegetais','A','Iron-Wood',200,'d20','+2','Efeitos de empurrão em armas/munições aumentam +1,5m; armaduras/escudos reduzem o empurrão sofrido em +1,5m.','Pesa o dobro do normal; ganha a propriedade pesada (ou +2 no requerimento de Força se já tiver).'],
-    ['veg_nogueira','Vegetais','A','Nogueira',170,'d20','+2','Se tiver ao menos 1 ponto de feitiçaria, ganha +1 ponto extra ao sintonizar.',''],
-    ['veg_bordo','Vegetais','A','Bordo',170,'d20','+2','Se tiver ao menos 1 ponto de Ki, ganha +1 ponto extra ao sintonizar.',''],
-    ['veg_samambaia_metamorfica','Vegetais','A','Samambaia Metamórfica',185,'d20','+2','Material vivo; pode assumir 2 formas de item diferentes, alternando com ação bônus; modo furtivo 1x/rodada.','Precisa de vínculo com o portador e se alimenta de luz solar 1h/dia.'],
-    ['veg_yggdrasil','Vegetais','S','Yggdrasil',500,'∞','+3','Atinge criaturas no Plano Astral/incorpóreas; foco de conjuração dobra a distância de teletransporte; +1 em testes de Sabedoria ou Inteligência ao sintonizar.','Extremamente raro de obter — indestrutível, sem desvantagem mecânica.'],
-    ['veg_samambaia_primordial','Vegetais','S','Samambaia Primordial',500,'d100','+3','Material vivo; 1x/dia soma 2d4 a um teste próximo; pode assumir até 10 formas de item, alternando com ação bônus; recupera +1 durabilidade/dia.',''],
-    ['veg_hera_lunar','Vegetais','S','Hera Lunar',500,'d100','+3','Material vivo; gera vagens de esporos que ativam efeitos variados (espinhos, luz, veneno, feromônios) conforme a fase da lua, todos disponíveis na Lua Cheia.','Precisa de luz da lua para se alimentar.'],
+    ['veg_iron_wood','Vegetais','A','Iron-Wood',200,'d20','+2','Armas, escudos e munições aumentam efeitos de empurrão em +1,5m; armas com Munição causam +1d4 de dano ao usar a ação Preparar; armaduras e escudos reduzem empurrões sofridos em 1,5m (acumulativo).','Pesa o dobro do normal; ganha a propriedade Pesada e aumenta qualquer requerimento de Força em +2.'],
+    ['veg_nogueira','Vegetais','A','Nogueira',170,'d20','+2','Armas com Munição não têm desvantagem na distância longa; se tiver ao menos 1 ponto de feitiçaria, ganha +1 ponto extra ao sintonizar.',''],
+    ['veg_bordo','Vegetais','A','Bordo',170,'d20','+2','Armas com Munição aumentam a distância normal e longa em +3m e não têm desvantagem contra criaturas a 1,5m; se tiver ao menos 1 ponto de Ki, ganha +1 ponto extra ao sintonizar.',''],
+    ['veg_samambaia_metamorfica','Vegetais','A','Samambaia Metamórfica',185,'d20','+2','Material vivo: ao sintonizar, escolhe 2 formas de item e alterna com ação bônus; modo furtivo nas roupas 1x/rodada; Despertar: crítico no teste de criação transforma o item em Samambaia Primordial (Tier S).','Precisa de vínculo com o portador e se alimenta de luz solar 1h/dia.'],
+    ['veg_yggdrasil','Vegetais','S','Yggdrasil',500,'∞','+3','Armas corpo a corpo, de arremesso ou munições não têm desvantagem contra criaturas que você não possa ver; foco de conjuração dobra a distância e dá vantagem em magias de teletransporte; +1 em testes e TR de Sabedoria ou Inteligência ao sintonizar.','Indestrutível e inalterável (nem Desejo altera) — sem desvantagem mecânica.'],
+    ['veg_samambaia_primordial','Vegetais','S','Samambaia Primordial',500,'d100','+3','Material vivo consciente (não precisa se alimentar): ao sintonizar, 1x/dia soma 2d4 a um teste ou TR a até 1,5m; alterna entre até 10 formas de item com ação bônus; modo furtivo 1x/rodada; recupera +1 de durabilidade/dia.',''],
+    ['veg_hera_lunar','Vegetais','S','Hera Lunar',500,'d100','+3','Material vivo: gera 1d4 vagens de esporos/dia (máx. 10) e ativa efeitos conforme a fase da lua (2 na Nova, 4 na Crescente/Minguante, todos na Cheia: Escudo de Espinhos, Luminescência, Chicote de Hera, Hera Venenosa, Esporos Explosivos e Feromônios +1 Carisma).','Remover o acessório faz o item murchar em 5 rodadas; recupera +1 de durabilidade com 1h de luz da lua.'],
 
-    ['geo_pedra_gritante','Geológicos','D','Pedra Gritante',5,'d6','-1','Pode soltar um som alto e estridente ao ser usado — útil como distração.','Denuncia o usuário; ativa aleatoriamente em críticos ou disparos de munição.'],
+    ['geo_pedra_gritante','Geológicos','D','Pedra Gritante',5,'d6','-1','Produz um som alto e estridente ao ser usado (sempre ativa em críticos de arma ou disparos de munição) — útil para distração.','Barulho alto como um grito ou trovão denuncia a posição.'],
     ['geo_pedra','Geológicos','C','Pedra',1,'d6','0','Material comum e acessível, boa resistência para dano contundente.',''],
-    ['geo_silex_adormecido','Geológicos','C','Sílex Cinético Adormecido',50,'d8','0','Crítico positivo (causado ou sofrido) transforma o item no Tier S "Sílex Cinético Acordado" por 2 rodadas; não perde durabilidade por concussão.',''],
-    ['geo_obsidiana','Geológicos','C','Obsidiana',40,'d4','0','Extremamente afiada — armas de corte/perfuração ou munições ganham a maestria Bleed adicional.','Quebradiça; munições sempre quebram após o ataque.'],
-    ['geo_pedra_ana','Geológicos','B','Pedra Anã',30,'d8','+1','Grande resistência, textura quase idêntica ao mármore.','Dificulta a mobilidade.'],
-    ['geo_sal_cristalizado','Geológicos','B','Sal Cristalizado',35,'d8','+1','+2 de dano extra contra mortos-vivos (armas); +1 de CA contra mortos-vivos (armaduras/escudos pesados).',''],
-    ['geo_skip_rock','Geológicos','B','Skip Rock',30,'d6','+1','Munição de concussão ricocheteia para um segundo alvo próximo (maestria Cleave adicional).',''],
-    ['geo_pedra_cegante','Geológicos','B','Pedra Cegante',30,'d6','+1','Munição gera uma explosão de luz ao acertar, cegando por 10 min criaturas com Visão no Escuro em 6m (CD 16 Con).',''],
-    ['geo_gelo_eterno','Geológicos','B','Gelo Eterno',75,'d10','+1','+1 dano de frio em magias com foco deste material; efeitos mágicos de frio duram o dobro; só é destruído por dano físico.','O item está sempre frio ao toque.'],
-    ['geo_brasa_eterna','Geológicos','B','Brasa Eterna',75,'d10','+1','+1 dano de fogo em magias com foco deste material; efeitos mágicos de fogo duram o dobro; só é destruído por dano físico.','O item está sempre quente ao toque.'],
+    ['geo_silex_adormecido','Geológicos','C','Sílex Cinético Adormecido',50,'d8','0','Crítico positivo desperta o item para o Tier S "Sílex Cinético Acordado" (+3 e todas as propriedades: até o fim do turno em armas, fim do próximo turno em armaduras/escudos, ou 2 rodadas em focos); não perde durabilidade por concussão.',''],
+    ['geo_obsidiana','Geológicos','C','Obsidiana',40,'d4','0','Extremamente afiada — armas de corte/perfuração e munições ganham a maestria adicional Sangramento (Bleed).','Quebradiça; munições sempre quebram após o ataque.'],
+    ['geo_pedra_ana','Geológicos','B','Pedra Anã',30,'d8','+1','Grande resistência, textura quase idêntica ao mármore.','Pesada em armaduras, dificulta a mobilidade.'],
+    ['geo_sal_cristalizado','Geológicos','B','Sal Cristalizado',35,'d8','+1','Supera resistência/imunidade de mortos-vivos e causa +2 de dano extra contra eles (armas/munições); armaduras médias/pesadas e escudos dão +1 de CA contra mortos-vivos.',''],
+    ['geo_skip_rock','Geológicos','B','Skip Rock',30,'d6','+1','Munição com dano de concussão ricocheteia para um segundo alvo próximo: ganha a maestria adicional Trespassar (Cleave).',''],
+    ['geo_pedra_cegante','Geológicos','B','Pedra Cegante',30,'d6','+1','Munição gera uma explosão de luz violeta ao atingir superfície sólida: criaturas com Visão no Escuro a até 6m fazem TR de Constituição CD 16 ou perdem a Visão no Escuro por 10 min.','Não afeta a visão normal.'],
+    ['geo_gelo_eterno','Geológicos','B','Gelo Eterno',75,'d10','+1','Armas e munições causam dano de gelo no lugar do dano normal; armas com Munição causam +1 de dano de gelo; foco trata resultado 1 no dado de dano de gelo como 2; armadura dá vantagem contra exaustão por calor; escudo permite reação quando erram ataque a 1,5m para causar dano de gelo igual ao bônus de proficiência.','O item é sempre frio como gelo e nunca derrete.'],
+    ['geo_brasa_eterna','Geológicos','B','Brasa Eterna',75,'d10','+1','Armas e munições causam dano de fogo no lugar do dano normal; armas com Munição causam +1 de dano de fogo; foco trata resultado 1 no dado de dano de fogo como 2; armadura dá vantagem contra exaustão por frio; escudo permite reação quando erram ataque a 1,5m para causar dano de fogo igual ao bônus de proficiência.','O item é sempre quente como brasa e nunca se apaga.'],
     ['geo_cristal_estigio','Geológicos','A','Cristal Estígio',150,'d20','+2','Resistente e brilhante, ótima escolha para armaduras e armas de alta qualidade.',''],
-    ['geo_argila_elukiana','Geológicos','A','Argila Elukiana',175,'d20','+2','Sem desvantagem em ataques submersos; armadura dá deslocamento de natação; se ficar a 0 PV embaixo d\'água, emerge automaticamente 9m à superfície.','Não é ideal para lâminas afiadas — melhor para perfuração ou concussão.'],
-    ['geo_pedra_ana_refinada','Geológicos','A','Pedra Anã Refinada',200,'d20','+2','Pode trocar -5 no acerto por +10 no dano (corpo a corpo/arremesso); altera efeitos de empurrão conforme o uso.','Pesa o dobro do normal; ganha propriedade pesada (ou +2 no requerimento de Força se já tiver).'],
-    ['geo_glass_steel','Geológicos','A','Glass Steel',200,'d20','+2','Vantagem no primeiro ataque em penumbra; munições/armas de arremesso não deixam rastro visual; itens têm vantagem para serem escondidos.','O portador também sofre desvantagem no primeiro ataque contra ele em penumbra.'],
-    ['geo_deep_crystal','Geológicos','A','Deep Crystal',400,'d20','+2','+2 de dano psíquico (ou +5 após 10 min de meditação); armaduras dão resistência a dano psíquico e vantagem contra controle mental/leitura de mente; escudo ganha Parry contra psíquico.','Armazena memórias recentes do usuário — risco se o item for perdido ou lido por magia.'],
-    ['geo_fragmento_igneo_vorthal','Geológicos','A','Fragmento Ígneo de Vorthal',170,'d20','+2','Dano de concussão também causa fogo em área (1,5m); quem acerta a arma corpo a corpo sofre 1d4 de fogo.','Ao quebrar, explode causando 1d4 de fogo por kg do material em 3m.'],
-    ['geo_starstone','Geológicos','A','StarStone',120,'d20','+2','Permite criação de itens mágicos de raridade "rara" ou "muito rara".',''],
-    ['geo_pedra_lunar','Geológicos','S','Pedra Lunar',500,'d20','+3','Reverte criaturas polimorfadas/metamorfas ao acertar; munições e teletransportes ganham alcance/distância extra, com vantagem no d100 de "teletransporte".','Ao quebrar, causa 3d6 de dano de veneno a quem estiver a 1,5m (exceto o usuário).'],
-    ['geo_deep_crystal_alpha','Geológicos','S','Deep Crystal Alpha',500,'d20','+3','Versão superior do Deep Crystal: até +6 de dano psíquico acumulado, armazena memórias de vidas inteiras.','Uso contínuo induz amnésia gradual no usuário — arriscado para itens de combate.'],
-    ['geo_piroclasto_vorthal','Geológicos','S','Piroclasto de Vorthal',500,'d100','+3','Dano de concussão também causa fogo em área (3m); focos de conjuração aumentam o raio de magias de área em dano de fogo.','Ao quebrar, explode 1d6 de fogo por kg do material em 6m.'],
-    ['geo_quartzo_inercia','Geológicos','S','Quartzo de Inércia',500,'d100','+3','Absorve metade de um dano recebido e libera no turno seguinte; escudo empurra quem erra o ataque contra você; não perde durabilidade por concussão.',''],
-    ['geo_silex_acordado','Geológicos','S','Sílex Cinético Acordado',500,'d100','+3','Acumula cargas a cada acerto (arma) ou dano recebido (armadura/escudo); ao atingir o máximo, libera dano dobrado ou uma explosão de energia.','Se não usado por 24h, "adormece" e vira Sílex Cinético Adormecido (Tier C), perdendo as propriedades até ser reativado.'],
+    ['geo_argila_elukiana','Geológicos','A','Argila Elukiana',175,'d20','+2','Armas corpo a corpo, de arremesso ou com Munição não têm desvantagem submersas; armadura dá deslocamento de natação igual ao de caminhada; armadura ou escudo faz emergir 9m ao iniciar o turno com 0 PV embaixo d\'água.','Exige 3 dias para endurecer após o molde; pouco indicada para lâminas afiadas.'],
+    ['geo_pedra_ana_refinada','Geológicos','A','Pedra Anã Refinada',200,'d20','+2','1x/rodada pode trocar −5 no acerto por +10 no dano (armas corpo a corpo, arremesso ou com Munição); armas e escudos aumentam empurrões causados em +1,5m; armaduras e escudos reduzem empurrões sofridos em 1,5m (acumulativo).','Pesa o dobro do normal; ganha a propriedade Pesada e aumenta qualquer requerimento de Força em +2.'],
+    ['geo_glass_steel','Geológicos','A','Glass Steel',200,'d20','+2','Vantagem no primeiro ataque do combate em penumbra; munições e armas de arremesso não deixam rastro visual; criaturas têm desvantagem no primeiro ataque contra o portador de armadura/escudo em penumbra; vantagem para esconder o item.',''],
+    ['geo_deep_crystal','Geológicos','A','Deep Crystal',400,'d20','+2','+2 de dano psíquico em armas/munições (sobe para +3 por 1 min ao sofrer dano psíquico mágico ou meditar 10 min); armaduras médias/pesadas dão resistência psíquica e vantagem contra controle mental/leitura de mente; escudo ganha Aparar (Parry) contra psíquico; foco acumula +1 de dano psíquico por magia (máx. +3 por 1h).','Armazena memórias recentes por 24h e dano psíquico absorvido (liberado em quem ler a mente do item).'],
+    ['geo_fragmento_igneo_vorthal','Geológicos','A','Fragmento Ígneo de Vorthal',170,'d20','+2','Dano de concussão em armas/munições causa metade do dano como fogo em 1,5m ao redor do alvo; armas com Munição causam metade do dano como fogo em criaturas a 1,5m de você; foco aumenta o raio de magias de área em +1,5m.','Em armaduras/escudos, sofrer ataque corpo a corpo causa 1d4 de fogo a você e ao atacante; ao quebrar, explode 1d4 de fogo por kg em 3m.'],
+    ['geo_starstone','Geológicos','A','StarStone',120,'d20','+2','Permite criação de itens mágicos de raridade rara ou muito rara.',''],
+    ['geo_pedra_lunar','Geológicos','S','Pedra Lunar',500,'d20','+3','Crítico (ou toque com TR de Con CD 10 + dado da arma) reverte metamorfos e criaturas polimorfadas; munições ganham +1/4 de alcance; armaduras e focos dão +1/4 de distância em teletransportes e vantagem no d100 da magia Teletransporte.','Ao perder durabilidade (exceto munições), causa 3d6 de veneno a criaturas que respirem ar a até 1,5m (exceto o usuário).'],
+    ['geo_deep_crystal_alpha','Geológicos','S','Deep Crystal Alpha',500,'d20','+3','+2 de dano psíquico em armas/munições (sobe para +5 por 10 min ao sofrer dano psíquico mágico ou meditar 10 min); armaduras dão imunidade psíquica e sucesso automático contra controle/leitura mental; escudo ganha Defletir e soma proficiência em TR de área psíquica; foco acumula +2 por magia (máx. +6 por 1h).','Meditar apaga as últimas 24h; armaduras dão desvantagem para lembrar; uso contínuo induz amnésia gradual (10 anos de memórias por cm³).'],
+    ['geo_piroclasto_vorthal','Geológicos','S','Piroclasto de Vorthal',500,'d100','+3','Dano de concussão em armas/munições causa metade do dano como fogo em 3m ao redor do alvo; armas com Munição causam metade do dano como fogo a até 3m de você; foco aumenta a área de magias de dano em área em +50%.','Em armaduras/escudos, sofrer ataque corpo a corpo causa 1d6 de fogo a você e ao atacante; ao quebrar, explode 1d6 de fogo por kg em 6m.'],
+    ['geo_quartzo_inercia','Geológicos','S','Quartzo de Inércia',500,'d100','+3','Armas/munições podem guardar metade do dano para causar como energia no próximo turno; armas com Munição ganham +1 dado de dano em Ataque Concentrado ou Colossal; armaduras/escudos podem adiar metade do dano sofrido para o fim do próximo turno; escudo empurra 3m quem erra ataque corpo a corpo; foco absorve magia com Escudo Arcano (+1 espaço de 1º nível); não perde durabilidade por concussão.',''],
+    ['geo_silex_acordado','Geológicos','S','Sílex Cinético Acordado',500,'d100','+3','Armas corpo a corpo/arremesso acumulam até 3 cargas em acertos seguidos para dobrar os dados de dano; armas com Munição dobram os dados após 5 rodadas atacando; armaduras/escudos acumulam até 5 cargas (ao sofrer 10+ de dano) para explodir até 5d6 de concussão em 3m; foco acumula 3 cargas para subir magia em +1 nível; não perde durabilidade por concussão.','Se passar 24h sem causar (armas/focos) ou sofrer (armaduras/escudos) um crítico, adormece e vira Sílex Cinético Adormecido (Tier C).'],
+    ['geo_pedra_filosofal','Geológicos','S','Pedra Filosofal',500,'d20','+3','Exclusivo do Forjador Alquimista (17º nível, p. 131): com uma ação, permite trocar qualquer outro material do item por outro da mesma categoria e mesmo tier (exceto material vivo), alterando todos os seus benefícios.','Trocar um material que sustenta encantamento poderoso (como Starmetal) faz o item quebrar por não suportar a magia.'],
 
     ['org_couro_nd0_5','Orgânicos','C','Couro e Escamas (Nd 0-5)',1,'d6','0','Proteção modesta, fácil de encontrar e trabalhar.',''],
-    ['org_coral_morto','Orgânicos','C','Coral Morto',1,'d4','0','Sem desvantagem para ataques feitos submersos em água.','Mais rígido e propenso a lascar sob pressão que o coral vivo.'],
-    ['org_ossos_nd0_5','Orgânicos','C','Ossos (Nd 0-5)',1,'d6','0','Leves e fáceis de manusear, ideais para itens leves e flexíveis.',''],
-    ['org_inseto_treinado','Orgânicos','C','Artrópode Treinado',50,'d10','0','Material vivo e inteligente; alterna entre forma de criatura e de item por ação bônus; evolui e fortalece o vínculo com o dono.','Precisa se alimentar (1kg a cada 3 dias ou perde durabilidade); só o dono pode usá-lo.'],
-    ['org_couro_nd6_11','Orgânicos','B','Couro e Escamas (Nd 6-11)',30,'d8','+1','Escolha um tipo de dano (exceto cortante/perfurante/concussão): a armadura passa a dar resistência a esse dano.',''],
-    ['org_ossos_nd6_11','Orgânicos','B','Ossos (Nd 6-11)',30,'d6','+1','Ignoram resistência/imunidade a armas não-mágicas de criaturas do mesmo tipo; +1 dano necrótico em focos de conjuração; pesam metade do peso.',''],
-    ['org_quitina','Orgânicos','B','Quitina',45,'d8','+1','Óleos e venenos aplicados permanecem o dobro do tempo; pesa metade do peso.',''],
-    ['org_coral','Orgânicos','B','Coral',30,'d6','+1','Material vivo; armadura de coral dá deslocamento de natação e não pesa nada submersa.','Precisa ficar submerso ao menos 1h/dia ou "morre" e vira Coral Morto.'],
-    ['org_couro_nd12_17','Orgânicos','A','Couro e Escamas (Nd 12-17)',150,'d20','+2','Escolha um tipo de dano: a armadura dá resistência a esse dano, refletindo a origem poderosa da criatura.',''],
-    ['org_ossos_nd12_17','Orgânicos','A','Ossos (Nd 12-17)',150,'d20','+2','Ignoram resistência/imunidade a armas não-mágicas do mesmo tipo de criatura; +2 dano necrótico em focos; pesam metade do peso.',''],
-    ['org_couro_nd18','Orgânicos','S','Couro e Escamas (Nd 18+)',500,'d100','+3','Escolha 2 tipos de dano: reduz em -2 qualquer dano Cortante, Perfurante ou Concussão sofrido, além da resistência escolhida.',''],
-    ['org_ossos_nd18','Orgânicos','S','Ossos (Nd 18+)',500,'d100','+3','Ignoram resistência/imunidade a armas não-mágicas do mesmo tipo; +3 dano necrótico em focos; vantagem contra medo de criaturas do mesmo tipo.',''],
-    ['org_ossos_tarrasque','Orgânicos','S','Ossos de Tarrasque',500,'∞','+3','Armas ignoram resistência/imunidade a armas não-mágicas e causam o dobro de dano em estruturas; imune à presença aterradora de Tarrasques.','Indestrutível — nem magia de Desejo pode alterá-lo.']
+    ['org_coral_morto','Orgânicos','C','Coral Morto',1,'d4','0','Armas corpo a corpo, de arremesso ou com Munição não têm desvantagem em ataques submersos em água.','Mais rígido e propenso a lascar sob pressão que o coral vivo.'],
+    ['org_ossos_nd0_5','Orgânicos','C','Ossos (Nd 0-5)',1,'d6','0','Peso Leve: itens feitos de ossos pesam metade do peso normal (arredondado para baixo).',''],
+    ['org_inseto_treinado','Orgânicos','C','Artrópode Treinado',50,'d10','0','Material vivo e inteligente: alterna entre criatura (ND máx. 1/4) e item com ação bônus; evolui conforme o nível sugerido (5º: +1 / d12; 9º: +2 / d20; 13º: +3 / d100).','Exclusivo do dono; precisa ingerir 1 kg de alimento a cada 3 dias ou perde 1 ponto de durabilidade.'],
+    ['org_couro_nd6_11','Orgânicos','B','Couro e Escamas (Nd 6-11)',30,'d8','+1','Armaduras: se a criatura tiver imunidades (exceto cortante, perfurante e concussão), escolha uma na fabricação para receber resistência a esse dano.',''],
+    ['org_ossos_nd6_11','Orgânicos','B','Ossos (Nd 6-11)',30,'d6','+1','Armas/munições ignoram resistência/imunidade não-mágica de criaturas do mesmo tipo; armas com Munição sem desvantagem a 1,5m; foco dá +1 de dano necrótico; vantagem contra medo do mesmo tipo de criatura; não perde durabilidade pelos danos a que a criatura era resistente/imune; pesa metade do peso.',''],
+    ['org_quitina','Orgânicos','B','Quitina',45,'d8','+1','Óleos e venenos em armas/munições permanecem o dobro do tempo; pesa metade do peso normal (arredondado para baixo).',''],
+    ['org_coral','Orgânicos','B','Coral',30,'d6','+1','Material vivo: armas corpo a corpo, de arremesso ou com Munição sem desvantagem submersas; armadura dá deslocamento de natação igual ao de caminhada; não tem peso quando submerso em água.','Precisa ficar submerso em água ao menos 1h/dia ou morre e vira Coral Morto.'],
+    ['org_couro_nd12_17','Orgânicos','A','Couro e Escamas (Nd 12-17)',150,'d20','+2','Armaduras dão resistência a um tipo de dano ao qual a criatura era imune (exceto físico); ao sintonizar, vantagem contra ser amedrontado por criaturas do mesmo tipo.',''],
+    ['org_ossos_nd12_17','Orgânicos','A','Ossos (Nd 12-17)',150,'d20','+2','Armas/munições ignoram resistência/imunidade não-mágica do mesmo tipo; armas com Munição sem desvantagem a 1,5m; armaduras/escudos reduzem em −2 dois tipos de dano aos quais a criatura resistia; foco dá +2 de dano necrótico; vantagem contra medo do mesmo tipo; pesa metade do peso.',''],
+    ['org_couro_nd18','Orgânicos','S','Couro e Escamas (Nd 18+)',500,'d100','+3','Armaduras dão resistência a um dano ao qual a criatura era imune (exceto físico) e reduzem em −3 todo dano Cortante, Perfurante e Concussão sofrido; vantagem contra medo de criaturas do mesmo tipo ao sintonizar.',''],
+    ['org_ossos_nd18','Orgânicos','S','Ossos (Nd 18+)',500,'d100','+3','Armas/munições ignoram resistência/imunidade não-mágica do mesmo tipo; armas com Munição sem desvantagem a 1,5m; armaduras/escudos reduzem em −3 três tipos de dano aos quais a criatura resistia; foco dá +3 de dano necrótico; vantagem contra medo do mesmo tipo; pesa metade do peso.',''],
+    ['org_ossos_tarrasque','Orgânicos','S','Ossos de Tarrasque',500,'∞','+3','Armas/munições ignoram resistência/imunidade não-mágica e causam o dobro de dano em estruturas; armaduras/escudos 1x/dia anulam (1–5 no d6) ou refletem (6 no d6) mísseis mágicos, magias de linha ou de ataque à distância; foco conjura Escudo Arcano 1x/dia como reação sem gastar espaço; imunidade à presença aterradora de Tarrasques.','Indestrutível e inalterável (nem Desejo altera) — sem desvantagem.']
   ].map(function (row) {
     return {
       id: row[0], categoria: row[1], tier: row[2], nome: row[3],
@@ -1705,6 +1847,8 @@
     ["Símbolo sagrado: Amuleto", "Focos de Conjuração", 75, "", "arma", ""],
     ["Símbolo sagrado: Emblema", "Focos de Conjuração", 75, "", "arma", ""],
     ["Símbolo sagrado: Relicário", "Focos de Conjuração", 75, "", "arma", ""],
+    ["Instrumento musical", "Instrumentos e Acessórios", 75, "", "arma", ""],
+    ["Carregador de munição (10 munições)", "Instrumentos e Acessórios", 5, "", "arma", ""],
     ["Acolchoada", "Armaduras", 10, "leve", "armadura", ""],
     ["Couro", "Armaduras", 30, "leve", "armadura", ""],
     ["Brigantina", "Armaduras", 30, "leve", "armadura", ""],
@@ -1767,6 +1911,18 @@
     ['Alcance', 20, 'Armas corpo a corpo', 'Ganha a propriedade Alcance.'],
     ['Flexível', 5, 'Qualquer arma corpo a corpo', 'Ganha a propriedade Flexível.'],
     ['Montaria', 10, 'Armas corpo a corpo de duas mãos', 'Ganha a propriedade Montaria.']
+  ];
+
+  // Modificações de munição (Guia, p. 160): [nome, custo em po, a cada N munições, efeito]
+  var MUNICAO_MODS = [
+    ['Munição Assobiante', 5, 5, 'Entalhada como um apito: som estridente ao disparar; pode imitar sons de animais.'],
+    ['Munição de Franco Atirador', 5, 1, 'Sem desvantagem em ataques contra criaturas na sua distância longa.'],
+    ['Munição Lua Crescente', 5, 1, 'No Ataque Desestabilizante, não causa metade do dano.'],
+    ['Munição Chisel', 10, 1, 'Todo acerto força um teste de durabilidade da armadura do alvo.'],
+    ['Munição Incendiária', 10, 1, 'Gaiola com pano em óleo ou resina; acesa antes do disparo, incendeia alvos inflamáveis.'],
+    ['Munição de Impacto', 10, 1, 'Causa dano de concussão; pode trocar a maestria da arma para Topple.'],
+    ['Munição Dilaceradora', 10, 1, 'Causa dano cortante; pode trocar a maestria da arma para Bleed.'],
+    ['Munição Inquebrável', 25, 1, 'Não quebra: você recupera todas depois do combate.']
   ];
 
   // Encantamento (p. 169): horas de trabalho, custo e material mínimo exigido
@@ -1840,8 +1996,12 @@
     peso: '',
     mods: [],
     modExistente: false,
+    municaoMod: -1,
+    municaoModQtd: 5,
+    municaoModExistente: false,
     obraPrima: false,
     melhorDosMelhores: false,
+    excalibur: false,
     artesao: true,
     artesaoModo: 'duplo',
     materiaisPossuidos: false,
@@ -1900,6 +2060,30 @@
     if (!isFinite(n)) return '0';
     var rounded = Math.round(n * 100) / 100;
     return rounded.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
+
+  // Moedas do D&D (Livro do Jogador): 1 po = 10 pp = 100 pc. Electro e platina ficam de fora,
+  // como o próprio livro sugere (são incomuns em transações). Arredonda para a peça de cobre.
+  function moedas(n) {
+    var c = Math.round(Math.abs(isFinite(n) ? n : 0) * 100);
+    var partes = [];
+    var po = Math.floor(c / 100), pp = Math.floor((c % 100) / 10), pc = c % 10;
+    if (po) partes.push([po.toLocaleString('pt-BR'), 'po']);
+    if (pp) partes.push([String(pp), 'pp']);
+    if (pc) partes.push([String(pc), 'pc']);
+    if (!partes.length) partes.push(['0', 'po']);
+    return { neg: n < 0 && c > 0, partes: partes };
+  }
+  function fmtMoeda(n) {
+    var m = moedas(n);
+    return (m.neg ? '−' : '') + m.partes.map(function (p) { return p[0] + ' ' + p[1]; }).join(' ');
+  }
+  // Versão do número grande: a primeira moeda em destaque, as outras menores
+  function htmlMoeda(n) {
+    var m = moedas(n);
+    return m.partes.map(function (p, i) {
+      return '<span class="coin' + (i ? ' coin-sm' : '') + '"><span class="coin-n">' + (i === 0 && m.neg ? '−' : '') + p[0] + '</span><span class="unit">' + p[1] + '</span></span>';
+    }).join('');
   }
 
   function num(v, fallback) {
@@ -1965,15 +2149,23 @@
   // Switches simples: id do botão → chave do estado → o que recalcular
   var SIMPLE_SWITCHES = [
     ['existente-switch', 'modExistente', 'main'],
+    ['ammo-existente-switch', 'municaoModExistente', 'main'],
     ['obra-switch', 'obraPrima', 'main'],
     ['melhor-switch', 'melhorDosMelhores', 'main'],
     ['encantar-switch', 'encantarExistente', 'magic'],
     ['desencantado-switch', 'desencantado', 'magic'],
-    ['automaticas-switch', 'criacoesAutomaticas', 'magic'],
     ['versado-switch', 'versadoItensMagicos', 'magic']
   ];
 
-  var MAX_MATERIALS = 4;
+  var autoForjSwitch = document.getElementById('auto-forj-switch');
+  var autoMagicSwitch = document.getElementById('automaticas-switch');
+  var excaliburSwitch = document.getElementById('excalibur-switch');
+  var excaliburSetting = document.getElementById('excalibur-setting');
+  var consertoNoteEl = document.getElementById('conserto-note');
+
+  function maxMaterials() {
+    return state && state.excalibur && state.tipoItem === 'arma' ? 6 : 4;
+  }
 
   function buildMaterialCombo(idx, mat, multInput, tierSelect) {
     var wrap = document.createElement('div');
@@ -2179,7 +2371,7 @@
       var removeBtn = document.createElement('button');
       removeBtn.type = 'button';
       removeBtn.className = 'btn-remove';
-      removeBtn.textContent = '×';
+      removeBtn.innerHTML = ICON_X;
       removeBtn.setAttribute('aria-label', 'Remover material ' + (idx + 1));
       removeBtn.disabled = state.materials.length <= 1;
       removeBtn.addEventListener('click', function () {
@@ -2198,8 +2390,10 @@
       rowsWrap.appendChild(row);
     });
 
-    addBtn.disabled = state.materials.length >= MAX_MATERIALS;
-    capNote.hidden = state.materials.length < MAX_MATERIALS;
+    var maxMat = maxMaterials();
+    addBtn.disabled = state.materials.length >= maxMat;
+    capNote.textContent = 'Máximo de ' + maxMat + ' materiais' + (maxMat === 6 ? ' (Excalibur)' : '') + ' — além disso, não altera o custo.';
+    capNote.hidden = state.materials.length < maxMat;
   }
 
   function modsSum() {
@@ -2232,6 +2426,7 @@
     var discFactor = 1 - (desconto / 100);
     var duplo = !!state.artesao && state.artesaoModo !== 'simples';
     var possuidos = !!state.materiaisPossuidos;
+    var conserto = state.modo === 'conserto';
 
     var cheioPadrao = pde * sumMat;
     var usaFracaoFixa = state.tipoItem === 'armadura' && !!state.fracaoFixa;
@@ -2251,9 +2446,25 @@
       proprio = possuidos ? 0 : subtotal / divisor;
     }
 
+    // Modificação de munição: preço fixo por munição, fora do multiplicador do material.
+    // O Forjador paga metade (Trabalhador Itinerante) e o Artesão desconta, como no resto.
+    var proprioItem = proprio;
+    var modMun = null;
+    var mm = state.tipoItem === 'municao' ? MUNICAO_MODS[state.municaoMod] : null;
+    if (mm && !conserto) {
+      var qtdMun = Math.max(1, Math.floor(num(state.municaoModQtd, 5)));
+      var cheioMod = mm[1] * Math.ceil(qtdMun / mm[2]);
+      var pagoMod = possuidos ? 0 : cheioMod * discFactor / divisor;
+      modMun = { nome: mm[0], custo: mm[1], por: mm[2], qtd: qtdMun, cheio: cheioMod, pago: pagoMod, existente: !!state.municaoModExistente };
+      proprio = modMun.existente ? pagoMod : proprio + pagoMod;
+    }
+
+    var consertoCheio = cheio / 2;
     var lucroValor = 0;
     var final = proprio;
-    if (state.modo === 'vendido') {
+    if (conserto) {
+      final = proprio / 2;
+    } else if (state.modo === 'vendido') {
       lucroValor = proprio * (lucro / 100);
       final = proprio + lucroValor;
     }
@@ -2262,7 +2473,8 @@
       pde: pde, sumMat: sumMat, desconto: desconto, divisor: divisor, lucro: lucro,
       pdeDesc: pdeDesc, matDesc: matDesc, subtotal: subtotal, proprio: proprio,
       cheio: cheio, cheioPadrao: cheioPadrao, usaFracaoFixa: usaFracaoFixa,
-      lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota, duplo: duplo
+      lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota,
+      duplo: duplo, modMun: modMun, proprioItem: proprioItem, conserto: conserto, consertoCheio: consertoCheio
     };
   }
 
@@ -2299,7 +2511,7 @@
     right.className = 'c-right';
     var valueEl = document.createElement('span');
     valueEl.className = 'c-value';
-    valueEl.textContent = fmt(value) + ' po';
+    valueEl.textContent = fmtMoeda(value);
     right.appendChild(valueEl);
     if (delta) {
       var deltaEl = document.createElement('span');
@@ -2327,7 +2539,7 @@
     Array.prototype.forEach.call(rows, function (r) { max = Math.max(max, parseFloat(r.dataset.value) || 0); });
     Array.prototype.forEach.call(rows, function (r) {
       var v = parseFloat(r.dataset.value) || 0;
-      r.querySelector('.c-bar span').style.width = (max > 0 ? Math.max(1.5, v / max * 100) : 0) + '%';
+      r.querySelector('.c-bar span').style.transform = 'scaleX(' + (max > 0 ? Math.max(0.015, v / max) : 0) + ')';
     });
   }
 
@@ -2364,14 +2576,14 @@
 
       var pro = document.createElement('div');
       pro.className = 'v-row v-pro';
-      pro.innerHTML = '<span class="v-icon">+</span><span class="v-text"></span>';
+      pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
       pro.querySelector('.v-text').textContent = m.vantagens || 'Sem propriedade mecânica adicional além do bônus.';
       item.appendChild(pro);
 
       if (m.desvantagens) {
         var con = document.createElement('div');
         con.className = 'v-row v-con';
-        con.innerHTML = '<span class="v-icon">−</span><span class="v-text"></span>';
+        con.innerHTML = '<span class="v-icon">' + ICON_MINUS + '</span><span class="v-text"></span>';
         con.querySelector('.v-text').textContent = m.desvantagens;
         item.appendChild(con);
       }
@@ -2411,6 +2623,14 @@
     var tipo = state.tipoItem;
     var totalHoras, noteText;
 
+    if (tipo === 'municao' && state.municaoModExistente && MUNICAO_MODS[state.municaoMod]) {
+      productionNoteEl.textContent = 'Só a modificação de munições que você já tem: o Guia não define um tempo para isso (p. 160). Combine com o Mestre.';
+      resultTimeEl.textContent = '—';
+      resultTimeSubEl.textContent = 'sem tempo no Guia';
+      lastForjadorHoras = null;
+      return;
+    }
+
     if (tipo === 'polvora') {
       totalHoras = 8;
       noteText = 'Pólvora: 8h de base, rende 1d4 unidades (p. 171).';
@@ -2428,10 +2648,15 @@
         return;
       }
 
-      totalHoras = tiers.reduce(function (sum, t) { return sum + tabela[t]; }, 0);
-      var tiersDesc = tiers.map(function (t) { return 'Tier ' + t + ' = ' + tabela[t] + 'h'; }).join(' + ');
-      noteText = (tipo === 'municao' ? 'Munições, rendem 2d4 unidades (p. 171). ' : '') +
-        'Tempo somado por material, regra de Junção de Materiais (' + tiersDesc + ' = ' + fmt(totalHoras) + 'h de base).';
+      if (state.excalibur && tipo === 'arma') {
+        totalHoras = TIER_HOURS.S;
+        noteText = 'Excalibur (20º nível, p. 128): forjar do zero leva o mesmo tempo de uma arma de um único material Tier S (' + totalHoras + 'h de base), mesmo combinando até 6 materiais.';
+      } else {
+        totalHoras = tiers.reduce(function (sum, t) { return sum + tabela[t]; }, 0);
+        var tiersDesc = tiers.map(function (t) { return 'Tier ' + t + ' = ' + tabela[t] + 'h'; }).join(' + ');
+        noteText = (tipo === 'municao' ? 'Munições, rendem 2d4 unidades (p. 171). ' : '') +
+          'Tempo somado por material, regra de Junção de Materiais (' + tiersDesc + ' = ' + fmt(totalHoras) + 'h de base).';
+      }
 
       if (tipo === 'arma' || tipo === 'armadura') {
         if (state.peso === 'leve') {
@@ -2445,7 +2670,16 @@
     }
 
     var timeFactor = 1;
+    var temMaterialRaro = tipo !== 'polvora' && state.materials.some(function (m) {
+      return m.tier === 'B' || m.tier === 'A' || m.tier === 'S';
+    });
+    var usaAuto = !!(state.criacoesAutomaticas && temMaterialRaro);
+    if (usaAuto) {
+      timeFactor *= 0.5;
+      noteText += ' Criações Automáticas (p. 130): ÷2 com ajuda da ferramenta automatizada em material raro.';
+    }
     if (state.pressa) { timeFactor *= 0.5; noteText += ' Pressa: ÷2, item sai com −1 no modificador.'; }
+    if (tipo === 'municao' && MUNICAO_MODS[state.municaoMod]) noteText += ' A modificação de munição não muda o tempo (o Guia não define um tempo para ela).';
     productionNoteEl.textContent = noteText;
 
     var forjadorHoras = totalHoras * 2 / 3 * timeFactor;
@@ -2459,15 +2693,16 @@
     resultTimeSubEl.textContent = '· ' + diasForjador + (diasForjador === 1 ? ' dia' : ' dias');
 
     productionRowsEl.appendChild(pRow(
-      'Forjador (sozinho)',
-      'Trabalhador Itinerante: 2/3 do tempo · ' + FORJADOR_HORAS_DIA + 'h de trabalho/dia',
-      fmtTempo(forjadorHoras, FORJADOR_HORAS_DIA)
+      'Forjador (sozinho)' + (usaAuto ? ' + Criações Automáticas' : ''),
+      'Trabalhador Itinerante: 2/3 do tempo' + (usaAuto ? ' · ÷2 ferramenta automatizada' : '') + ' · ' + FORJADOR_HORAS_DIA + 'h de trabalho/dia',
+      fmtTempo(forjadorHoras, FORJADOR_HORAS_DIA),
+      usaAuto
     ));
     productionRowsEl.appendChild(pRow(
       'Forjador (com ajudante)',
       'metade do tempo do Forjador · ' + FORJADOR_HORAS_DIA + 'h/dia',
       fmtTempo(forjadorAjudanteHoras, FORJADOR_HORAS_DIA),
-      true
+      !usaAuto
     ));
     productionRowsEl.appendChild(pRow(
       'Outra classe, não-Forjador (sozinho)',
@@ -2519,7 +2754,12 @@
     var nS = mats.filter(function (m) { return m.tier === 'S'; }).length;
     var head = document.createElement('div');
     var warn = [];
-    if (nS >= 2) {
+    if (state.excalibur && state.tipoItem === 'arma') {
+      var nNaoS = mats.length - nS;
+      head.innerHTML = '<strong>Excalibur (Artefato, 20º nível, p. 128)</strong> — até 4 materiais Tier S + 2 materiais Tier A ou mais baixo, com todos os efeitos dos 6 materiais.';
+      if (nS > 4) warn.push('A Excalibur comporta no máximo 4 materiais Tier S (você selecionou ' + nS + ').');
+      if (nNaoS > 2) warn.push('Além dos até 4 materiais Tier S, a Excalibur comporta no máximo 2 materiais de Tier A ou mais baixo (você selecionou ' + nNaoS + ').');
+    } else if (nS >= 2) {
       head.innerHTML = '<strong>Equipamento Tier SS</strong> — dois materiais Tier S.';
       if (mats.length > 2) warn.push('Os materiais além dos dois Tier S só trazem propriedades “Geral” ou “Material Vivo”.');
       if (nS > 2) warn.push('Um terceiro Tier S não soma propriedades exclusivas.');
@@ -2532,7 +2772,8 @@
     warn.forEach(function (w) {
       var d = document.createElement('div');
       d.className = 'jw';
-      d.textContent = '⚠ ' + w;
+      d.innerHTML = ICON_WARN;
+      d.appendChild(document.createTextNode(w));
       juncaoInfo.appendChild(d);
     });
   }
@@ -2552,7 +2793,8 @@
   }
 
   function renderResultProps() {
-    var props = itemProps();
+    var soModMun = state.tipoItem === 'municao' && state.municaoModExistente && !!MUNICAO_MODS[state.municaoMod];
+    var props = state.tipoItem === 'polvora' || soModMun ? null : itemProps();
     resultPropsEl.innerHTML = '';
     if (!props) {
       resultPropsEl.hidden = true;
@@ -2701,30 +2943,41 @@
     var raridadeAtual = state.magicoRaridade;
     var t = RARIDADE_TABELA[raridadeAtual];
     var elegivelEspecialista = raridadeAtual === 'comum' || raridadeAtual === 'incomum';
+    var excaliburLendario = !!(state.excalibur && state.tipoItem === 'arma' && raridadeAtual === 'lendario');
 
     var custoEnc = num(state.magicoCustoBase, 0);
     if (state.peritoItensMagicos) custoEnc /= 2;
     var horas = num(state.magicoTempoBase, 0);
     var notasTempo = [];
-    if (state.especialistaItensMagicos && elegivelEspecialista) { horas /= 4; notasTempo.push('÷4 Especialista'); }
-    if (state.criacoesAutomaticas) { horas /= 2; notasTempo.push('÷2 Criações Automáticas'); }
-    if (state.versadoItensMagicos) { horas /= 2; notasTempo.push('÷2 Versado'); }
-    if (state.desencantado) { horas /= 2; notasTempo.push('÷2 item desencantado'); }
+    if (excaliburLendario) {
+      horas = 0;
+      notasTempo.push('Excalibur: +0h para o efeito lendário (p. 128)');
+    } else {
+      if (state.especialistaItensMagicos && elegivelEspecialista) { horas /= 4; notasTempo.push('÷4 Especialista'); }
+      if (state.criacoesAutomaticas) { horas /= 2; notasTempo.push('÷2 Criações Automáticas'); }
+      if (state.versadoItensMagicos) { horas /= 2; notasTempo.push('÷2 Versado'); }
+      if (state.desencantado) { horas /= 2; notasTempo.push('÷2 item desencantado'); }
+    }
 
     magicoResultEl.innerHTML = '';
     var custoItem = state.encantarExistente ? 0 : calculate().final;
-    magicoResultEl.appendChild(mgLine('Custo do encantamento', fmt(custoEnc) + ' po' + (state.peritoItensMagicos ? ' (÷2 Perito)' : '')));
+    magicoResultEl.appendChild(mgLine('Custo do encantamento', fmtMoeda(custoEnc) + (state.peritoItensMagicos ? ' (÷2 Perito)' : '')));
     magicoResultEl.appendChild(mgLine(
       state.encantarExistente ? 'Item base (já possui)' : 'Fabricação do item (resultado acima)',
-      fmt(custoItem) + ' po'
+      fmtMoeda(custoItem)
     ));
-    magicoResultEl.appendChild(mgLine('Custo total', fmt(custoEnc + custoItem) + ' po'));
-    magicoResultEl.appendChild(mgLine('Tempo do encantamento', fmtHorasDias(horas) + (notasTempo.length ? ' · ' + notasTempo.join(', ') : '')));
+    magicoResultEl.appendChild(mgLine('Custo total', fmtMoeda(custoEnc + custoItem)));
+    magicoResultEl.appendChild(mgLine('Tempo do encantamento', (excaliburLendario ? '0h' : fmtHorasDias(horas)) + (notasTempo.length ? ' · ' + notasTempo.join(', ') : '')));
     if (!state.encantarExistente) {
-      magicoResultEl.appendChild(mgLine('Tempo de fabricação do item', 'veja Tempo de Produção, somado ao do encantamento'));
+      if (lastForjadorHoras != null) {
+        var totalMagHoras = lastForjadorHoras + horas;
+        magicoResultEl.appendChild(mgLine('Tempo total (fabricação + encantamento)', fmt(totalMagHoras) + 'h (' + Math.ceil(totalMagHoras / FORJADOR_HORAS_DIA) + ' dias de ' + FORJADOR_HORAS_DIA + 'h do Forjador)'));
+      } else {
+        magicoResultEl.appendChild(mgLine('Tempo de fabricação do item', 'veja Tempo de Produção, somado ao do encantamento'));
+      }
     }
 
-    if (t && t.material) {
+    if (t && t.material && !excaliburLendario) {
       var temMaterial = state.materials.some(function (m) { return t.material.indexOf(m.materialId) !== -1; });
       if (!temMaterial) {
         magicoResultEl.appendChild(mgWarning('Raridade ' + magicoRaridadeSelect.options[magicoRaridadeSelect.selectedIndex].text +
@@ -2732,7 +2985,7 @@
       }
     }
 
-    // --- Transmutação (Forjador Alquimista 3º / 7º / 13º) ---
+    // --- Transmutação (Forjador Alquimista 3º / 7º / 13º, p. 130–131) ---
     var nivel = parseInt(state.transmutNivel, 10) || 3;
     var origem = materialById(state.transmutOrigemId);
     var destino = materialById(state.transmutDestinoId);
@@ -2758,15 +3011,15 @@
       return;
     }
 
-    var pde = num(state.pde, 0);
+    var pde = baseValue().valor;
     var custoTransmut = 0.5 * pde * destino.mult;
-    var complexa = rOrigem >= 2 || rDestino >= 2 || origem.categoria !== destino.categoria;
+    var complexa = rOrigem >= 2 || rDestino >= 2;
     var tempoTransmut = complexa ? 8 : 1 + (rDestino - rOrigem);
-    var notaCusto = 'metade do PDE × material de destino';
+    var notaCusto = 'metade do valor do equipamento no material de destino';
     if (nivel >= 13 && rDestino <= 2 && rOrigem <= 2) { custoTransmut = 0; notaCusto = 'Transmutação Suprema: grátis até Tier B'; }
 
-    transmutResultEl.appendChild(mgLine('Custo (' + notaCusto + ')', fmt(custoTransmut) + ' po'));
-    transmutResultEl.appendChild(mgLine('Tempo de trabalho', fmt(tempoTransmut) + 'h' + (complexa ? ' (transmutação complexa: 8h por material)' : '')));
+    transmutResultEl.appendChild(mgLine('Custo (' + notaCusto + ')', fmtMoeda(custoTransmut)));
+    transmutResultEl.appendChild(mgLine('Tempo de trabalho', fmt(tempoTransmut) + 'h' + (complexa ? ' (Tier B ou A: 8h por material transformado)' : ' (Tier D/C: 1h + 1h por tier acima)')));
   }
 
   function deltaPct(value, cheio) {
@@ -2781,33 +3034,42 @@
   var cbValue = document.getElementById('cb-value');
   var cbLabel = document.getElementById('cb-label');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Digitar num campo muda o resultado a cada tecla: aí o número troca na hora, sem contagem
+  var lastTypedAt = 0;
+  document.addEventListener('input', function (e) {
+    if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) lastTypedAt = performance.now();
+  }, true);
+  function modeLabel() {
+    if (state.modo === 'vendido') return 'Preço de venda';
+    if (state.modo === 'conserto') return 'Custo para consertar';
+    return 'Custo para forjar';
+  }
   function animateResult(target) {
-    cbLabel.textContent = state.modo === 'vendido' ? 'Preço de venda' : 'Custo para forjar';
-    if (shownValue === null || reduceMotion || !isFinite(target)) {
+    cbLabel.textContent = modeLabel();
+    if (shownValue === null || reduceMotion || !isFinite(target) || performance.now() - lastTypedAt < 400) {
       shownValue = target;
-      resultEl.textContent = fmt(target);
-      cbValue.textContent = fmt(target);
+      resultEl.innerHTML = htmlMoeda(target);
+      cbValue.textContent = fmtMoeda(target);
       return;
     }
     if (Math.abs(target - shownValue) < 0.005) return;
-    var from = shownValue, t0 = performance.now(), dur = 520, id = ++animId;
+    var from = shownValue, t0 = performance.now(), dur = 280, id = ++animId;
     shownValue = target;
-    resultCard.classList.remove('pulse');
-    void resultCard.offsetWidth;
-    resultCard.classList.add('pulse');
     (function tick(now) {
       if (id !== animId) return;
       var k = Math.min(1, (now - t0) / dur);
       var e = 1 - Math.pow(1 - k, 3);
       var v = from + (target - from) * e;
-      resultEl.textContent = fmt(v);
-      cbValue.textContent = fmt(v);
+      resultEl.innerHTML = htmlMoeda(v);
+      cbValue.textContent = fmtMoeda(v);
       if (k < 1) requestAnimationFrame(tick);
     })(t0);
   }
 
   // Conta incompleta: diz o que falta em vez de mostrar uma coluna de zeros
   function emptyReason(c) {
+    if (c.modMun && c.modMun.existente) return '';
+    if (state.tipoItem === 'municao' && state.municaoModExistente) return 'Escolha uma modificação de munição para calcular o custo.';
     if (!(c.pde > 0)) {
       if (state.modExistente) return 'Marque pelo menos uma modificação para calcular o custo.';
       return 'Informe o PDE ou escolha um equipamento do Guia para calcular o custo.';
@@ -2816,21 +3078,26 @@
     return '';
   }
 
+  var pdeMoedaEl = document.getElementById('pde-moeda');
   function update() {
     var c = calculate();
+    // PDE com centavos (munições, por exemplo): mostra em moedas do D&D
+    var pdeNum = num(state.pde, 0);
+    pdeMoedaEl.hidden = !(pdeNum > 0 && Math.round(pdeNum * 100) % 100 !== 0);
+    pdeMoedaEl.textContent = fmt(pdeNum) + ' po = ' + fmtMoeda(pdeNum);
     var vazio = emptyReason(c);
     resultCard.classList.toggle('is-empty', !!vazio);
     resultEmptyEl.hidden = !vazio;
     resultEmptyEl.textContent = vazio;
-    compareSection.hidden = !!vazio;
+    compareSection.hidden = !!vazio || !!(c.modMun && c.modMun.existente);
     document.getElementById('cost-bar').classList.toggle('is-empty', !!vazio);
 
     animateResult(c.final);
-    resultLabel.textContent = state.modo === 'vendido' ? 'Preço de venda' : 'Custo para forjar';
+    resultLabel.textContent = modeLabel();
 
     breakdownEl.innerHTML = '';
     if (c.baseNota) {
-      breakdownEl.appendChild(bRow('Valor-base (' + c.baseNota + ')', fmt(c.pde) + ' po'));
+      breakdownEl.appendChild(bRow('Valor-base (' + c.baseNota + ')', fmtMoeda(c.pde)));
     }
     if (state.melhorDosMelhores && state.tipoItem !== 'polvora') {
       breakdownEl.appendChild(bRow('O Melhor dos Melhores: dobro de materiais', 'Σ × 2 = ' + fmt(c.sumMat)));
@@ -2838,51 +3105,73 @@
     if (c.usaFracaoFixa) {
       breakdownEl.appendChild(bRow(
         'Preço cheio, fração fixa (' + fmt((1 - ARMADURA_FRACAO) * 100) + '% fixo + ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ materiais)',
-        fmt(c.cheio) + ' po'
+        fmtMoeda(c.cheio)
       ));
-      breakdownEl.appendChild(bRow('Preço padrão do livro, para referência (PDE × Σ materiais)', fmt(c.cheioPadrao) + ' po'));
+      breakdownEl.appendChild(bRow('Preço padrão do livro, para referência (PDE × Σ materiais)', fmtMoeda(c.cheioPadrao)));
       if (c.possuidos) {
         breakdownEl.appendChild(bRow('Materiais já em posse (Trabalhador Itinerante)', 'grátis — só o tempo'));
       } else {
-        breakdownEl.appendChild(bRow('Com desconto (' + fmt(c.cheio) + ' × ' + (100 - c.desconto) + '%' + (c.duplo ? ' × ' + (100 - c.desconto) + '%' : '') + ')', fmt(c.subtotal) + ' po'));
-        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmt(c.proprio) + ' po'));
+        breakdownEl.appendChild(bRow('Com desconto (' + fmtMoeda(c.cheio) + ' × ' + (100 - c.desconto) + '%' + (c.duplo ? ' × ' + (100 - c.desconto) + '%' : '') + ')', fmtMoeda(c.subtotal)));
+        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmtMoeda(c.proprioItem)));
       }
     } else {
-      breakdownEl.appendChild(bRow('Preço cheio, sem desconto (PDE × Σ materiais)', fmt(c.cheio) + ' po'));
+      breakdownEl.appendChild(bRow('Preço cheio, sem desconto (PDE × Σ materiais)', fmtMoeda(c.cheio)));
       if (c.possuidos) {
         breakdownEl.appendChild(bRow('Materiais já em posse (Trabalhador Itinerante)', 'grátis — só o tempo'));
       } else {
-        breakdownEl.appendChild(bRow('PDE com desconto (' + fmt(c.pde) + ' × ' + (100 - c.desconto) + '%)', fmt(c.pdeDesc) + ' po'));
+        breakdownEl.appendChild(bRow('PDE com desconto (' + fmtMoeda(c.pde) + ' × ' + (100 - c.desconto) + '%)', fmtMoeda(c.pdeDesc)));
         breakdownEl.appendChild(bRow(c.duplo
           ? 'Σ materiais com desconto (' + fmt(c.sumMat) + ' × ' + (100 - c.desconto) + '%)'
           : 'Σ materiais (desconto só uma vez)', fmt(c.matDesc)));
-        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmt(c.proprio) + ' po'));
+        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmtMoeda(c.proprioItem)));
       }
     }
-    if (state.modo === 'vendido') {
-      breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(c.lucro) + '%)', '+' + fmt(c.lucroValor) + ' po'));
+    if (c.modMun) {
+      if (c.modMun.existente) breakdownEl.innerHTML = '';
+      var porTxt = c.modMun.por === 1 ? fmtMoeda(c.modMun.custo) + ' cada' : fmtMoeda(c.modMun.custo) + ' a cada ' + c.modMun.por;
+      breakdownEl.appendChild(bRow(c.modMun.nome + ' (' + porTxt + ', ' + c.modMun.qtd + (c.modMun.qtd === 1 ? ' munição)' : ' munições)'), fmtMoeda(c.modMun.cheio)));
+      breakdownEl.appendChild(bRow(c.possuidos
+        ? 'Modificação com materiais em posse'
+        : 'Modificação' + (c.desconto ? ' com desconto (' + (100 - c.desconto) + '%)' : '') + ' ÷ ' + fmt(c.divisor) + ' de mão de obra',
+        c.possuidos ? 'grátis' : (c.modMun.existente ? '' : '+') + fmtMoeda(c.modMun.pago)));
     }
-    breakdownEl.appendChild(bRow(state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmt(c.final) + ' po', true));
+    if (c.conserto && !c.possuidos) {
+      breakdownEl.appendChild(bRow('Conserto de item quebrado (metade do valor do item, p. 173)', '÷ 2'));
+    }
+    if (state.modo === 'vendido') {
+      breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(c.lucro) + '%)', '+' + fmtMoeda(c.lucroValor)));
+    }
+    breakdownEl.appendChild(bRow(c.conserto ? 'Custo do conserto' : state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(c.final), true));
 
     var formulaStr = c.possuidos
       ? 'materiais em posse — grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
-      : c.usaFracaoFixa
-        ? '(PDE × ' + fmt((1 - ARMADURA_FRACAO) * 100) + '% + PDE × ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ multiplicadores) × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
-        : (c.duplo ? '(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor' : '(PDE × desconto) × Σ multiplicadores ÷ divisor') + (state.modo === 'vendido' ? ' + lucro' : '');
+      : c.conserto
+        ? (c.usaFracaoFixa
+          ? '((PDE × ' + fmt((1 - ARMADURA_FRACAO) * 100) + '% + PDE × ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ multiplicadores) × desconto ÷ 2 conserto) ÷ divisor'
+          : ((c.duplo ? '(PDE × desconto) × (Σ multiplicadores × desconto)' : '(PDE × desconto) × Σ multiplicadores') + ' ÷ 2 conserto ÷ divisor'))
+        : c.modMun && c.modMun.existente
+          ? 'modificação × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
+          : c.usaFracaoFixa
+            ? '(PDE × ' + fmt((1 - ARMADURA_FRACAO) * 100) + '% + PDE × ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ multiplicadores) × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
+            : (c.duplo ? '(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor' : '(PDE × desconto) × Σ multiplicadores ÷ divisor') + (c.modMun ? ' + modificação' : '') + (state.modo === 'vendido' ? ' + lucro' : '');
     formulaNote.textContent = formulaStr;
 
-    var comMaterial = c.cheio / 2;
+    var baseRef = c.conserto ? c.consertoCheio : c.cheio;
+    var comMaterial = baseRef / 2;
     compareRowsEl.innerHTML = '';
-    if (c.usaFracaoFixa) {
+    if (c.conserto) {
+      compareRowsEl.appendChild(cRow('Valor cheio do item novo', 'PDE × Σ materiais', c.cheio, ''));
+      compareRowsEl.appendChild(cRow('Ferreiro comum (conserto de item quebrado, p. 173)', '(PDE × Σ materiais) ÷ 2', c.consertoCheio, ''));
+    } else if (c.usaFracaoFixa) {
       compareRowsEl.appendChild(cRow('Preço padrão do livro (sem fração fixa)', 'PDE × Σ materiais', c.cheioPadrao, ''));
       compareRowsEl.appendChild(cRow('Ferreiro comum (com fração fixa)', fmt((1 - ARMADURA_FRACAO) * 100) + '% fixo + ' + fmt(ARMADURA_FRACAO * 100) + '% × material', c.cheio, deltaPct(c.cheio, c.cheioPadrao)));
     } else {
       compareRowsEl.appendChild(cRow('Ferreiro comum', 'PDE × Σ materiais', c.cheio, ''));
     }
-    if (state.artesao) {
+    if (state.artesao && !c.conserto) {
       compareRowsEl.appendChild(cRow('Ferreiro, levando o material pronto', '(PDE × Σ materiais) ÷ 2', comMaterial, deltaPct(comMaterial, c.cheio)));
     }
-    var seuLabel = (state.modo === 'vendido' ? 'Seu preço de venda' : 'Seu custo') +
+    var seuLabel = (c.conserto ? 'Seu custo para consertar' : state.modo === 'vendido' ? 'Seu preço de venda' : 'Seu custo') +
       (c.possuidos
         ? ' (materiais em posse)'
         : ' (Forjador' + (state.artesao ? ' + Artesão' : ', sem Artesão') + ')');
@@ -2890,7 +3179,7 @@
       seuLabel,
       formulaStr,
       c.final,
-      deltaPct(c.final, c.cheio),
+      deltaPct(c.final, baseRef),
       true
     ));
     scaleCompareBars();
@@ -2907,7 +3196,7 @@
     clearTimeout(liveTimer);
     liveTimer = setTimeout(function () {
       if (vazio) { liveEl.textContent = vazio; return; }
-      liveEl.textContent = resultLabel.textContent + ': ' + fmt(c.final) + ' po' +
+      liveEl.textContent = resultLabel.textContent + ': ' + fmtMoeda(c.final) +
         (temTempo ? '. Tempo do Forjador: ' + resultTimeEl.textContent + resultTimeSubEl.textContent.replace('·', ',') : '');
     }, 700);
   }
@@ -2923,7 +3212,7 @@
     var e = null;
     EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) e = x; });
     if (!e) { equipInfo.hidden = true; return; }
-    var partes = [e.grupo, 'PDE ' + fmt(e.pde) + ' po'];
+    var partes = [e.grupo, 'PDE ' + fmtMoeda(e.pde)];
     if (e.peso) partes.push(e.peso === 'leve' ? 'Leve (−8h)' : 'Pesado (+8h)');
     if (e.maestria) partes.push('Maestria: ' + e.maestria);
     equipInfo.textContent = partes.join(' · ');
@@ -2937,7 +3226,7 @@
     input.type = 'text';
     input.className = 'mat-search';
     input.autocomplete = 'off';
-    input.placeholder = 'Buscar arma, armadura, escudo, munição ou pólvora';
+    input.placeholder = 'Buscar arma, armadura, escudo, foco, instrumento ou munição';
     input.setAttribute('aria-labelledby', 'equip-label');
     input.value = state.equipNome || '';
     var dropdown = document.createElement('div');
@@ -2977,7 +3266,7 @@
         n.textContent = e.nome;
         var p = document.createElement('span');
         p.className = 'mo-mult';
-        p.textContent = fmt(e.pde) + ' po';
+        p.textContent = fmtMoeda(e.pde);
         opt.appendChild(n);
         opt.appendChild(p);
         opt.addEventListener('mousedown', function (ev) { ev.preventDefault(); pick(e); });
@@ -2999,6 +3288,52 @@
   }
 
   // --- Modificações ---
+  var ammoModsList = document.getElementById('ammo-mods-list');
+  var ammoModsTotal = document.getElementById('ammo-mods-total');
+  var ammoQtdInput = document.getElementById('ammo-qtd');
+  function renderAmmoMods() {
+    ammoModsList.innerHTML = '';
+    [['Nenhuma', 0, 1, 'Munição comum, sem modificação.']].concat(MUNICAO_MODS).forEach(function (m, k) {
+      var i = k - 1;
+      var lab = document.createElement('label');
+      lab.className = 'mod-item';
+      var rb = document.createElement('input');
+      rb.type = 'radio';
+      rb.name = 'ammo-mod';
+      rb.checked = (state.municaoMod === undefined ? -1 : state.municaoMod) === i;
+      rb.addEventListener('change', function () {
+        state.municaoMod = i;
+        saveState();
+        updateAmmoModsTotal();
+        update();
+      });
+      var name = document.createElement('span');
+      name.className = 'mod-name';
+      name.textContent = m[0];
+      var cost = document.createElement('span');
+      cost.className = 'mod-cost';
+      cost.textContent = i < 0 ? '' : fmtMoeda(m[1]) + (m[2] === 1 ? ' cada' : ' a cada ' + m[2]);
+      var desc = document.createElement('span');
+      desc.className = 'mod-desc';
+      desc.textContent = m[3];
+      lab.appendChild(rb);
+      lab.appendChild(name);
+      lab.appendChild(cost);
+      lab.appendChild(desc);
+      ammoModsList.appendChild(lab);
+    });
+    updateAmmoModsTotal();
+  }
+  function updateAmmoModsTotal() {
+    var mm = MUNICAO_MODS[state.municaoMod];
+    ammoModsTotal.textContent = mm ? mm[0].replace('Munição ', '') : '';
+  }
+  ammoQtdInput.addEventListener('input', function () {
+    state.municaoModQtd = ammoQtdInput.value;
+    saveState();
+    update();
+  });
+
   function renderMods() {
     modsList.innerHTML = '';
     MODS_DB.forEach(function (m, i) {
@@ -3080,12 +3415,111 @@
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
     lucroWrap.hidden = mode !== 'vendido';
+    consertoNoteEl.hidden = mode !== 'conserto';
     saveState();
     update();
   }
 
+  // Como funciona a criação de cada tipo (Guia de Xyleff Sualky, p. 124-125 e 170-172)
+  var COMO_FUNCIONA = {
+    arma: {
+      titulo: 'Criar uma arma',
+      itens: [
+        'Custo: PDE × a soma dos multiplicadores dos materiais. O Forjador paga só a matéria-prima, metade do preço; se já tem os materiais, não paga nada.',
+        'Modificações somam ao PDE antes de multiplicar pelo material (p. 163).',
+        'Tempo por tier: C/D 24h, B 48h, A 96h, S 192h. Com mais de um material, o tempo de cada um se soma.',
+        'Leve tira 8h, Pesada soma 8h. O Forjador trabalha em 2/3 do tempo e aguenta 12h por dia.',
+        'Até 4 materiais: dureza e bônus ficam com o maior. Pressa corta o tempo pela metade e dá −1.',
+        'Obra-Prima com 20 natural (17–20 com Prodígio): +1, até +3.'
+      ],
+      fonte: 'p. 124–125, 163 e 170–172'
+    },
+    armadura: {
+      titulo: 'Criar uma armadura ou escudo',
+      itens: [
+        'Mesmas regras da arma: PDE × materiais, o Forjador paga metade, e o tempo por tier se soma entre os materiais.',
+        'Armadura leve tira 8h; armadura pesada soma 8h. Escudos entram aqui.',
+        'O modificador do material vira bônus (ou penalidade) de CA.',
+        'Fração fixa é uma regra opcional desta calculadora, fora do Guia: só 20% do PDE é multiplicado pelo material, para suavizar armaduras caras.'
+      ],
+      fonte: 'p. 169–172'
+    },
+    municao: {
+      titulo: 'Criar munições',
+      itens: [
+        'Você paga o preço de 4 munições (× materiais) e rola 2d4 para saber quantas fez.',
+        'Tempo por tier: C/D 1h, B 6h, A 12h, S 24h.',
+        'Leve e Pesado não se aplicam.',
+        'Modificações de munição (p. 160): uma por munição, com preço por munição transformada, fora do multiplicador do material. As de arma não valem.',
+        'O modificador do material vale só no dano.'
+      ],
+      fonte: 'p. 160, 169 e 171'
+    },
+    polvora: {
+      titulo: 'Criar pólvora',
+      itens: [
+        'Você paga o preço de 2 pólvoras e rola 1d4 para saber quantas fez.',
+        'Leva 8 horas, qualquer que seja o tipo de pólvora.',
+        'Materiais, peso, modificações e Obra-Prima não se aplicam: o custo vem só do preço da pólvora.'
+      ],
+      fonte: 'p. 159 e 171'
+    }
+  };
+  var tipoInfoBtn = document.getElementById('tipo-info-btn');
+  var tipoInfoEl = document.getElementById('tipo-info');
+  function renderTipoInfo() {
+    var info = COMO_FUNCIONA[state.tipoItem] || COMO_FUNCIONA.arma;
+    tipoInfoEl.innerHTML = '';
+    var h = document.createElement('h3'); h.id = 'tipo-info-titulo'; h.textContent = info.titulo;
+    var ul = document.createElement('ul');
+    info.itens.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+    var src = document.createElement('p'); src.className = 'src'; src.textContent = 'Guia de Xyleff Sualky, ' + info.fonte + '.';
+    tipoInfoEl.appendChild(h); tipoInfoEl.appendChild(ul); tipoInfoEl.appendChild(src);
+  }
+  tipoInfoBtn.addEventListener('click', function () {
+    var abrir = tipoInfoEl.hidden;
+    if (abrir) renderTipoInfo();
+    tipoInfoEl.hidden = !abrir;
+    tipoInfoBtn.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+  });
+
+  // Bloqueios: o que não vale para o tipo some, com uma frase dizendo por quê
+  var materialsWrap = document.getElementById('materials-wrap');
+  var matLockNote = document.getElementById('mat-lock-note');
+  var modsLockNote = document.getElementById('mods-lock-note');
+  var modsDetailsEl = document.getElementById('mods-details');
+  var obraSetting = document.getElementById('obra-switch').closest('.setting');
+  var melhorSetting = document.getElementById('melhor-switch').closest('.setting');
+  var vantagensSection = document.getElementById('vantagens-section');
+  var addMaterialBtn = document.getElementById('add-material');
+  var autoForjSetting = document.getElementById('auto-forj-setting');
+  function applyTipoLocks(tipo) {
+    var polvora = tipo === 'polvora', municao = tipo === 'municao';
+    var maxMat = maxMaterials();
+    materialsWrap.hidden = polvora;
+    addMaterialBtn.hidden = polvora;
+    matLockNote.hidden = !polvora;
+    document.getElementById('mat-sub').textContent = polvora ? 'Não se aplica à pólvora' : 'Até ' + maxMat + ' materiais; cada um multiplica o PDE';
+    matLockNote.textContent = polvora ? 'A pólvora não usa materiais: o custo é o preço de 2 pólvoras, e ela rende 1d4 em 8 horas (p. 171).' : '';
+    modsDetailsEl.hidden = polvora || municao;
+    modsLockNote.hidden = !municao;
+    document.getElementById('ammo-mods-details').hidden = !municao;
+    modsLockNote.textContent = municao ? 'As modificações de arma não valem para munição; use a lista própria de munições logo abaixo (p. 160).' : '';
+    obraSetting.hidden = polvora;
+    melhorSetting.hidden = polvora;
+    autoForjSetting.hidden = polvora;
+    excaliburSetting.hidden = tipo !== 'arma';
+    vantagensSection.hidden = polvora;
+    if (!tipoInfoEl.hidden) renderTipoInfo();
+  }
+
   function setTipo(tipo) {
     state.tipoItem = tipo;
+    if (tipo !== 'arma' && state.materials.length > 4) {
+      state.materials = state.materials.slice(0, 4);
+    }
+    applyTipoLocks(tipo);
+    renderMaterials();
     tipoBtns.forEach(function (btn) {
       var active = btn.dataset.tipo === tipo;
       btn.classList.toggle('active', active);
@@ -3174,6 +3608,34 @@
     update();
   });
 
+  function syncAutoSwitches() {
+    var val = state.criacoesAutomaticas ? 'true' : 'false';
+    autoForjSwitch.setAttribute('aria-checked', val);
+    autoMagicSwitch.setAttribute('aria-checked', val);
+  }
+  function toggleCriacoesAutomaticas() {
+    state.criacoesAutomaticas = !state.criacoesAutomaticas;
+    syncAutoSwitches();
+    saveState();
+    update();
+    updateMagicos();
+  }
+  autoForjSwitch.addEventListener('click', toggleCriacoesAutomaticas);
+  autoMagicSwitch.addEventListener('click', toggleCriacoesAutomaticas);
+
+  excaliburSwitch.addEventListener('click', function () {
+    state.excalibur = !state.excalibur;
+    excaliburSwitch.setAttribute('aria-checked', state.excalibur ? 'true' : 'false');
+    if (!state.excalibur && state.materials.length > 4) {
+      state.materials = state.materials.slice(0, 4);
+    }
+    applyTipoLocks(state.tipoItem);
+    saveState();
+    renderMaterials();
+    update();
+    updateMagicos();
+  });
+
   SIMPLE_SWITCHES.forEach(function (sw) {
     var el = document.getElementById(sw[0]);
     el.addEventListener('click', function () {
@@ -3198,7 +3660,7 @@
   });
 
   addBtn.addEventListener('click', function () {
-    if (state.materials.length >= MAX_MATERIALS) return;
+    if (state.materials.length >= maxMaterials()) return;
     state.materials.push({ materialId: '', name: '', mult: '', tier: '' });
     newRowIndex = state.materials.length - 1;
     saveState();
@@ -3217,7 +3679,29 @@
   var toastEl = document.getElementById('toast');
   var toastMsg = document.getElementById('toast-msg');
   var toastAction = document.getElementById('toast-undo');
-  var toastFn = null, toastTimer = 0;
+  var toastFn = null, toastTimer = 0, toastEndAt = 0, toastRem = 0, toastHover = false;
+  function scheduleToast(ms) {
+    clearTimeout(toastTimer);
+    toastRem = ms;
+    toastEndAt = performance.now() + ms;
+    if (!toastHover && !document.hidden) {
+      toastTimer = setTimeout(hideToast, ms);
+    }
+  }
+  function pauseToast() {
+    if (toastEl.hidden || !toastEl.classList.contains('show')) return;
+    clearTimeout(toastTimer);
+    toastRem = Math.max(800, toastEndAt - performance.now());
+  }
+  function resumeToast() {
+    if (toastEl.hidden || !toastEl.classList.contains('show') || toastHover || document.hidden) return;
+    scheduleToast(toastRem || 2500);
+  }
+  toastEl.addEventListener('mouseenter', function () { toastHover = true; pauseToast(); });
+  toastEl.addEventListener('mouseleave', function () { toastHover = false; resumeToast(); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) pauseToast(); else resumeToast();
+  });
   function hideToast() {
     clearTimeout(toastTimer);
     toastEl.classList.remove('show');
@@ -3233,7 +3717,7 @@
     toastEl.hidden = false;
     void toastEl.offsetWidth;
     toastEl.classList.add('show');
-    toastTimer = setTimeout(hideToast, ms || (actionFn ? 8000 : 3000));
+    scheduleToast(ms || (actionFn ? 8000 : 3000));
   }
   toastAction.addEventListener('click', function () {
     var fn = toastFn;
@@ -3268,8 +3752,9 @@
   function resumoAtual() {
     var c = calculate();
     if (emptyReason(c)) return null;
-    var props = itemProps();
-    var mats = state.tipoItem === 'polvora' ? [] : state.materials
+    var soModMun = !!(c.modMun && c.modMun.existente);
+    var props = soModMun ? null : itemProps();
+    var mats = state.tipoItem === 'polvora' || soModMun ? [] : state.materials
       .filter(function (m) { return m.name || m.materialId; })
       .map(function (m) {
         var db = m.materialId ? materialById(m.materialId) : null;
@@ -3279,25 +3764,30 @@
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       nome: state.equipNome || (TIPO_NOME[state.tipoItem] || 'Item') + ' (PDE ' + fmt(num(state.pde, 0)) + ')',
       mats: mats,
-      mods: (state.mods || []).map(function (i) { return MODS_DB[i] && MODS_DB[i][0]; }).filter(Boolean),
+      mods: state.tipoItem === 'municao'
+        ? (MUNICAO_MODS[state.municaoMod] ? [MUNICAO_MODS[state.municaoMod][0] + ' (' + Math.max(1, Math.floor(num(state.municaoModQtd, 5))) + ')'] : [])
+        : (state.mods || []).map(function (i) { return MODS_DB[i] && MODS_DB[i][0]; }).filter(Boolean),
       valor: c.final,
       venda: state.modo === 'vendido',
+      conserto: state.modo === 'conserto',
+      excalibur: !!(state.excalibur && state.tipoItem === 'arma'),
       horas: lastForjadorHoras,
       dureza: props && state.mostrarDureza ? props.dureza : null,
       mod: props ? props.mod : null,
       obra: !!(props && props.obra),
       pressa: !!state.pressa,
-      rende: state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
+      rende: soModMun || state.modo === 'conserto' ? '' : state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
     };
   }
 
   function linhaTitulo(r) {
-    return r.nome + (r.mats.length ? ' — ' + r.mats.join(' + ') : '');
+    return r.nome + (r.excalibur ? ' [Excalibur]' : '') + (r.mats.length ? ' — ' + r.mats.join(' + ') : '');
   }
 
   function textoResumo(r) {
-    var linhas = ['⚒️ ' + linhaTitulo(r)];
-    linhas.push((r.venda ? 'Preço de venda: ' : 'Custo para forjar: ') + fmt(r.valor) + ' po' + (r.rende ? ' (rende ' + r.rende + ')' : ''));
+    var linhas = [linhaTitulo(r)];
+    var prefixo = r.conserto ? 'Custo para consertar: ' : r.venda ? 'Preço de venda: ' : 'Custo para forjar: ';
+    linhas.push(prefixo + fmtMoeda(r.valor) + (r.rende ? ' (rende ' + r.rende + ')' : ''));
     if (r.horas != null) linhas.push('Tempo do Forjador: ' + fmtHorasForjador(r.horas));
     var props = [];
     var tags = [r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : ''].filter(Boolean);
@@ -3370,7 +3860,7 @@
       nome.textContent = r.nome + (r.mod != null ? ' ' + fmtMod(r.mod) : '');
       var sub = document.createElement('span');
       sub.className = 'li-sub';
-      sub.textContent = [r.mats.join(' + '), r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : '', r.mods.length ? r.mods.length + (r.mods.length === 1 ? ' modificação' : ' modificações') : '', r.rende ? 'rende ' + r.rende : '']
+      sub.textContent = [r.excalibur ? 'Excalibur' : '', r.mats.join(' + '), r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : '', r.mods.length ? r.mods.length + (r.mods.length === 1 ? ' modificação' : ' modificações') : '', r.rende ? 'rende ' + r.rende : '']
         .filter(Boolean).join(' · ');
       info.appendChild(nome);
       if (sub.textContent) info.appendChild(sub);
@@ -3378,7 +3868,7 @@
       nums.className = 'li-nums';
       var v = document.createElement('span');
       v.className = 'li-valor';
-      v.textContent = fmt(r.valor) + ' po' + (r.venda ? ' (venda)' : '');
+      v.textContent = fmtMoeda(r.valor) + (r.conserto ? ' (conserto)' : r.venda ? ' (venda)' : '');
       var h = document.createElement('span');
       h.className = 'li-horas';
       h.textContent = r.horas != null ? fmt(r.horas) + 'h' : 'tempo: Mestre';
@@ -3387,7 +3877,7 @@
       var rm = document.createElement('button');
       rm.type = 'button';
       rm.className = 'btn-remove';
-      rm.textContent = '×';
+      rm.innerHTML = ICON_X;
       rm.setAttribute('aria-label', 'Tirar ' + r.nome + ' da lista');
       rm.addEventListener('click', function () {
         var removido = lista.splice(idx, 1)[0];
@@ -3411,7 +3901,7 @@
     tl.textContent = 'Total · ' + lista.length + (lista.length === 1 ? ' item' : ' itens');
     var tv = document.createElement('span');
     tv.className = 'lt-valor';
-    tv.textContent = fmt(t.po) + ' po';
+    tv.textContent = fmtMoeda(t.po);
     var th = document.createElement('span');
     th.className = 'lt-horas';
     th.textContent = (t.horas ? fmtHorasForjador(t.horas) + ' de forja, um item após o outro' : '') +
@@ -3428,7 +3918,7 @@
     salvarLista();
     renderLista();
     var t = totaisLista();
-    showToast('Adicionado. Lista: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmt(t.po) + ' po.', 'Ver lista', function () {
+    showToast('Adicionado. Lista: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) + '.', 'Ver lista', function () {
       listaSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     }, 5000);
   });
@@ -3437,7 +3927,7 @@
     if (!lista.length) return;
     var t = totaisLista();
     var partes = lista.map(textoResumo);
-    partes.push('Total: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmt(t.po) + ' po' +
+    partes.push('Total: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) +
       (t.horas ? ' · ' + fmtHorasForjador(t.horas) : ''));
     copiarTexto(partes.join('\n\n') + '\n' + SITE_URL).then(function () {
       showToast('Lista copiada.');
@@ -3473,6 +3963,8 @@
     magicoRaridadeSelect.value = state.magicoRaridade || 'comum';
     peritoSwitch.setAttribute('aria-checked', state.peritoItensMagicos ? 'true' : 'false');
     especialistaSwitch.setAttribute('aria-checked', state.especialistaItensMagicos ? 'true' : 'false');
+    syncAutoSwitches();
+    excaliburSwitch.setAttribute('aria-checked', state.excalibur ? 'true' : 'false');
     SIMPLE_SWITCHES.forEach(function (sw) {
       document.getElementById(sw[0]).setAttribute('aria-checked', state[sw[1]] ? 'true' : 'false');
     });
@@ -3481,6 +3973,8 @@
     equipWrap.appendChild(buildEquipCombo());
     showEquipInfo();
     renderMods();
+    renderAmmoMods();
+    ammoQtdInput.value = state.municaoModQtd == null ? 5 : state.municaoModQtd;
     syncMagicoRaridade();
     renderMaterials();
     setMode(state.modo || 'proprio');
@@ -3512,6 +4006,36 @@
     }, { threshold: 0.15 }).observe(resultCard);
   }
 
+})();
+
+// Campos numéricos: valor negativo ou inválido ganha aviso junto ao campo
+(function () {
+  'use strict';
+  function check(input) {
+    var min = parseFloat(input.getAttribute('min'));
+    var raw = input.value, v = parseFloat(raw);
+    var bad = raw !== '' && (!isFinite(v) || (isFinite(min) && v < min));
+    input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    var group = input.parentElement && input.parentElement.classList.contains('field-group') ? input.parentElement : null;
+    if (!group) { input.title = bad ? (min > 0 ? 'Use um número a partir de ' + min + '.' : 'O valor não pode ser negativo.') : ''; return; }
+    var msg = group.querySelector('.field-error');
+    if (bad && !msg) {
+      msg = document.createElement('p');
+      msg.className = 'field-error';
+      msg.id = (input.id || 'campo') + '-erro';
+      msg.textContent = min > 0 ? 'Use um número a partir de ' + min + '.' : 'O valor não pode ser negativo.';
+      group.appendChild(msg);
+      input.setAttribute('aria-describedby', ((input.getAttribute('aria-describedby') || '') + ' ' + msg.id).trim());
+    } else if (!bad && msg) {
+      var ids = (input.getAttribute('aria-describedby') || '').split(/\s+/).filter(function (x) { return x && x !== msg.id; });
+      msg.remove();
+      if (ids.length) input.setAttribute('aria-describedby', ids.join(' ')); else input.removeAttribute('aria-describedby');
+    }
+  }
+  document.addEventListener('input', function (e) {
+    if (e.target && e.target.matches && e.target.matches('input[type="number"][min]')) check(e.target);
+  }, true);
+  Array.prototype.forEach.call(document.querySelectorAll('input[type="number"][min]'), check);
 })();
 
 // Grupos de opção (botões segmentados): setas do teclado e um só ponto de foco por grupo
