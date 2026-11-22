@@ -191,7 +191,7 @@
       rgba(0,0,0,.5) max(0px, calc(var(--wave-r) - 105px)),
       rgba(0,0,0,.58) max(0px, calc(var(--wave-r) - 60px)),
       transparent var(--wave-r));
-    animation: theme-wave 3000ms cubic-bezier(.37, 0, .63, 1) forwards;
+    animation: theme-wave 1150ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
   @keyframes theme-wave { from { --wave-r: 0px; } to { --wave-r: var(--wave-max); } }
 
@@ -482,6 +482,7 @@
 
   /* Controle segmentado */
   .segmented {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
     background: var(--surface-2);
@@ -493,7 +494,21 @@
   }
   .segmented.seg-3 { grid-template-columns: repeat(3, 1fr); }
   .segmented.seg-4 { grid-template-columns: repeat(4, 1fr); }
+  .seg-pill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 4px;
+    background: var(--accent);
+    box-shadow: 0 1px 2px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.22);
+    pointer-events: none;
+    z-index: 0;
+    transition: transform 220ms var(--ease-out), width 220ms var(--ease-out), height 220ms var(--ease-out);
+  }
+  .seg-pill.no-anim { transition: none !important; }
   .seg-btn {
+    position: relative;
+    z-index: 1;
     min-height: 34px;
     font-family: var(--font-body);
     font-weight: 600;
@@ -510,6 +525,10 @@
     background: var(--accent);
     color: var(--accent-ink);
     box-shadow: 0 1px 2px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.22);
+  }
+  .segmented.has-pill .seg-btn.active {
+    background: transparent;
+    box-shadow: none;
   }
   .seg-btn:active, .btn-ghost:active:not(:disabled), .btn-remove:active:not(:disabled),
   .theme-btn:active, .toast-btn:active, .btn-reset:active, .switch:active { transform: scale(0.97); }
@@ -824,7 +843,7 @@
     background: color-mix(in srgb, var(--tier-s) 12%, var(--surface-2));
   }
   .prop-chip.chip-excalibur .p-v { color: var(--tier-s); }
-  .prop-chip.chip-obra::after {
+  .prop-chip.chip-obra::after, .prop-chip.chip-excalibur::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -833,6 +852,14 @@
     transform: translateX(-120%);
     animation: shine 1.2s ease-out .2s 1 both;
   }
+  .prop-chip.chip-excalibur::after {
+    background: linear-gradient(110deg, transparent 30%, color-mix(in srgb, var(--tier-s) 45%, rgba(255,255,255,.45)) 50%, transparent 70%);
+  }
+  .prop-chip.is-entering {
+    animation: chip-in 200ms var(--ease-out) both;
+  }
+  .prop-chip.is-entering:nth-child(2) { animation-delay: 40ms; }
+  .prop-chip.is-entering:nth-child(3) { animation-delay: 75ms; }
 
   .kpi-main { display: flex; flex-direction: column; gap: var(--sp-1); }
 
@@ -855,6 +882,17 @@
     background: color-mix(in srgb, var(--accent) 12%, transparent);
     border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
     color: var(--text);
+  }
+  .btn-ghost.is-morphing {
+    filter: blur(1.8px);
+    opacity: .72;
+  }
+  .btn-ghost {
+    transition: border-color var(--t-fast), background-color var(--t-fast), color var(--t-fast), filter 130ms ease, opacity 130ms ease, transform var(--t-press) var(--ease-out);
+  }
+  .btn-ghost.is-confirmed {
+    border-color: color-mix(in srgb, var(--good) 55%, var(--border));
+    color: var(--good);
   }
 
   /* Lista da sessão */
@@ -1260,20 +1298,39 @@
   /* =========================================================
      13. Animações
      ========================================================= */
-  @keyframes slide-in { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+  @keyframes slide-in { from { opacity: 0; transform: translateX(-10px) scale(0.98); } to { opacity: 1; transform: none; } }
+  @keyframes row-out { to { opacity: 0; transform: translateX(-10px) scale(0.97); } }
   @keyframes drop { from { opacity: 0; transform: translateY(-4px) scale(0.98); } to { opacity: 1; transform: none; } }
+  @keyframes chip-in { from { opacity: 0; transform: translateY(4px) scale(0.96); } to { opacity: 1; transform: none; } }
+  @keyframes item-stagger { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
   @keyframes shine { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
   @keyframes forge-breathe { 0%, 100% { opacity: .5; } 50% { opacity: .85; } }
 
+  .material-row.is-leaving, .lista-item.is-leaving {
+    pointer-events: none;
+    animation: row-out 155ms var(--ease-out) forwards;
+  }
+  .v-item.is-entering {
+    animation: item-stagger 220ms var(--ease-out) both;
+  }
+  .v-item.is-entering:nth-child(2) { animation-delay: 45ms; }
+  .v-item.is-entering:nth-child(3) { animation-delay: 85ms; }
+  .v-item.is-entering:nth-child(4) { animation-delay: 115ms; }
+  .v-item.is-entering:nth-child(5) { animation-delay: 140ms; }
+  .v-item.is-entering:nth-child(6) { animation-delay: 160ms; }
+
   @media (prefers-reduced-motion: reduce) {
     /* entradas viram fade, sem deslocamento */
-    .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]), .tipo-info:not([hidden]) { animation-name: fade-in; }
+    .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]), .tipo-info:not([hidden]),
+    .prop-chip.is-entering, .v-item.is-entering { animation-name: fade-in; }
+    .material-row.is-leaving, .lista-item.is-leaving { animation: none; }
     /* efeitos decorativos param */
-    .prop-chip.chip-obra::after, .forja-on .forge-glow { animation: none; }
+    .prop-chip.chip-obra::after, .prop-chip.chip-excalibur::after, .forja-on .forge-glow { animation: none; }
     /* nada se move: só cor e opacidade mudam */
-    .switch .knob, .theme-btn svg, .c-bar span, .mods-summary::before, .magicos-summary::before, .explain > summary::before {
+    .switch .knob, .theme-btn svg, .c-bar span, .mods-summary::before, .magicos-summary::before, .explain > summary::before, .seg-pill {
       transition-property: opacity, background-color, color, border-color;
     }
+    .btn-ghost.is-morphing { filter: none; }
     .seg-btn:active, .btn-ghost:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .btn-info:active, .btn-reset:active, .mods-summary:active, .magicos-summary:active, .explain > summary:active, .switch:active, .cost-bar:active { transform: none; }
     .theme-btn svg { transform: none !important; }
     .toast, .toast.show { transform: translate(-50%, 0); }
@@ -2506,11 +2563,17 @@
       removeBtn.setAttribute('aria-label', 'Remover material ' + (idx + 1));
       removeBtn.disabled = state.materials.length <= 1;
       removeBtn.addEventListener('click', function () {
-        state.materials.splice(idx, 1);
-        newRowIndex = -1;
-        saveState();
-        renderMaterials();
-        update();
+        if (row.classList.contains('is-leaving')) return;
+        function doRemove() {
+          state.materials.splice(idx, 1);
+          newRowIndex = -1;
+          saveState();
+          renderMaterials();
+          update();
+        }
+        if (reduceMotion) { doRemove(); return; }
+        row.classList.add('is-leaving');
+        setTimeout(doRemove, 145);
       });
 
       topLine.appendChild(combo);
@@ -2674,6 +2737,7 @@
     });
   }
 
+  var lastVantKey = '';
   function renderVantagens() {
     vantagensRowsEl.innerHTML = '';
     var known = state.materials
@@ -2681,6 +2745,7 @@
       .filter(Boolean);
 
     if (!known.length) {
+      lastVantKey = '';
       var empty = document.createElement('p');
       empty.className = 'v-empty';
       empty.textContent = 'Selecione materiais da lista (em vez de "Personalizado") para ver as vantagens e desvantagens de cada um.';
@@ -2688,9 +2753,13 @@
       return;
     }
 
+    var vantKey = known.map(function (m) { return m.id; }).join(',') + '|' + state.mostrarDureza;
+    var animateIn = lastVantKey !== '' && vantKey !== lastVantKey;
+    lastVantKey = vantKey;
+
     known.forEach(function (m) {
       var item = document.createElement('div');
-      item.className = 'v-item';
+      item.className = 'v-item' + (animateIn ? ' is-entering' : '');
 
       var head = document.createElement('div');
       head.className = 'v-head';
@@ -2930,27 +2999,38 @@
     return chip;
   }
 
+  var lastPropKey = '';
   function renderResultProps() {
     var soModMun = state.tipoItem === 'municao' && state.municaoModExistente && !!MUNICAO_MODS[state.municaoMod];
     var props = state.tipoItem === 'polvora' || soModMun ? null : itemProps();
     resultPropsEl.innerHTML = '';
     if (!props) {
+      lastPropKey = '';
       resultPropsEl.hidden = true;
       return;
     }
+    var exc = !!(state.excalibur && state.tipoItem === 'arma');
+    var propKey = [props.dureza, props.mod, props.obra, state.pressa, state.mostrarDureza, exc].join('|');
+    var animateIn = lastPropKey !== '' && propKey !== lastPropKey;
+    lastPropKey = propKey;
+
     resultPropsEl.hidden = false;
     if (state.mostrarDureza) {
-      resultPropsEl.appendChild(propChip('Dureza', props.dureza));
+      var durChip = propChip('Dureza', props.dureza);
+      if (animateIn) durChip.classList.add('is-entering');
+      resultPropsEl.appendChild(durChip);
     }
     var tags = [];
     if (props.obra) tags.push('Obra-Prima');
     if (state.pressa) tags.push('Pressa');
     var modChip = propChip('Modificador' + (tags.length ? ' (' + tags.join(', ') + ')' : ''), (props.mod > 0 ? '+' : '') + props.mod);
     if (props.obra) modChip.classList.add('chip-obra');
+    if (animateIn) modChip.classList.add('is-entering');
     resultPropsEl.appendChild(modChip);
-    if (state.excalibur && state.tipoItem === 'arma') {
+    if (exc) {
       var excChip = propChip('Artefato', 'Excalibur');
       excChip.classList.add('chip-excalibur');
+      if (animateIn) excChip.classList.add('is-entering');
       resultPropsEl.appendChild(excChip);
     }
   }
@@ -3959,10 +4039,33 @@
     });
   }
 
-  document.getElementById('copy-btn').addEventListener('click', function () {
+  var ICON_CHECK = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  function morphBtn(btn, confirmedHtml) {
+    if (!btn) return;
+    if (!btn._origHtml) btn._origHtml = btn.innerHTML;
+    clearTimeout(btn._morphTimer);
+    clearTimeout(btn._revertTimer);
+    btn.classList.add('is-morphing');
+    btn._morphTimer = setTimeout(function () {
+      btn.innerHTML = confirmedHtml;
+      btn.classList.remove('is-morphing');
+      btn.classList.add('is-confirmed');
+    }, 95);
+    btn._revertTimer = setTimeout(function () {
+      btn.classList.add('is-morphing');
+      setTimeout(function () {
+        btn.innerHTML = btn._origHtml;
+        btn.classList.remove('is-morphing', 'is-confirmed');
+      }, 95);
+    }, 1500);
+  }
+
+  var copyBtnEl = document.getElementById('copy-btn');
+  copyBtnEl.addEventListener('click', function () {
     var r = resumoAtual();
     if (!r) return;
     copiarTexto(textoResumo(r) + '\n' + SITE_URL).then(function () {
+      morphBtn(copyBtnEl, ICON_CHECK + ' Copiado');
       showToast('Resultado copiado. É só colar no chat da mesa.');
     }, function () {
       showToast('Não consegui copiar automaticamente neste navegador.');
@@ -4023,14 +4126,20 @@
       rm.innerHTML = ICON_X;
       rm.setAttribute('aria-label', 'Tirar ' + r.nome + ' da lista');
       rm.addEventListener('click', function () {
-        var removido = lista.splice(idx, 1)[0];
-        salvarLista();
-        renderLista();
-        showToast(removido.nome + ' saiu da lista.', 'Desfazer', function () {
-          lista.splice(Math.min(idx, lista.length), 0, removido);
+        if (li.classList.contains('is-leaving')) return;
+        function doRemoveItem() {
+          var removido = lista.splice(idx, 1)[0];
           salvarLista();
           renderLista();
-        });
+          showToast(removido.nome + ' saiu da lista.', 'Desfazer', function () {
+            lista.splice(Math.min(idx, lista.length), 0, removido);
+            salvarLista();
+            renderLista();
+          });
+        }
+        if (reduceMotion) { doRemoveItem(); return; }
+        li.classList.add('is-leaving');
+        setTimeout(doRemoveItem, 145);
       });
       li.appendChild(info);
       li.appendChild(nums);
@@ -4054,25 +4163,29 @@
     if (th.textContent) listaTotalEl.appendChild(th);
   }
 
-  document.getElementById('add-lista-btn').addEventListener('click', function () {
+  var addListaBtnEl = document.getElementById('add-lista-btn');
+  addListaBtnEl.addEventListener('click', function () {
     var r = resumoAtual();
     if (!r) return;
     lista.push(r);
     salvarLista();
     renderLista();
+    morphBtn(addListaBtnEl, ICON_CHECK + ' Adicionado');
     var t = totaisLista();
     showToast('Adicionado. Lista: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) + '.', 'Ver lista', function () {
       listaSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     }, 5000);
   });
 
-  document.getElementById('lista-copy-btn').addEventListener('click', function () {
+  var listaCopyBtnEl = document.getElementById('lista-copy-btn');
+  listaCopyBtnEl.addEventListener('click', function () {
     if (!lista.length) return;
     var t = totaisLista();
     var partes = lista.map(textoResumo);
     partes.push('Total: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) +
       (t.horas ? ' · ' + fmtHorasForjador(t.horas) : ''));
     copiarTexto(partes.join('\n\n') + '\n' + SITE_URL).then(function () {
+      morphBtn(listaCopyBtnEl, ICON_CHECK + ' Copiada');
       showToast('Lista copiada.');
     }, function () {
       showToast('Não consegui copiar automaticamente neste navegador.');
@@ -4181,16 +4294,50 @@
   Array.prototype.forEach.call(document.querySelectorAll('input[type="number"][min]'), check);
 })();
 
-// Grupos de opção (botões segmentados): setas do teclado e um só ponto de foco por grupo
+// Grupos de opção (botões segmentados): setas do teclado, indicador deslizante e um só ponto de foco por grupo
+// + abertura/fechamento suave de gavetas <details> via Web Animations API
 (function () {
   'use strict';
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var groups = document.querySelectorAll('.segmented[role="radiogroup"]');
+  var pillUpdaters = [];
+
   Array.prototype.forEach.call(groups, function (group) {
     var btns = Array.prototype.slice.call(group.querySelectorAll('[role="radio"]'));
+    var pill = document.createElement('span');
+    pill.className = 'seg-pill no-anim';
+    pill.setAttribute('aria-hidden', 'true');
+    group.insertBefore(pill, group.firstChild);
+    group.classList.add('has-pill');
+    var skipNextAnim = true;
+
+    function updatePill(instant) {
+      var checked = btns.filter(function (b) { return b.getAttribute('aria-checked') === 'true'; })[0] || btns[0];
+      if (!checked || !checked.offsetWidth) {
+        skipNextAnim = true;
+        return;
+      }
+      if (instant || skipNextAnim || reduce) {
+        pill.classList.add('no-anim');
+      } else {
+        pill.classList.remove('no-anim');
+      }
+      pill.style.width = checked.offsetWidth + 'px';
+      pill.style.height = checked.offsetHeight + 'px';
+      pill.style.transform = 'translate3d(' + checked.offsetLeft + 'px,' + checked.offsetTop + 'px,0)';
+      if (instant || skipNextAnim || reduce) {
+        void pill.offsetWidth;
+        pill.classList.remove('no-anim');
+      }
+      skipNextAnim = false;
+    }
+
     function syncTabs() {
       var checked = btns.filter(function (b) { return b.getAttribute('aria-checked') === 'true'; })[0] || btns[0];
       btns.forEach(function (b) { b.tabIndex = b === checked ? 0 : -1; });
+      updatePill(false);
     }
+
     group.addEventListener('keydown', function (ev) {
       var i = btns.indexOf(document.activeElement);
       if (i < 0) return;
@@ -4201,11 +4348,60 @@
       else if (ev.key === 'End') next = btns[btns.length - 1];
       if (!next) return;
       ev.preventDefault();
+      // Ações por teclado não animam (regra do emil-design-eng)
+      skipNextAnim = true;
       next.click();
       next.focus();
     });
+
     new MutationObserver(syncTabs).observe(group, { subtree: true, attributes: true, attributeFilter: ['aria-checked'] });
     syncTabs();
+    pillUpdaters.push(function () { updatePill(true); });
+  });
+
+  window.addEventListener('resize', function () {
+    pillUpdaters.forEach(function (fn) { fn(); });
+  });
+  // Quando blocos ocultos (como #artesao-modo-wrap ou #peso-wrap) aparecem, reposiciona a pílula sem animar
+  new MutationObserver(function () {
+    pillUpdaters.forEach(function (fn) { fn(); });
+  }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
+
+  // Gavetas <details>: expansão e fechamento interrompíveis com tempos assimétricos (abre em 220ms, fecha em 165ms)
+  Array.prototype.forEach.call(document.querySelectorAll('details.mods, details.magicos, details.explain'), function (det) {
+    var sum = det.querySelector('summary');
+    if (!sum || !det.animate) return;
+    var anim = null;
+    sum.addEventListener('click', function (ev) {
+      if (reduce) return;
+      ev.preventDefault();
+      if (anim) { anim.cancel(); anim = null; }
+      var startH = det.offsetHeight;
+      var isClosing = det.open;
+      if (!isClosing) det.open = true;
+      var endH = isClosing ? sum.offsetHeight : det.scrollHeight;
+      det.style.overflow = 'hidden';
+      anim = det.animate(
+        [
+          { height: startH + 'px', opacity: isClosing ? 1 : 0.92 },
+          { height: endH + 'px', opacity: 1 }
+        ],
+        {
+          duration: isClosing ? 165 : 220,
+          easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
+        }
+      );
+      anim.onfinish = function () {
+        if (isClosing) det.open = false;
+        det.style.height = '';
+        det.style.overflow = '';
+        anim = null;
+      };
+      anim.oncancel = function () {
+        det.style.height = '';
+        det.style.overflow = '';
+      };
+    });
   });
 })();
 </script>
