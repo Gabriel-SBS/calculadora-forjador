@@ -1290,6 +1290,27 @@
         </div>
       </details>
       <p class="locked-note" id="mods-lock-note" hidden></p>
+      <details class="mods" id="ammo-mods-details" hidden>
+        <summary class="mods-summary">Modificação de munição <span class="mods-total" id="ammo-mods-total"></span></summary>
+        <div class="mods-body">
+          <p class="magicos-note">Cada munição só pode ter uma modificação. O preço é por munição transformada e não passa pelo multiplicador do material (p. 160).</p>
+          <div class="mods-list" id="ammo-mods-list" role="radiogroup" aria-label="Modificação de munição"></div>
+          <div class="field-group">
+            <label for="ammo-qtd">Quantas munições transformar</label>
+            <input id="ammo-qtd" type="number" min="1" step="1" inputmode="numeric" />
+            <p class="field-hint">A criação rende 2d4 munições; a média é 5.</p>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Só transformar munições que já tenho</span>
+              <span class="t-sub">Paga só a modificação, sem criar munições novas</span>
+            </div>
+            <button type="button" class="switch" id="ammo-existente-switch" role="switch" aria-checked="false" aria-label="Só transformar munições que já tenho">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+      </details>
     </section>
 
     <section class="form-section" aria-labelledby="sec-forj">
@@ -1856,6 +1877,18 @@
     ['Montaria', 10, 'Armas corpo a corpo de duas mãos', 'Ganha a propriedade Montaria.']
   ];
 
+  // Modificações de munição (Guia, p. 160): [nome, custo em po, a cada N munições, efeito]
+  var MUNICAO_MODS = [
+    ['Munição Assobiante', 5, 5, 'Entalhada como um apito: som estridente ao disparar; pode imitar sons de animais.'],
+    ['Munição de Franco Atirador', 5, 1, 'Sem desvantagem em ataques contra criaturas na sua distância longa.'],
+    ['Munição Lua Crescente', 5, 1, 'No Ataque Desestabilizante, não causa metade do dano.'],
+    ['Munição Chisel', 10, 1, 'Todo acerto força um teste de durabilidade da armadura do alvo.'],
+    ['Munição Incendiária', 10, 1, 'Gaiola com pano em óleo ou resina; acesa antes do disparo, incendeia alvos inflamáveis.'],
+    ['Munição de Impacto', 10, 1, 'Causa dano de concussão; pode trocar a maestria da arma para Topple.'],
+    ['Munição Dilaceradora', 10, 1, 'Causa dano cortante; pode trocar a maestria da arma para Bleed.'],
+    ['Munição Inquebrável', 25, 1, 'Não quebra: você recupera todas depois do combate.']
+  ];
+
   // Encantamento (p. 169): horas de trabalho, custo e material mínimo exigido
   var RARIDADE_TABELA = {
     comum: { horas: 24, custo: 50, material: null },
@@ -1927,6 +1960,9 @@
     peso: '',
     mods: [],
     modExistente: false,
+    municaoMod: -1,
+    municaoModQtd: 5,
+    municaoModExistente: false,
     obraPrima: false,
     melhorDosMelhores: false,
     artesao: true,
@@ -2076,6 +2112,7 @@
   // Switches simples: id do botão → chave do estado → o que recalcular
   var SIMPLE_SWITCHES = [
     ['existente-switch', 'modExistente', 'main'],
+    ['ammo-existente-switch', 'municaoModExistente', 'main'],
     ['obra-switch', 'obraPrima', 'main'],
     ['melhor-switch', 'melhorDosMelhores', 'main'],
     ['encantar-switch', 'encantarExistente', 'magic'],
@@ -2362,6 +2399,19 @@
       proprio = possuidos ? 0 : subtotal / divisor;
     }
 
+    // Modificação de munição: preço fixo por munição, fora do multiplicador do material.
+    // O Forjador paga metade (Trabalhador Itinerante) e o Artesão desconta, como no resto.
+    var proprioItem = proprio;
+    var modMun = null;
+    var mm = state.tipoItem === 'municao' ? MUNICAO_MODS[state.municaoMod] : null;
+    if (mm) {
+      var qtdMun = Math.max(1, Math.floor(num(state.municaoModQtd, 5)));
+      var cheioMod = mm[1] * Math.ceil(qtdMun / mm[2]);
+      var pagoMod = possuidos ? 0 : cheioMod * discFactor / divisor;
+      modMun = { nome: mm[0], custo: mm[1], por: mm[2], qtd: qtdMun, cheio: cheioMod, pago: pagoMod, existente: !!state.municaoModExistente };
+      proprio = modMun.existente ? pagoMod : proprio + pagoMod;
+    }
+
     var lucroValor = 0;
     var final = proprio;
     if (state.modo === 'vendido') {
@@ -2373,7 +2423,7 @@
       pde: pde, sumMat: sumMat, desconto: desconto, divisor: divisor, lucro: lucro,
       pdeDesc: pdeDesc, matDesc: matDesc, subtotal: subtotal, proprio: proprio,
       cheio: cheio, cheioPadrao: cheioPadrao, usaFracaoFixa: usaFracaoFixa,
-      lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota, duplo: duplo
+      lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota, duplo: duplo, modMun: modMun, proprioItem: proprioItem
     };
   }
 
@@ -2522,6 +2572,14 @@
     var tipo = state.tipoItem;
     var totalHoras, noteText;
 
+    if (tipo === 'municao' && state.municaoModExistente && MUNICAO_MODS[state.municaoMod]) {
+      productionNoteEl.textContent = 'Só a modificação de munições que você já tem: o Guia não define um tempo para isso (p. 160). Combine com o Mestre.';
+      resultTimeEl.textContent = '—';
+      resultTimeSubEl.textContent = 'sem tempo no Guia';
+      lastForjadorHoras = null;
+      return;
+    }
+
     if (tipo === 'polvora') {
       totalHoras = 8;
       noteText = 'Pólvora: 8h de base, rende 1d4 unidades (p. 171).';
@@ -2557,6 +2615,7 @@
 
     var timeFactor = 1;
     if (state.pressa) { timeFactor *= 0.5; noteText += ' Pressa: ÷2, item sai com −1 no modificador.'; }
+    if (tipo === 'municao' && MUNICAO_MODS[state.municaoMod]) noteText += ' A modificação de munição não muda o tempo (o Guia não define um tempo para ela).';
     productionNoteEl.textContent = noteText;
 
     var forjadorHoras = totalHoras * 2 / 3 * timeFactor;
@@ -2664,7 +2723,8 @@
   }
 
   function renderResultProps() {
-    var props = state.tipoItem === 'polvora' ? null : itemProps();
+    var soModMun = state.tipoItem === 'municao' && state.municaoModExistente && !!MUNICAO_MODS[state.municaoMod];
+    var props = state.tipoItem === 'polvora' || soModMun ? null : itemProps();
     resultPropsEl.innerHTML = '';
     if (!props) {
       resultPropsEl.hidden = true;
@@ -2922,6 +2982,8 @@
 
   // Conta incompleta: diz o que falta em vez de mostrar uma coluna de zeros
   function emptyReason(c) {
+    if (c.modMun && c.modMun.existente) return '';
+    if (state.tipoItem === 'municao' && state.municaoModExistente) return 'Escolha uma modificação de munição para calcular o custo.';
     if (!(c.pde > 0)) {
       if (state.modExistente) return 'Marque pelo menos uma modificação para calcular o custo.';
       return 'Informe o PDE ou escolha um equipamento do Guia para calcular o custo.';
@@ -2941,7 +3003,7 @@
     resultCard.classList.toggle('is-empty', !!vazio);
     resultEmptyEl.hidden = !vazio;
     resultEmptyEl.textContent = vazio;
-    compareSection.hidden = !!vazio;
+    compareSection.hidden = !!vazio || !!(c.modMun && c.modMun.existente);
     document.getElementById('cost-bar').classList.toggle('is-empty', !!vazio);
 
     animateResult(c.final);
@@ -2964,7 +3026,7 @@
         breakdownEl.appendChild(bRow('Materiais já em posse (Trabalhador Itinerante)', 'grátis — só o tempo'));
       } else {
         breakdownEl.appendChild(bRow('Com desconto (' + fmtMoeda(c.cheio) + ' × ' + (100 - c.desconto) + '%' + (c.duplo ? ' × ' + (100 - c.desconto) + '%' : '') + ')', fmtMoeda(c.subtotal)));
-        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmtMoeda(c.proprio)));
+        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmtMoeda(c.proprioItem)));
       }
     } else {
       breakdownEl.appendChild(bRow('Preço cheio, sem desconto (PDE × Σ materiais)', fmtMoeda(c.cheio)));
@@ -2975,8 +3037,17 @@
         breakdownEl.appendChild(bRow(c.duplo
           ? 'Σ materiais com desconto (' + fmt(c.sumMat) + ' × ' + (100 - c.desconto) + '%)'
           : 'Σ materiais (desconto só uma vez)', fmt(c.matDesc)));
-        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmtMoeda(c.proprio)));
+        breakdownEl.appendChild(bRow('Subtotal (÷ ' + fmt(c.divisor) + ' de mão de obra)', fmtMoeda(c.proprioItem)));
       }
+    }
+    if (c.modMun) {
+      if (c.modMun.existente) breakdownEl.innerHTML = '';
+      var porTxt = c.modMun.por === 1 ? fmtMoeda(c.modMun.custo) + ' cada' : fmtMoeda(c.modMun.custo) + ' a cada ' + c.modMun.por;
+      breakdownEl.appendChild(bRow(c.modMun.nome + ' (' + porTxt + ', ' + c.modMun.qtd + (c.modMun.qtd === 1 ? ' munição)' : ' munições)'), fmtMoeda(c.modMun.cheio)));
+      breakdownEl.appendChild(bRow(c.possuidos
+        ? 'Modificação com materiais em posse'
+        : 'Modificação' + (c.desconto ? ' com desconto (' + (100 - c.desconto) + '%)' : '') + ' ÷ ' + fmt(c.divisor) + ' de mão de obra',
+        c.possuidos ? 'grátis' : (c.modMun.existente ? '' : '+') + fmtMoeda(c.modMun.pago)));
     }
     if (state.modo === 'vendido') {
       breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(c.lucro) + '%)', '+' + fmtMoeda(c.lucroValor)));
@@ -2985,9 +3056,11 @@
 
     var formulaStr = c.possuidos
       ? 'materiais em posse — grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
-      : c.usaFracaoFixa
-        ? '(PDE × ' + fmt((1 - ARMADURA_FRACAO) * 100) + '% + PDE × ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ multiplicadores) × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
-        : (c.duplo ? '(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor' : '(PDE × desconto) × Σ multiplicadores ÷ divisor') + (state.modo === 'vendido' ? ' + lucro' : '');
+      : c.modMun && c.modMun.existente
+        ? 'modificação × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
+        : c.usaFracaoFixa
+          ? '(PDE × ' + fmt((1 - ARMADURA_FRACAO) * 100) + '% + PDE × ' + fmt(ARMADURA_FRACAO * 100) + '% × Σ multiplicadores) × desconto ÷ divisor' + (state.modo === 'vendido' ? ' + lucro' : '')
+          : (c.duplo ? '(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor' : '(PDE × desconto) × Σ multiplicadores ÷ divisor') + (c.modMun ? ' + modificação' : '') + (state.modo === 'vendido' ? ' + lucro' : '');
     formulaNote.textContent = formulaStr;
 
     var comMaterial = c.cheio / 2;
@@ -3118,6 +3191,52 @@
   }
 
   // --- Modificações ---
+  var ammoModsList = document.getElementById('ammo-mods-list');
+  var ammoModsTotal = document.getElementById('ammo-mods-total');
+  var ammoQtdInput = document.getElementById('ammo-qtd');
+  function renderAmmoMods() {
+    ammoModsList.innerHTML = '';
+    [['Nenhuma', 0, 1, 'Munição comum, sem modificação.']].concat(MUNICAO_MODS).forEach(function (m, k) {
+      var i = k - 1;
+      var lab = document.createElement('label');
+      lab.className = 'mod-item';
+      var rb = document.createElement('input');
+      rb.type = 'radio';
+      rb.name = 'ammo-mod';
+      rb.checked = (state.municaoMod === undefined ? -1 : state.municaoMod) === i;
+      rb.addEventListener('change', function () {
+        state.municaoMod = i;
+        saveState();
+        updateAmmoModsTotal();
+        update();
+      });
+      var name = document.createElement('span');
+      name.className = 'mod-name';
+      name.textContent = m[0];
+      var cost = document.createElement('span');
+      cost.className = 'mod-cost';
+      cost.textContent = i < 0 ? '' : fmtMoeda(m[1]) + (m[2] === 1 ? ' cada' : ' a cada ' + m[2]);
+      var desc = document.createElement('span');
+      desc.className = 'mod-desc';
+      desc.textContent = m[3];
+      lab.appendChild(rb);
+      lab.appendChild(name);
+      lab.appendChild(cost);
+      lab.appendChild(desc);
+      ammoModsList.appendChild(lab);
+    });
+    updateAmmoModsTotal();
+  }
+  function updateAmmoModsTotal() {
+    var mm = MUNICAO_MODS[state.municaoMod];
+    ammoModsTotal.textContent = mm ? mm[0].replace('Munição ', '') : '';
+  }
+  ammoQtdInput.addEventListener('input', function () {
+    state.municaoModQtd = ammoQtdInput.value;
+    saveState();
+    update();
+  });
+
   function renderMods() {
     modsList.innerHTML = '';
     MODS_DB.forEach(function (m, i) {
@@ -3233,7 +3352,7 @@
         'Você paga o preço de 4 munições (× materiais) e rola 2d4 para saber quantas fez.',
         'Tempo por tier: C/D 1h, B 6h, A 12h, S 24h.',
         'Leve e Pesado não se aplicam.',
-        'As modificações de arma não valem para munição; munições têm uma lista própria (p. 160), que a calculadora ainda não calcula.',
+        'Modificações de munição (p. 160): uma por munição, com preço por munição transformada, fora do multiplicador do material. As de arma não valem.',
         'O modificador do material vale só no dano.'
       ],
       fonte: 'p. 160, 169 e 171'
@@ -3284,7 +3403,8 @@
     matLockNote.textContent = polvora ? 'A pólvora não usa materiais: o custo é o preço de 2 pólvoras, e ela rende 1d4 em 8 horas (p. 171).' : '';
     modsDetailsEl.hidden = polvora || municao;
     modsLockNote.hidden = !municao;
-    modsLockNote.textContent = municao ? 'As modificações de arma não valem para munição. Munições têm uma lista própria (p. 160), que a calculadora ainda não calcula.' : '';
+    document.getElementById('ammo-mods-details').hidden = !municao;
+    modsLockNote.textContent = municao ? 'As modificações de arma não valem para munição; use a lista própria de munições logo abaixo (p. 160).' : '';
     obraSetting.hidden = polvora;
     melhorSetting.hidden = polvora;
     vantagensSection.hidden = polvora;
@@ -3476,8 +3596,9 @@
   function resumoAtual() {
     var c = calculate();
     if (emptyReason(c)) return null;
-    var props = itemProps();
-    var mats = state.tipoItem === 'polvora' ? [] : state.materials
+    var soModMun = !!(c.modMun && c.modMun.existente);
+    var props = soModMun ? null : itemProps();
+    var mats = state.tipoItem === 'polvora' || soModMun ? [] : state.materials
       .filter(function (m) { return m.name || m.materialId; })
       .map(function (m) {
         var db = m.materialId ? materialById(m.materialId) : null;
@@ -3487,7 +3608,9 @@
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       nome: state.equipNome || (TIPO_NOME[state.tipoItem] || 'Item') + ' (PDE ' + fmt(num(state.pde, 0)) + ')',
       mats: mats,
-      mods: (state.mods || []).map(function (i) { return MODS_DB[i] && MODS_DB[i][0]; }).filter(Boolean),
+      mods: state.tipoItem === 'municao'
+        ? (MUNICAO_MODS[state.municaoMod] ? [MUNICAO_MODS[state.municaoMod][0] + ' (' + Math.max(1, Math.floor(num(state.municaoModQtd, 5))) + ')'] : [])
+        : (state.mods || []).map(function (i) { return MODS_DB[i] && MODS_DB[i][0]; }).filter(Boolean),
       valor: c.final,
       venda: state.modo === 'vendido',
       horas: lastForjadorHoras,
@@ -3495,7 +3618,7 @@
       mod: props ? props.mod : null,
       obra: !!(props && props.obra),
       pressa: !!state.pressa,
-      rende: state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
+      rende: soModMun ? '' : state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
     };
   }
 
@@ -3689,6 +3812,8 @@
     equipWrap.appendChild(buildEquipCombo());
     showEquipInfo();
     renderMods();
+    renderAmmoMods();
+    ammoQtdInput.value = state.municaoModQtd == null ? 5 : state.municaoModQtd;
     syncMagicoRaridade();
     renderMaterials();
     setMode(state.modo || 'proprio');
@@ -3731,13 +3856,13 @@
     var bad = raw !== '' && (!isFinite(v) || (isFinite(min) && v < min));
     input.setAttribute('aria-invalid', bad ? 'true' : 'false');
     var group = input.parentElement && input.parentElement.classList.contains('field-group') ? input.parentElement : null;
-    if (!group) { input.title = bad ? 'O valor não pode ser negativo.' : ''; return; }
+    if (!group) { input.title = bad ? (min > 0 ? 'Use um número a partir de ' + min + '.' : 'O valor não pode ser negativo.') : ''; return; }
     var msg = group.querySelector('.field-error');
     if (bad && !msg) {
       msg = document.createElement('p');
       msg.className = 'field-error';
       msg.id = (input.id || 'campo') + '-erro';
-      msg.textContent = 'O valor não pode ser negativo.';
+      msg.textContent = min > 0 ? 'Use um número a partir de ' + min + '.' : 'O valor não pode ser negativo.';
       group.appendChild(msg);
       input.setAttribute('aria-describedby', ((input.getAttribute('aria-describedby') || '') + ' ' + msg.id).trim());
     } else if (!bad && msg) {

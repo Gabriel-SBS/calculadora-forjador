@@ -40,6 +40,7 @@ Se o sistema estiver com "reduzir movimento" ligado, a troca de tema é instant�
 - Modo "Item para Venda", com margem de lucro, para quando o Forjador vende o trabalho.
 - As 25 modificações de armas (p. 163–168). Elas entram no valor-base antes de multiplicar pelo material, como o livro manda. Se o item já existe, a calculadora cobra só a modificação vezes o material.
 - Munições custam o preço de 4 unidades e rendem 2d4. Pólvoras custam 2 unidades e rendem 1d4 (p. 171).
+- As 8 modificações de munição (p. 160), uma por munição: preço fixo por munição transformada (a Assobiante sai 5 po a cada 5), fora do multiplicador do material. Dá para modificar munições novas, somando ao custo da criação, ou só transformar as que você já tem.
 
 **Tempo**
 - 24h, 48h, 96h ou 192h conforme o tier, somando quando há mais de um material (regra de junção).
