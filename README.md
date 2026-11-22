@@ -74,6 +74,30 @@ A calculadora não decide nada que o Guia deixa para o Mestre: o tempo de itens 
 
 Achou um número diferente do livro? Abra uma issue dizendo o item, os materiais e a página.
 
+## O que mudou em cada versão
+
+### v3
+- As moedas de ouro (`po`), prata (`pp`) e cobre (`pc`) agora têm cores e selos próprios no resultado principal, para bater o olho e separar o ouro dos trocados.
+- Cada tier (`D` a `S`) ganhou uma etiqueta colorida nas vantagens e um friso da mesma cor no campo do material escolhido. Quando a Excalibur está ligada, aparece também um selo roxo de Artefato no resultado.
+- Entraram um ícone de bigorna no topo (que acende junto com o Modo forja), fio duplo de livro-caixa nos totais do recibo e da lista, barra em cor de brasa com a porcentagem economizada no comparativo e relevo nos botões e interruptores.
+- Os botões de seleção (*Arma / Armadura / Munição / Pólvora*, *Peso* e *Finalidade*) agora têm uma pílula que desliza de uma opção para outra no clique, mas muda na hora quando você usa as setas do teclado.
+- As gavetas de Modificações e de Itens Mágicos abrem e fecham deslizando (`220ms` para abrir, `165ms` para fechar), as linhas saem suavemente quando você apaga um material ou item da lista e os botões de copiar e adicionar mostram um `✓` de confirmação.
+- No celular, a barra do topo cabe sempre numa linha só, o menu de busca de materiais e equipamentos foi ajustado para não ficar atrás do teclado virtual, a barra fixa de custo ganhou fundo translúcido e o aviso de *Desfazer* também pausa quando você encosta nele.
+
+### v2
+- Conferi os 68 materiais com o livro completo de 239 páginas (p. 174–197), atualizando os efeitos de armas com a propriedade Munição e a regra *Despertar* da Samambaia Metamórfica.
+- Entraram a Pedra Filosofal (o 69º material, Tier S do Alquimista de 17º nível, p. 131), o instrumento musical (`75 po`, p. 162 e 170) e o carregador de munição (`5 po`, p. 166).
+- Adicionei as 8 modificações de munição da p. 160 (*Alquímica*, *Assobiante*, *Contundente*, *Farpada*, *Incendiária*, *Perfurante*, *Pesada* e *Serrilhada*), com campo de quantidade e opção de só transformar munições que você já tem.
+- Entraram o modo Consertar quebrado em Finalidade (metade do valor do item, p. 173, pagando só a matéria-prima pelo Trabalhador Itinerante), Criações Automáticas do 17º nível (corta pela metade o tempo de materiais raros e itens mágicos, p. 130) e a Excalibur do 20º nível (até 6 materiais em armas ou focos, tempo de 1 Tier S e encantamento Lendário sem StarMetal, p. 128).
+- Corrigi o tempo da Transmutação Avançada (7º nível) ao trocar de categoria entre materiais Tier D e C (p. 130–131) e somei o tempo de fabricação ao de encantamento nos Itens Mágicos.
+- Os preços passaram a sair em moedas do D&D (`po`, `pp` e `pc`), entrou o botão *Como funciona?* com o resumo das regras por tipo de item, o que não vale para o tipo escolhido fica escondido e o aviso de *Desfazer* pausa enquanto o mouse está em cima ou você troca de aba.
+
+### v1
+- Primeira versão: conta de custo com PDE × até 4 materiais, Trabalhador Itinerante (`÷2`), talento Artesão (uma compra de `−20%` ou duas de `−36%`), fração fixa opcional para armaduras e modo Para venda com margem de lucro.
+- Tempo de produção por tier e peso do item, com o tempo do Forjador sozinho, com ajudante (12h por dia) e o de alguém de outra classe (8h por dia).
+- Dureza e modificador finais do item (com Pressa, Obra-Prima e O Melhor dos Melhores), avisos da Junção de Materiais (Tier SS e SA), lista de equipamentos do Guia, as 26 modificações de armas e equipamentos, Itens Mágicos e Transmutação.
+- Recibo com a conta passo a passo, barras de comparação com um ferreiro comum, barra fixa de custo no celular, botão de copiar para o chat da mesa, Lista da sessão para somar encomendas do grupo, tema claro/escuro em onda, Modo forja com brasas no fundo e funcionamento sem internet (`sw.js`).
+
 ---
 
 Conteúdo de fã, não oficial. *Dungeons & Dragons* é marca da Wizards of the Coast. As regras de materiais, classes e equipamentos são do *Guia de Xyleff Sualky para Coisas Impensáveis*, de Felix Klaus.
