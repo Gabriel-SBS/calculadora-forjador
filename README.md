@@ -81,7 +81,7 @@ Achou um número diferente do livro? Abra uma issue dizendo o item, os materiais
 - Cada tier (`D` a `S`) ganhou uma etiqueta colorida nas vantagens e um friso da mesma cor no campo do material escolhido. Quando a Excalibur está ligada, aparece também um selo roxo de Artefato no resultado.
 - Entraram um ícone de bigorna no topo (que acende junto com o Modo forja), fio duplo de livro-caixa nos totais do recibo e da lista, barra em cor de brasa com a porcentagem economizada no comparativo e relevo nos botões e interruptores.
 - Os botões de seleção (*Arma / Armadura / Munição / Pólvora*, *Peso* e *Finalidade*) agora têm uma pílula que desliza de uma opção para outra no clique, mas muda na hora quando você usa as setas do teclado.
-- As gavetas de Modificações e de Itens Mágicos abrem e fecham deslizando (`220ms` para abrir, `165ms` para fechar), as linhas saem suavemente quando você apaga um material ou item da lista, os botões de copiar e adicionar mostram um `✓` de confirmação e a onda da troca de tema ficou mais curta (`1,15s`).
+- As gavetas de Modificações e de Itens Mágicos abrem e fecham deslizando (`220ms` para abrir, `165ms` para fechar), as linhas saem suavemente quando você apaga um material ou item da lista e os botões de copiar e adicionar mostram um `✓` de confirmação.
 
 ### v2
 - Conferi os 68 materiais com o livro completo de 239 páginas (p. 174–197), atualizando os efeitos de armas com a propriedade Munição e a regra *Despertar* da Samambaia Metamórfica.
