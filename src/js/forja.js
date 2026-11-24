@@ -56,9 +56,6 @@
     peso: '',
     mods: [],
     modExistente: false,
-    municaoMod: -1,
-    municaoModQtd: 5,
-    municaoModExistente: false,
     obraPrima: false,
     melhorDosMelhores: false,
     excalibur: false,
@@ -541,13 +538,10 @@
     return (state.mods || []).reduce(function (s, i) { return s + (MODS_DB[i] ? MODS_DB[i][1] : 0); }, 0);
   }
 
-  // Valor-base efetivo: PDE + modificações (p. 163), munição = 4 unidades, pólvora = 2 unidades (p. 171)
+  // Valor-base efetivo: PDE + modificações (p. 163)
   function baseValue() {
     var pdeItem = num(state.pde, 0);
     var mods = modsSum();
-    var tipo = state.tipoItem;
-    if (tipo === 'municao') return { valor: pdeItem * 4, nota: 'preço de 4 munições (rende 2d4)' };
-    if (tipo === 'polvora') return { valor: pdeItem * 2, nota: 'preço de 2 pólvoras (rende 1d4)' };
     if (state.modExistente) return { valor: Math.max(0, mods), nota: 'só as modificações (item já existe)' };
     var v = pdeItem + mods;
     if (pdeItem > 0) v = Math.max(1, v);
@@ -557,10 +551,8 @@
   function calculate() {
     var base = baseValue();
     var pde = base.valor;
-    var sumMat = state.tipoItem === 'polvora'
-      ? 1
-      : state.materials.reduce(function (s, m) { return s + num(m.mult, 0); }, 0);
-    if (state.melhorDosMelhores && state.tipoItem !== 'polvora') sumMat *= 2;
+    var sumMat = state.materials.reduce(function (s, m) { return s + num(m.mult, 0); }, 0);
+    if (state.melhorDosMelhores) sumMat *= 2;
     var desconto = state.artesao ? ARTESAO_DESCONTO : 0;
     var divisor = FORJADOR_DIVISOR;
     var lucro = num(state.lucro, 0);
@@ -1387,14 +1379,9 @@
     var usaFracao = state.tipoItem === 'armadura' && !!state.fracaoFixa;
     var cheio = usaFracao ? pde * ((1 - ARMADURA_FRACAO) + ARMADURA_FRACAO * sumMat) : pde * sumMat;
     var conserto = state.modo === 'conserto';
-    var proprio;
-    if (state.materiaisPossuidos) {
-      proprio = 0;
-    } else if (usaFracao) {
-      proprio = (cheio * disc) / FORJADOR_DIVISOR;
-    } else {
-      proprio = (cheio * disc * (duplo ? disc : 1)) / FORJADOR_DIVISOR;
-    }
+    var proprio = state.materiaisPossuidos
+      ? 0
+      : (cheio * disc * (duplo ? disc : 1)) / FORJADOR_DIVISOR;
     if (conserto && !state.materiaisPossuidos) proprio /= 2;
     var lucroPct = num(state.lucro, 0);
     var final = state.modo === 'vendido' ? proprio * (1 + lucroPct / 100) : proprio;
@@ -1691,26 +1678,6 @@
         'Fração fixa é uma regra opcional desta calculadora, fora do Guia: só 20% do PDE é multiplicado pelo material, para suavizar armaduras caras.'
       ],
       fonte: 'p. 169–172'
-    },
-    municao: {
-      titulo: 'Criar munições',
-      itens: [
-        'Você paga o preço de 4 munições (× materiais) e rola 2d4 para saber quantas fez.',
-        'Tempo por tier: C/D 1h, B 6h, A 12h, S 24h.',
-        'Leve e Pesado não se aplicam.',
-        'Modificações de munição (p. 160): uma por munição, com preço por munição transformada, fora do multiplicador do material. As de arma não valem.',
-        'O modificador do material vale só no dano.'
-      ],
-      fonte: 'p. 160, 169 e 171'
-    },
-    polvora: {
-      titulo: 'Criar pólvora',
-      itens: [
-        'Você paga o preço de 2 pólvoras e rola 1d4 para saber quantas fez.',
-        'Leva 8 horas, qualquer que seja o tipo de pólvora.',
-        'Materiais, peso, modificações e Obra-Prima não se aplicam: o custo vem só do preço da pólvora.'
-      ],
-      fonte: 'p. 159 e 171'
     }
   };
   var tipoInfoBtn = document.getElementById('tipo-info-btn');

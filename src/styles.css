@@ -492,10 +492,6 @@
   .tipo-info ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
   .tipo-info li::marker { color: var(--accent); }
   .tipo-info .src { margin: var(--sp-2) 0 0; font-size: var(--fs-xs); color: var(--text-dim); }
-  .locked-note {
-    margin: 0; padding: var(--sp-3) var(--sp-4); border: 1px dashed var(--border-strong); border-radius: var(--r-sm);
-    font-size: var(--fs-sm); color: var(--text-dim);
-  }
   .field-hint { margin: 0; font-size: var(--fs-xs); color: var(--text-dim); font-family: var(--font-mono); }
   .field-error { margin: 0; font-size: var(--fs-xs); font-weight: 600; color: var(--danger); }
   input::placeholder { color: var(--text-dim); opacity: .7; }
@@ -1654,7 +1650,6 @@
     .magicos-summary { padding: var(--sp-4) 0; }
     .magicos-body { padding: 0 0 var(--sp-4); }
     .mg-grid { grid-template-columns: 1fr; }
-    .segmented.seg-4 { grid-template-columns: 1fr 1fr; }
     .segmented.seg-3 .seg-btn, #artesao-modo .seg-btn, #bomba-artesao-modo .seg-btn { font-size: var(--fs-xs); padding: var(--sp-2) 6px; }
     .view-bar { width: 100%; justify-content: space-between; flex-wrap: nowrap; }
     .view-switch { flex: 1; justify-content: center; padding-left: var(--sp-2); font-size: var(--fs-xs); }

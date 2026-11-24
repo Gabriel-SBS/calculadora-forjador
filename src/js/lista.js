@@ -328,7 +328,7 @@
     renderLista();
     morphBtn(addListaBtnEl, ICON_CHECK + ' Adicionado');
     var t = totaisLista();
-    showToast('Adicionado. Lista: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) + '.', 'Ver lista', function () {
+    showToast('Adicionado. Lista: ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) + '.', 'Ver lista', function () {
       listaSection.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
     }, 5000);
   });
@@ -338,7 +338,7 @@
     if (!lista.length) return;
     var t = totaisLista();
     var partes = lista.map(textoResumo);
-    partes.push('Total: ' + lista.length + (lista.length === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) +
+    partes.push('Total: ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) +
       (t.horas ? ' · ' + fmtHorasForjador(t.horas) : ''));
     copiarTexto(partes.join('\n\n') + '\n' + SITE_URL).then(function () {
       morphBtn(listaCopyBtnEl, ICON_CHECK + ' Copiada');
