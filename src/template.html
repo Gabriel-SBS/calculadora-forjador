@@ -1,0 +1,1154 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<script>
+  // Aplica o tema e a oficina salvos antes de desenhar a página (evita piscar)
+  try {
+    var tema = localStorage.getItem('forjador-tema');
+    if (tema === 'light' || tema === 'dark') document.documentElement.setAttribute('data-theme', tema);
+    var ofi = localStorage.getItem('forjador-oficina');
+    if (ofi === 'forja' || ofi === 'bombas' || ofi === 'herbalismo') document.documentElement.setAttribute('data-oficina', ofi);
+  } catch (e) {}
+</script>
+<title>Calculadora do Forjador</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#b85c26">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Forjador">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIkNhbGN1bGFkb3JhIGRvIEZvcmphZG9yIiwgInNob3J0X25hbWUiOiAiRm9yamFkb3IiLCAiZGVzY3JpcHRpb24iOiAiRm9yamEgZGUgRXF1aXBhbWVudG8sIEJvbWJhcyBlIE11bmnDp8O1ZXMgZSBIZXJiYWxpc21vIGUgUG/Dp8O1ZXMg4oCUIEd1aWEgZGUgWHlsZWZmIFN1YWxreSIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjMWExODE1IiwgInRoZW1lX2NvbG9yIjogIiNiODVjMjYiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFNQUFBQURBQ0FZQUFBQlMzR3dIQUFBRXkwbEVRVlI0bk8zZE8yNGNSeFNHVVpId0NnUW84U0lVMkJramI4cXIwS1ljS2JPRFdRUVRBZHFDQlFtUUlGTERZVCtxdStyV2YwNG1RQ0FIdy90VjFieDY3dDRNNXZkM2IvL3ZmUnM0enVPbnozZHZCdEwxeGhoMmVrZHgraTgyOUl3VXcybS96T0F6WWdpSC94S0R6OGdoSFBiRERUNFZRbWorUXcwK2xVSzRiL25EREQ5SGF6MWpUV295K0ZUZERYYnZBSWFmWGxyTTNxNEFERCs5N1ozQnpRRVlma2F4WnhZM0JXRDRHYzNXbVZ3ZGdPRm5WRnRtYzFVQWhwL1JyWjNSeFFFWWZxcFlNNnVMQWpEOFZMTjBabDhOd1BCVDFaTFpiZnBXQ0tqbVpnQldmNnA3YllaZkRNRHdNNHRicyt3SVJMU3JBVmo5bWMxTE0yMEhJTm92QVZqOW1kVzEyYllERU8xSkFGWi9admQ4eHUwQVJQc1JnTldmRkQvUHVoMkFhQUlnMnJjQUhIOUk4MzNtN1FCRUV3RFJCRUEwQVJEdHpnTmdrdGtCaUNZQW9nbUFhQUlnbWdDSUpnQ2lDWUJvQWlEYWI3MXZBT2Y0K1BjZlQvNzk4T0UvZDcxWGd2TUcvN21IOEJBY2dZS0hmK24vbVprQUpyVm1zRDhHUnlBQW9nbUFhQUlnbWdDSUpvQkpyWGw2OHlINHFWQUJUR3pKWUQ4RUQvOVhQaElad2l2QjF3bUFhSTVBUkJNQTBRUkFOQUVRVFFCRUV3RFJCRUEwQVJCTkFFUVRBTkVFUURRQkVFMEFSQk1BMFFSQXRPNlhScno4KzAvdm0wQm43Ly84Sys4RE1RYWZFYUk0UFFDRHowaFJuQktBb1dmVUtBNE53T0F6ZWhTSFBBZzIrRlRaRVpvR1lQQ3BkaHphSFlDaHAvSmpnYzBCR0h4bWVDQzhPZ0NEejB6UEF0MVhldFVPV3MvaXJxZEI3UWIwMG1vaDN2Vm1PTHNCUGJTY3U5M3ZCaFVCWjJvOWIwMWZDWFlrNGtoSExMWk5QdzlnTitBb1I4MVc4dy9FaUlCS00rWE5jQXp0NkFYMTBJOUUyZzBZZlg0Ty8weXdDTmhpeWsrRWVaYUkwUmJOVTY4S1lUZGd0Qms1L2JJb0ltQ2syZWo2TmFtT1JQUmVHTHRlR010dVFPeDFnYXFxc0d0WldKWnphY1RKaG12MDJ6Y2FBUkJOQUVRVEFORUVNTkU1ZTlUYk5USUJFRTBBUkJQQUpNZU4wVzVQRlFJZ21nQ0lKZ0NpQ1dDQ2MvY290Nk1pQVJCTkFFUVRRREhqUisvZlg1MEFpQ1lBb2dtQWFBSW9mQTUzL3Q5UEFFUVRBTkVFVVBRNDR2alRoZ0NJSmdDaUNZQm9BaWg0TG5mK2IyZjZTeU5XdUpUaDZONVAvSDRqT3dEUnBnN0E2dTkrakE0QVlnT3crcnMvb3dPQTJBQ3MvdTdYNkFCZ0tRRVFiYm9BSEgvY3Y5RUJRR3dBVm4vM2MzUUFFQnVBMWQvOUhSMEFiQ0VBb2swUmdPT1ArejA2QUlnTndPcnYvbzhPQUdJRHNQcVA0Vkw0YzllbEE0QzlCRUMwc2dGVTNuWm5kQ242OXlnYkFNUUdVSFcxbWQybDROK2xaQUFRRzBERlZTYkpwZGpmcDF3QTBOTDBGOGVGVyt3QVJCTUEwZTRmUDMyKzYzMGpvSWV2czI4SElKb0FpQ1lBb2dtQWFOOEM4RUNZTk45bjNnNUFOQUVRN1VjQWprR2srSG5XN1FCRWV4S0FYWURaUFo5eE93RFJmZ25BTHNDc3JzMjJIWUJvVndPd0N6Q2JsMmJhRGtDMEZ3T3dDekNMVzdOOGN3Y1FBZFc5TnNPT1FFUjdOUUM3QUZVdG1kMUZPNEFJcUdicHpDNCtBb21BS3RiTTZxckhBQ0pnZEd0bmRQV0RZQkV3cWkyenVlbFpJQkV3bXEwenVmbHBVQkV3aWoyenVPdDFBQkhRMjk0WjNQMUNtQWpvcGNYc05iMHVxRXV0YzRhV2kyN1R0MExZRFRoYTZ4azc3TXJRZGdNcUxLNkhYeHBkQ0l4OHFqanR1d0dFd0lqSDZkTy9IRU1JalBRNHN1dTN3NGlCM2srZURQZjFTS0tZMitOZ1g4bjFCZEFzZG9zdHgrc3BBQUFBQUVsRlRrU3VRbUNDIiwgInNpemVzIjogIjE5MngxOTIiLCAidHlwZSI6ICJpbWFnZS9wbmcifSwgeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFnQUFBQUlBQ0FZQUFBRDBlTlQ2QUFBUGprbEVRVlI0bk8zZE1YTGp5Qm1HNGRIVW5rQlZTblFJQkhibXlKZnlLWHlwalp5dGd6MEVrNjNhSzhnMVhzdkQxVWdVQ0RUUWYvZjNQS25MTGdvYzhudlJrR2NldmxEUzg5UGpTKy9YQU5EQzViZmZIMXpKZXJ3cG5SaDRnRDhJaEQ0RXdBbU1QY0I5Uk1IeEJNQUJERDVBVzRLZ1BRSFFnTUVIT0pjZzJFOEFiR1QwQVdvUUE5c0lnRHNZZllEYXhNQjZBdUFUUmg5Z1RHTGdOZ0h3QWNNUE1BY2g4RDRCY01Yb0E4eE5ESHduQUF3L1FKeUx2NTB3T3dEYzhRTmt1d1NIUU9RUGJ2Z0JTQStCcUIvWThBTnd5eVVvQkNKK1VNTVB3RDB1QVNIdzljdmtqRDhBdHVOSDB4YU80UWVnaGN1a3B3SFQvVkNHSDRBalhDWUxnYWtlQVJoL0FHek1PbFBVak9FSDRFeVhDVTREaGo4Qk1QNEEySjZ3QUREK0FOaWdiWVk4d2pEOEFGUnlHZkNSd0hBbkFNWWZnR3Flbng1ZnZneG1xQUFZOFFJRGtPRjVzSTBhNHNoaXRJc0tRTGJMQUk4RXlwOEFHSDhBUnZNOHdJMXI2UUFZNFFJQ3dJZ2JWallBcWw4NEFCaDV5MG9HUU9VTEJnQXpiRnE1QUtoNm9RQmdwbTByRlFBVkx4QUF6TGh4WlFLZzJvVUJnSm0zcmtRQVZMb2dBSkN3ZWQwRG9NcUZBSUNrN2Z1YWZnRUFJSEVEdjZiKzRBRFFXODh0N0JJQXhoOEErbTdpNlFGZy9BR2cvemFlR2dER0h3QnFiT1JwQVdEOEFhRE9WcDRTQU1ZZkFHcHRadmUvQndBQU9OL2hBZUR1SHdEcWJlZWhBV0Q4QWFEbWhoNFdBTVlmQU9wdXFkOEJBSUJBaHdTQXUzOEFxTDJwelFQQStBTkEvVzF0R2dER0h3Q08wWHBqL1E0QUFBUnFGZ0R1L2dIZ1dDMjN0a2tBR0g4QU9FZXJ6ZlVJQUFBQzdRNEFkLzhBY0s0VzIrc0VBQUFDN1FvQWQvOEEwTWZlRGQ0Y0FNWWZBUHJhczhVZUFRQkFvRTBCNE80ZkFHcll1c2xPQUFBZzBOMEI0TzRmQUdyWnNzMU9BQUFnMEYwQjRPNGZBR3E2ZDZPZEFBQkFvTlVCNE80ZkFHcTdaNnVkQUFCQW9GVUI0TzRmQU1hd2RyT2RBQUJBSUFFQUFJRStEUURIL3dBd2xqWGI3UVFBQUFMZERBQjMvd0F3cHM4MjNBa0FBQVFTQUFBUTZNTUFjUHdQQUdPN3RlVk9BQUFna0FBQWdFRHZCb0RqZndDWXcwZWI3Z1FBQUFJSkFBQUk5RU1BT1A0SGdMbTh0KzFPQUFBZ2tBQUFnRUFDQUFEU0E4RHpmd0NZMDl1TmR3SUFBSUVFQUFBRUVnQUFrQndBbnY4RHdOeXV0OTRKQUFBRUVnQUFFRWdBQUVBZ0FRQUFxUUhnRndBQklNUHI1anNCQUlCQUFnQUFBZ2tBQUFna0FBQWdrQUFBZ0VBQ0FBQUNDUUFBQ1BUZzd3QUFnRHhPQUFBZ2tBQUFnRUFDQUFBQ0NRQUFDQ1FBQUNDUUFBQ0FRQUlBQUFJSkFBQUlKQUFBSUpBQUFJQkFBZ0FBQWdrQUFBZ2tBQUFna0FBQWdFQUNBQUFDQ1FBQUNDUUFBQ0RRVDcxZkFFQkYvL3JIWDI3KzUzLzc1NzlQZXkxd2hJZm5wOGVYUS82WEFTWWIvWStJQVVia0VRREFqdkhmKzkrRlhwd0FBTkZhajdmVEFFYmhCQUNJZGNTZHU5TUFSaUVBZ0VoSERyVUlZQVFDQUFBQ0NRQWd6aGwzNkU0QnFFNEFBRkhPSEdZUlFHVUNBQUFDQ1FBQUNDUUFnQmc5anVROUJxQXFBUUFBZ1FRQUFBUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFRSXdlLzFTdmZ4NllxZ1FBQUFRU0FBQVFTQUFBVWM0OGtuZjhUMlVDQUloenhqQWJmNm9UQUFBUVNBQUFrWTY4UTNmM3p3Z0VBQkRyaUtFMi9vemk0Zm5wOGFYM2l3RG9iZTgvMjJ2NEdZMFRBSUNkQTI3OEdaRVRBSUFOSndKR245RUpBQUFJNUJFQUFRUVNBQUFRU0FBQVFDQUJBQUNCQkFBQUJCSUFBQkJJQUFCQUlBRUFBSUVFQUFBRUVnQUFFRWdBQUVBZ0FRQUFnUVFBQUFRU0FBQVFTQUFBUUNBQkFBQ0JCQUFBQkJJQUFCQklBQUJBSUFFQUFJRUVBQUFFRWdBQUVFZ0FBRUFnQVFBQWdRUUFBQVFTQUFBUVNBQUFRQ0FCQUFDQkJBQUFCQklBQUJEb3A5NHZZRWEvL3ZKejc1Y0FNSlhscjMvdi9SS204L0Q4OVBqUyswWE13dkFEbkVNUTdDY0FHakQ4QVAySmd2c0lnQjBNUDBCZGd1QTJBYkNCNFFjWWt5ajRUZ0NzWlBRQjVyTUUvM0toQVBpRTRRZklzb1JFZ1FENGdPRUhZT1lnRUFCdkdINEFFcUpBQVB5UDRRY2dLUWppQThEd0E1QVlCYkVCWVBnQlNBNkN1QUF3L0FCVTBUTUtJdjR4SUtNUFFEVkw1eE9CcVFQQThBTlEwVkxnY2NDVUFXRDRBYWhxS1REKzB3V0E0UWVnc3FYSStFOFRBSVlmZ09xV1F1TS9mQUFZZmdCR3NCUWIvMkVEd1BBRE1JcWw0UGdQRndDR0g0Q1JMRVhIZjRnQU1Qb0FqR2dyTlA2bEE4RHdBekNxcGZqNGx3d0F3dy9BeUpZQnhyOVVBQmgrQUVhM0RETEdNZklnQU1Qd0NpVzRhTi82aXZzVkhDSGdFQUFBQUFFbEZUa1N1UW1DQyIsICJzaXplcyI6ICI1MTJ4NTEyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn1dfQ==">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAADXElEQVR4nO3dMW7UQBiGYSfiBEg0HMIFdFtxKU7BpajSQbEnoo1EvsDaY/ufmefpEqRIa7/ze7Jrh6fPnz4u8JbnN78L4uA9JgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxEH/I/sd3L9y+vv7z9+L10yOQ4vIzlre90QRyNvYQOeuxDHC29vFtAd32Ig0gcROIgEgeROFq6vft+RnfvdoijsVsooLsyxHGI218d9FjGsixP/gNAEpcVInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4uCKh5ruv34e98N5bf27benlI3tZjBFK4zhkMVIlzeKQxXihNIhDFqNWsj0OTQwfypbfVmQxyQh5LA5ZTHVx+d84ZDHhtuPfcchi2g3p81XvvnG+R0/lA7+tGCFd27DIH/jgzQjp17Zz99insvro0eaztvFNMJeYXuxZzxvv5zBCurDzNO39bMUIKWv/At57J5gRUlOT89LgNkF9VNPqjLS82cclpoKGa7XlDcZGyOXanoLGd5/r40LND/5RfxPMJeZkRyzLo55bMULO1NOjCZc7f26tI352PeYTbyefqnXEMoaNgybEQSQO5ovjtH3AOuiGY+Q42E8cROJgyjhO2A2s4244Bo+DncTBrHEcOvbXoa8p48fBHuIgEgcTx3HQzmAdfcMxRRxsJg4icTB3HM33B+sEG45Z4mAbcRCJg2X2OBruEtY5NhzVH2qa4ZnKtXBqs0wOhopjhrGx1H6ZdePgckXjqLyemiv7YovGQQUV4yi7kmZ7yRXjoAhx0E8cNQfsnC+8XBzUUSuOgqtn5pdfKw5KEQc9xFFtqF6i1EEoFAfVVImj1Iq51r3MoagSBwWViKPOWiniXuOAlIiDmsRB4TiKjNBq7gUOy/VxUNbFcVRYH2Xdrz44Jgcl47h8ZdR3v/QQmRz0+Tgk1zI5iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHETiIBIHkTiIxEEkDiJxEImDSBxE4iASB5E4iMRBJA4icRCJg0gcROIgEgeROIjEQSQOInEQiYNIHCzJH0BUW+WfhdlIAwAAAABJRU5ErkJggg==">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Work+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* {{STYLES}} */
+</style>
+</head>
+<body>
+<canvas id="embers" aria-hidden="true"></canvas>
+<div class="forge-glow" aria-hidden="true"></div>
+<div class="page">
+  <header class="hero">
+    <div class="hero-text">
+      <div class="hero-title-row">
+        <span class="hero-mark" aria-hidden="true">
+          <svg class="mark-ico mark-forja" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 10h13l4-2.5v2.5l-4 2.5H9c0 2.5 1.5 4.5 3.5 5.5H6.5c1.5-1 2.5-3 2.5-5.5H5L3 10z"/>
+            <path d="M5 18h9v2.5H5z"/>
+            <path d="M13 4.5l3.5 3.5M15.5 3l2.5 2.5"/>
+          </svg>
+          <svg class="mark-ico mark-bombas" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10.5" cy="14" r="6.5"/>
+            <path d="M14.5 8.5l2-2c1.2-1.2 2.8-1 3.5 0"/>
+            <path d="M18.5 3.5v1.5M21 6h-1.5M19.8 4.2l-1 1"/>
+            <path d="M8 12.5a3 3 0 0 1 2.5-2"/>
+          </svg>
+          <svg class="mark-ico mark-herbalismo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 20A7 7 0 0 1 4 13C4 7 11 4 19 4c0 8-3 16-8 16z"/>
+            <path d="M11 20c0-5 3-9 8-12"/>
+            <path d="M7.5 14.5c1.5-.5 3.5-.5 5 0"/>
+          </svg>
+        </span>
+        <h1 id="hero-title">Calculadora do Forjador</h1>
+      </div>
+      <p class="sub" id="hero-sub">Custo de criação de um item, combinando o desconto de Artesão com a mão de obra dispensada pelo Forjador.</p>
+    </div>
+    <div class="view-bar" role="group" aria-label="Exibição">
+      <button type="button" class="theme-btn" id="theme-btn" aria-label="Mudar para tema noturno" title="Mudar para tema noturno">
+        <svg class="i-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></g></svg>
+      </button>
+      <label class="view-switch" id="dureza-view-wrap" title="Regra de quebra de equipamentos é opcional">
+        <span id="dureza-label">Mostrar dureza</span>
+        <button type="button" class="switch" id="dureza-switch" role="switch" aria-checked="true" aria-labelledby="dureza-label">
+          <span class="knob"></span>
+        </button>
+      </label>
+      <label class="view-switch" title="Partículas animadas no fundo">
+        <span id="forja-label">Modo forja</span>
+        <button type="button" class="switch" id="forja-switch" role="switch" aria-checked="false" aria-labelledby="forja-label">
+          <span class="knob"></span>
+        </button>
+      </label>
+    </div>
+  </header>
+
+  <nav class="oficina-nav" aria-label="Oficinas do Guia">
+    <div class="segmented seg-3 oficina-tabs" id="oficina-segmented" role="tablist" aria-label="Escolha a oficina">
+      <button type="button" class="seg-btn active" data-oficina="forja" role="tab" aria-selected="true" aria-checked="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h13l4-2.5v2.5l-4 2.5H9c0 2.5 1.5 4.5 3.5 5.5H6.5c1.5-1 2.5-3 2.5-5.5H5L3 10z"/><path d="M5 18h9v2.5H5z"/></svg>
+        <span>Forja de Equipamento</span>
+      </button>
+      <button type="button" class="seg-btn" data-oficina="bombas" role="tab" aria-selected="false" aria-checked="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="14" r="6.5"/><path d="M14.5 8.5l2-2c1.2-1.2 2.8-1 3.5 0"/><path d="M19 4v1.5M21 6h-1.5"/></svg>
+        <span>Bombas e Munições</span>
+      </button>
+      <button type="button" class="seg-btn" data-oficina="herbalismo" role="tab" aria-selected="false" aria-checked="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13C4 7 11 4 19 4c0 8-3 16-8 16z"/><path d="M11 20c0-5 3-9 8-12"/></svg>
+        <span>Herbalismo e Poções</span>
+      </button>
+    </div>
+  </nav>
+
+  <main class="panel" id="panel-forja" data-oficina-panel="forja">
+
+    <section class="form-section" aria-labelledby="sec-item">
+      <header class="section-head">
+        <div>
+          <h2 id="sec-item">Item</h2>
+          <p>Escolha do Guia ou digite o PDE à mão</p>
+        </div>
+      </header>
+
+      <div class="field-group">
+        <div class="label-row">
+          <span class="label" id="equip-label">Equipamento do Guia (opcional)</span>
+          <button type="button" class="btn-info" data-info-toggle="equip-search-info" aria-expanded="false" aria-controls="equip-search-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona a pesquisa?</button>
+        </div>
+        <div id="equip-wrap"></div>
+        <p class="equip-info" id="equip-info" hidden></p>
+        <div class="tipo-info" id="equip-search-info" role="region" hidden>
+          <p class="ti-head">Pesquisa de equipamentos</p>
+          <ul>
+            <li><strong>Por nome:</strong> digite parte do nome (<code>espada longa</code>, <code>cota de malha</code>, <code>orbe</code>), sem precisar de acento.</li>
+            <li><strong>Por categoria:</strong> digite <code>armas</code>, <code>armaduras</code>, <code>escudos</code>, <code>focos</code> ou <code>instrumentos</code> para listar todo o grupo.</li>
+            <li><strong>Munições e pólvoras:</strong> ficam na aba <em>Bombas e Munições</em>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="pde" id="pde-label">PDE — Preço de Equipamento (po)</label>
+        <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" aria-describedby="pde-moeda" />
+        <p class="field-hint" id="pde-moeda" hidden></p>
+      </div>
+
+      <div class="field-group">
+        <div class="label-row">
+          <span class="label" id="tipo-label">Tipo de item</span>
+          <button type="button" class="btn-info" id="tipo-info-btn" aria-expanded="false" aria-controls="tipo-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona?</button>
+        </div>
+        <div class="segmented" id="tipo-segmented" role="radiogroup" aria-label="Tipo de item">
+          <button type="button" class="seg-btn" data-tipo="arma" role="radio">Arma</button>
+          <button type="button" class="seg-btn" data-tipo="armadura" role="radio">Armadura</button>
+        </div>
+        <div class="tipo-info" id="tipo-info" role="region" hidden></div>
+      </div>
+
+      <div class="field-group" id="peso-wrap">
+        <span class="label" id="peso-label">Peso do item (tempo de criação)</span>
+        <div class="segmented seg-3" id="peso-segmented" role="radiogroup" aria-label="Peso do item">
+          <button type="button" class="seg-btn" data-peso="leve" role="radio">Leve (−8h)</button>
+          <button type="button" class="seg-btn" data-peso="" role="radio">Normal</button>
+          <button type="button" class="seg-btn" data-peso="pesado" role="radio">Pesado (+8h)</button>
+        </div>
+      </div>
+
+      <div class="toggle-row" id="fracao-wrap" hidden>
+        <div class="toggle-label">
+          <span class="t-name">Fração fixa do PDE</span>
+          <span class="t-sub">Regra opcional: só 20% do PDE é sensível ao material — suaviza armaduras caras</span>
+        </div>
+        <button type="button" class="switch" id="fracao-switch" role="switch" aria-checked="false" aria-label="Fração fixa do PDE">
+          <span class="knob"></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="form-section" aria-labelledby="sec-mat">
+      <header class="section-head">
+        <div>
+          <h2 id="sec-mat">Materiais</h2>
+          <p id="mat-sub">Até 4 materiais; cada um multiplica o PDE</p>
+        </div>
+        <button type="button" id="add-material" class="btn-ghost section-action"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg> material</button>
+      </header>
+
+      <div class="materials" id="materials-wrap">
+        <div class="label-row">
+          <span class="label">Lista de materiais</span>
+          <button type="button" class="btn-info" data-info-toggle="mat-search-info" aria-expanded="false" aria-controls="mat-search-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona a pesquisa?</button>
+        </div>
+        <div class="tipo-info" id="mat-search-info" role="region" hidden>
+          <p class="ti-head">Pesquisa de materiais (69 do Guia)</p>
+          <ul>
+            <li><strong>Por nome:</strong> digite qualquer parte do nome (<code>aço</code>, <code>prata</code>, <code>coral</code>, <code>pedra filosofal</code>) sem precisar de acento.</li>
+            <li><strong>Por Tier:</strong> digite <code>tier d</code>, <code>tier c</code>, <code>tier b</code>, <code>tier a</code> ou <code>tier s</code> para listar todos os materiais daquele tier.</li>
+            <li><strong>Por tipo:</strong> digite <code>metal</code>, <code>vegetal</code> (ou <code>madeira</code>), <code>geologico</code> (ou <code>pedra</code>, <code>cristal</code>) ou <code>organico</code>.</li>
+            <li><strong>Fora do livro:</strong> escolha <em>Personalizado</em> para informar multiplicador e tier à mão.</li>
+          </ul>
+        </div>
+        <div id="material-rows"></div>
+        <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais — além disso, não altera o custo.</p>
+        <div class="juncao" id="juncao-info" hidden></div>
+      </div>
+
+      <details class="mods" id="mods-details">
+        <summary class="mods-summary">Modificações <span class="mods-total" id="mods-total"></span></summary>
+        <div class="mods-body">
+          <p class="magicos-note">Cada modificação soma ao valor-base (PDE) antes de multiplicar pelo material (p. 163).</p>
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Modificar item que já possui</span>
+              <span class="t-sub">Paga só as modificações × material, não o item de novo</span>
+            </div>
+            <button type="button" class="switch" id="existente-switch" role="switch" aria-checked="false" aria-label="Modificar item existente">
+              <span class="knob"></span>
+            </button>
+          </div>
+          <div class="mods-list" id="mods-list"></div>
+        </div>
+      </details>
+    </section>
+
+    <section class="form-section" aria-labelledby="sec-forj">
+      <header class="section-head">
+        <div>
+          <h2 id="sec-forj">O Forjador</h2>
+          <p>Talentos e características que mudam custo e tempo</p>
+        </div>
+      </header>
+
+      <p class="group-label" id="grp-custo">Custo</p>
+      <div class="settings-list" role="group" aria-labelledby="grp-custo">
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Talento Artesão</span>
+              <span class="t-sub">−20% em compras de itens não-mágicos</span>
+            </div>
+            <button type="button" class="switch" id="artesao-switch" role="switch" aria-checked="false" aria-label="Talento Artesão">
+              <span class="knob"></span>
+            </button>
+          </div>
+          <div class="field-group setting-sub" id="artesao-modo-wrap">
+            <span class="label" id="artmodo-label">Como o desconto do Artesão entra</span>
+            <div class="segmented" id="artesao-modo" role="radiogroup" aria-label="Modo do desconto do Artesão">
+              <button type="button" class="seg-btn" data-artmodo="duplo" role="radio">Duas compras (−36%)</button>
+              <button type="button" class="seg-btn" data-artmodo="simples" role="radio">Uma compra (−20%)</button>
+            </div>
+            <details class="explain">
+              <summary>Por que esse desconto?</summary>
+              <p class="magicos-note" id="artesao-explica"></p>
+            </details>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Já possui os materiais</span>
+              <span class="t-sub">Trabalhador Itinerante: grátis, só custa o tempo</span>
+            </div>
+            <button type="button" class="switch" id="materiais-switch" role="switch" aria-checked="false" aria-label="Já possui os materiais">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        </div>
+
+      <p class="group-label" id="grp-tempo">Tempo e qualidade</p>
+      <div class="settings-list" role="group" aria-labelledby="grp-tempo">
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Pressa</span>
+              <span class="t-sub">Metade do tempo, item sai com −1 no modificador</span>
+            </div>
+            <button type="button" class="switch" id="pressa-switch" role="switch" aria-checked="false" aria-label="Pressa">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Obra-Prima</span>
+              <span class="t-sub">20 natural no teste (17–20 com Prodígio, nível 2): +1 no modificador, máx. +3</span>
+            </div>
+            <button type="button" class="switch" id="obra-switch" role="switch" aria-checked="false" aria-label="Obra-Prima">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">O Melhor dos Melhores</span>
+              <span class="t-sub">Forjador nível 14: gasta o dobro de materiais e o item vira Obra-Prima</span>
+            </div>
+            <button type="button" class="switch" id="melhor-switch" role="switch" aria-checked="false" aria-label="O Melhor dos Melhores">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting" id="auto-forj-setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Criações Automáticas</span>
+              <span class="t-sub">Forja Arcana nível 17: ferramenta automatizada ajuda em materiais raros e itens mágicos (tempo ÷2)</span>
+            </div>
+            <button type="button" class="switch" id="auto-forj-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting" id="excalibur-setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Excalibur</span>
+              <span class="t-sub">Forjador nível 20: arma ou foco com até 6 materiais (4 Tier S + 2 Tier A ou menor), tempo de 1 Tier S e encantamento Lendário sem StarMetal (+0h)</span>
+            </div>
+            <button type="button" class="switch" id="excalibur-switch" role="switch" aria-checked="false" aria-label="Excalibur">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2.</p>
+    </section>
+
+    <section class="form-section" aria-labelledby="sec-fim">
+      <header class="section-head">
+        <div>
+          <h2 id="sec-fim">Finalidade</h2>
+          <p>Criar para uso próprio, vender com margem ou consertar item quebrado</p>
+        </div>
+      </header>
+
+      <div class="mode">
+        <div class="segmented seg-3" id="mode-segmented" role="radiogroup" aria-label="Modo de cálculo">
+          <button type="button" class="seg-btn" data-mode="proprio" role="radio">Uso próprio</button>
+          <button type="button" class="seg-btn" data-mode="vendido" role="radio">Para venda</button>
+          <button type="button" class="seg-btn" data-mode="conserto" role="radio">Consertar quebrado</button>
+        </div>
+        <div class="field-group" id="lucro-wrap" hidden>
+          <label for="lucro">Margem de lucro (%)</label>
+          <input id="lucro" type="number" min="0" step="1" inputmode="numeric" />
+        </div>
+        <p class="magicos-note" id="conserto-note" hidden>Um item quebrado (penalidade −5) custa metade do valor para ser consertado (p. 173). Com o Trabalhador Itinerante (p. 124), o Forjador paga só a matéria-prima desse serviço (metade do conserto, ou grátis se já tiver o material).</p>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="panel" id="panel-bombas" data-oficina-panel="bombas" hidden aria-label="Oficina de Bombas e Munições">
+    <section class="form-section" aria-labelledby="sec-bomba">
+      <header class="section-head">
+        <div>
+          <h2 id="sec-bomba">Bombas, Munições e Pólvora</h2>
+          <p id="bm-sub">Escolha entre as 16 bombas, munições com modificações ou pólvoras do Guia</p>
+        </div>
+      </header>
+
+      <div class="field-group">
+        <div class="label-row">
+          <span class="label" id="bm-tipo-label">O que vai fabricar?</span>
+          <button type="button" class="btn-info" id="bomba-info-btn" aria-expanded="false" aria-controls="bomba-tipo-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona?</button>
+        </div>
+        <div class="segmented seg-3" id="bm-tipo-seg" role="radiogroup" aria-labelledby="bm-tipo-label">
+          <button type="button" class="seg-btn active" data-bmtipo="bomba" role="radio" aria-checked="true">Bomba</button>
+          <button type="button" class="seg-btn" data-bmtipo="municao" role="radio" aria-checked="false">Munição</button>
+          <button type="button" class="seg-btn" data-bmtipo="polvora" role="radio" aria-checked="false">Pólvora</button>
+        </div>
+        <div class="tipo-info" id="bomba-tipo-info" role="region" hidden></div>
+      </div>
+
+      <!-- Modo 1: Bomba -->
+      <div id="bm-view-bomba" class="bm-subview">
+        <div class="field-group">
+          <div class="label-row">
+            <span class="label" id="bomba-combo-label">Bomba do Guia</span>
+            <button type="button" class="btn-info" data-info-toggle="bomba-search-info" aria-expanded="false" aria-controls="bomba-search-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona a pesquisa?</button>
+          </div>
+          <div id="bomba-combo-wrap"></div>
+          <p class="equip-info" id="bomba-equip-info"></p>
+          <div class="tipo-info" id="bomba-search-info" role="region" hidden>
+            <p class="ti-head">Pesquisa de bombas (16 do Guia)</p>
+            <ul>
+              <li><strong>Por nome:</strong> digite parte do nome (<code>estilhaço</code>, <code>fumaça</code>, <code>santa granada</code>) sem precisar de acento.</li>
+              <li><strong>Por categoria:</strong> digite <code>dano</code>, <code>controle</code> ou <code>taticas</code> para filtrar o grupo.</li>
+              <li><strong>Por regra ou ramo:</strong> digite a CD (<code>cd 12</code>, <code>cd 15</code>), a salvaguarda (<code>destreza</code>, <code>forca</code>, <code>sabedoria</code>) ou a cor do ramo usado na receita.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <span class="label" id="bomba-formato-label">Formato de produção</span>
+          <div class="segmented" id="bomba-formato-seg" role="radiogroup" aria-labelledby="bomba-formato-label">
+            <button type="button" class="seg-btn active" data-bformato="bomba" role="radio" aria-checked="true">Bomba inteira</button>
+            <button type="button" class="seg-btn" data-bformato="bombinha" role="radio" aria-checked="false">Bombinhas (2d4)</button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="label-row">
+            <span class="label" id="bomba-polvora-label">Carga de pólvora (p. 217)</span>
+            <button type="button" class="btn-info" data-info-toggle="bomba-polvora-search-info" aria-expanded="false" aria-controls="bomba-polvora-search-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona a pesquisa?</button>
+          </div>
+          <div id="bomba-polvora-wrap"></div>
+          <p class="equip-info" id="bomba-polvora-info"></p>
+          <div class="tipo-info" id="bomba-polvora-search-info" role="region" hidden>
+            <p class="ti-head">Pesquisa de pólvoras para carga (11 do Guia)</p>
+            <ul>
+              <li><strong>Por nome:</strong> digite parte do nome (<code>negra</code>, <code>poderosa</code>, <code>elukiana</code>, <code>vermelha</code>) sem precisar de acento.</li>
+              <li><strong>Por categoria:</strong> digite <code>comum</code>, <code>alquimicas</code> ou <code>raras</code> para listar o grupo.</li>
+              <li><strong>Por efeito:</strong> digite termos do efeito (<code>raio</code>, <code>fumaça</code>, <code>fogo</code>, <code>gelo</code>, <code>ácido</code>, <code>luz</code>).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="bomba-qtd" id="bomba-qtd-label">Quantidade de bombas</label>
+          <input id="bomba-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+        </div>
+      </div>
+
+      <!-- Modo 2: Munição (p. 160 e p. 171) -->
+      <div id="bm-view-municao" class="bm-subview" hidden>
+        <div class="mg-grid">
+          <div class="field-group">
+            <label for="bm-mun-select">Tipo de munição</label>
+            <select id="bm-mun-select"></select>
+          </div>
+          <div class="field-group">
+            <label for="bm-mun-pde">PDE de 1 munição (po)</label>
+            <input id="bm-mun-pde" type="number" min="0" step="0.01" value="0.05" inputmode="decimal" />
+          </div>
+        </div>
+        <p class="equip-info" id="bm-mun-info">Custo de 4 unidades · rende 2d4 munições (p. 171)</p>
+
+        <div class="field-group">
+          <div class="label-row">
+            <span class="label" id="bm-mun-mat-label">Material da munição</span>
+            <button type="button" class="btn-info" data-info-toggle="bm-mat-search-info" aria-expanded="false" aria-controls="bm-mat-search-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona a pesquisa?</button>
+          </div>
+          <div id="bm-mun-mat-wrap"></div>
+          <div class="tipo-info" id="bm-mat-search-info" role="region" hidden>
+            <p class="ti-head">Pesquisa de materiais (69 do Guia)</p>
+            <ul>
+              <li><strong>Por nome:</strong> digite parte do nome (<code>aço</code>, <code>prata</code>, <code>ferro</code>) sem precisar de acento.</li>
+              <li><strong>Por Tier:</strong> digite <code>tier d</code>, <code>tier c</code>, <code>tier b</code>, <code>tier a</code> ou <code>tier s</code>.</li>
+              <li><strong>Por tipo:</strong> digite <code>metal</code>, <code>vegetal</code> (ou <code>madeira</code>), <code>geologico</code> (ou <code>pedra</code>, <code>cristal</code>) ou <code>organico</code>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <details class="mods" id="bm-ammo-mods-details">
+          <summary class="mods-summary">Modificação de munição <span class="mods-total" id="bm-ammo-mods-total"></span></summary>
+          <div class="mods-body">
+            <p class="magicos-note">Cada munição só pode ter uma modificação. O preço é fixo por munição transformada e não passa pelo multiplicador do material (p. 160).</p>
+            <div class="mods-list" id="bm-ammo-mods-list" role="radiogroup" aria-label="Modificação de munição"></div>
+            <div class="field-group">
+              <label for="bm-ammo-qtd">Quantas munições transformar</label>
+              <input id="bm-ammo-qtd" type="number" min="1" step="1" value="5" inputmode="numeric" />
+              <p class="field-hint">A criação rende 2d4 munições; a média é 5.</p>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-label">
+                <span class="t-name">Só transformar munições que já tenho</span>
+                <span class="t-sub">Paga só a modificação, sem criar munições novas</span>
+              </div>
+              <button type="button" class="switch" id="bm-ammo-existente-switch" role="switch" aria-checked="false" aria-label="Só transformar munições existentes">
+                <span class="knob"></span>
+              </button>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Modo 3: Pólvora (p. 160 e p. 171) -->
+      <div id="bm-view-polvora" class="bm-subview" hidden>
+        <div class="field-group">
+          <div class="label-row">
+            <span class="label" id="bm-polv-label">Pólvora do Guia</span>
+            <button type="button" class="btn-info" data-info-toggle="polv-search-info" aria-expanded="false" aria-controls="polv-search-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona a pesquisa?</button>
+          </div>
+          <div id="bm-polv-wrap"></div>
+          <p class="equip-info" id="bm-polv-info"></p>
+          <div class="tipo-info" id="polv-search-info" role="region" hidden>
+            <p class="ti-head">Pesquisa de pólvoras (11 do Guia)</p>
+            <ul>
+              <li><strong>Por nome:</strong> digite parte do nome (<code>elukiana</code>, <code>refinada</code>, <code>vermelha</code>).</li>
+              <li><strong>Por categoria:</strong> digite <code>basica</code>, <code>potencia</code> ou <code>elemental</code>.</li>
+              <li><strong>Por efeito:</strong> digite <code>agua</code>, <code>fogo</code>, <code>frio</code>, <code>fumaca</code> ou <code>som</code>.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="bm-polv-qtd">Quantidade de lotes (rende 1d4 cada)</label>
+          <input id="bm-polv-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section" aria-labelledby="sec-bomba-alquimista">
+      <header class="section-head">
+        <div>
+          <h2 id="sec-bomba-alquimista">O Alquimista</h2>
+          <p id="bm-alq-sub">Talentos, custos de oficina e cálculo da CD de detonação</p>
+        </div>
+      </header>
+
+      <p class="group-label" id="grp-bomba-custo">Custo</p>
+      <div class="settings-list" role="group" aria-labelledby="grp-bomba-custo">
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Trabalhador Itinerante</span>
+              <span class="t-sub">Forjador paga só a matéria-prima (÷2) e trabalha em 2/3 do tempo</span>
+            </div>
+            <button type="button" class="switch" id="bomba-forjador-switch" role="switch" aria-checked="true" aria-label="Trabalhador Itinerante">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Talento Artesão</span>
+              <span class="t-sub" id="bomba-artesao-sub">−20% em compras de itens não-mágicos</span>
+            </div>
+            <button type="button" class="switch" id="bomba-artesao-switch" role="switch" aria-checked="true" aria-label="Talento Artesão">
+              <span class="knob"></span>
+            </button>
+          </div>
+          <div class="field-group setting-sub" id="bomba-artesao-modo-wrap">
+            <span class="label" id="bomba-artmodo-label">Como o desconto do Artesão entra (sincronizado com a Forja)</span>
+            <div class="segmented" id="bomba-artesao-modo" role="radiogroup" aria-labelledby="bomba-artmodo-label">
+              <button type="button" class="seg-btn" data-artmodo="duplo" role="radio">Duas compras (−36%)</button>
+              <button type="button" class="seg-btn" data-artmodo="simples" role="radio">Uma compra (−20%)</button>
+            </div>
+            <details class="explain">
+              <summary>Por que esse desconto?</summary>
+              <p class="magicos-note" id="bomba-artesao-explica"></p>
+            </details>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Já possui os ingredientes / materiais</span>
+              <span class="t-sub">Custo 0 po (usa componentes já no inventário)</span>
+            </div>
+            <button type="button" class="switch" id="bomba-possuidos-switch" role="switch" aria-checked="false" aria-label="Já possui os ingredientes">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="bm-cd-group" class="bm-subview">
+        <p class="group-label" id="grp-bomba-cd">Detonação na mesa</p>
+        <div class="settings-list" role="group" aria-labelledby="grp-bomba-cd">
+          <div class="setting">
+            <div class="mg-grid">
+              <div class="field-group">
+                <label for="bomba-des">Mod. de Destreza</label>
+                <input id="bomba-des" type="number" min="-5" max="10" step="1" value="3" />
+              </div>
+              <div class="field-group">
+                <label for="bomba-bp">Bônus de Proficiência</label>
+                <input id="bomba-bp" type="number" min="2" max="6" step="1" value="2" inputmode="numeric" />
+              </div>
+            </div>
+          </div>
+
+          <div class="setting">
+            <div class="toggle-row">
+              <div class="toggle-label">
+                <span class="t-name">Mestre das Bombas</span>
+                <span class="t-sub">Talento (p. 216): soma proficiência na CD e arremessa com ação bônus</span>
+              </div>
+              <button type="button" class="switch" id="bomba-mestre-switch" role="switch" aria-checked="false" aria-label="Talento Mestre das Bombas">
+                <span class="knob"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="bm-tempo-group" class="bm-subview" hidden>
+        <p class="group-label" id="grp-bm-tempo">Tempo e qualidade</p>
+        <div class="settings-list" role="group" aria-labelledby="grp-bm-tempo">
+          <div class="setting">
+            <div class="toggle-row">
+              <div class="toggle-label">
+                <span class="t-name">Pressa</span>
+                <span class="t-sub">Metade do tempo; munição sai com −1 no modificador</span>
+              </div>
+              <button type="button" class="switch" id="bm-pressa-switch" role="switch" aria-checked="false" aria-label="Pressa">
+                <span class="knob"></span>
+              </button>
+            </div>
+          </div>
+          <div class="setting" id="bm-obra-setting">
+            <div class="toggle-row">
+              <div class="toggle-label">
+                <span class="t-name">Obra-Prima</span>
+                <span class="t-sub">20 natural (17–20 com Prodígio): +1 no modificador, máx. +3</span>
+              </div>
+              <button type="button" class="switch" id="bm-obra-switch" role="switch" aria-checked="false" aria-label="Obra-Prima">
+                <span class="knob"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="mao-obra-note" id="bm-footer-note">Requer Kit de Alquimista. Com proficiência, a bomba só explode na mão em falha crítica (p. 216).</p>
+    </section>
+
+    <section class="form-section" aria-labelledby="sec-bomba-fim">
+      <header class="section-head">
+        <div>
+          <h2 id="sec-bomba-fim">Finalidade</h2>
+          <p>Criar para uso próprio ou vender com margem</p>
+        </div>
+      </header>
+      <div class="mode">
+        <div class="segmented" id="bomba-modo-seg" role="radiogroup" aria-label="Finalidade">
+          <button type="button" class="seg-btn active" data-bmodo="proprio" role="radio" aria-checked="true">Uso próprio</button>
+          <button type="button" class="seg-btn" data-bmodo="vendido" role="radio" aria-checked="false">Para venda</button>
+        </div>
+        <div class="field-group" id="bomba-lucro-wrap" hidden>
+          <label for="bomba-lucro">Margem de lucro (%)</label>
+          <input id="bomba-lucro" type="number" min="0" step="1" value="50" inputmode="numeric" />
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="panel" id="panel-herbalismo" data-oficina-panel="herbalismo" hidden aria-label="Oficina de Herbalismo">
+    <section class="form-section" aria-labelledby="sec-herbal">
+      <header class="section-head">
+        <div>
+          <h2 id="sec-herbal">Receita Herbal</h2>
+          <p>Escolha uma das 23 receitas do Guia (p. 148–150)</p>
+        </div>
+      </header>
+
+      <div class="field-group">
+        <div class="label-row">
+          <span class="label" id="herbal-combo-label">Item herbáceo do Guia</span>
+          <button type="button" class="btn-info" data-info-toggle="herbal-search-info" aria-expanded="false" aria-controls="herbal-search-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona a pesquisa?</button>
+        </div>
+        <div id="herbal-combo-wrap"></div>
+        <p class="equip-info" id="herbal-equip-info"></p>
+        <div class="tipo-info" id="herbal-search-info" role="region" hidden>
+          <p class="ti-head">Pesquisa de receitas herbáceas (23 do Guia)</p>
+          <ul>
+            <li><strong>Por nome:</strong> digite parte do nome (<code>óleo de linhaça</code>, <code>cura</code>, <code>antitoxina</code>) sem precisar de acento.</li>
+            <li><strong>Por categoria:</strong> digite <code>pocoes</code>, <code>tonicos</code>, <code>venenos</code>, <code>manutencao</code> ou <code>disfarce</code>.</li>
+            <li><strong>Por efeito ou ramo:</strong> digite o efeito ou a cor do ramo usado (<code>vermelho</code>, <code>azul</code>, <code>laranja</code>, <code>verde</code>, <code>roxo</code>, <code>amarelo</code>).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="herbal-qtd">Quantidade de doses / lotes</label>
+        <input id="herbal-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+      </div>
+
+      <div class="field-group">
+        <div class="label-row">
+          <span class="label" id="herbal-origem-label">Origem dos ramos</span>
+          <button type="button" class="btn-info" id="herbal-info-btn" aria-expanded="false" aria-controls="herbal-tipo-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona?</button>
+        </div>
+        <div class="segmented seg-3" id="herbal-origem-seg" role="radiogroup" aria-labelledby="herbal-origem-label">
+          <button type="button" class="seg-btn active" data-horigem="comprar-ramos" role="radio" aria-checked="true">Comprar ramos</button>
+          <button type="button" class="seg-btn" data-horigem="forragear" role="radio" aria-checked="false">Forrageados</button>
+          <button type="button" class="seg-btn" data-horigem="comprar-pronto" role="radio" aria-checked="false">Comprar pronto</button>
+        </div>
+        <div class="tipo-info" id="herbal-tipo-info" role="region" hidden></div>
+      </div>
+    </section>
+
+    <section class="form-section" aria-labelledby="sec-herbal-opcoes">
+      <header class="section-head">
+        <div>
+          <h2 id="sec-herbal-opcoes">O Herbolário</h2>
+          <p>Descontos e limites de memorização de receitas</p>
+        </div>
+      </header>
+
+      <p class="group-label" id="grp-herbal-custo">Custo</p>
+      <div class="settings-list" role="group" aria-labelledby="grp-herbal-custo">
+        <div class="setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Talento Artesão (−20%)</span>
+              <span class="t-sub">Desconto na compra de ramos ou itens herbáceos não-mágicos</span>
+            </div>
+            <button type="button" class="switch" id="herbal-artesao-switch" role="switch" aria-checked="true" aria-label="Talento Artesão no herbalismo">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <p class="mao-obra-note">Receitas memorizadas (p. 149): sem proficiência 2 · Natureza 4 · Kit de Herbalismo 6 · Curandeiro sabe todas.</p>
+    </section>
+
+    <section class="form-section" aria-labelledby="sec-herbal-fim">
+      <header class="section-head">
+        <div>
+          <h2 id="sec-herbal-fim">Finalidade</h2>
+          <p>Preparar para uso próprio ou vender com margem</p>
+        </div>
+      </header>
+      <div class="mode">
+        <div class="segmented" id="herbal-modo-seg" role="radiogroup" aria-label="Finalidade">
+          <button type="button" class="seg-btn active" data-hmodo="proprio" role="radio" aria-checked="true">Uso próprio</button>
+          <button type="button" class="seg-btn" data-hmodo="vendido" role="radio" aria-checked="false">Para venda</button>
+        </div>
+        <div class="field-group" id="herbal-lucro-wrap" hidden>
+          <label for="herbal-lucro">Margem de lucro (%)</label>
+          <input id="herbal-lucro" type="number" min="0" step="1" value="50" inputmode="numeric" />
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <aside class="side" id="side">
+  <section class="result" id="result-card">
+    <div class="kpi-main">
+      <h2 class="result-label" id="result-label">Custo para forjar</h2>
+      <p class="result-value" id="result">0</p>
+    </div>
+    <p class="result-empty" id="result-empty" hidden></p>
+    <div class="kpi-time">
+      <span class="kpi-time-label" id="kpi-time-label">Tempo do Forjador</span>
+      <span class="kpi-time-value"><strong id="result-time">—</strong> <span id="result-time-sub"></span></span>
+    </div>
+    <div class="result-props" id="result-props" hidden></div>
+    <div class="result-actions">
+      <button type="button" class="btn-ghost btn-strong" id="add-lista-btn"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg> Adicionar à lista</button>
+      <button type="button" class="btn-ghost" id="copy-btn">Copiar resultado</button>
+      <button type="button" class="btn-ghost" id="share-btn"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11 4.93M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L13 19.07"/></svg> Copiar link</button>
+    </div>
+    <div class="result-help-row">
+      <button type="button" class="btn-info" data-info-toggle="share-info" aria-expanded="false" aria-controls="share-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona o compartilhamento?</button>
+    </div>
+    <div class="tipo-info" id="share-info" role="region" hidden>
+      <p class="ti-head">Compartilhar receita e resultados</p>
+      <ul>
+        <li><strong>Copiar resultado:</strong> gera um resumo em texto pronto para colar no Discord ou WhatsApp da mesa.</li>
+        <li><strong>Copiar link:</strong> cria uma URL com a oficina, o item, os materiais e as opções preenchidos. Quem abrir o link vê a conta exata no navegador.</li>
+        <li><strong>Adicionar à lista:</strong> acumula vários itens de qualquer oficina na <em>Lista da sessão</em> para somar o ouro e o tempo total.</li>
+      </ul>
+    </div>
+    <div class="receipt">
+      <h3 class="receipt-title">A conta</h3>
+      <div class="breakdown" id="breakdown"></div>
+    </div>
+  </section>
+
+  <section class="compare" id="compare-section">
+    <h2 class="compare-title">Comparativo</h2>
+    <div id="compare-rows"></div>
+  </section>
+  </aside>
+
+  <section class="vantagens" id="vantagens-section" data-oficina-panel="forja">
+    <h2 class="vantagens-title">Vantagens e desvantagens dos materiais</h2>
+    <div id="vantagens-rows"></div>
+  </section>
+
+  <section class="production" id="production-section" data-oficina-panel="forja">
+    <h2 class="production-title">Tempo de Produção</h2>
+    <p class="production-note" id="production-note"></p>
+    <div id="production-rows"></div>
+  </section>
+
+  <section class="vantagens" id="bomba-detalhes-section" data-oficina-panel="bombas" hidden>
+    <h2 class="vantagens-title" id="bomba-detalhes-title">Receita e efeitos da bomba</h2>
+    <div id="bomba-info-card"></div>
+  </section>
+
+  <section class="vantagens" id="herbal-detalhes-section" data-oficina-panel="herbalismo" hidden>
+    <h2 class="vantagens-title">Ingredientes e efeito da receita</h2>
+    <div id="herbal-info-card"></div>
+  </section>
+
+  <section class="production" id="herbal-mesa-section" data-oficina-panel="herbalismo" hidden>
+    <h2 class="production-title">Forrageamento e Herbolário</h2>
+    <p class="production-note">Forragear leva 1 hora (teste de Natureza ou Sobrevivência CD 14 → 2 ramos). Herbolários renovam o estoque diariamente (p. 148).</p>
+    <div class="roller-actions">
+      <button type="button" class="btn-ghost btn-strong" id="btn-forragear">Rolar Forragear (1d20 → 2 ramos)</button>
+      <button type="button" class="btn-ghost" id="btn-herbolario">Gerar estoque de Herbolário</button>
+    </div>
+    <div class="roller-output" id="herbal-roller-out" hidden></div>
+  </section>
+
+  <details class="magicos" id="herbal-ramos-details" data-oficina-panel="herbalismo" hidden>
+    <summary class="magicos-summary">Tabela dos 8 Ramos <span class="magicos-sub">(p. 148 · venda pela metade do preço)</span></summary>
+    <div class="magicos-body">
+      <div class="ramos-grid" id="ramos-grid"></div>
+    </div>
+  </details>
+
+  <section class="lista" id="lista-section" aria-labelledby="lista-title" hidden>
+    <div class="lista-head">
+      <div class="lista-title-wrap">
+        <h2 class="lista-title" id="lista-title">Lista da sessão</h2>
+        <button type="button" class="btn-info" data-info-toggle="lista-info" aria-expanded="false" aria-controls="lista-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona?</button>
+      </div>
+      <div class="lista-actions">
+        <button type="button" class="btn-ghost" id="lista-copy-btn">Copiar lista</button>
+        <button type="button" class="btn-reset" id="lista-clear-btn">limpar</button>
+      </div>
+    </div>
+    <div class="tipo-info" id="lista-info" role="region" hidden>
+      <p class="ti-head">Lista da sessão (todas as oficinas)</p>
+      <ul>
+        <li><strong>Quantidade (− / +):</strong> ajuste quantas unidades daquele item o grupo vai encomendar, e o custo e o tempo atualizam na hora.</li>
+        <li><strong>Marcar como fabricado:</strong> clique na caixa à esquerda para riscar o que já ficou pronto; o rodapé separa o que ainda está <em>pendente</em> do total.</li>
+        <li><strong>Copiar lista:</strong> exporta toda a encomenda formatada para o chat da mesa, e a lista fica salva no navegador até você limpar.</li>
+      </ul>
+    </div>
+    <ul class="lista-items" id="lista-items"></ul>
+    <div class="lista-total" id="lista-total"></div>
+  </section>
+
+  <details class="magicos" id="comp-mat-details" data-oficina-panel="forja">
+    <summary class="magicos-summary">Comparar Materiais Lado a Lado <span class="magicos-sub">(até 3 materiais no item atual)</span></summary>
+    <div class="magicos-body">
+      <div class="label-row">
+        <span class="label">Escolha até 3 materiais do Guia</span>
+        <button type="button" class="btn-info" data-info-toggle="comp-mat-info" aria-expanded="false" aria-controls="comp-mat-info"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18zM12 8v.5M12 11v5"/></svg> Como funciona?</button>
+      </div>
+      <div class="tipo-info" id="comp-mat-info" role="region" hidden>
+        <p class="ti-head">Comparador de Materiais</p>
+        <ul>
+          <li><strong>Usa o item acima:</strong> pega o PDE, modificações, peso, <em>Talento Artesão</em>, <em>Pressa</em>, <em>Obra-Prima</em> e <em>Finalidade</em> configurados no formulário.</li>
+          <li><strong>Comparação direta:</strong> escolha 2 ou 3 materiais (busque por nome, tier ou categoria) para ver lado a lado custo final, tempo do Forjador, dureza e modificador antes de forjar.</li>
+          <li><strong>Destaque automático:</strong> marca o material mais econômico e o maior modificador da seleção.</li>
+        </ul>
+      </div>
+      <div class="cm-inputs">
+        <div class="field-group">
+          <span class="label" id="comp-mat-0-label">Material 1</span>
+          <div id="comp-mat-0"></div>
+        </div>
+        <div class="field-group">
+          <span class="label" id="comp-mat-1-label">Material 2</span>
+          <div id="comp-mat-1"></div>
+        </div>
+        <div class="field-group">
+          <span class="label" id="comp-mat-2-label">Material 3</span>
+          <div id="comp-mat-2"></div>
+        </div>
+      </div>
+      <div class="cm-grid" id="comp-mat-grid"></div>
+    </div>
+  </details>
+
+  <details class="magicos" id="magicos-details" data-oficina-panel="forja">
+    <summary class="magicos-summary">Itens Mágicos e Transmutação <span class="magicos-sub">(Forjador Arcano / Alquimista)</span></summary>
+    <div class="magicos-body">
+
+      <div class="magicos-block">
+        <p class="magicos-block-title">Itens Mágicos</p>
+        <p class="magicos-note">Tabela da p. 169: o item é fabricado normalmente (custo e tempo acima) e ainda paga o custo do encantamento. Raro exige StarWood, Muito Raro exige StarStone e Lendário exige StarMetal entre os materiais. O Trabalhador Itinerante não reduz o tempo de itens mágicos.</p>
+        <div class="field-group">
+          <label for="magico-raridade">Raridade</label>
+          <select id="magico-raridade">
+            <option value="comum">Comum</option>
+            <option value="incomum">Incomum</option>
+            <option value="raro">Raro</option>
+            <option value="muitoRaro">Muito Raro</option>
+            <option value="lendario">Lendário</option>
+            <option value="personalizado">Personalizado</option>
+          </select>
+        </div>
+        <div class="mg-grid">
+          <div class="field-group">
+            <label for="magico-custo">Custo do encantamento (po)</label>
+            <input id="magico-custo" type="number" min="0" step="0.01" inputmode="decimal" />
+          </div>
+          <div class="field-group">
+            <label for="magico-tempo">Tempo do encantamento (horas)</label>
+            <input id="magico-tempo" type="number" min="0" step="1" inputmode="decimal" />
+          </div>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Encantar item que já possui</span>
+            <span class="t-sub">Ritual sobre um item existente: paga só o encantamento</span>
+          </div>
+          <button type="button" class="switch" id="encantar-switch" role="switch" aria-checked="false" aria-label="Encantar item existente">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Energia de item desencantado</span>
+            <span class="t-sub">Iniciado em Itens Mágicos: desencantou um item da mesma raridade, tempo ÷2</span>
+          </div>
+          <button type="button" class="switch" id="desencantado-switch" role="switch" aria-checked="false" aria-label="Energia de item desencantado">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Perito em Itens Mágicos</span>
+            <span class="t-sub">10º nível de Forjador: custo de criação ÷2</span>
+          </div>
+          <button type="button" class="switch" id="perito-switch" role="switch" aria-checked="false" aria-label="Perito em Itens Mágicos">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Especialista em Itens Mágicos</span>
+            <span class="t-sub">13º nível de Forjador Arcano: tempo ÷4 (raridade comum/incomum)</span>
+          </div>
+          <button type="button" class="switch" id="especialista-switch" role="switch" aria-checked="false" aria-label="Especialista em Itens Mágicos">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Criações Automáticas</span>
+            <span class="t-sub">17º nível de Forjador Arcano: ferramenta automatizada ajuda, tempo ÷2</span>
+          </div>
+          <button type="button" class="switch" id="automaticas-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-label">
+            <span class="t-name">Versado em Itens Mágicos</span>
+            <span class="t-sub">18º nível de Forjador: tempo ÷2</span>
+          </div>
+          <button type="button" class="switch" id="versado-switch" role="switch" aria-checked="false" aria-label="Versado em Itens Mágicos">
+            <span class="knob"></span>
+          </button>
+        </div>
+        <div id="magico-result" class="mg-result"></div>
+      </div>
+
+      <div class="magicos-block">
+        <p class="magicos-block-title">Transmutação de Material</p>
+        <p class="magicos-note">Forjador Alquimista: usa o PDE do formulário principal. Custa metade do valor do item no material de destino (até 30 cm³).</p>
+        <div class="field-group">
+          <label for="transmut-nivel">Nível da característica</label>
+          <select id="transmut-nivel">
+            <option value="3">3º — Transmutação (Tier D/C, mesma categoria)</option>
+            <option value="7">7º — Avançada (qualquer categoria, até Tier B)</option>
+            <option value="13">13º — Suprema (D/C/B grátis, Tier A permitido)</option>
+          </select>
+        </div>
+        <div class="mg-grid">
+          <div class="field-group">
+            <span class="label" id="origem-label">Material de origem</span>
+            <div id="transmut-origem-wrap"></div>
+          </div>
+          <div class="field-group">
+            <span class="label" id="destino-label">Material de destino</span>
+            <div id="transmut-destino-wrap"></div>
+          </div>
+        </div>
+        <div id="transmut-result" class="mg-result"></div>
+      </div>
+
+    </div>
+  </details>
+
+  <footer class="foot">
+    <p id="formula-note">(PDE × desconto) × (Σ multiplicadores × desconto) ÷ divisor</p>
+    <button type="button" class="btn-reset" id="reset-btn">restaurar padrão</button>
+  </footer>
+</div>
+
+<button type="button" class="cost-bar" id="cost-bar" title="Ver a conta completa">
+  <span class="cb-left">
+    <span class="cb-label" id="cb-label">Custo para forjar</span>
+    <span class="cb-time" id="cb-time"></span>
+  </span>
+  <span class="cb-value" id="cb-value">0 po</span>
+</button>
+<p class="sr-only" id="live-result" aria-live="polite"></p>
+<div class="toast" id="toast" role="status" hidden>
+  <span id="toast-msg"></span>
+  <button type="button" class="toast-btn" id="toast-undo" hidden></button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+/* {{APP_JS}} */
+})();
+
+// Campos numéricos: valor negativo ou inválido ganha aviso junto ao campo
+(function () {
+  'use strict';
+  function check(input) {
+    var min = parseFloat(input.getAttribute('min'));
+    var raw = input.value, v = parseFloat(raw);
+    var bad = raw !== '' && (!isFinite(v) || (isFinite(min) && v < min));
+    input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    var group = input.parentElement && input.parentElement.classList.contains('field-group') ? input.parentElement : null;
+    if (!group) { input.title = bad ? (min > 0 ? 'Use um número a partir de ' + min + '.' : 'O valor não pode ser negativo.') : ''; return; }
+    var msg = group.querySelector('.field-error');
+    if (bad && !msg) {
+      msg = document.createElement('p');
+      msg.className = 'field-error';
+      msg.id = (input.id || 'campo') + '-erro';
+      msg.textContent = min > 0 ? 'Use um número a partir de ' + min + '.' : 'O valor não pode ser negativo.';
+      group.appendChild(msg);
+      input.setAttribute('aria-describedby', ((input.getAttribute('aria-describedby') || '') + ' ' + msg.id).trim());
+    } else if (!bad && msg) {
+      var ids = (input.getAttribute('aria-describedby') || '').split(/\s+/).filter(function (x) { return x && x !== msg.id; });
+      msg.remove();
+      if (ids.length) input.setAttribute('aria-describedby', ids.join(' ')); else input.removeAttribute('aria-describedby');
+    }
+  }
+  document.addEventListener('input', function (e) {
+    if (e.target && e.target.matches && e.target.matches('input[type="number"][min]')) check(e.target);
+  }, true);
+  Array.prototype.forEach.call(document.querySelectorAll('input[type="number"][min]'), check);
+})();
+
+// Grupos de opção (botões segmentados): setas do teclado, indicador deslizante e um só ponto de foco por grupo
+// + abertura/fechamento suave de gavetas <details> via Web Animations API
+(function () {
+  'use strict';
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var groups = document.querySelectorAll('.segmented[role="radiogroup"], .segmented[role="tablist"]');
+  var pillUpdaters = [];
+
+  Array.prototype.forEach.call(groups, function (group) {
+    var btns = Array.prototype.slice.call(group.querySelectorAll('[role="radio"], [role="tab"]'));
+    var pill = document.createElement('span');
+    pill.className = 'seg-pill no-anim';
+    pill.setAttribute('aria-hidden', 'true');
+    group.insertBefore(pill, group.firstChild);
+    group.classList.add('has-pill');
+    var skipNextAnim = true;
+
+    function updatePill(instant) {
+      var checked = btns.filter(function (b) { return b.getAttribute('aria-checked') === 'true'; })[0] || btns[0];
+      if (!checked || !checked.offsetWidth) {
+        skipNextAnim = true;
+        return;
+      }
+      if (instant || skipNextAnim || reduce) {
+        pill.classList.add('no-anim');
+      } else {
+        pill.classList.remove('no-anim');
+      }
+      pill.style.width = checked.offsetWidth + 'px';
+      pill.style.height = checked.offsetHeight + 'px';
+      pill.style.transform = 'translate3d(' + checked.offsetLeft + 'px,' + checked.offsetTop + 'px,0)';
+      if (instant || skipNextAnim || reduce) {
+        void pill.offsetWidth;
+        pill.classList.remove('no-anim');
+      }
+      skipNextAnim = false;
+    }
+
+    function syncTabs() {
+      var checked = btns.filter(function (b) { return b.getAttribute('aria-checked') === 'true'; })[0] || btns[0];
+      btns.forEach(function (b) { b.tabIndex = b === checked ? 0 : -1; });
+      updatePill(false);
+    }
+
+    group.addEventListener('keydown', function (ev) {
+      var i = btns.indexOf(document.activeElement);
+      if (i < 0) return;
+      var next = null;
+      if (ev.key === 'ArrowRight' || ev.key === 'ArrowDown') next = btns[(i + 1) % btns.length];
+      else if (ev.key === 'ArrowLeft' || ev.key === 'ArrowUp') next = btns[(i - 1 + btns.length) % btns.length];
+      else if (ev.key === 'Home') next = btns[0];
+      else if (ev.key === 'End') next = btns[btns.length - 1];
+      if (!next) return;
+      ev.preventDefault();
+      // Ações por teclado não animam (regra do emil-design-eng)
+      skipNextAnim = true;
+      next.click();
+      next.focus();
+    });
+
+    new MutationObserver(syncTabs).observe(group, { subtree: true, attributes: true, attributeFilter: ['aria-checked'] });
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(function () { updatePill(true); }).observe(group);
+    }
+    syncTabs();
+    pillUpdaters.push(function () { updatePill(true); });
+  });
+
+  window.addEventListener('resize', function () {
+    pillUpdaters.forEach(function (fn) { fn(); });
+  });
+  // Quando blocos ocultos (como #artesao-modo-wrap ou #peso-wrap) aparecem, reposiciona a pílula sem animar
+  new MutationObserver(function () {
+    pillUpdaters.forEach(function (fn) { fn(); });
+  }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
+
+  // Gavetas <details>: expansão e fechamento interrompíveis com tempos assimétricos (abre em 220ms, fecha em 165ms)
+  Array.prototype.forEach.call(document.querySelectorAll('details.mods, details.magicos, details.explain'), function (det) {
+    var sum = det.querySelector('summary');
+    if (!sum || !det.animate) return;
+    var anim = null;
+    sum.addEventListener('click', function (ev) {
+      if (reduce) return;
+      ev.preventDefault();
+      if (anim) { anim.cancel(); anim = null; }
+      var startH = det.offsetHeight;
+      var isClosing = det.open;
+      if (!isClosing) det.open = true;
+      var endH = isClosing ? sum.offsetHeight : det.scrollHeight;
+      det.style.overflow = 'hidden';
+      anim = det.animate(
+        [
+          { height: startH + 'px', opacity: isClosing ? 1 : 0.92 },
+          { height: endH + 'px', opacity: 1 }
+        ],
+        {
+          duration: isClosing ? 165 : 220,
+          easing: 'cubic-bezier(0.23, 1, 0.32, 1)'
+        }
+      );
+      anim.onfinish = function () {
+        if (isClosing) det.open = false;
+        det.style.height = '';
+        det.style.overflow = '';
+        anim = null;
+      };
+      anim.oncancel = function () {
+        det.style.height = '';
+        det.style.overflow = '';
+      };
+    });
+  });
+})();
+</script>
+<script>
+/* {{TEMA_JS}} */
+</script>
+<script>
+/* {{PARTICULAS_JS}} */
+</script>
+
+<script>
+// Funciona sem internet quando servida pela web (GitHub Pages); aberta como arquivo, não precisa
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+}
+</script>
+
+</body>
+</html>

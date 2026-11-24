@@ -8,21 +8,30 @@ Fiz esta calculadora para a minha mesa de D&D 5e, onde jogo com a classe **Forja
 
 ## Como usar
 
-1. Em **Equipamento do Guia**, digite o nome do item (por exemplo "espada longa", "cota de malha" ou "orbe"). A lista tem as armas, escudos, armaduras, munições, pólvoras, focos de conjuração, instrumento musical e carregador de munição do Guia. O PDE, o tipo e o peso são preenchidos sozinhos. Se o item não estiver na lista, digite o PDE à mão.
-   O botão **Como funciona?**, ao lado do tipo de item, resume as regras de criação daquele tipo (arma, armadura, munição ou pólvora) com as páginas do Guia. O que não vale para o tipo escolhido some da tela: a pólvora, por exemplo, não usa materiais nem modificações.
-2. Em **Materiais**, busque o material ("aço", "prata", "coral", "pedra filosofal"...). O multiplicador e o tier vêm da tabela do Guia. Dá para juntar até 4 materiais no mesmo item (ou até 6 na **Excalibur**, do 20º nível).
-3. Em **O Forjador**, ligue o que vale para o seu personagem. Em **Custo** ficam o talento Artesão (e se o desconto entra uma ou duas vezes) e se você já tem os materiais; em **Tempo e qualidade**, Pressa, Obra-Prima, O Melhor dos Melhores, Criações Automáticas e Excalibur.
-4. Em **Finalidade**, escolha entre **Uso próprio**, **Para venda** (com margem de lucro) ou **Consertar quebrado** (metade do valor do item, p. 173, com a mão de obra dividida por 2 pelo Trabalhador Itinerante).
-5. O custo e o tempo do Forjador aparecem no painel de resultado (no computador ele fica fixo na lateral; no celular, uma barra no rodapé mostra os dois enquanto você rola). Logo abaixo vêm a conta passo a passo, a comparação com um ferreiro comum e o tempo de produção em detalhe.
+No topo da página ficam as três abas do Guia:
+
+- **Forja de Equipamento:** armas, armaduras, escudos, focos de conjuração e instrumentos musicais.
+- **Bombas e Munições:** as 16 bombas e bombinhas (p. 216–220), munições (inclusive de armas de fogo e canhão, p. 159–160) e as 11 pólvoras do Guia.
+- **Herbalismo e Poções:** as 23 receitas herbáceas e os 8 ramos (p. 148–150), com rolador de forrageamento e estoque de herbolário.
+
+Na **Forja de Equipamento**:
+
+1. Em **Equipamento do Guia**, digite parte do nome (como "espada longa", "cota de malha" ou "orbe") ou a categoria ("armas", "armaduras", "escudos", "focos", "instrumentos"). O PDE, o tipo e o peso são preenchidos sozinhos. Se o item não estiver na lista, digite o PDE à mão.
+   Em todas as buscas, o botão **Como funciona a pesquisa?** mostra o que dá para digitar (nome sem acento, categoria, tier, tipo de material, CD, salvaguarda, efeito ou cor do ramo), e **Como funciona?** resume as regras com as páginas do Guia.
+2. Em **Materiais**, busque pelo nome ("aço", "prata", "coral", "pedra filosofal"), pelo tier ("tier d" a "tier s") ou pelo tipo ("metal", "vegetal", "geologico", "organico"). Dá para juntar até 4 materiais no mesmo item (ou até 6 na **Excalibur**, do 20º nível).
+3. Em **O Forjador**, ligue o que vale para o seu personagem. Em **Custo** ficam o talento Artesão (com escolha entre duas compras de −36% ou uma de −20%, sincronizada com *Bombas e Munições*) e se você já tem os materiais; em **Tempo e qualidade**, Pressa, Obra-Prima, O Melhor dos Melhores, Criações Automáticas e Excalibur.
+4. Em **Finalidade**, escolha entre **Uso próprio**, **Para venda** (com margem de lucro, disponível nas três abas) ou **Consertar quebrado** (metade do valor do item, p. 173, com a mão de obra dividida por 2 pelo Trabalhador Itinerante).
+5. O custo e o tempo aparecem no painel de resultado (no computador ele fica fixo na lateral; no celular, uma barra no rodapé mostra os dois enquanto você rola). Logo abaixo vêm a conta passo a passo, a comparação com loja, alquimista ou ferreiro comum e os detalhes de vantagens, receitas ou tempo de produção.
 
 Os valores aparecem em moedas do D&D: peças de ouro (po), prata (pp) e cobre (pc), arredondados para a peça de cobre. Uma flecha, por exemplo, custa 5 pc, e não 0,05 po. Electro e platina ficam de fora porque o Livro do Jogador diz que são incomuns em transações. Os campos de preço continuam em po, como os preços do Guia.
 
 Os valores ficam salvos no seu navegador, então dá para fechar a página e voltar depois.
 
-### Copiar e montar uma lista
+### Copiar, compartilhar e montar uma lista
 
 - **Copiar resultado** gera um texto pronto para colar no Discord ou no WhatsApp da mesa, com item, materiais, custo, tempo, modificador e dureza.
-- **Adicionar à lista** guarda o item atual na **Lista da sessão**, que soma o custo e o tempo de todos os itens (o tempo considera um item feito depois do outro). Serve para quando o grupo encomenda vários equipamentos de uma vez. A lista também pode ser copiada inteira e fica salva no navegador até você limpar.
+- **Copiar link** gera um endereço (`?s=...`) com a oficina, o item, os materiais e as opções preenchidos. Quem abrir o link vê a mesma conta no navegador.
+- **Adicionar à lista** guarda o item atual na **Lista da sessão**, que soma o custo e o tempo de todos os itens (um item feito depois do outro). Dá para mudar a quantidade (`−` e `+`) direto na lista e marcar o que já ficou pronto, separando o pendente do total. A lista também pode ser copiada inteira e fica salva no navegador até você limpar.
 
 ## Aparência
 
@@ -30,7 +39,7 @@ No topo da página há três controles:
 
 - **Tema (lua / sol):** troca entre o tema diurno e o noturno, numa onda que sai do botão. Na primeira visita a calculadora segue o tema do seu sistema; depois lembra a sua escolha.
 - **Mostrar dureza:** esconde a Dureza do item pronto, para mesas que não usam a regra opcional de quebra de equipamentos.
-- **Modo forja:** liga brasas subindo pelo fundo da página. Vem desligado e é só enfeite: não muda nenhuma conta.
+- **Modo forja / pólvora / jardim:** liga a animação ambiente no fundo da página, mudando conforme a oficina ativa (**brasas subindo** na Forja, **névoa de pólvora com clarões abafados e grãos inflamando** em Bombas e Munições, e **folhas botânicas caindo** em Herbalismo e Poções). Vem desligado e é só enfeite: não muda nenhuma conta.
 
 Se o sistema estiver com "reduzir movimento" ligado, a troca de tema é instantânea e as brasas ficam paradas. No Firefox a troca de tema também é instantânea, porque ele ainda não tem suporte à animação.
 
@@ -54,19 +63,34 @@ Se o sistema estiver com "reduzir movimento" ligado, a troca de tema é instant�
 - Aviso de equipamento SS ou SA quando os materiais passam do que a regra permite.
 - Vantagens e desvantagens dos 69 materiais do livro completo (incluindo a **Pedra Filosofal**, exclusiva do Alquimista de 17º nível, p. 131).
 
-**Itens mágicos e transmutação**
+**Itens mágicos, transmutação e comparador**
 - Custo e horas do encantamento por raridade (p. 169), tempo total somado à fabricação do item e o material exigido: StarWood para raro, StarStone para muito raro, StarMetal para lendário.
 - Habilidades do Forjador que mexem nisso: Perito, Especialista, Criações Automáticas, Versado, Excalibur e a energia de um item desencantado.
 - Transmutação do Forjador Alquimista no 3º, 7º e 13º nível (p. 130–131).
+- Gaveta **Comparar Materiais Lado a Lado** para testar até 3 materiais no item atual e ver custo, tempo do Forjador, modificador e dureza lado a lado.
+
+**Bombas, Munições e Herbalismo**
+- As 16 bombas do Guia (inteira ou bombinhas, 2d4 por lote ou ¼ do preço), troca de carga para as 11 pólvoras (p. 217), fabricação de lotes de pólvora (1d4 cargas em 8h base) e CD de detonação (8 + DES + Mestre das Bombas).
+- Munições comuns, bala de arma de fogo e bala colossal de canhão (p. 159), com as 8 modificações da p. 160.
+- As 23 receitas herbáceas e os 8 ramos (p. 148–150), comprando ramos, forrageando ou comprando pronto, modo Para venda com margem de lucro e roladores para Forragear (1d20 → 2 ramos) e Estoque do Herbolário.
 
 ## Desconto do Artesão: 36% ou 20%?
 
-O talento Artesão dá 20% de desconto na compra de itens não-mágicos. A dúvida é quantas compras o Forjador faz, e por isso a calculadora tem um botão para escolher:
+O talento Artesão dá 20% de desconto na compra de itens não-mágicos. A dúvida é quantas compras o Forjador faz, e por isso a calculadora tem um botão para escolher (sincronizado entre Forja e Bombas; ligar ou desligar o talento vale nas três abas):
 
 - **Duas compras (−36%)**, como jogamos na nossa mesa. O Forjador compra a matéria-prima de um NPC e depois paga a fabricação do item, e cada uma recebe os 20%. Descontos seguidos se multiplicam, não se somam: 0,8 × 0,8 = 0,64. Você paga 64% do preço, ou seja, 36% de desconto, e não 40%.
-- **Uma compra (−20%)**, a leitura literal do talento. Como o próprio Forjador fabrica o item, a única compra é a da matéria-prima, e o desconto entra uma vez só.
+- **Uma compra (−20%)**, a leitura literal do talento. Como o próprio Forjador fabrica o item, a única compra é a da matéria-prima, e o desconto entra uma vez só. No Herbalismo só existe uma compra direta (os ramos ou a poção pronta), então o desconto entra uma vez só.
 
-Exemplo com uma espada longa de aço (PDE 50 × 36 de materiais = 1.800 po cheio, ÷ 2 pelo Trabalhador Itinerante): 576 po com duas compras, 720 po com uma. Combine com o seu Mestre qual vale.
+Exemplo com uma espada longa de aço (PDE 50 × 30 de Aço = 1.500 po cheio, ÷ 2 pelo Trabalhador Itinerante): 480 po com duas compras, 600 po com uma. Combine com o seu Mestre qual vale.
+
+## Como montar o arquivo e rodar os testes
+
+O código fica separado em `src/` (`template.html`, `styles.css`, `data/` e `js/`) e o `build.py` junta tudo no `index.html` único:
+
+```bash
+python build.py --sync
+node --test tests/calc.test.js
+```
 
 ## Limites
 
@@ -75,6 +99,14 @@ A calculadora não decide nada que o Guia deixa para o Mestre: o tempo de itens 
 Achou um número diferente do livro? Abra uma issue dizendo o item, os materiais e a página.
 
 ## O que mudou em cada versão
+
+### v4
+- A calculadora ganhou três abas no topo: **Forja de Equipamento**, **Bombas e Munições** e **Herbalismo e Poções**. Cada uma tem paleta própria, ícone no cabeçalho e animação de fundo diferente (brasas na Forja, névoa com clarões e grãos de pólvora em Bombas, e folhas caindo no Herbalismo), calibradas no tema claro e no escuro.
+- Munições e pólvoras saíram da Forja e foram para **Bombas e Munições**, junto com as 16 bombas (inteira ou bombinhas 2d4), as 11 pólvoras (como carga ou lote 1d4), bala de arma de fogo e bala colossal (p. 159), CD de detonação com Mestre das Bombas e o modo do talento Artesão sincronizado com a Forja.
+- Entrou a aba **Herbalismo e Poções** (p. 148–150) com as 23 receitas, a tabela dos 8 ramos, cálculo comprando ramos, forrageando ou comprando pronto, modo Para venda e roladores de Forragear e Estoque do Herbolário.
+- Todas as buscas agora seguem o mesmo padrão da Forja: começam vazias (inclusive PDE e materiais, deixando só o Artesão ligado), só abrem a lista quando você digita, limpam ao apagar o texto e têm o botão *Como funciona a pesquisa?* logo ao lado.
+- Entraram o comparador de até 3 materiais lado a lado na Forja, o botão *Copiar link* (`?s=...`) para mandar a receita pronta no chat e melhorias na Lista da sessão (quantidade `−` / `+` e marcar itens já fabricados).
+- Separei o código em `src/` com `build.py` para gerar o `index.html` único sem dependências, adicionei testes de fórmula em `tests/calc.test.js` e atualizei o cache offline (`sw.js`) para `forjador-v4`.
 
 ### v3
 - As moedas de ouro (`po`), prata (`pp`) e cobre (`pc`) agora têm cores e selos próprios no resultado principal, para bater o olho e separar o ouro dos trocados.
