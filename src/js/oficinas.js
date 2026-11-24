@@ -5,7 +5,7 @@
   var OFICINA_META = {
     forja: {
       title: 'Forja de Equipamento',
-      sub: 'Armas, armaduras, escudos, focos e instrumentos — PDE, materiais, modificações e tempo de forja.',
+      sub: 'Armas, armaduras, escudos, focos e instrumentos do Guia, com cálculo de custo, materiais e tempo de forja.',
       forjaLabel: 'Modo forja',
       themeLight: '#b0551f',
       themeDark: '#1a1815'
