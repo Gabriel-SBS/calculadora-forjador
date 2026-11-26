@@ -210,6 +210,11 @@
       dChip.classList.add('chip-obra');
       resultPropsEl.appendChild(dChip);
     }
+    if (state.herbalModo === 'vendido' && ch.lucroValor > 0) {
+      var hlChip = propChip('Lucro líquido', '+' + fmtMoeda(ch.lucroValor));
+      hlChip.classList.add('chip-lucro');
+      resultPropsEl.appendChild(hlChip);
+    }
 
     breakdownEl.innerHTML = '';
     if (state.herbalOrigem === 'comprar-pronto') {

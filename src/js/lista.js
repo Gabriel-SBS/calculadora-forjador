@@ -9,9 +9,31 @@
   }
   function fmtMod(m) { return (m >= 0 ? '+' : '−') + Math.abs(m); }
 
+  function encodeJsonB64(obj) {
+    var json = JSON.stringify(obj);
+    var bytes = unescape(encodeURIComponent(json));
+    return btoa(bytes).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function decodeJsonB64(str) {
+    try {
+      var b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      return JSON.parse(decodeURIComponent(escape(atob(b64))));
+    } catch (e) { return null; }
+  }
+
   function resumoAtual() {
-    if (state.oficina === 'bombas') return resumoBombaAtual();
-    if (state.oficina === 'herbalismo') return resumoHerbalAtual();
+    var snap = encodeShareState();
+    if (state.oficina === 'bombas') {
+      var rb = resumoBombaAtual();
+      if (rb) rb.snap = snap;
+      return rb;
+    }
+    if (state.oficina === 'herbalismo') {
+      var rh = resumoHerbalAtual();
+      if (rh) rh.snap = snap;
+      return rh;
+    }
     var c = calculate();
     if (emptyReason(c)) return null;
     var soModMun = !!(c.modMun && c.modMun.existente);
@@ -39,6 +61,7 @@
       dureza: props && state.mostrarDureza ? props.dureza : null,
       mod: props ? props.mod : null,
       pesoKg: w ? w.finalKg : null,
+      snap: snap,
       obra: !!(props && props.obra),
       pressa: !!state.pressa,
       rende: soModMun || state.modo === 'conserto' ? '' : state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
@@ -258,6 +281,23 @@
       qtyWrap.appendChild(btnDec);
       qtyWrap.appendChild(qtyVal);
       qtyWrap.appendChild(btnInc);
+      if (r.snap) {
+        var btnOpen = document.createElement('button');
+        btnOpen.type = 'button';
+        btnOpen.className = 'btn-ghost li-open-btn';
+        btnOpen.textContent = 'Abrir';
+        btnOpen.title = 'Recarregar este item na calculadora';
+        btnOpen.addEventListener('click', function () {
+          var parsed = decodeJsonB64(r.snap);
+          if (!parsed || typeof parsed !== 'object') return;
+          state = Object.assign(JSON.parse(JSON.stringify(DEFAULTS)), parsed);
+          saveState();
+          hydrateForm();
+          window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+          showToast(r.nome + ' carregado na calculadora.');
+        });
+        qtyWrap.appendChild(btnOpen);
+      }
 
       info.appendChild(nome);
       if (sub.textContent) info.appendChild(sub);
@@ -359,6 +399,23 @@
     });
   });
 
+  var listaShareBtnEl = document.getElementById('lista-share-btn');
+  if (listaShareBtnEl) {
+    listaShareBtnEl.addEventListener('click', function () {
+      if (!lista.length) return;
+      var base = (window.location.protocol === 'http:' || window.location.protocol === 'https:')
+        ? window.location.origin + window.location.pathname
+        : SITE_URL;
+      var url = base + '?l=' + encodeJsonB64(lista);
+      copiarTexto(url).then(function () {
+        morphBtn(listaShareBtnEl, ICON_CHECK + ' Link copiado');
+        showToast('Link da lista copiado. Quem abrir recebe todos os itens.');
+      }, function () {
+        showToast('Não consegui copiar o link automaticamente neste navegador.');
+      });
+    });
+  }
+
   var listaClearDoneBtn = document.getElementById('lista-clear-done-btn');
   if (listaClearDoneBtn) {
     listaClearDoneBtn.addEventListener('click', function () {
@@ -387,5 +444,33 @@
       renderLista();
     });
   });
+
+  // Carrega lista compartilhada (?l=...) se houver na URL
+  (function loadSharedLista() {
+    var q = window.location.search || '';
+    var m = q.match(/[?&]l=([A-Za-z0-9_-]+)/);
+    if (!m) return;
+    var parsed = decodeJsonB64(m[1]);
+    if (!Array.isArray(parsed) || !parsed.length) return;
+    var anterior = lista.slice();
+    lista = parsed;
+    salvarLista();
+    try {
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    } catch (e) {}
+    setTimeout(function () {
+      if (anterior.length) {
+        showToast('Lista compartilhada carregada (' + lista.length + ' itens).', 'Restaurar anterior', function () {
+          lista = anterior;
+          salvarLista();
+          renderLista();
+        }, 6000);
+      } else {
+        showToast('Lista compartilhada carregada (' + lista.length + ' itens).');
+      }
+    }, 200);
+  })();
 
   renderLista();

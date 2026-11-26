@@ -568,6 +568,12 @@
         oChip.classList.add('chip-obra');
         resultPropsEl.appendChild(oChip);
       }
+      if (state.bombaModo === 'vendido' && cm.lucroValor > 0) {
+        resultPropsEl.hidden = false;
+        var mlChip = propChip('Lucro líquido', '+' + fmtMoeda(cm.lucroValor));
+        mlChip.classList.add('chip-lucro');
+        resultPropsEl.appendChild(mlChip);
+      }
 
       breakdownEl.innerHTML = '';
       if (!cm.modMun || !cm.modMun.existente) {
@@ -625,6 +631,11 @@
       resultPropsEl.hidden = false;
       resultPropsEl.appendChild(propChip('Rende', (cp.qtd === 1 ? '1d4' : cp.qtd + 'd4') + ' cargas'));
       resultPropsEl.appendChild(propChip('1 carga', fmtMoeda(cp.p.preco)));
+      if (state.bombaModo === 'vendido' && cp.lucroValor > 0) {
+        var plChip = propChip('Lucro líquido', '+' + fmtMoeda(cp.lucroValor));
+        plChip.classList.add('chip-lucro');
+        resultPropsEl.appendChild(plChip);
+      }
 
       breakdownEl.innerHTML = '';
       breakdownEl.appendChild(bRow(cp.p.nome + ' (' + (cp.qtd * 2) + ' cargas base)', fmtMoeda(cp.cheioTotal)));
@@ -689,6 +700,11 @@
       var mChip = propChip('Ação', 'Bônus (Mestre)');
       mChip.classList.add('chip-obra');
       resultPropsEl.appendChild(mChip);
+    }
+    if (state.bombaModo === 'vendido' && cb.lucroValor > 0) {
+      var blChip = propChip('Lucro líquido', '+' + fmtMoeda(cb.lucroValor));
+      blChip.classList.add('chip-lucro');
+      resultPropsEl.appendChild(blChip);
     }
 
     breakdownEl.innerHTML = '';

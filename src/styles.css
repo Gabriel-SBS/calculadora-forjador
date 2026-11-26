@@ -721,6 +721,11 @@
   .mods-warn ul { margin: 4px 0 0; padding-left: 18px; }
   .mods-warn .mw-head { display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--accent); }
   .mods-toggle-all { margin-top: var(--sp-2); width: 100%; justify-content: center; font-size: 12.5px; }
+  .chip-lucro { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); background: color-mix(in srgb, var(--accent) 12%, var(--surface-2)); }
+  .chip-lucro .pc-v { color: var(--accent); }
+  .li-open-btn { padding: 2px 9px; font-size: 11.5px; min-height: 24px; margin-left: 6px; }
+  .tipo-info code.search-ex { cursor: pointer; transition: background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast); }
+  .tipo-info code.search-ex:hover { border-color: var(--accent); color: var(--accent); }
   .material-row[data-tier] .mat-search {
     border-left: 3px solid var(--tier-color);
   }

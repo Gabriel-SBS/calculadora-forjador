@@ -1161,12 +1161,13 @@
   }
 
   var lastPropKey = '';
-  function renderResultProps() {
+  function renderResultProps(c) {
     var soModMun = state.tipoItem === 'municao' && state.municaoModExistente && !!MUNICAO_MODS[state.municaoMod];
     var props = state.tipoItem === 'polvora' || soModMun ? null : itemProps();
     var w = state.tipoItem === 'polvora' || soModMun ? null : calcItemWeight();
+    var lucro = (state.modo === 'vendido' && c && c.lucroValor > 0) ? c.lucroValor : 0;
     resultPropsEl.innerHTML = '';
-    if (!props && !w) {
+    if (!props && !w && !lucro) {
       lastPropKey = '';
       resultPropsEl.hidden = true;
       return;
@@ -1192,7 +1193,8 @@
       w ? w.notas.join(',') : '',
       hasMithral,
       hasForcaPesado,
-      modTarget
+      modTarget,
+      lucro
     ].join('|');
     var animateIn = lastPropKey !== '' && propKey !== lastPropKey;
     lastPropKey = propKey;
@@ -1232,6 +1234,12 @@
       excChip.classList.add('chip-excalibur');
       if (animateIn) excChip.classList.add('is-entering');
       resultPropsEl.appendChild(excChip);
+    }
+    if (lucro > 0) {
+      var lucChip = propChip('Lucro líquido', '+' + fmtMoeda(lucro));
+      lucChip.classList.add('chip-lucro');
+      if (animateIn) lucChip.classList.add('is-entering');
+      resultPropsEl.appendChild(lucChip);
     }
   }
 
@@ -1654,7 +1662,7 @@
 
     renderVantagens();
     renderProduction();
-    renderResultProps();
+    renderResultProps(c);
     renderModsWarn();
     renderJuncao();
     renderCompMateriais();
@@ -2042,9 +2050,10 @@
         'Tempo por tier: C/D 24h, B 48h, A 96h, S 192h. Com mais de um material, o tempo de cada um se soma.',
         'Leve tira 8h, Pesada soma 8h. O Forjador trabalha em 2/3 do tempo e aguenta 12h por dia.',
         'Até 4 materiais: dureza e bônus ficam com o maior. Pressa corta o tempo pela metade e dá −1.',
-        'Obra-Prima com 20 natural (17–20 com Prodígio): +1, até +3.'
+        'Obra-Prima com 20 natural (17–20 com Prodígio): +1, até +3.',
+        'Teste de dureza (opcional, p. 172–173): 4+ não sofre desgaste; 1–3 aplica −1 cumulativo (se já estiver negativo, quebra; em −5 quebra automático). Um Descanso Curto com ferramentas recupera +1.'
       ],
-      fonte: 'p. 124–125, 163 e 170–172'
+      fonte: 'p. 124–125, 163 e 170–173'
     },
     armadura: {
       titulo: 'Criar uma armadura ou escudo',
@@ -2052,9 +2061,10 @@
         'Mesmas regras da arma: PDE × materiais, o Forjador paga metade, e o tempo por tier se soma entre os materiais.',
         'Armadura leve tira 8h; armadura pesada soma 8h. Escudos entram aqui.',
         'O modificador do material vira bônus (ou penalidade) de CA.',
+        'Teste de dureza (opcional, p. 172–173): 4+ não sofre desgaste; 1–3 aplica −1 cumulativo (quebra quando a penalidade zera a CA da armadura ou escudo). Descanso Curto com ferramentas recupera +1.',
         'Fração fixa é uma regra opcional desta calculadora, fora do Guia: só 20% do PDE é multiplicado pelo material, para suavizar armaduras caras.'
       ],
-      fonte: 'p. 169–172'
+      fonte: 'p. 169–173'
     }
   };
   var tipoInfoBtn = document.getElementById('tipo-info-btn');
