@@ -200,6 +200,7 @@
             </button>
           </div>
           <div class="mods-list" id="mods-list"></div>
+          <div class="mods-warn" id="mods-warn" role="status" hidden></div>
         </div>
       </details>
     </section>
@@ -770,6 +771,7 @@
     <h2 class="production-title">Tempo de Produção</h2>
     <p class="production-note" id="production-note"></p>
     <div id="production-rows"></div>
+    <p class="production-note">Hora extra (acima de 12h/dia no Forjador ou 8h/dia comum): TR de Constituição CD 10 (+1 por hora extra) ou 1 nível de exaustão (p. 125 e 170).</p>
   </section>
 
   <section class="vantagens" id="bomba-detalhes-section" data-oficina-panel="bombas" hidden>
@@ -784,12 +786,7 @@
 
   <section class="production" id="herbal-mesa-section" data-oficina-panel="herbalismo" hidden>
     <h2 class="production-title">Forrageamento e Herbolário</h2>
-    <p class="production-note">Forragear leva 1 hora (teste de Natureza ou Sobrevivência CD 14 → 2 ramos). Herbolários renovam o estoque diariamente (p. 148).</p>
-    <div class="roller-actions">
-      <button type="button" class="btn-ghost btn-strong" id="btn-forragear">Rolar Forragear (1d20 → 2 ramos)</button>
-      <button type="button" class="btn-ghost" id="btn-herbolario">Gerar estoque de Herbolário</button>
-    </div>
-    <div class="roller-output" id="herbal-roller-out" hidden></div>
+    <p class="production-note">Forragear leva 1 hora (teste de Natureza ou Sobrevivência CD 14 → role 1d20 na tabela abaixo e ganhe 2 ramos). Herbolários renovam o estoque diariamente com 1d20 por cor e 1d4 por quantidade (p. 148).</p>
   </section>
 
   <details class="magicos" id="herbal-ramos-details" data-oficina-panel="herbalismo" hidden>
@@ -807,6 +804,7 @@
       </div>
       <div class="lista-actions">
         <button type="button" class="btn-ghost" id="lista-copy-btn">Copiar lista</button>
+        <button type="button" class="btn-reset" id="lista-clear-done-btn" hidden>limpar concluídos</button>
         <button type="button" class="btn-reset" id="lista-clear-btn">limpar</button>
       </div>
     </div>
