@@ -316,8 +316,8 @@
   .hero-mark svg { width: 22px; height: 22px; }
   .forja-on .hero-mark {
     color: var(--ember);
-    border-color: color-mix(in srgb, var(--ember) 60%, var(--border));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 0 14px color-mix(in srgb, var(--ember) 28%, transparent);
+    border-color: color-mix(in srgb, var(--ember) 65%, var(--border));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 2px 8px rgba(0,0,0,.22);
   }
 
   /* Barra de exibição (dureza, modo forja) */
@@ -360,7 +360,7 @@
     cursor: pointer;
     transition: color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .theme-btn svg { grid-area: 1 / 1; transition: transform 250ms var(--ease-out), opacity 200ms ease; }
+  .theme-btn svg { grid-area: 1 / 1; transition: transform 250ms var(--ease-out), opacity 200ms var(--ease-out); }
   .theme-btn .i-sun { opacity: 0; transform: rotate(-90deg) scale(.9); }
   .theme-btn[data-current="dark"] .i-sun { opacity: 1; transform: none; }
   .theme-btn[data-current="dark"] .i-moon { opacity: 0; transform: rotate(90deg) scale(.9); }
@@ -686,28 +686,28 @@
     align-items: center;
   }
   .mat-combo { position: relative; min-width: 0; }
-  .mat-combo .mat-search { padding-right: 30px; }
+  .mat-combo .mat-search { padding-right: 36px; }
   .mat-clear-btn {
     position: absolute;
     top: 50%;
-    right: 6px;
+    right: 4px;
     transform: translateY(-50%);
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
     padding: 0;
     border: 0;
     border-radius: 50%;
     background: transparent;
-    color: var(--muted);
+    color: var(--text-dim);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: color .15s, background .15s;
+    transition: color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .mat-clear-btn:hover { color: var(--ink); background: var(--surface-3, rgba(128,128,128,.14)); }
+  .mat-clear-btn:active { transform: translateY(-50%) scale(0.92); }
   .mat-clear-btn[hidden] { display: none; }
-  .mat-clear-btn .ico { width: 13px; height: 13px; }
+  .mat-clear-btn .ico { width: 14px; height: 14px; }
   .mods-warn {
     margin-top: var(--sp-2);
     padding: 8px 11px;
@@ -742,6 +742,7 @@
     left: 0;
     right: 0;
     z-index: 30;
+    transform-origin: top center;
     max-height: 280px;
     overflow-y: auto;
     background: var(--surface);
@@ -976,9 +977,7 @@
   /* Conta incompleta */
   .result-empty {
     margin: 0;
-    padding: var(--sp-3) var(--sp-4);
-    border: 1px dashed var(--border-strong);
-    border-radius: var(--r-sm);
+    padding: var(--sp-2) 0;
     font-size: var(--fs-md);
     color: var(--text-dim);
   }
@@ -1772,7 +1771,7 @@
     /* entradas viram fade, sem deslocamento */
     .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]), .tipo-info:not([hidden]),
     .prop-chip.is-entering, .v-item.is-entering, [data-oficina-panel]:not([hidden]),
-    .hero-mark .mark-ico, .roller-output.is-rolled { animation-name: fade-in; }
+    .hero-mark .mark-ico { animation-name: fade-in; }
     body, .oficina-tabs { transition: none; }
     .material-row.is-leaving, .lista-item.is-leaving { animation: none; }
     /* efeitos decorativos param */
@@ -1784,6 +1783,7 @@
     }
     .btn-ghost.is-morphing { filter: none; }
     .seg-btn:active, .btn-ghost:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .btn-info:active, .btn-reset:active, .mods-summary:active, .magicos-summary:active, .explain > summary:active, .switch:active, .cost-bar:active { transform: none; }
+    .mat-clear-btn:active { transform: translateY(-50%); }
     .theme-btn svg { transform: none !important; }
     .toast, .toast.show { transform: translate(-50%, 0); }
     .cost-bar { transform: none; opacity: 0; pointer-events: none; transition: opacity 200ms ease; }
@@ -1809,5 +1809,5 @@
     .ramo-row:hover { border-color: var(--border-strong); }
     .li-check:hover { border-color: var(--accent); }
     .li-qty-btn:hover:not(:disabled) { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+    .mat-clear-btn:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
   }
-  .roller-output.is-rolled { animation: chip-in 180ms var(--ease-out) both; }

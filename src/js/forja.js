@@ -1685,7 +1685,7 @@
     input.type = 'text';
     input.className = 'mat-search';
     input.autocomplete = 'off';
-    input.placeholder = 'Buscar arma, armadura, escudo, foco ou instrumento';
+    input.placeholder = 'Buscar arma, armadura, escudo ou foco';
     input.setAttribute('aria-labelledby', 'equip-label');
     input.value = state.equipNome || '';
     var dropdown = document.createElement('div');
