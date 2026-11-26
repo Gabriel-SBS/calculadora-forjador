@@ -712,6 +712,40 @@
     align-items: center;
   }
   .mat-combo { position: relative; min-width: 0; }
+  .mat-combo .mat-search { padding-right: 30px; }
+  .mat-clear-btn {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color .15s, background .15s;
+  }
+  .mat-clear-btn:hover { color: var(--ink); background: var(--surface-3, rgba(128,128,128,.14)); }
+  .mat-clear-btn[hidden] { display: none; }
+  .mat-clear-btn .ico { width: 13px; height: 13px; }
+  .mods-warn {
+    margin-top: var(--sp-2);
+    padding: 8px 11px;
+    border-radius: var(--r-sm);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: color-mix(in srgb, var(--accent) 9%, var(--surface-2));
+    color: var(--ink);
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .mods-warn ul { margin: 4px 0 0; padding-left: 18px; }
+  .mods-warn .mw-head { display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--accent); }
   .material-row[data-tier] .mat-search {
     border-left: 3px solid var(--tier-color);
   }
@@ -1979,6 +2013,7 @@
             </button>
           </div>
           <div class="mods-list" id="mods-list"></div>
+          <div class="mods-warn" id="mods-warn" role="status" hidden></div>
         </div>
       </details>
     </section>
@@ -2549,6 +2584,7 @@
     <h2 class="production-title">Tempo de Produção</h2>
     <p class="production-note" id="production-note"></p>
     <div id="production-rows"></div>
+    <p class="production-note">Hora extra (acima de 12h/dia no Forjador ou 8h/dia comum): TR de Constituição CD 10 (+1 por hora extra) ou 1 nível de exaustão (p. 125 e 170).</p>
   </section>
 
   <section class="vantagens" id="bomba-detalhes-section" data-oficina-panel="bombas" hidden>
@@ -2563,12 +2599,7 @@
 
   <section class="production" id="herbal-mesa-section" data-oficina-panel="herbalismo" hidden>
     <h2 class="production-title">Forrageamento e Herbolário</h2>
-    <p class="production-note">Forragear leva 1 hora (teste de Natureza ou Sobrevivência CD 14 → 2 ramos). Herbolários renovam o estoque diariamente (p. 148).</p>
-    <div class="roller-actions">
-      <button type="button" class="btn-ghost btn-strong" id="btn-forragear">Rolar Forragear (1d20 → 2 ramos)</button>
-      <button type="button" class="btn-ghost" id="btn-herbolario">Gerar estoque de Herbolário</button>
-    </div>
-    <div class="roller-output" id="herbal-roller-out" hidden></div>
+    <p class="production-note">Forragear leva 1 hora (teste de Natureza ou Sobrevivência CD 14 → role 1d20 na tabela abaixo e ganhe 2 ramos). Herbolários renovam o estoque diariamente com 1d20 por cor e 1d4 por quantidade (p. 148).</p>
   </section>
 
   <details class="magicos" id="herbal-ramos-details" data-oficina-panel="herbalismo" hidden>
@@ -2586,6 +2617,7 @@
       </div>
       <div class="lista-actions">
         <button type="button" class="btn-ghost" id="lista-copy-btn">Copiar lista</button>
+        <button type="button" class="btn-reset" id="lista-clear-done-btn" hidden>limpar concluídos</button>
         <button type="button" class="btn-reset" id="lista-clear-btn">limpar</button>
       </div>
     </div>
@@ -2853,161 +2885,172 @@
     ['org_ossos_nd18','Orgânicos','S','Ossos (Nd 18+)',500,'d100','+3','Armas/munições ignoram resistência/imunidade não-mágica do mesmo tipo; armas com Munição sem desvantagem a 1,5m; armaduras/escudos reduzem em −3 três tipos de dano aos quais a criatura resistia; foco dá +3 de dano necrótico; vantagem contra medo do mesmo tipo; pesa metade do peso.',''],
     ['org_ossos_tarrasque','Orgânicos','S','Ossos de Tarrasque',500,'∞','+3','Armas/munições ignoram resistência/imunidade não-mágica e causam o dobro de dano em estruturas; armaduras/escudos 1x/dia anulam (1–5 no d6) ou refletem (6 no d6) mísseis mágicos, magias de linha ou de ataque à distância; foco conjura Escudo Arcano 1x/dia como reação sem gastar espaço; imunidade à presença aterradora de Tarrasques.','Indestrutível e inalterável (nem Desejo altera) — sem desvantagem.']
   ].map(function (row) {
+    var id = row[0];
+    var pesoMult = (id === 'metal_ouro' || id === 'veg_iron_wood' || id === 'geo_pedra_ana_refinada') ? 2
+      : (id === 'metal_aco_verde_baatoriano' || id === 'metal_mithral' || id === 'metal_ebano' ||
+         id === 'org_ossos_nd0_5' || id === 'org_ossos_nd6_11' || id === 'org_ossos_nd12_17' ||
+         id === 'org_ossos_nd18' || id === 'org_quitina') ? 0.5
+      : 1;
+    var forcaPesado = (id === 'veg_iron_wood' || id === 'geo_pedra_ana_refinada');
+    var materialVivo = (id === 'metal_elementium' || id === 'veg_fungo_viventis' ||
+      id === 'veg_samambaia_metamorfica' || id === 'veg_samambaia_primordial' ||
+      id === 'veg_hera_lunar' || id === 'org_inseto_treinado' || id === 'org_coral');
     return {
-      id: row[0], categoria: row[1], tier: row[2], nome: row[3],
+      id: id, categoria: row[1], tier: row[2], nome: row[3],
       mult: row[4], dureza: row[5], mod: row[6],
-      vantagens: row[7], desvantagens: row[8]
+      vantagens: row[7], desvantagens: row[8],
+      pesoMult: pesoMult, forcaPesado: forcaPesado, materialVivo: materialVivo
     };
   });
 
   // Equipamentos e PDE (Guia de Xyleff Sualky, p. 155–159)
   var EQUIP_DB = [
-    ["Cestus", "Armas", 10, "leve", "arma", "Ágil"],
-    ["Katar", "Armas", 10, "leve", "arma", "Afligir"],
-    ["Bagh Nakh", "Armas", 10, "leve", "arma", "Drenar"],
-    ["Tonfa", "Armas", 20, "leve", "arma", "Aparar"],
-    ["Tekko-kagi", "Armas", 20, "leve", "arma", "Desarmar"],
-    ["Lu Jiao Dao", "Armas", 20, "leve", "arma", "Ágil"],
-    ["Nunchaku", "Armas", 20, "leve", "arma", "Drenar"],
-    ["Sansetsukon", "Armas", 40, "", "arma", "Desarmar"],
-    ["Agulha", "Armas", 1, "leve", "arma", "Forma"],
-    ["Jitte", "Armas", 25, "leve", "arma", "Desarmar"],
-    ["Adaga", "Armas", 30, "leve", "arma", "Ágil"],
-    ["Kunai", "Armas", 20, "leve", "arma", "Lentidão"],
-    ["Punhal", "Armas", 25, "leve", "arma", "Forma"],
-    ["Adaga Kris", "Armas", 25, "leve", "arma", "Sangramento"],
-    ["Sai", "Armas", 25, "leve", "arma", "Aparar"],
-    ["Hunga-munga", "Armas", 35, "leve", "arma", "Aparar"],
-    ["Kpinga", "Armas", 30, "leve", "arma", "Desarmar"],
-    ["Urumi", "Armas", 35, "leve", "arma", "Sangramento"],
-    ["Espada Curta", "Armas", 40, "leve", "arma", "Afligir"],
-    ["Cimitarra", "Armas", 40, "leve", "arma", "Ágil"],
-    ["Kopesh", "Armas", 45, "leve", "arma", "Drenar"],
-    ["Espada Gancho", "Armas", 40, "leve", "arma", "Desarmar"],
-    ["Lâmina gêmea", "Armas", 80, "", "arma", "Ágil"],
-    ["Falchion", "Armas", 50, "", "arma", "Garantido"],
-    ["Rapieira", "Armas", 50, "", "arma", "Afligir"],
-    ["Estoc", "Armas", 50, "", "arma", "Drenar"],
-    ["Espada Longa", "Armas", 50, "", "arma", "Drenar"],
-    ["Flamberge", "Armas", 50, "", "arma", "Sangramento"],
-    ["Espada Bastarda", "Armas", 50, "", "arma", "Garantido"],
-    ["Katana", "Armas", 60, "", "arma", "Afligir"],
-    ["Espada Grande", "Armas", 55, "pesado", "arma", "Garantido"],
-    ["Clava Colossal", "Armas", 85, "pesado", "arma", "Derrubar"],
-    ["Espada Colossal", "Armas", 85, "pesado", "arma", "Trespassar"],
-    ["Machado Colossal", "Armas", 85, "pesado", "arma", "Crítico"],
-    ["Martelo Colossal", "Armas", 85, "pesado", "arma", "Drenar"],
-    ["Shuriken Gigante", "Armas", 75, "pesado", "arma", "Trespassar"],
-    ["Arco Colossal", "Armas", 80, "pesado", "arma", "Trespassar"],
-    ["Besta Colossal", "Armas", 80, "pesado", "arma", "Empurrar"],
-    ["Azagaia", "Armas", 35, "", "arma", "Lentidão"],
-    ["Lança", "Armas", 40, "", "arma", "Drenar"],
-    ["Tridente", "Armas", 55, "", "arma", "Derrubar"],
-    ["Glaive", "Armas", 50, "pesado", "arma", "Garantido"],
-    ["Alabarda", "Armas", 50, "pesado", "arma", "Trespassar"],
-    ["Lança de montaria", "Armas", 55, "pesado", "arma", "Derrubar"],
-    ["Lança longa", "Armas", 50, "pesado", "arma", "Empurrar"],
-    ["Clava", "Armas", 15, "leve", "arma", "Lentidão"],
-    ["Foice curta", "Armas", 15, "leve", "arma", "Ágil"],
-    ["Martelo leve", "Armas", 20, "leve", "arma", "Ágil"],
-    ["Maça", "Armas", 25, "", "arma", "Drenar"],
-    ["Bordão", "Armas", 35, "", "arma", "Derrubar"],
-    ["Bastão", "Armas", 80, "", "arma", "Empurrar"],
-    ["Machadinha", "Armas", 35, "leve", "arma", "Afligir"],
-    ["Clava Grande", "Armas", 30, "", "arma", "Empurrar"],
-    ["Chicote", "Armas", 35, "", "arma", "Desarmar"],
-    ["Peso com corrente", "Armas", 70, "", "arma", "Forma"],
-    ["Kusarigama", "Armas", 80, "", "arma", "Desarmar"],
-    ["Foice Média", "Armas", 45, "leve", "arma", "Afligir"],
-    ["Foice Dupla", "Armas", 90, "pesado", "arma", "Ágil"],
-    ["Mangual Atroz", "Armas", 80, "", "arma", "Garantido"],
-    ["Foice Grande", "Armas", 40, "pesado", "arma", "Derrubar"],
-    ["Mangual", "Armas", 40, "", "arma", "Drenar"],
-    ["Maça Estrela", "Armas", 40, "", "arma", "Drenar"],
-    ["Machado de batalha", "Armas", 50, "", "arma", "Derrubar"],
-    ["Martelo de guerra", "Armas", 50, "", "arma", "Empurrar"],
-    ["Picareta de guerra", "Armas", 50, "", "arma", "Drenar"],
-    ["Kanabo", "Armas", 55, "pesado", "arma", "Derrubar"],
-    ["Marreta", "Armas", 55, "pesado", "arma", "Crítico"],
-    ["Machado grande", "Armas", 55, "pesado", "arma", "Trespassar"],
-    ["Estilingue", "Armas", 15, "leve", "arma", "Afligir"],
-    ["Dardo", "Armas", 1, "", "arma", "Afligir"],
-    ["Funda", "Armas", 15, "", "arma", "Lentidão"],
-    ["Arpão", "Armas", 35, "", "arma", "Drenar"],
-    ["Boleadeira", "Armas", 10, "", "arma", ""],
-    ["Rede", "Armas", 10, "", "arma", ""],
-    ["Bumerangue", "Armas", 50, "", "arma", "Afligir"],
-    ["Arco curto", "Armas", 25, "", "arma", "Afligir"],
-    ["Besta leve", "Armas", 40, "", "arma", "Lentidão"],
-    ["Zarabatana", "Armas", 1, "", "arma", "Afligir"],
-    ["Shuriken", "Armas", 1, "", "arma", "Drenar"],
-    ["Cartão de Metal", "Armas", 1, "", "arma", "Sangramento"],
-    ["Besta de mão", "Armas", 35, "leve", "arma", "Afligir"],
-    ["Besta dupla", "Armas", 70, "", "arma", "Ágil"],
-    ["Besta de repetição", "Armas", 85, "", "arma", "Drenar"],
-    ["Besta automática", "Armas", 50, "", "arma", "Afligir"],
-    ["Arco longo", "Armas", 40, "pesado", "arma", "Lentidão"],
-    ["Arco composto", "Armas", 40, "pesado", "arma", "Estender"],
-    ["Besta pesada", "Armas", 50, "pesado", "arma", "Empurrar"],
-    ["Mosquete", "Armas", 95, "", "arma", "Lentidão"],
-    ["Pistola", "Armas", 95, "", "arma", "Afligir"],
-    ["Bacamarte", "Armas", 95, "", "arma", "Drenar"],
-    ["Canhão", "Armas", 100, "pesado", "arma", "Empurrar"],
-    ["Arcabuz", "Armas", 85, "", "arma", "Garantido"],
-    ["Broquel", "Escudos", 35, "leve", "armadura", "Aparar"],
-    ["Rodela", "Escudos", 35, "leve", "armadura", "Drenar"],
-    ["Escudo padrão", "Escudos", 50, "", "armadura", "Defletir"],
-    ["Escudo grande", "Escudos", 75, "", "armadura", "Derrubar"],
-    ["Escudo aerodinâmico", "Escudos", 75, "", "armadura", "Forma"],
-    ["Escudo de duas mãos", "Escudos", 100, "", "armadura", "Empurrar"],
+    ["Cestus", "Armas", 10, "leve", "arma", "Ágil", 0.5],
+    ["Katar", "Armas", 10, "leve", "arma", "Afligir", 0.5],
+    ["Bagh Nakh", "Armas", 10, "leve", "arma", "Drenar", 0.5],
+    ["Tonfa", "Armas", 20, "leve", "arma", "Aparar", 1],
+    ["Tekko-kagi", "Armas", 20, "leve", "arma", "Desarmar", 1],
+    ["Lu Jiao Dao", "Armas", 20, "leve", "arma", "Ágil", 1],
+    ["Nunchaku", "Armas", 20, "leve", "arma", "Drenar", 1],
+    ["Sansetsukon", "Armas", 40, "", "arma", "Desarmar", 1],
+    ["Agulha", "Armas", 1, "leve", "arma", "Forma", null],
+    ["Jitte", "Armas", 25, "leve", "arma", "Desarmar", 0.5],
+    ["Adaga", "Armas", 30, "leve", "arma", "Ágil", 0.5],
+    ["Kunai", "Armas", 20, "leve", "arma", "Lentidão", 0.5],
+    ["Punhal", "Armas", 25, "leve", "arma", "Forma", 1],
+    ["Adaga Kris", "Armas", 25, "leve", "arma", "Sangramento", 1],
+    ["Sai", "Armas", 25, "leve", "arma", "Aparar", 0.5],
+    ["Hunga-munga", "Armas", 35, "leve", "arma", "Aparar", 1],
+    ["Kpinga", "Armas", 30, "leve", "arma", "Desarmar", 1],
+    ["Urumi", "Armas", 35, "leve", "arma", "Sangramento", 0.5],
+    ["Espada Curta", "Armas", 40, "leve", "arma", "Afligir", 1],
+    ["Cimitarra", "Armas", 40, "leve", "arma", "Ágil", 1],
+    ["Kopesh", "Armas", 45, "leve", "arma", "Drenar", 2],
+    ["Espada Gancho", "Armas", 40, "leve", "arma", "Desarmar", 2],
+    ["Lâmina gêmea", "Armas", 80, "", "arma", "Ágil", 2],
+    ["Falchion", "Armas", 50, "", "arma", "Garantido", 1],
+    ["Rapieira", "Armas", 50, "", "arma", "Afligir", 1],
+    ["Estoc", "Armas", 50, "", "arma", "Drenar", 1],
+    ["Espada Longa", "Armas", 50, "", "arma", "Drenar", 2],
+    ["Flamberge", "Armas", 50, "", "arma", "Sangramento", 2],
+    ["Espada Bastarda", "Armas", 50, "", "arma", "Garantido", 1],
+    ["Katana", "Armas", 60, "", "arma", "Afligir", 1],
+    ["Espada Grande", "Armas", 55, "pesado", "arma", "Garantido", 3],
+    ["Clava Colossal", "Armas", 85, "pesado", "arma", "Derrubar", 30],
+    ["Espada Colossal", "Armas", 85, "pesado", "arma", "Trespassar", 30],
+    ["Machado Colossal", "Armas", 85, "pesado", "arma", "Crítico", 30],
+    ["Martelo Colossal", "Armas", 85, "pesado", "arma", "Drenar", 30],
+    ["Shuriken Gigante", "Armas", 75, "pesado", "arma", "Trespassar", 10],
+    ["Arco Colossal", "Armas", 80, "pesado", "arma", "Trespassar", 30],
+    ["Besta Colossal", "Armas", 80, "pesado", "arma", "Empurrar", 30],
+    ["Azagaia", "Armas", 35, "", "arma", "Lentidão", 1],
+    ["Lança", "Armas", 40, "", "arma", "Drenar", 1.5],
+    ["Tridente", "Armas", 55, "", "arma", "Derrubar", 2],
+    ["Glaive", "Armas", 50, "pesado", "arma", "Garantido", 3],
+    ["Alabarda", "Armas", 50, "pesado", "arma", "Trespassar", 3],
+    ["Lança de montaria", "Armas", 55, "pesado", "arma", "Derrubar", 3],
+    ["Lança longa", "Armas", 50, "pesado", "arma", "Empurrar", 3],
+    ["Clava", "Armas", 15, "leve", "arma", "Lentidão", 1],
+    ["Foice curta", "Armas", 15, "leve", "arma", "Ágil", 1],
+    ["Martelo leve", "Armas", 20, "leve", "arma", "Ágil", 1],
+    ["Maça", "Armas", 25, "", "arma", "Drenar", 2],
+    ["Bordão", "Armas", 35, "", "arma", "Derrubar", 2],
+    ["Bastão", "Armas", 80, "", "arma", "Empurrar", 1],
+    ["Machadinha", "Armas", 35, "leve", "arma", "Afligir", 1],
+    ["Clava Grande", "Armas", 30, "", "arma", "Empurrar", 4.5],
+    ["Chicote", "Armas", 35, "", "arma", "Desarmar", 1],
+    ["Peso com corrente", "Armas", 70, "", "arma", "Forma", 2],
+    ["Kusarigama", "Armas", 80, "", "arma", "Desarmar", 2],
+    ["Foice Média", "Armas", 45, "leve", "arma", "Afligir", 2],
+    ["Foice Dupla", "Armas", 90, "pesado", "arma", "Ágil", 2],
+    ["Mangual Atroz", "Armas", 80, "", "arma", "Garantido", 4],
+    ["Foice Grande", "Armas", 40, "pesado", "arma", "Derrubar", 2],
+    ["Mangual", "Armas", 40, "", "arma", "Drenar", 1],
+    ["Maça Estrela", "Armas", 40, "", "arma", "Drenar", 2],
+    ["Machado de batalha", "Armas", 50, "", "arma", "Derrubar", 2],
+    ["Martelo de guerra", "Armas", 50, "", "arma", "Empurrar", 2],
+    ["Picareta de guerra", "Armas", 50, "", "arma", "Drenar", 1],
+    ["Kanabo", "Armas", 55, "pesado", "arma", "Derrubar", 5],
+    ["Marreta", "Armas", 55, "pesado", "arma", "Crítico", 5],
+    ["Machado grande", "Armas", 55, "pesado", "arma", "Trespassar", 3],
+    ["Estilingue", "Armas", 15, "leve", "arma", "Afligir", 0.5],
+    ["Dardo", "Armas", 1, "", "arma", "Afligir", 0.1],
+    ["Funda", "Armas", 15, "", "arma", "Lentidão", null],
+    ["Arpão", "Armas", 35, "", "arma", "Drenar", 2],
+    ["Boleadeira", "Armas", 10, "", "arma", "", 1],
+    ["Rede", "Armas", 10, "", "arma", "", 1],
+    ["Bumerangue", "Armas", 50, "", "arma", "Afligir", 1],
+    ["Arco curto", "Armas", 25, "", "arma", "Afligir", 1],
+    ["Besta leve", "Armas", 40, "", "arma", "Lentidão", 2.5],
+    ["Zarabatana", "Armas", 1, "", "arma", "Afligir", 0.5],
+    ["Shuriken", "Armas", 1, "", "arma", "Drenar", null],
+    ["Cartão de Metal", "Armas", 1, "", "arma", "Sangramento", null],
+    ["Besta de mão", "Armas", 35, "leve", "arma", "Afligir", 1.5],
+    ["Besta dupla", "Armas", 70, "", "arma", "Ágil", 1.5],
+    ["Besta de repetição", "Armas", 85, "", "arma", "Drenar", 1.5],
+    ["Besta automática", "Armas", 50, "", "arma", "Afligir", 1.5],
+    ["Arco longo", "Armas", 40, "pesado", "arma", "Lentidão", 1],
+    ["Arco composto", "Armas", 40, "pesado", "arma", "Estender", 1],
+    ["Besta pesada", "Armas", 50, "pesado", "arma", "Empurrar", 8],
+    ["Mosquete", "Armas", 95, "", "arma", "Lentidão", 5],
+    ["Pistola", "Armas", 95, "", "arma", "Afligir", 1.5],
+    ["Bacamarte", "Armas", 95, "", "arma", "Drenar", 5],
+    ["Canhão", "Armas", 100, "pesado", "arma", "Empurrar", 20],
+    ["Arcabuz", "Armas", 85, "", "arma", "Garantido", 6],
+    ["Broquel", "Escudos", 35, "leve", "armadura", "Aparar", 1],
+    ["Rodela", "Escudos", 35, "leve", "armadura", "Drenar", 1],
+    ["Escudo padrão", "Escudos", 50, "", "armadura", "Defletir", 3],
+    ["Escudo grande", "Escudos", 75, "", "armadura", "Derrubar", 5],
+    ["Escudo aerodinâmico", "Escudos", 75, "", "armadura", "Forma", 2],
+    ["Escudo de duas mãos", "Escudos", 100, "", "armadura", "Empurrar", 20],
     // Focos de conjuração (p. 159): tempo de criação igual ao de armas (p. 170)
-    ["Foco arcano: Bastão", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco arcano: Cajado", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco arcano: Cristal", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco arcano: Orbe", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco arcano: Varinha", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco druídico: Cajado de madeira", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco druídico: Ramo de visco", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco druídico: Totem", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco druídico: Varinha de teixo", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Símbolo sagrado: Amuleto", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Símbolo sagrado: Emblema", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Símbolo sagrado: Relicário", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Instrumento musical", "Instrumentos e Acessórios", 75, "", "arma", ""],
-    ["Carregador de munição (10 munições)", "Instrumentos e Acessórios", 5, "", "arma", ""],
-    ["Acolchoada", "Armaduras", 10, "leve", "armadura", ""],
-    ["Couro", "Armaduras", 30, "leve", "armadura", ""],
-    ["Brigantina", "Armaduras", 30, "leve", "armadura", ""],
-    ["Couro batido", "Armaduras", 75, "leve", "armadura", ""],
-    ["Peça de Armadura", "Armaduras", 50, "leve", "armadura", ""],
-    ["Gibão de peles", "Armaduras", 10, "", "armadura", ""],
-    ["Camisão de malha", "Armaduras", 30, "", "armadura", ""],
-    ["Brunea", "Armaduras", 30, "", "armadura", ""],
-    ["Peitoral", "Armaduras", 75, "", "armadura", ""],
-    ["Meia-armadura", "Armaduras", 50, "", "armadura", ""],
-    ["Cota de anéis", "Armaduras", 20, "pesado", "armadura", ""],
-    ["Cota de malha", "Armaduras", 75, "pesado", "armadura", ""],
-    ["Cota de talas", "Armaduras", 250, "pesado", "armadura", ""],
-    ["Placas", "Armaduras", 750, "pesado", "armadura", ""],
-    ["Placas encouraçada", "Armaduras", 2000, "pesado", "armadura", ""],
-    ["Flecha (1 unidade)", "Munições", 0.05, "", "municao", ""],
-    ["Virote (1 unidade)", "Munições", 0.05, "", "municao", ""],
-    ["Bala — funda / arma de fogo (1 unidade)", "Munições", 0.05, "", "municao", ""],
-    ["Bala colossal — canhão (1 unidade)", "Munições", 0.05, "pesado", "municao", ""],
-    ["Agulha de Zarabatana (1 unidade)", "Munições", 0.02, "", "municao", ""],
-    ["Pólvora negra", "Pólvoras", 5, "", "polvora", ""],
-    ["Pólvora elukiana", "Pólvoras", 15, "", "polvora", ""],
-    ["Pólvora silente", "Pólvoras", 15, "", "polvora", ""],
-    ["Pólvora fumegante", "Pólvoras", 20, "", "polvora", ""],
-    ["Pólvora potente", "Pólvoras", 30, "", "polvora", ""],
-    ["Pólvora refinada", "Pólvoras", 50, "", "polvora", ""],
-    ["Pólvora de luz", "Pólvoras", 75, "", "polvora", ""],
-    ["Pólvora vermelha", "Pólvoras", 100, "", "polvora", ""],
-    ["Pólvora azul", "Pólvoras", 100, "", "polvora", ""],
-    ["Pólvora amarela", "Pólvoras", 100, "", "polvora", ""],
-    ["Pólvora verde", "Pólvoras", 100, "", "polvora", ""]
+    ["Foco arcano: Bastão", "Focos de Conjuração", 75, "", "arma", "", 1],
+    ["Foco arcano: Cajado", "Focos de Conjuração", 75, "", "arma", "", 2],
+    ["Foco arcano: Cristal", "Focos de Conjuração", 75, "", "arma", "", 0.5],
+    ["Foco arcano: Orbe", "Focos de Conjuração", 75, "", "arma", "", 1.5],
+    ["Foco arcano: Varinha", "Focos de Conjuração", 75, "", "arma", "", 0.5],
+    ["Foco druídico: Cajado de madeira", "Focos de Conjuração", 75, "", "arma", "", 2],
+    ["Foco druídico: Ramo de visco", "Focos de Conjuração", 75, "", "arma", "", null],
+    ["Foco druídico: Totem", "Focos de Conjuração", 75, "", "arma", "", null],
+    ["Foco druídico: Varinha de teixo", "Focos de Conjuração", 75, "", "arma", "", 0.5],
+    ["Símbolo sagrado: Amuleto", "Focos de Conjuração", 75, "", "arma", "", 0.5],
+    ["Símbolo sagrado: Emblema", "Focos de Conjuração", 75, "", "arma", "", null],
+    ["Símbolo sagrado: Relicário", "Focos de Conjuração", 75, "", "arma", "", 1],
+    ["Instrumento musical", "Instrumentos e Acessórios", 75, "", "arma", "", null],
+    ["Carregador de munição (10 munições)", "Instrumentos e Acessórios", 5, "", "arma", "", null],
+    ["Acolchoada", "Armaduras", 10, "leve", "armadura", "", 4],
+    ["Couro", "Armaduras", 30, "leve", "armadura", "", 5],
+    ["Brigantina", "Armaduras", 30, "leve", "armadura", "", 6],
+    ["Couro batido", "Armaduras", 75, "leve", "armadura", "", 6],
+    ["Peça de Armadura", "Armaduras", 50, "leve", "armadura", "", 2],
+    ["Gibão de peles", "Armaduras", 10, "", "armadura", "", 6],
+    ["Camisão de malha", "Armaduras", 30, "", "armadura", "", 10],
+    ["Brunea", "Armaduras", 30, "", "armadura", "", 22],
+    ["Peitoral", "Armaduras", 75, "", "armadura", "", 10],
+    ["Meia-armadura", "Armaduras", 50, "", "armadura", "", 20],
+    ["Cota de anéis", "Armaduras", 20, "pesado", "armadura", "", 20],
+    ["Cota de malha", "Armaduras", 75, "pesado", "armadura", "", 27],
+    ["Cota de talas", "Armaduras", 250, "pesado", "armadura", "", 30],
+    ["Placas", "Armaduras", 750, "pesado", "armadura", "", 32],
+    ["Placas encouraçada", "Armaduras", 2000, "pesado", "armadura", "", 45],
+    ["Flecha (1 unidade)", "Munições", 0.05, "", "municao", "", 0.005],
+    ["Virote (1 unidade)", "Munições", 0.05, "", "municao", "", 0.005],
+    ["Bala — funda / arma de fogo (1 unidade)", "Munições", 0.05, "", "municao", "", 0.0375],
+    ["Bala colossal — canhão (1 unidade)", "Munições", 0.05, "pesado", "municao", "", 1.0375],
+    ["Agulha de Zarabatana (1 unidade)", "Munições", 0.02, "", "municao", "", null],
+    ["Pólvora negra", "Pólvoras", 5, "", "polvora", "", null],
+    ["Pólvora elukiana", "Pólvoras", 15, "", "polvora", "", null],
+    ["Pólvora silente", "Pólvoras", 15, "", "polvora", "", null],
+    ["Pólvora fumegante", "Pólvoras", 20, "", "polvora", "", null],
+    ["Pólvora potente", "Pólvoras", 30, "", "polvora", "", null],
+    ["Pólvora refinada", "Pólvoras", 50, "", "polvora", "", null],
+    ["Pólvora de luz", "Pólvoras", 75, "", "polvora", "", null],
+    ["Pólvora vermelha", "Pólvoras", 100, "", "polvora", "", null],
+    ["Pólvora azul", "Pólvoras", 100, "", "polvora", "", null],
+    ["Pólvora amarela", "Pólvoras", 100, "", "polvora", "", null],
+    ["Pólvora verde", "Pólvoras", 100, "", "polvora", "", null]
   ].map(function (r) {
-    return { nome: r[0], grupo: r[1], pde: r[2], peso: r[3], tipo: r[4], maestria: r[5] };
+    return { nome: r[0], grupo: r[1], pde: r[2], peso: r[3], tipo: r[4], maestria: r[5], pesoKg: r[6] != null ? r[6] : null };
   });
 
   // Modificações (Guia de Xyleff Sualky, p. 163–168): [nome, custo, compatível, efeito]
@@ -3621,6 +3664,28 @@
     return state && state.excalibur && state.tipoItem === 'arma' ? 6 : 4;
   }
 
+  function attachComboClear(wrap, input, onClear) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'mat-clear-btn';
+    btn.innerHTML = ICON_X;
+    btn.setAttribute('aria-label', 'Limpar campo');
+    btn.title = 'Limpar';
+    function sync() { btn.hidden = !input.value; }
+    btn.addEventListener('mousedown', function (ev) {
+      ev.preventDefault();
+      input.value = '';
+      sync();
+      if (onClear) onClear();
+      else input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.focus();
+    });
+    input.addEventListener('input', sync);
+    wrap.appendChild(btn);
+    sync();
+    return sync;
+  }
+
   function buildMaterialCombo(idx, mat, multInput, tierSelect) {
     var wrap = document.createElement('div');
     wrap.className = 'mat-combo';
@@ -3658,6 +3723,7 @@
       state.materials[idx].mult = m.mult;
       state.materials[idx].tier = m.tier;
       input.value = m.nome;
+      syncClear();
       var rowEl = input.closest('.material-row');
       if (rowEl) rowEl.dataset.tier = m.tier;
       if (m.tier === 'S' && window.Forja) window.Forja.sparksAt(input, 'purple');
@@ -3669,7 +3735,8 @@
       multInput.title = tierSelect.title = 'Definido pelo material — apague o nome para digitar um material personalizado';
       saveState();
       closeDropdown();
-      update();
+      if (m.forcaPesado && state.peso !== 'pesado') setPeso('pesado');
+      else update();
     }
 
     function highlight(newIndex) {
@@ -3770,6 +3837,7 @@
     });
 
     wrap.appendChild(input);
+    var syncClear = attachComboClear(wrap, input);
     wrap.appendChild(dropdown);
     return wrap;
   }
@@ -3914,11 +3982,16 @@
       proprio = modMun.existente ? pagoMod : proprio + pagoMod;
     }
 
-    var consertoCheio = cheio / 2;
+    var temMaterialVivo = (state.materials || []).some(function (row) {
+      var m = row.materialId ? materialById(row.materialId) : null;
+      return !!(m && m.materialVivo);
+    });
+    var consertoVivo = conserto && temMaterialVivo;
+    var consertoCheio = consertoVivo ? 0 : cheio / 2;
     var lucroValor = 0;
     var final = proprio;
     if (conserto) {
-      final = proprio / 2;
+      final = consertoVivo ? 0 : proprio / 2;
     } else if (state.modo === 'vendido') {
       lucroValor = proprio * (lucro / 100);
       final = proprio + lucroValor;
@@ -3929,7 +4002,8 @@
       pdeDesc: pdeDesc, matDesc: matDesc, subtotal: subtotal, proprio: proprio,
       cheio: cheio, cheioPadrao: cheioPadrao, usaFracaoFixa: usaFracaoFixa,
       lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota,
-      duplo: duplo, modMun: modMun, proprioItem: proprioItem, conserto: conserto, consertoCheio: consertoCheio
+      duplo: duplo, modMun: modMun, proprioItem: proprioItem, conserto: conserto,
+      consertoCheio: consertoCheio, consertoVivo: consertoVivo
     };
   }
 
@@ -4260,40 +4334,164 @@
     return chip;
   }
 
+  function fmtKg(kg) {
+    if (kg == null || !isFinite(kg)) return '';
+    var rounded = Math.round(kg * 100) / 100;
+    return rounded.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' kg';
+  }
+
+  function calcItemWeight() {
+    var e = null;
+    EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) e = x; });
+    if (!e || e.pesoKg == null) return null;
+    var mult = 1;
+    var notas = [];
+    var forcaPesado = false;
+    (state.materials || []).forEach(function (row) {
+      var m = row.materialId ? materialById(row.materialId) : null;
+      if (!m) return;
+      if (m.pesoMult && m.pesoMult !== 1) {
+        mult *= m.pesoMult;
+        notas.push(m.nome + (m.pesoMult === 0.5 ? ' ÷2' : ' ×2'));
+      }
+      if (m.forcaPesado) forcaPesado = true;
+    });
+    var leveMod = (state.mods || []).indexOf(1) !== -1;
+    if (leveMod) {
+      mult *= 0.75;
+      notas.push('Estrutura Leve −25%');
+    }
+    return {
+      baseKg: e.pesoKg,
+      finalKg: e.pesoKg * mult,
+      mult: mult,
+      leveMod: leveMod,
+      forcaPesado: forcaPesado,
+      notas: notas
+    };
+  }
+
+  var RANGED_AMMO_SET = {
+    'Estilingue': 1, 'Funda': 1, 'Arco curto': 1, 'Besta leve': 1, 'Zarabatana': 1,
+    'Besta de mão': 1, 'Besta dupla': 1, 'Besta de repetição': 1, 'Besta automática': 1,
+    'Arco longo': 1, 'Arco composto': 1, 'Besta pesada': 1, 'Arco Colossal': 1, 'Besta Colossal': 1,
+    'Mosquete': 1, 'Pistola': 1, 'Bacamarte': 1, 'Canhão': 1, 'Arcabuz': 1
+  };
+  function modAplicacao() {
+    if (state.tipoItem === 'armadura') return 'CA';
+    if (state.equipNome) {
+      var eq = null;
+      EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+      if (eq) {
+        if (eq.grupo === 'Focos de Conjuração') return 'Ataque de magia';
+        if (eq.grupo === 'Instrumentos e Acessórios') return 'Teste';
+        if (RANGED_AMMO_SET[eq.nome]) return 'Só ataque';
+      }
+    }
+    return 'Ataque e dano';
+  }
+
   var lastPropKey = '';
   function renderResultProps() {
     var soModMun = state.tipoItem === 'municao' && state.municaoModExistente && !!MUNICAO_MODS[state.municaoMod];
     var props = state.tipoItem === 'polvora' || soModMun ? null : itemProps();
+    var w = state.tipoItem === 'polvora' || soModMun ? null : calcItemWeight();
     resultPropsEl.innerHTML = '';
-    if (!props) {
+    if (!props && !w) {
       lastPropKey = '';
       resultPropsEl.hidden = true;
       return;
     }
+    var hasMithral = false;
+    var hasForcaPesado = false;
+    (state.materials || []).forEach(function (row) {
+      var m = row.materialId ? materialById(row.materialId) : null;
+      if (!m) return;
+      if (m.id === 'metal_mithral') hasMithral = true;
+      if (m.forcaPesado) hasForcaPesado = true;
+    });
+    var modTarget = modAplicacao();
     var exc = !!(state.excalibur && state.tipoItem === 'arma');
-    var propKey = [props.dureza, props.mod, props.obra, state.pressa, state.mostrarDureza, exc].join('|');
+    var propKey = [
+      props ? props.dureza : '',
+      props ? props.mod : '',
+      props ? props.obra : '',
+      state.pressa,
+      state.mostrarDureza,
+      exc,
+      w ? w.finalKg : '',
+      w ? w.notas.join(',') : '',
+      hasMithral,
+      hasForcaPesado,
+      modTarget
+    ].join('|');
     var animateIn = lastPropKey !== '' && propKey !== lastPropKey;
     lastPropKey = propKey;
 
     resultPropsEl.hidden = false;
-    if (state.mostrarDureza) {
+    if (props && state.mostrarDureza) {
       var durChip = propChip('Dureza', props.dureza);
       if (animateIn) durChip.classList.add('is-entering');
       resultPropsEl.appendChild(durChip);
     }
-    var tags = [];
-    if (props.obra) tags.push('Obra-Prima');
-    if (state.pressa) tags.push('Pressa');
-    var modChip = propChip('Modificador' + (tags.length ? ' (' + tags.join(', ') + ')' : ''), (props.mod > 0 ? '+' : '') + props.mod);
-    if (props.obra) modChip.classList.add('chip-obra');
-    if (animateIn) modChip.classList.add('is-entering');
-    resultPropsEl.appendChild(modChip);
+    if (props) {
+      var tags = [];
+      if (props.obra) tags.push('Obra-Prima');
+      if (state.pressa) tags.push('Pressa');
+      var modChip = propChip('Modificador · ' + modTarget + (tags.length ? ' (' + tags.join(', ') + ')' : ''), (props.mod > 0 ? '+' : '') + props.mod);
+      if (props.obra) modChip.classList.add('chip-obra');
+      if (animateIn) modChip.classList.add('is-entering');
+      resultPropsEl.appendChild(modChip);
+    }
+    if (w) {
+      var pesoChip = propChip('Peso' + (w.notas.length ? ' (' + w.notas.join(', ') + ')' : ''), fmtKg(w.finalKg));
+      if (animateIn) pesoChip.classList.add('is-entering');
+      resultPropsEl.appendChild(pesoChip);
+    }
+    if (hasMithral) {
+      var miChip = propChip('Mithral', 'Sem req. Força / Furtividade');
+      if (animateIn) miChip.classList.add('is-entering');
+      resultPropsEl.appendChild(miChip);
+    }
+    if (hasForcaPesado) {
+      var fpChip = propChip('Requisito', 'Pesado · +2 Força');
+      if (animateIn) fpChip.classList.add('is-entering');
+      resultPropsEl.appendChild(fpChip);
+    }
     if (exc) {
       var excChip = propChip('Artefato', 'Excalibur');
       excChip.classList.add('chip-excalibur');
       if (animateIn) excChip.classList.add('is-entering');
       resultPropsEl.appendChild(excChip);
     }
+  }
+
+  var FIREARMS_SET = { 'Mosquete': 1, 'Pistola': 1, 'Bacamarte': 1, 'Canhão': 1, 'Arcabuz': 1 };
+  var modsWarnEl = document.getElementById('mods-warn');
+  function renderModsWarn() {
+    if (!modsWarnEl) return;
+    var avisos = [];
+    var mods = state.mods || [];
+    if (mods.indexOf(2) !== -1 && state.peso === 'pesado') {
+      avisos.push('Estrutura Ocultável exige item sem propriedade Pesada / armadura não pesada.');
+    }
+    if (mods.indexOf(3) !== -1 && (state.tipoItem === 'armadura' || (state.equipNome && !FIREARMS_SET[state.equipNome]))) {
+      avisos.push('Câmara Expandida se aplica apenas a armas de fogo (com Ignição).');
+    }
+    if (mods.indexOf(0) !== -1 && state.tipoItem === 'armadura') {
+      avisos.push('Dano Extra se aplica apenas a armas corpo a corpo ou de arremesso.');
+    }
+    if (mods.indexOf(4) !== -1 && state.tipoItem === 'armadura') {
+      avisos.push('Suporte para Baioneta se aplica apenas a armas com Munição ou focos.');
+    }
+    if (!avisos.length) {
+      modsWarnEl.hidden = true;
+      modsWarnEl.innerHTML = '';
+      return;
+    }
+    modsWarnEl.hidden = false;
+    modsWarnEl.innerHTML = '<div class="mw-head">' + ICON_WARN + '<span>Atenção à compatibilidade (você ainda pode manter se o Mestre liberar)</span></div><ul>' +
+      avisos.map(function (a) { return '<li>' + a + '</li>'; }).join('') + '</ul>';
   }
 
   function buildSimpleCombo(placeholder, initialId, onPick, labelId) {
@@ -4347,6 +4545,7 @@
         opt.addEventListener('mousedown', function (e) {
           e.preventDefault();
           input.value = m.nome;
+          syncSimpleClear();
           close();
           onPick(m.id);
         });
@@ -4367,6 +4566,10 @@
     });
 
     wrap.appendChild(input);
+    var syncSimpleClear = attachComboClear(wrap, input, function () {
+      close();
+      onPick('');
+    });
     wrap.appendChild(dropdown);
     return wrap;
   }
@@ -4631,7 +4834,15 @@
     }
     breakdownEl.appendChild(bRow(c.conserto ? 'Custo do conserto' : state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(c.final), true));
 
-    var formulaStr = c.possuidos
+    if (consertoNoteEl && c.conserto) {
+      consertoNoteEl.textContent = c.consertoVivo
+        ? 'Material vivo quebrado não se conserta com po: exige magia de ressurreição, sem gasto em ouro (p. 173).'
+        : 'Um item quebrado (penalidade −5) custa metade do valor do item novo para consertar (p. 173). Reparar +1 de durabilidade antes de quebrar é grátis em um Descanso Curto com ferramentas.';
+    }
+
+    var formulaStr = c.consertoVivo
+      ? 'material vivo quebrado — magia de ressurreição (0 po, p. 173)'
+      : c.possuidos
       ? 'materiais em posse — grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
       : c.conserto
         ? (c.usaFracaoFixa
@@ -4675,6 +4886,7 @@
     renderVantagens();
     renderProduction();
     renderResultProps();
+    renderModsWarn();
     renderJuncao();
     renderCompMateriais();
     updateMagicos();
@@ -4709,7 +4921,8 @@
     var final = state.modo === 'vendido' ? proprio * (1 + lucroPct / 100) : proprio;
 
     var baseHoras = TIER_HOURS[mat.tier] || 24;
-    var adj = state.peso === 'leve' ? -8 : state.peso === 'pesado' ? 8 : 0;
+    var pesoEfetivo = mat.forcaPesado ? 'pesado' : state.peso;
+    var adj = pesoEfetivo === 'leve' ? -8 : pesoEfetivo === 'pesado' ? 8 : 0;
     var horas = Math.max(1, baseHoras + adj) * (2 / 3);
     if (state.criacoesAutomaticas && (mat.tier === 'A' || mat.tier === 'S')) horas /= 2;
     if (state.pressa) horas /= 2;
@@ -4719,7 +4932,12 @@
     if (state.melhorDosMelhores && modNum < 3) modNum += 1;
     if (state.pressa) modNum -= 1;
 
-    return { mat: mat, final: final, horas: horas, modNum: modNum, dureza: mat.dureza };
+    var eq = null;
+    EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+    var leveMod = (state.mods || []).indexOf(1) !== -1;
+    var pesoKg = eq && eq.pesoKg != null ? eq.pesoKg * (mat.pesoMult || 1) * (leveMod ? 0.75 : 1) : null;
+
+    return { mat: mat, final: final, horas: horas, modNum: modNum, dureza: mat.dureza, pesoKg: pesoKg, forcaPesado: !!mat.forcaPesado };
   }
 
   function renderCompMateriais() {
@@ -4780,12 +4998,16 @@
         card.appendChild(tag2);
       }
 
-      [
+      var stats = [
         ['Tempo (Forjador)', fmt(r.horas) + 'h'],
         ['Modificador', fmtMod(r.modNum)],
         ['Dureza', state.mostrarDureza ? r.dureza : '—'],
         ['Multiplicador', '×' + r.mat.mult]
-      ].forEach(function (st) {
+      ];
+      if (r.pesoKg != null) {
+        stats.push(['Peso', fmtKg(r.pesoKg) + (r.forcaPesado ? ' · Pesado' : '')]);
+      }
+      stats.forEach(function (st) {
         var line = document.createElement('div');
         line.className = 'cm-stat';
         var k = document.createElement('span');
@@ -4814,6 +5036,7 @@
     EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) e = x; });
     if (!e) { equipInfo.hidden = true; return; }
     var partes = [e.grupo, 'PDE ' + fmtMoeda(e.pde)];
+    if (e.pesoKg != null) partes.push(fmtKg(e.pesoKg));
     if (e.peso) partes.push(e.peso === 'leve' ? 'Leve (−8h)' : 'Pesado (+8h)');
     if (e.maestria) partes.push('Maestria: ' + e.maestria);
     equipInfo.textContent = partes.join(' · ');
@@ -4840,6 +5063,7 @@
       state.pde = e.pde;
       pdeInput.value = e.pde;
       input.value = e.nome;
+      syncEquipClear();
       close();
       setTipo(e.tipo);
       setPeso(e.peso);
@@ -4867,7 +5091,7 @@
         n.textContent = e.nome;
         var p = document.createElement('span');
         p.className = 'mo-mult';
-        p.textContent = fmtMoeda(e.pde);
+        p.textContent = fmtMoeda(e.pde) + (e.pesoKg != null ? ' · ' + fmtKg(e.pesoKg) : '');
         opt.appendChild(n);
         opt.appendChild(p);
         opt.addEventListener('mousedown', function (ev) { ev.preventDefault(); pick(e); });
@@ -4884,6 +5108,13 @@
     input.addEventListener('focus', function () { input.select(); });
     input.addEventListener('blur', function () { setTimeout(close, 120); });
     wrap.appendChild(input);
+    var syncEquipClear = attachComboClear(wrap, input, function () {
+      state.equipNome = '';
+      equipInfo.hidden = true;
+      close();
+      saveState();
+      update();
+    });
     wrap.appendChild(dropdown);
     return wrap;
   }
@@ -5284,6 +5515,7 @@
     if (emptyReason(c)) return null;
     var soModMun = !!(c.modMun && c.modMun.existente);
     var props = soModMun ? null : itemProps();
+    var w = state.tipoItem === 'polvora' || soModMun ? null : calcItemWeight();
     var mats = state.tipoItem === 'polvora' || soModMun ? [] : state.materials
       .filter(function (m) { return m.name || m.materialId; })
       .map(function (m) {
@@ -5305,6 +5537,7 @@
       horas: lastForjadorHoras,
       dureza: props && state.mostrarDureza ? props.dureza : null,
       mod: props ? props.mod : null,
+      pesoKg: w ? w.finalKg : null,
       obra: !!(props && props.obra),
       pressa: !!state.pressa,
       rende: soModMun || state.modo === 'conserto' ? '' : state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
@@ -5344,6 +5577,7 @@
     var tags = [r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : ''].filter(Boolean);
     if (r.mod != null) props.push('Modificador ' + fmtMod(r.mod) + (tags.length ? ' (' + tags.join(', ') + ')' : ''));
     if (r.dureza) props.push('Dureza ' + r.dureza);
+    if (r.pesoKg != null) props.push('Peso ' + fmtKg(r.pesoKg));
     if (props.length) linhas.push(props.join(' · '));
     if (r.mods && r.mods.length) linhas.push('Modificações: ' + r.mods.join(', '));
     return linhas.join('\n');
@@ -5431,22 +5665,25 @@
     try { localStorage.setItem(LISTA_KEY, JSON.stringify(lista)); } catch (e) {}
   }
   function totaisLista() {
-    var po = 0, horas = 0, semTempo = 0, pendPo = 0, pendHoras = 0, feitos = 0, totalQtd = 0;
+    var po = 0, horas = 0, semTempo = 0, pendPo = 0, pendHoras = 0, feitos = 0, totalQtd = 0, kg = 0, pendKg = 0;
     lista.forEach(function (r) {
       var q = Math.max(1, r.qtd || 1);
       var v = (r.valor || 0) * q;
       var h = r.horas != null ? r.horas * q : null;
+      var w = r.pesoKg != null ? r.pesoKg * q : 0;
       po += v;
+      kg += w;
       totalQtd += q;
       if (h != null) horas += h; else semTempo++;
       if (r.feito) {
         feitos++;
       } else {
         pendPo += v;
+        pendKg += w;
         if (h != null) pendHoras += h;
       }
     });
-    return { po: po, horas: horas, semTempo: semTempo, pendPo: pendPo, pendHoras: pendHoras, feitos: feitos, totalQtd: totalQtd };
+    return { po: po, horas: horas, semTempo: semTempo, pendPo: pendPo, pendHoras: pendHoras, feitos: feitos, totalQtd: totalQtd, kg: kg, pendKg: pendKg };
   }
 
   function renderLista() {
@@ -5563,10 +5800,12 @@
       listaItemsEl.appendChild(li);
     });
     var t = totaisLista();
+    var clearDoneBtnEl = document.getElementById('lista-clear-done-btn');
+    if (clearDoneBtnEl) clearDoneBtnEl.hidden = t.feitos === 0;
     listaTotalEl.innerHTML = '';
     var tl = document.createElement('span');
     tl.className = 'lt-label';
-    tl.textContent = 'Total · ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens');
+    tl.textContent = 'Total · ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens') + (t.kg > 0 ? ' · ' + fmtKg(t.kg) : '');
     var tv = document.createElement('span');
     tv.className = 'lt-valor';
     tv.textContent = fmtMoeda(t.po);
@@ -5582,7 +5821,9 @@
       tp.className = 'lt-pend';
       tp.textContent = t.feitos === lista.length
         ? 'Todos os itens marcados como fabricados.'
-        : 'Pendente (' + (lista.length - t.feitos) + '): ' + fmtMoeda(t.pendPo) + (t.pendHoras ? ' · ' + fmtHorasForjador(t.pendHoras) : '');
+        : 'Pendente (' + (lista.length - t.feitos) + '): ' + fmtMoeda(t.pendPo) +
+          (t.pendHoras ? ' · ' + fmtHorasForjador(t.pendHoras) : '') +
+          (t.pendKg > 0 ? ' · ' + fmtKg(t.pendKg) : '');
       listaTotalEl.appendChild(tp);
     }
   }
@@ -5607,7 +5848,8 @@
     var t = totaisLista();
     var partes = lista.map(textoResumo);
     partes.push('Total: ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) +
-      (t.horas ? ' · ' + fmtHorasForjador(t.horas) : ''));
+      (t.horas ? ' · ' + fmtHorasForjador(t.horas) : '') +
+      (t.kg > 0 ? ' · ' + fmtKg(t.kg) : ''));
     copiarTexto(partes.join('\n\n') + '\n' + SITE_URL).then(function () {
       morphBtn(listaCopyBtnEl, ICON_CHECK + ' Copiada');
       showToast('Lista copiada.');
@@ -5615,6 +5857,23 @@
       showToast('Não consegui copiar automaticamente neste navegador.');
     });
   });
+
+  var listaClearDoneBtn = document.getElementById('lista-clear-done-btn');
+  if (listaClearDoneBtn) {
+    listaClearDoneBtn.addEventListener('click', function () {
+      var copia = lista.slice();
+      var removidos = lista.filter(function (r) { return r.feito; }).length;
+      if (!removidos) return;
+      lista = lista.filter(function (r) { return !r.feito; });
+      salvarLista();
+      renderLista();
+      showToast(removidos + (removidos === 1 ? ' item concluído removido.' : ' itens concluídos removidos.'), 'Desfazer', function () {
+        lista = copia;
+        salvarLista();
+        renderLista();
+      });
+    });
+  }
 
   document.getElementById('lista-clear-btn').addEventListener('click', function () {
     var copia = lista.slice();
@@ -5736,6 +5995,10 @@
     dropdown.setAttribute('role', 'listbox');
     dropdown.hidden = true;
     wrap.appendChild(input);
+    var syncCatClear = attachComboClear(wrap, input, function () {
+      close();
+      if (onClear) onClear();
+    });
     wrap.appendChild(dropdown);
 
     var opts = [];
@@ -5750,6 +6013,7 @@
     function syncInput() {
       var cur = getInitial();
       input.value = cur ? cur.nome : '';
+      syncCatClear();
     }
     syncInput();
 
@@ -5762,6 +6026,7 @@
     }
     function pick(item) {
       input.value = item.nome;
+      syncCatClear();
       close();
       if (window.Forja && (item.tier === 'S' || item.id === 'santa_granada')) {
         window.Forja.sparksAt(input, 'purple');
@@ -5981,7 +6246,8 @@
       '<p class="ti-head">Criação de Pólvoras · p. 160 e 171</p><ul>' +
       '<li><strong>Lote:</strong> paga o preço de <strong>2 cargas</strong> e rende <strong>1d4 cargas</strong>. Não usa materiais nem modificações.</li>' +
       '<li><strong>Tempo:</strong> 8 horas de base por lote (5,33h para o Forjador pelo Trabalhador Itinerante).</li>' +
-      '<li><strong>Uso em bombas:</strong> com Kit de Alquimista e uma ação, substitua a Pólvora Negra de qualquer bomba por uma carga especial (p. 217).</li></ul>'
+      '<li><strong>Uso em bombas:</strong> com Kit de Alquimista e uma ação, substitua a Pólvora Negra de qualquer bomba por uma carga especial (p. 217).</li>' +
+      '<li><strong>Especialista em Pólvora (p. 212):</strong> talento que permite consumir 2 cargas diferentes no mesmo disparo com Ignição (sem combinar duas elementais) e reduz Emperrado em −2.</li></ul>'
   };
 
   function syncBmInfoHtml() {
@@ -6275,9 +6541,19 @@
     }
   }
 
+  function municaoPesoKg(cm) {
+    var m = null;
+    MUNICOES_LIST.forEach(function (x) { if (x.nome === state.bmMunId) m = x; });
+    if (!m || m.pesoKg == null) return null;
+    var mult = cm && cm.mat && cm.mat.pesoMult ? cm.mat.pesoMult : 1;
+    return m.pesoKg * mult;
+  }
+
   function renderBmMunInfo(cm) {
-    var colossalNote = (state.bmMunId || '').indexOf('colossal') !== -1 ? ' · +1 kg (evita ½ dano em armas colossais, p. 159)' : '';
-    bmMunInfo.textContent = '1 unidade = ' + fmtMoeda(cm.pdeUnit) + ' · Lote (4×) = ' + fmtMoeda(cm.pdeLote) + ' · rende 2d4 unidades' + colossalNote;
+    var colossalNote = (state.bmMunId || '').indexOf('colossal') !== -1 ? ' · +1 kg/un. (evita ½ dano em armas colossais, p. 159)' : '';
+    var kgUnit = municaoPesoKg(cm);
+    var pesoNote = kgUnit != null ? ' · Peso (20 un.): ' + fmtKg(kgUnit * 20) : '';
+    bmMunInfo.textContent = '1 unidade = ' + fmtMoeda(cm.pdeUnit) + ' · Lote (4×) = ' + fmtMoeda(cm.pdeLote) + ' · rende 2d4 unidades' + pesoNote + colossalNote;
     if (!cm.mat) { bombaDetalhesSection.hidden = true; return; }
     bombaDetalhesSection.hidden = false;
     bombaDetalhesTitle.textContent = 'Material da munição';
@@ -6546,6 +6822,9 @@
     resultPropsEl.appendChild(propChip('CD Detonação', String(cb.cdDetonacao)));
     resultPropsEl.appendChild(propChip('CD Fabricação', String(cb.b.cd)));
     resultPropsEl.appendChild(propChip('Raio', cb.isBombinha ? '1,5 m / 1 alvo' : cb.b.raio));
+    if (cb.isBombinha) {
+      resultPropsEl.appendChild(propChip('Peso', '0,1 kg/un.'));
+    }
     if (state.bombaMestre) {
       var mChip = propChip('Ação', 'Bônus (Mestre)');
       mChip.classList.add('chip-obra');
@@ -6601,6 +6880,8 @@
       var cm = calcBmMunicao();
       if (!cm || (!(cm.pdeUnit > 0) && !(cm.modMun && cm.modMun.existente))) return null;
       var baseNome = (state.bmMunId || 'Munição').replace(' (1 unidade)', '');
+      var kgUnit = municaoPesoKg(cm);
+      var pesoTxt = kgUnit != null ? ' · Peso (20 un.) ' + fmtKg(kgUnit * 20) : '';
       return {
         id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
         oficina: 'bombas',
@@ -6612,7 +6893,7 @@
         venda: state.bombaModo === 'vendido',
         horas: cm.horas,
         rende: cm.modMun && cm.modMun.existente ? '' : '2d4 unidades',
-        detalhes: (cm.mat ? 'Dano ' + fmtMod(cm.modNum) + ' · Dureza ' + cm.mat.dureza : 'Modificação em munição existente') + (cm.modMun ? ' · ' + cm.modMun.nome + ' (' + cm.modMun.qtd + ')' : '')
+        detalhes: (cm.mat ? 'Dano ' + fmtMod(cm.modNum) + ' · Dureza ' + cm.mat.dureza : 'Modificação em munição existente') + (cm.modMun ? ' · ' + cm.modMun.nome + ' (' + cm.modMun.qtd + ')' : '') + pesoTxt
       };
     }
     if (state.bmTipo === 'polvora') {
@@ -6648,7 +6929,7 @@
       venda: state.bombaModo === 'vendido',
       horas: cb.isBombinha ? +(cb.qtd / 60).toFixed(2) : null,
       rende: cb.isBombinha ? (cb.qtd === 1 ? '2d4 bombinhas' : (cb.qtd * 2) + 'd4 bombinhas') : '',
-      detalhes: 'CD Detonação ' + cb.cdDetonacao + ' · CD Fab. ' + cb.b.cd + ' · Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo' : cb.b.raio) + ' · TR ' + cb.b.tr,
+      detalhes: 'CD Detonação ' + cb.cdDetonacao + ' · CD Fab. ' + cb.b.cd + ' · Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo · Peso 0,1 kg/un.' : cb.b.raio) + ' · TR ' + cb.b.tr,
       receita: cb.b.receita
     };
   }
@@ -6728,7 +7009,6 @@
   var herbalLucroWrap = document.getElementById('herbal-lucro-wrap');
   var herbalLucroInput = document.getElementById('herbal-lucro');
   var ramosGridEl = document.getElementById('ramos-grid');
-  var herbalRollerOut = document.getElementById('herbal-roller-out');
   var herbalComboEl = null;
 
   herbalTipoInfo.innerHTML =
@@ -6736,6 +7016,7 @@
     '<ul>' +
     '<li><strong>Preparo:</strong> criar qualquer item herbáceo exige 1 hora e um Kit de Herbalismo (ou Kit de Venenos para venenos).</li>' +
     '<li><strong>Forragear ramos:</strong> 1 hora em ambiente não-urbano + teste de Natureza ou Sobrevivência CD 14 → role 1d20 na tabela e ganhe 2 ramos.</li>' +
+    '<li><strong>Receitas memorizadas (p. 148–149):</strong> sem proficiência: máx. 2 · Natureza: 2 iniciais (máx. 4) · Kit de Herbalismo: 3 iniciais (máx. 6) · Curandeiro nv. 1+: sabe todas e ensina em 1 minuto (normalmente 1h).</li>' +
     '<li><strong>Ação bônus:</strong> a regra recomenda tomar poções e aplicar venenos com ação bônus (D&amp;D 2024).</li>' +
     '</ul>';
   herbalInfoBtn.addEventListener('click', function () {
@@ -6777,51 +7058,6 @@
     });
   }
   renderRamosTable();
-
-  function ramoByRoll(roll) {
-    for (var i = 0; i < RAMOS_DB.length; i++) {
-      if (roll >= RAMOS_DB[i].min && roll <= RAMOS_DB[i].max) return RAMOS_DB[i];
-    }
-    return RAMOS_DB[0];
-  }
-
-  function showRollOutput(html) {
-    herbalRollerOut.hidden = false;
-    herbalRollerOut.classList.remove('is-rolled');
-    herbalRollerOut.innerHTML = html;
-    void herbalRollerOut.offsetWidth;
-    herbalRollerOut.classList.add('is-rolled');
-  }
-
-  var btnForragear = document.getElementById('btn-forragear');
-  var btnHerbolario = document.getElementById('btn-herbolario');
-  var rollCount = 0;
-
-  btnForragear.addEventListener('click', function () {
-    rollCount += 1;
-    var roll = Math.floor(Math.random() * 20) + 1;
-    var r = ramoByRoll(roll);
-    morphBtn(btnForragear, ICON_CHECK + ' Rolou ' + roll);
-    showRollOutput('Forrageamento #' + rollCount + ' (1h · teste Natureza/Sobrevivência CD 14): rolou <strong>' + roll + '</strong> → encontrou <strong>2× Ramo ' + r.nome + '</strong> (' + fmtMoeda(r.preco * 2) + ' em loja / ' + fmtMoeda(r.preco) + ' na venda).');
-  });
-
-  btnHerbolario.addEventListener('click', function () {
-    rollCount += 1;
-    var numCores = Math.floor(Math.random() * 4) + 2; // 2 a 5 lotes disponíveis no dia
-    var estoque = {};
-    for (var i = 0; i < numCores; i++) {
-      var roll = Math.floor(Math.random() * 20) + 1;
-      var r = ramoByRoll(roll);
-      var q = Math.floor(Math.random() * 4) + 1;
-      estoque[r.id] = (estoque[r.id] || 0) + q;
-    }
-    var partes = Object.keys(estoque).map(function (id) {
-      var r = RAMOS_MAP[id];
-      return '<strong>' + estoque[id] + '× ' + r.nome + '</strong> (' + fmtMoeda(r.preco) + '/un.)';
-    });
-    morphBtn(btnHerbolario, ICON_CHECK + ' Estoque gerado');
-    showRollOutput('Estoque do Herbolário #' + rollCount + ' (1d20 cor + 1d4 qtd): ' + partes.join(' · ') + '.');
-  });
 
   function calcHerbal() {
     var h = herbalById(state.herbalId);

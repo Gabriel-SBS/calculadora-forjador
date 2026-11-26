@@ -157,3 +157,38 @@ test('Herbalismo: soma dos ramos e venda com ramos forrageados usa base de merca
   const precoVenda = baseVenda * 1.5;
   approx(precoVenda, ramosUnit * 1.2);
 });
+
+// ---------- 5. Pesos em kg e modificadores de peso ----------
+test('Forja: Pesos em kg do Guia e modificadores de material / Estrutura Leve', () => {
+  const byNome = (n) => db.EQUIP_DB.find((e) => e.nome === n);
+  assert.equal(byNome('Adaga').pesoKg, 0.5);
+  assert.equal(byNome('Espada Longa').pesoKg, 2);
+  assert.equal(byNome('Espada Colossal').pesoKg, 30);
+  assert.equal(byNome('Arco longo').pesoKg, 1);
+  assert.equal(byNome('Placas').pesoKg, 32);
+  assert.equal(byNome('Placas encouraçada').pesoKg, 45);
+  assert.equal(byNome('Broquel').pesoKg, 1);
+  assert.equal(byNome('Escudo de duas mãos').pesoKg, 20);
+  assert.equal(byNome('Canhão').pesoKg, 20);
+  assert.equal(byNome('Agulha').pesoKg, null);
+
+  const mithral = db.MATERIALS_DB.find((m) => m.id === 'metal_mithral');
+  const ouro = db.MATERIALS_DB.find((m) => m.id === 'metal_ouro');
+  const ironWood = db.MATERIALS_DB.find((m) => m.id === 'veg_iron_wood');
+  const pedraAnaRef = db.MATERIALS_DB.find((m) => m.id === 'geo_pedra_ana_refinada');
+  assert.equal(mithral.pesoMult, 0.5);
+  assert.equal(ouro.pesoMult, 2);
+  assert.equal(ironWood.pesoMult, 2);
+  assert.equal(ironWood.forcaPesado, true);
+  assert.equal(pedraAnaRef.pesoMult, 2);
+  assert.equal(pedraAnaRef.forcaPesado, true);
+
+  // Placas (32 kg) de Mithral (÷2) com Estrutura Leve (-25%) = 12 kg
+  approx(byNome('Placas').pesoKg * mithral.pesoMult * 0.75, 12);
+
+  // Materiais vivos (conserto por ressurreição, p. 173)
+  const vivos = db.MATERIALS_DB.filter((m) => m.materialVivo).map((m) => m.id);
+  assert.equal(vivos.length, 7);
+  assert.ok(vivos.includes('metal_elementium'));
+  assert.ok(vivos.includes('org_coral'));
+});
