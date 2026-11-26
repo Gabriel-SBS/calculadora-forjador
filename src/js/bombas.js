@@ -476,10 +476,17 @@
     head.appendChild(tg);
     item.appendChild(head);
 
+    if (cp.p.efeitoArma) {
+      var proArma = document.createElement('div');
+      proArma.className = 'v-row v-pro';
+      proArma.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+      proArma.querySelector('.v-text').textContent = 'Em armas de fogo (p. 159): ' + cp.p.efeitoArma;
+      item.appendChild(proArma);
+    }
     var pro = document.createElement('div');
     pro.className = 'v-row v-pro';
     pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
-    pro.querySelector('.v-text').textContent = cp.p.efeito;
+    pro.querySelector('.v-text').textContent = 'Em bombas (p. 217): ' + cp.p.efeito;
     item.appendChild(pro);
     bombaInfoCard.appendChild(item);
   }

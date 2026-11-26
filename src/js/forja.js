@@ -741,6 +741,51 @@
     return !!targets[itemCtx];
   }
 
+  function cleanClauseForCtx(txt, itemCtx) {
+    if (!txt || !itemCtx || itemCtx === 'all') return txt;
+    var s = txt;
+    if (itemCtx === 'municao') {
+      s = s
+        .replace(/armas\s+corpo\s+a\s+corpo,\s*de\s+arremesso\s+ou\s+(?:à\s+distância|muni[cç][oõ]es)/gi, 'munições')
+        .replace(/armas\s+de\s+(?:corte\/perfura[cç][aã]o|concuss[aã]o)\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas\s+corpo\s+a\s+corpo\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas,\s*escudos\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas\/muni[cç][oõ]es/gi, 'munições')
+        .replace(/muni[cç][oõ]es\s+e\s+armas\s+de\s+arremesso/gi, 'munições')
+        .replace(/\b(em\s+)armas\s+corpo\s+a\s+corpo,\s*de\s+arremesso\s+ou\s+muni[cç][oõ]es/gi, '$1munições')
+        .replace(/\barmas\s+corpo\s+a\s+corpo\s+ou\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/\s*\(exceto\s+muni[cç][oõ]es\)/gi, '');
+    } else {
+      // Na Forja não há munição: remove referências a munições das frases de armas/escudos
+      s = s
+        .replace(/armas\/muni[cç][oõ]es/gi, 'armas')
+        .replace(/armas\s+de\s+corte\/perfura[cç][aã]o\s+e\s+muni[cç][oõ]es/gi, 'armas de corte/perfuração')
+        .replace(/armas\s+corpo\s+a\s+corpo,\s*de\s+arremesso\s+ou\s+muni[cç][oõ]es/gi, 'armas corpo a corpo ou de arremesso')
+        .replace(/armas\s+corpo\s+a\s+corpo\s+e\s+muni[cç][oõ]es/gi, 'armas corpo a corpo')
+        .replace(/armas\s+e\s+muni[cç][oõ]es/gi, 'armas')
+        .replace(/armas,\s*escudos\s+e\s+muni[cç][oõ]es/gi, itemCtx === 'escudo' ? 'escudos' : 'armas')
+        .replace(/muni[cç][oõ]es\s+e\s+armas\s+de\s+arremesso/gi, 'armas de arremesso')
+        .replace(/,\s*de\s+arremesso\s+ou\s+muni[cç][oõ]es/gi, ' ou de arremesso')
+        .replace(/\s*\(armas\/muni[cç][oõ]es\)/gi, ' (armas)')
+        .replace(/\s*\(sempre\s+ativa\s+em\s+cr[ií]ticos\s+de\s+arma\s+ou\s+disparos\s+de\s+muni[cç][aã]o\)/gi, ' (sempre ativa em críticos de arma)');
+      if (itemCtx === 'armadura') {
+        s = s
+          .replace(/armaduras\s+m[ée]dias\/pesadas\s+e\s+escudos/gi, 'armaduras médias/pesadas')
+          .replace(/armaduras\/escudos/gi, 'armaduras')
+          .replace(/armaduras\s+e\s+escudos/gi, 'armaduras')
+          .replace(/armadura\s+ou\s+escudo/gi, 'armadura');
+      } else if (itemCtx === 'escudo') {
+        s = s
+          .replace(/armaduras\s+m[ée]dias\/pesadas\s+e\s+escudos/gi, 'escudos')
+          .replace(/armaduras\/escudos/gi, 'escudos')
+          .replace(/armaduras\s+e\s+escudos/gi, 'escudos')
+          .replace(/armadura\s+ou\s+escudo/gi, 'escudo');
+      }
+    }
+    return capFirst(s.trim());
+  }
+
   function filterMaterialClauses(text, itemCtx) {
     if (!text) return [];
     var sharedPrefix = '';
@@ -759,7 +804,8 @@
     parts.forEach(function (p) {
       var targets = clauseTargets(p);
       if (matchesItemCtx(targets, itemCtx)) {
-        var txt = sharedPrefix ? (sharedPrefix + ' ' + p) : capFirst(p);
+        var cleaned = cleanClauseForCtx(p, itemCtx);
+        var txt = sharedPrefix ? (sharedPrefix + ' ' + cleaned.charAt(0).toLowerCase() + cleaned.slice(1)) : cleaned;
         out.push(/[.!?]$/.test(txt) ? txt : txt + '.');
       }
     });
@@ -1791,6 +1837,7 @@
       setTipo(e.tipo);
       setPeso(e.peso);
       showEquipInfo();
+      renderMods();
       updateMagicos();
     }
     function open(q) {
@@ -1835,6 +1882,7 @@
       state.equipNome = '';
       equipInfo.hidden = true;
       close();
+      renderMods();
       saveState();
       update();
     });
@@ -1843,14 +1891,53 @@
   }
 
   // --- Modificações ---
+  var showAllMods = false;
+  function modIsCompatible(idx) {
+    var ctx = currentForjaCtx();
+    var eq = null;
+    if (state.equipNome) {
+      EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+    }
+    var isWeapon = ctx === 'melee' || ctx === 'ranged' || ctx === 'arma_all';
+    var isMelee = ctx === 'melee' || ctx === 'arma_all';
+    var isRanged = ctx === 'ranged' || ctx === 'arma_all';
+    var isFirearm = eq ? !!FIREARMS_SET[eq.nome] : ctx === 'arma_all';
+    var isCrossbow = eq ? /besta/i.test(eq.nome) : ctx === 'arma_all';
+    var hasMaestria = eq ? !!eq.maestria : (ctx !== 'foco' && ctx !== 'armadura');
+
+    switch (idx) {
+      case 1: case 5: case 6: case 9: case 11: return true;
+      case 2: return state.peso !== 'pesado';
+      case 0: case 13: case 19: case 23: case 24: case 25: return isMelee;
+      case 8: return isMelee && (!eq || state.peso === 'leve');
+      case 3: return isFirearm;
+      case 4: return isRanged || ctx === 'foco';
+      case 7: return isWeapon;
+      case 10: return isCrossbow;
+      case 12: return isFirearm || isCrossbow;
+      case 14: case 15: case 17: return hasMaestria;
+      case 16: return isWeapon || ctx === 'escudo' || ctx === 'armadura_escudo';
+      case 18: case 21: return isRanged;
+      case 20: case 22: return isWeapon;
+      default: return true;
+    }
+  }
+
   function renderMods() {
     modsList.innerHTML = '';
+    var hiddenCount = 0;
     MODS_DB.forEach(function (m, i) {
+      var checked = state.mods.indexOf(i) !== -1;
+      var compat = modIsCompatible(i);
+      if (!showAllMods && !compat && !checked) {
+        hiddenCount++;
+        return;
+      }
       var lab = document.createElement('label');
       lab.className = 'mod-item';
       var cb = document.createElement('input');
       cb.type = 'checkbox';
-      cb.checked = state.mods.indexOf(i) !== -1;
+      cb.checked = checked;
       cb.addEventListener('change', function () {
         var pos = state.mods.indexOf(i);
         if (cb.checked && pos === -1) state.mods.push(i);
@@ -1875,6 +1962,19 @@
       lab.appendChild(desc);
       modsList.appendChild(lab);
     });
+    if (hiddenCount > 0 || showAllMods) {
+      var toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.className = 'btn-ghost mods-toggle-all';
+      toggleBtn.textContent = showAllMods
+        ? 'Mostrar só compatíveis com este item'
+        : 'Mostrar todas as modificações (+' + hiddenCount + ' de outros tipos)';
+      toggleBtn.addEventListener('click', function () {
+        showAllMods = !showAllMods;
+        renderMods();
+      });
+      modsList.appendChild(toggleBtn);
+    }
     updateModsTotal();
   }
 
@@ -1893,6 +1993,7 @@
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
+    renderMods();
     saveState();
     update();
   }
@@ -1996,6 +2097,7 @@
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
     fracaoWrap.hidden = tipo !== 'armadura';
+    renderMods();
     saveState();
     update();
   }
