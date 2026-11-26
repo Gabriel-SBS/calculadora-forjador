@@ -16,7 +16,6 @@
   var herbalLucroWrap = document.getElementById('herbal-lucro-wrap');
   var herbalLucroInput = document.getElementById('herbal-lucro');
   var ramosGridEl = document.getElementById('ramos-grid');
-  var herbalRollerOut = document.getElementById('herbal-roller-out');
   var herbalComboEl = null;
 
   herbalTipoInfo.innerHTML =
@@ -24,6 +23,7 @@
     '<ul>' +
     '<li><strong>Preparo:</strong> criar qualquer item herbáceo exige 1 hora e um Kit de Herbalismo (ou Kit de Venenos para venenos).</li>' +
     '<li><strong>Forragear ramos:</strong> 1 hora em ambiente não-urbano + teste de Natureza ou Sobrevivência CD 14 → role 1d20 na tabela e ganhe 2 ramos.</li>' +
+    '<li><strong>Receitas memorizadas (p. 148–149):</strong> sem proficiência: máx. 2 · Natureza: 2 iniciais (máx. 4) · Kit de Herbalismo: 3 iniciais (máx. 6) · Curandeiro nv. 1+: sabe todas e ensina em 1 minuto (normalmente 1h).</li>' +
     '<li><strong>Ação bônus:</strong> a regra recomenda tomar poções e aplicar venenos com ação bônus (D&amp;D 2024).</li>' +
     '</ul>';
   herbalInfoBtn.addEventListener('click', function () {
@@ -65,51 +65,6 @@
     });
   }
   renderRamosTable();
-
-  function ramoByRoll(roll) {
-    for (var i = 0; i < RAMOS_DB.length; i++) {
-      if (roll >= RAMOS_DB[i].min && roll <= RAMOS_DB[i].max) return RAMOS_DB[i];
-    }
-    return RAMOS_DB[0];
-  }
-
-  function showRollOutput(html) {
-    herbalRollerOut.hidden = false;
-    herbalRollerOut.classList.remove('is-rolled');
-    herbalRollerOut.innerHTML = html;
-    void herbalRollerOut.offsetWidth;
-    herbalRollerOut.classList.add('is-rolled');
-  }
-
-  var btnForragear = document.getElementById('btn-forragear');
-  var btnHerbolario = document.getElementById('btn-herbolario');
-  var rollCount = 0;
-
-  btnForragear.addEventListener('click', function () {
-    rollCount += 1;
-    var roll = Math.floor(Math.random() * 20) + 1;
-    var r = ramoByRoll(roll);
-    morphBtn(btnForragear, ICON_CHECK + ' Rolou ' + roll);
-    showRollOutput('Forrageamento #' + rollCount + ' (1h · teste Natureza/Sobrevivência CD 14): rolou <strong>' + roll + '</strong> → encontrou <strong>2× Ramo ' + r.nome + '</strong> (' + fmtMoeda(r.preco * 2) + ' em loja / ' + fmtMoeda(r.preco) + ' na venda).');
-  });
-
-  btnHerbolario.addEventListener('click', function () {
-    rollCount += 1;
-    var numCores = Math.floor(Math.random() * 4) + 2; // 2 a 5 lotes disponíveis no dia
-    var estoque = {};
-    for (var i = 0; i < numCores; i++) {
-      var roll = Math.floor(Math.random() * 20) + 1;
-      var r = ramoByRoll(roll);
-      var q = Math.floor(Math.random() * 4) + 1;
-      estoque[r.id] = (estoque[r.id] || 0) + q;
-    }
-    var partes = Object.keys(estoque).map(function (id) {
-      var r = RAMOS_MAP[id];
-      return '<strong>' + estoque[id] + '× ' + r.nome + '</strong> (' + fmtMoeda(r.preco) + '/un.)';
-    });
-    morphBtn(btnHerbolario, ICON_CHECK + ' Estoque gerado');
-    showRollOutput('Estoque do Herbolário #' + rollCount + ' (1d20 cor + 1d4 qtd): ' + partes.join(' · ') + '.');
-  });
 
   function calcHerbal() {
     var h = herbalById(state.herbalId);

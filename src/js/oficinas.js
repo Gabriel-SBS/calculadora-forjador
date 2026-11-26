@@ -105,6 +105,10 @@
     dropdown.setAttribute('role', 'listbox');
     dropdown.hidden = true;
     wrap.appendChild(input);
+    var syncCatClear = attachComboClear(wrap, input, function () {
+      close();
+      if (onClear) onClear();
+    });
     wrap.appendChild(dropdown);
 
     var opts = [];
@@ -119,6 +123,7 @@
     function syncInput() {
       var cur = getInitial();
       input.value = cur ? cur.nome : '';
+      syncCatClear();
     }
     syncInput();
 
@@ -131,6 +136,7 @@
     }
     function pick(item) {
       input.value = item.nome;
+      syncCatClear();
       close();
       if (window.Forja && (item.tier === 'S' || item.id === 'santa_granada')) {
         window.Forja.sparksAt(input, 'purple');

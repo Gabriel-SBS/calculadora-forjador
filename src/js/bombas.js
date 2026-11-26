@@ -87,7 +87,8 @@
       '<p class="ti-head">Criação de Pólvoras · p. 160 e 171</p><ul>' +
       '<li><strong>Lote:</strong> paga o preço de <strong>2 cargas</strong> e rende <strong>1d4 cargas</strong>. Não usa materiais nem modificações.</li>' +
       '<li><strong>Tempo:</strong> 8 horas de base por lote (5,33h para o Forjador pelo Trabalhador Itinerante).</li>' +
-      '<li><strong>Uso em bombas:</strong> com Kit de Alquimista e uma ação, substitua a Pólvora Negra de qualquer bomba por uma carga especial (p. 217).</li></ul>'
+      '<li><strong>Uso em bombas:</strong> com Kit de Alquimista e uma ação, substitua a Pólvora Negra de qualquer bomba por uma carga especial (p. 217).</li>' +
+      '<li><strong>Especialista em Pólvora (p. 212):</strong> talento que permite consumir 2 cargas diferentes no mesmo disparo com Ignição (sem combinar duas elementais) e reduz Emperrado em −2.</li></ul>'
   };
 
   function syncBmInfoHtml() {
@@ -381,9 +382,19 @@
     }
   }
 
+  function municaoPesoKg(cm) {
+    var m = null;
+    MUNICOES_LIST.forEach(function (x) { if (x.nome === state.bmMunId) m = x; });
+    if (!m || m.pesoKg == null) return null;
+    var mult = cm && cm.mat && cm.mat.pesoMult ? cm.mat.pesoMult : 1;
+    return m.pesoKg * mult;
+  }
+
   function renderBmMunInfo(cm) {
-    var colossalNote = (state.bmMunId || '').indexOf('colossal') !== -1 ? ' · +1 kg (evita ½ dano em armas colossais, p. 159)' : '';
-    bmMunInfo.textContent = '1 unidade = ' + fmtMoeda(cm.pdeUnit) + ' · Lote (4×) = ' + fmtMoeda(cm.pdeLote) + ' · rende 2d4 unidades' + colossalNote;
+    var colossalNote = (state.bmMunId || '').indexOf('colossal') !== -1 ? ' · +1 kg/un. (evita ½ dano em armas colossais, p. 159)' : '';
+    var kgUnit = municaoPesoKg(cm);
+    var pesoNote = kgUnit != null ? ' · Peso (20 un.): ' + fmtKg(kgUnit * 20) : '';
+    bmMunInfo.textContent = '1 unidade = ' + fmtMoeda(cm.pdeUnit) + ' · Lote (4×) = ' + fmtMoeda(cm.pdeLote) + ' · rende 2d4 unidades' + pesoNote + colossalNote;
     if (!cm.mat) { bombaDetalhesSection.hidden = true; return; }
     bombaDetalhesSection.hidden = false;
     bombaDetalhesTitle.textContent = 'Material da munição';
@@ -652,6 +663,9 @@
     resultPropsEl.appendChild(propChip('CD Detonação', String(cb.cdDetonacao)));
     resultPropsEl.appendChild(propChip('CD Fabricação', String(cb.b.cd)));
     resultPropsEl.appendChild(propChip('Raio', cb.isBombinha ? '1,5 m / 1 alvo' : cb.b.raio));
+    if (cb.isBombinha) {
+      resultPropsEl.appendChild(propChip('Peso', '0,1 kg/un.'));
+    }
     if (state.bombaMestre) {
       var mChip = propChip('Ação', 'Bônus (Mestre)');
       mChip.classList.add('chip-obra');
@@ -707,6 +721,8 @@
       var cm = calcBmMunicao();
       if (!cm || (!(cm.pdeUnit > 0) && !(cm.modMun && cm.modMun.existente))) return null;
       var baseNome = (state.bmMunId || 'Munição').replace(' (1 unidade)', '');
+      var kgUnit = municaoPesoKg(cm);
+      var pesoTxt = kgUnit != null ? ' · Peso (20 un.) ' + fmtKg(kgUnit * 20) : '';
       return {
         id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
         oficina: 'bombas',
@@ -718,7 +734,7 @@
         venda: state.bombaModo === 'vendido',
         horas: cm.horas,
         rende: cm.modMun && cm.modMun.existente ? '' : '2d4 unidades',
-        detalhes: (cm.mat ? 'Dano ' + fmtMod(cm.modNum) + ' · Dureza ' + cm.mat.dureza : 'Modificação em munição existente') + (cm.modMun ? ' · ' + cm.modMun.nome + ' (' + cm.modMun.qtd + ')' : '')
+        detalhes: (cm.mat ? 'Dano ' + fmtMod(cm.modNum) + ' · Dureza ' + cm.mat.dureza : 'Modificação em munição existente') + (cm.modMun ? ' · ' + cm.modMun.nome + ' (' + cm.modMun.qtd + ')' : '') + pesoTxt
       };
     }
     if (state.bmTipo === 'polvora') {
@@ -754,7 +770,7 @@
       venda: state.bombaModo === 'vendido',
       horas: cb.isBombinha ? +(cb.qtd / 60).toFixed(2) : null,
       rende: cb.isBombinha ? (cb.qtd === 1 ? '2d4 bombinhas' : (cb.qtd * 2) + 'd4 bombinhas') : '',
-      detalhes: 'CD Detonação ' + cb.cdDetonacao + ' · CD Fab. ' + cb.b.cd + ' · Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo' : cb.b.raio) + ' · TR ' + cb.b.tr,
+      detalhes: 'CD Detonação ' + cb.cdDetonacao + ' · CD Fab. ' + cb.b.cd + ' · Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo · Peso 0,1 kg/un.' : cb.b.raio) + ' · TR ' + cb.b.tr,
       receita: cb.b.receita
     };
   }

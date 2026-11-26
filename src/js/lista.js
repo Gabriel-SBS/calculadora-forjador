@@ -16,6 +16,7 @@
     if (emptyReason(c)) return null;
     var soModMun = !!(c.modMun && c.modMun.existente);
     var props = soModMun ? null : itemProps();
+    var w = state.tipoItem === 'polvora' || soModMun ? null : calcItemWeight();
     var mats = state.tipoItem === 'polvora' || soModMun ? [] : state.materials
       .filter(function (m) { return m.name || m.materialId; })
       .map(function (m) {
@@ -37,6 +38,7 @@
       horas: lastForjadorHoras,
       dureza: props && state.mostrarDureza ? props.dureza : null,
       mod: props ? props.mod : null,
+      pesoKg: w ? w.finalKg : null,
       obra: !!(props && props.obra),
       pressa: !!state.pressa,
       rende: soModMun || state.modo === 'conserto' ? '' : state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
@@ -76,6 +78,7 @@
     var tags = [r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : ''].filter(Boolean);
     if (r.mod != null) props.push('Modificador ' + fmtMod(r.mod) + (tags.length ? ' (' + tags.join(', ') + ')' : ''));
     if (r.dureza) props.push('Dureza ' + r.dureza);
+    if (r.pesoKg != null) props.push('Peso ' + fmtKg(r.pesoKg));
     if (props.length) linhas.push(props.join(' · '));
     if (r.mods && r.mods.length) linhas.push('Modificações: ' + r.mods.join(', '));
     return linhas.join('\n');
@@ -163,22 +166,25 @@
     try { localStorage.setItem(LISTA_KEY, JSON.stringify(lista)); } catch (e) {}
   }
   function totaisLista() {
-    var po = 0, horas = 0, semTempo = 0, pendPo = 0, pendHoras = 0, feitos = 0, totalQtd = 0;
+    var po = 0, horas = 0, semTempo = 0, pendPo = 0, pendHoras = 0, feitos = 0, totalQtd = 0, kg = 0, pendKg = 0;
     lista.forEach(function (r) {
       var q = Math.max(1, r.qtd || 1);
       var v = (r.valor || 0) * q;
       var h = r.horas != null ? r.horas * q : null;
+      var w = r.pesoKg != null ? r.pesoKg * q : 0;
       po += v;
+      kg += w;
       totalQtd += q;
       if (h != null) horas += h; else semTempo++;
       if (r.feito) {
         feitos++;
       } else {
         pendPo += v;
+        pendKg += w;
         if (h != null) pendHoras += h;
       }
     });
-    return { po: po, horas: horas, semTempo: semTempo, pendPo: pendPo, pendHoras: pendHoras, feitos: feitos, totalQtd: totalQtd };
+    return { po: po, horas: horas, semTempo: semTempo, pendPo: pendPo, pendHoras: pendHoras, feitos: feitos, totalQtd: totalQtd, kg: kg, pendKg: pendKg };
   }
 
   function renderLista() {
@@ -295,10 +301,12 @@
       listaItemsEl.appendChild(li);
     });
     var t = totaisLista();
+    var clearDoneBtnEl = document.getElementById('lista-clear-done-btn');
+    if (clearDoneBtnEl) clearDoneBtnEl.hidden = t.feitos === 0;
     listaTotalEl.innerHTML = '';
     var tl = document.createElement('span');
     tl.className = 'lt-label';
-    tl.textContent = 'Total · ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens');
+    tl.textContent = 'Total · ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens') + (t.kg > 0 ? ' · ' + fmtKg(t.kg) : '');
     var tv = document.createElement('span');
     tv.className = 'lt-valor';
     tv.textContent = fmtMoeda(t.po);
@@ -314,7 +322,9 @@
       tp.className = 'lt-pend';
       tp.textContent = t.feitos === lista.length
         ? 'Todos os itens marcados como fabricados.'
-        : 'Pendente (' + (lista.length - t.feitos) + '): ' + fmtMoeda(t.pendPo) + (t.pendHoras ? ' · ' + fmtHorasForjador(t.pendHoras) : '');
+        : 'Pendente (' + (lista.length - t.feitos) + '): ' + fmtMoeda(t.pendPo) +
+          (t.pendHoras ? ' · ' + fmtHorasForjador(t.pendHoras) : '') +
+          (t.pendKg > 0 ? ' · ' + fmtKg(t.pendKg) : '');
       listaTotalEl.appendChild(tp);
     }
   }
@@ -339,7 +349,8 @@
     var t = totaisLista();
     var partes = lista.map(textoResumo);
     partes.push('Total: ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) +
-      (t.horas ? ' · ' + fmtHorasForjador(t.horas) : ''));
+      (t.horas ? ' · ' + fmtHorasForjador(t.horas) : '') +
+      (t.kg > 0 ? ' · ' + fmtKg(t.kg) : ''));
     copiarTexto(partes.join('\n\n') + '\n' + SITE_URL).then(function () {
       morphBtn(listaCopyBtnEl, ICON_CHECK + ' Copiada');
       showToast('Lista copiada.');
@@ -347,6 +358,23 @@
       showToast('Não consegui copiar automaticamente neste navegador.');
     });
   });
+
+  var listaClearDoneBtn = document.getElementById('lista-clear-done-btn');
+  if (listaClearDoneBtn) {
+    listaClearDoneBtn.addEventListener('click', function () {
+      var copia = lista.slice();
+      var removidos = lista.filter(function (r) { return r.feito; }).length;
+      if (!removidos) return;
+      lista = lista.filter(function (r) { return !r.feito; });
+      salvarLista();
+      renderLista();
+      showToast(removidos + (removidos === 1 ? ' item concluído removido.' : ' itens concluídos removidos.'), 'Desfazer', function () {
+        lista = copia;
+        salvarLista();
+        renderLista();
+      });
+    });
+  }
 
   document.getElementById('lista-clear-btn').addEventListener('click', function () {
     var copia = lista.slice();
