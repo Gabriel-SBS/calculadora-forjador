@@ -707,6 +707,81 @@
     });
   }
 
+  function capFirst(s) {
+    return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+  }
+
+  function clauseTargets(clause) {
+    var s = clause.toLowerCase();
+    var t = {};
+    var hasArmasComMun = /armas?\s+com\s+(a\s+propriedade\s+)?muni[cç][aã]o/.test(s);
+    var hasArmasCorpo = /armas?\s+corpo\s+a\s+corpo|armas?\s+de\s+(corte|perfura|concuss|arremesso)|arremesso/.test(s);
+    var hasArmasDist = /armas?\s+[àa]\s+dist[âa]ncia|ou\s+[àa]\s+dist[âa]ncia/.test(s);
+    var hasArmasMunSlash = /armas?\/muni[cç]/.test(s);
+    var hasArmasGen = /\barmas?\b/.test(s) && !hasArmasComMun && !hasArmasCorpo && !hasArmasDist && !hasArmasMunSlash;
+    var hasMunicao = hasArmasMunSlash || /(?:^|[\s,/(])muni[cç][oõ]es\b|disparos\s+de\s+muni[cç][aã]o|\bmuni[cç][aã]o\s+(com|gera|quebra)/.test(s);
+    var hasArmadura = /\barmaduras?\b/.test(s);
+    var hasEscudo = /\bescudos?\b/.test(s);
+    var hasFoco = /\bfocos?\b|\bcanalizadores?\b/.test(s);
+
+    if (hasArmasCorpo || hasArmasMunSlash || hasArmasGen) t.melee = true;
+    if (hasArmasComMun || hasArmasDist || hasArmasMunSlash || hasArmasGen) t.ranged = true;
+    if (hasMunicao) t.municao = true;
+    if (hasArmadura) t.armadura = true;
+    if (hasEscudo) t.escudo = true;
+    if (hasFoco) t.foco = true;
+    return t;
+  }
+
+  function matchesItemCtx(targets, itemCtx) {
+    var keys = Object.keys(targets);
+    if (!keys.length || !itemCtx || itemCtx === 'all') return true;
+    if (itemCtx === 'arma_all') return !!(targets.melee || targets.ranged);
+    if (itemCtx === 'armadura_escudo') return !!(targets.armadura || targets.escudo);
+    return !!targets[itemCtx];
+  }
+
+  function filterMaterialClauses(text, itemCtx) {
+    if (!text) return [];
+    var sharedPrefix = '';
+    var body = text;
+    var m = text.match(/^(Ao sofrer ou canalizar[^:]+:|Material vivo(?:\s+[^:]+)?\:)\s*(.+)$/i);
+    if (m && m[2].indexOf(';') !== -1) {
+      sharedPrefix = m[1];
+      body = m[2];
+    }
+    var parts = body.split(';').map(function (p) { return p.replace(/^[,;\s]+|[,;\s]+$/g, ''); }).filter(Boolean);
+    var out = [];
+    if (sharedPrefix && /^Material vivo/i.test(sharedPrefix)) {
+      out.push(sharedPrefix.replace(/:$/, '') + '.');
+      sharedPrefix = '';
+    }
+    parts.forEach(function (p) {
+      var targets = clauseTargets(p);
+      if (matchesItemCtx(targets, itemCtx)) {
+        var txt = sharedPrefix ? (sharedPrefix + ' ' + p) : capFirst(p);
+        out.push(/[.!?]$/.test(txt) ? txt : txt + '.');
+      }
+    });
+    return out;
+  }
+
+  function currentForjaCtx() {
+    if (state.equipNome) {
+      var eq = null;
+      EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+      if (eq) {
+        if (eq.grupo === 'Escudos') return 'escudo';
+        if (eq.grupo === 'Focos de Conjuração') return 'foco';
+        if (eq.tipo === 'armadura') return 'armadura';
+        if (RANGED_AMMO_SET[eq.nome]) return 'ranged';
+        return 'melee';
+      }
+    }
+    if (state.tipoItem === 'armadura') return 'armadura_escudo';
+    return 'arma_all';
+  }
+
   var lastVantKey = '';
   function renderVantagens() {
     vantagensRowsEl.innerHTML = '';
@@ -723,7 +798,8 @@
       return;
     }
 
-    var vantKey = known.map(function (m) { return m.id; }).join(',') + '|' + state.mostrarDureza;
+    var itemCtx = currentForjaCtx();
+    var vantKey = known.map(function (m) { return m.id; }).join(',') + '|' + state.mostrarDureza + '|' + itemCtx;
     var animateIn = lastVantKey !== '' && vantKey !== lastVantKey;
     lastVantKey = vantKey;
 
@@ -751,19 +827,31 @@
       head.appendChild(tag);
       item.appendChild(head);
 
-      var pro = document.createElement('div');
-      pro.className = 'v-row v-pro';
-      pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
-      pro.querySelector('.v-text').textContent = m.vantagens || 'Sem propriedade mecânica adicional além do bônus.';
-      item.appendChild(pro);
+      var pros = filterMaterialClauses(m.vantagens, itemCtx);
+      if (pros.length) {
+        pros.forEach(function (txt) {
+          var pro = document.createElement('div');
+          pro.className = 'v-row v-pro';
+          pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+          pro.querySelector('.v-text').textContent = txt;
+          item.appendChild(pro);
+        });
+      } else {
+        var none = document.createElement('div');
+        none.className = 'v-row v-dim';
+        none.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+        none.querySelector('.v-text').textContent = 'Sem propriedade específica para este tipo de item (mantém o bônus e a dureza do material).';
+        item.appendChild(none);
+      }
 
-      if (m.desvantagens) {
+      var cons = filterMaterialClauses(m.desvantagens, itemCtx);
+      cons.forEach(function (txt) {
         var con = document.createElement('div');
         con.className = 'v-row v-con';
         con.innerHTML = '<span class="v-icon">' + ICON_MINUS + '</span><span class="v-text"></span>';
-        con.querySelector('.v-text').textContent = m.desvantagens;
+        con.querySelector('.v-text').textContent = txt;
         item.appendChild(con);
-      }
+      });
 
       vantagensRowsEl.appendChild(item);
     });

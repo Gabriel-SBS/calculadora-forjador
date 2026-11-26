@@ -424,19 +424,31 @@
     head.appendChild(tg);
     item.appendChild(head);
 
-    var pro = document.createElement('div');
-    pro.className = 'v-row v-pro';
-    pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
-    pro.querySelector('.v-text').textContent = cm.mat.vantagens || 'Sem propriedade mecânica adicional além do bônus no dano.';
-    item.appendChild(pro);
+    var pros = filterMaterialClauses(cm.mat.vantagens, 'municao');
+    if (pros.length) {
+      pros.forEach(function (txt) {
+        var pro = document.createElement('div');
+        pro.className = 'v-row v-pro';
+        pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+        pro.querySelector('.v-text').textContent = txt;
+        item.appendChild(pro);
+      });
+    } else {
+      var none = document.createElement('div');
+      none.className = 'v-row v-dim';
+      none.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+      none.querySelector('.v-text').textContent = 'Sem propriedade mecânica adicional para munições além do bônus no dano.';
+      item.appendChild(none);
+    }
 
-    if (cm.mat.desvantagens) {
+    var cons = filterMaterialClauses(cm.mat.desvantagens, 'municao');
+    cons.forEach(function (txt) {
       var con = document.createElement('div');
       con.className = 'v-row v-con';
       con.innerHTML = '<span class="v-icon">' + ICON_MINUS + '</span><span class="v-text"></span>';
-      con.querySelector('.v-text').textContent = cm.mat.desvantagens;
+      con.querySelector('.v-text').textContent = txt;
       item.appendChild(con);
-    }
+    });
     bombaInfoCard.appendChild(item);
   }
 
