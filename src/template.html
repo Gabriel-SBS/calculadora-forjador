@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-tema-key="forjador-tema">
 <head>
 <meta charset="UTF-8">
 <script>
   // Aplica o tema e a oficina salvos antes de desenhar a página (evita piscar)
   try {
-    var tema = localStorage.getItem('forjador-tema');
+    var tema = localStorage.getItem(document.documentElement.getAttribute('data-tema-key') || 'tema');
     if (tema === 'light' || tema === 'dark') document.documentElement.setAttribute('data-theme', tema);
     var ofi = localStorage.getItem('forjador-oficina');
     if (ofi === 'forja' || ofi === 'bombas' || ofi === 'herbalismo') document.documentElement.setAttribute('data-oficina', ofi);

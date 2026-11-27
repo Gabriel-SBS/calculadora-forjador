@@ -14,6 +14,7 @@ const ARQUIVOS = [
   'data/herbalismo.js',
   'core/util.js',
   'regras/estado.js',
+  'regras/comum.js',
   'regras/forja.js',
   'regras/bombas.js',
   'regras/herbalismo.js',
@@ -88,6 +89,20 @@ test('Pesos em kg do Guia e materiais que mudam o peso', () => {
   assert.equal(app.materialById('metal_ouro').pesoMult, 2);
   assert.equal(app.materialById('veg_iron_wood').forcaPesado, true);
   assert.equal(app.MATERIALS_DB.filter((m) => m.materialVivo).length, 7);
+});
+
+test('Arquivos compartilhados com o Cozinheiro não dependem de nada da Forja', () => {
+  const compartilhados = [
+    'core/util.js', 'core/icones.js', 'core/combo.js', 'core/campo-moeda.js',
+    'data/ramos.js', 'regras/comum.js', 'ui/controles.js', 'ui/tema.js',
+  ];
+  // Nomes que só existem na Forja: chaves e ids dela, constantes de classe e catálogos
+  const daForja = /forjador|forja|FORJADOR_|MATERIALS_DB|EQUIP_DB|BOMBAS_DB|HERBAL_DB|MODS_DB|MUNICAO_|STORAGE_KEY|state/;
+  for (const f of compartilhados) {
+    const codigo = fs.readFileSync(path.join(SRC, f), 'utf8');
+    const achado = codigo.match(daForja);
+    assert.equal(achado, null, `${f} cita "${achado && achado[0]}"`);
+  }
 });
 
 // Utilitários

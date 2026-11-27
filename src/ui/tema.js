@@ -5,6 +5,8 @@
   var root = document.documentElement;
   var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
   var themeMeta = document.querySelector('meta[name="theme-color"]');
+  // Cada app diz no <html> (data-tema-key) em que chave guarda o tema
+  var TEMA_KEY = root.getAttribute('data-tema-key') || 'tema';
 
   function current() {
     var forced = root.getAttribute('data-theme');
@@ -17,20 +19,16 @@
     var label = t === 'dark' ? 'Mudar para tema diurno' : 'Mudar para tema noturno';
     btn.setAttribute('aria-label', label);
     btn.title = label;
-    var ofi = root.getAttribute('data-oficina') || 'forja';
-    var metaColors = {
-      forja: t === 'dark' ? '#1a1815' : '#ede6d9',
-      bombas: t === 'dark' ? '#171619' : '#ebe7e5',
-      herbalismo: t === 'dark' ? '#131915' : '#e6ebe3'
-    };
-    if (themeMeta) themeMeta.setAttribute('content', metaColors[ofi] || metaColors.forja);
+    // A barra do navegador acompanha o fundo da aba e do tema atuais
+    var bg = getComputedStyle(root).getPropertyValue('--bg').trim();
+    if (themeMeta && bg) themeMeta.setAttribute('content', bg);
   }
   window.addEventListener('oficina-change', sync);
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function apply(next) {
     root.setAttribute('data-theme', next);
-    try { localStorage.setItem('forjador-tema', next); } catch (e) {}
+    try { localStorage.setItem(TEMA_KEY, next); } catch (e) {}
     sync();
   }
 

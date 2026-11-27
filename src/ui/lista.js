@@ -111,7 +111,6 @@
     });
   }
 
-  var ICON_CHECK = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   function morphBtn(btn, confirmedHtml) {
     if (!btn) return;
     if (!btn._origHtml) btn._origHtml = btn.innerHTML;

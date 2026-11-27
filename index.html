@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-tema-key="forjador-tema">
 <head>
 <meta charset="UTF-8">
 <script>
   // Aplica o tema e a oficina salvos antes de desenhar a página (evita piscar)
   try {
-    var tema = localStorage.getItem('forjador-tema');
+    var tema = localStorage.getItem(document.documentElement.getAttribute('data-tema-key') || 'tema');
     if (tema === 'light' || tema === 'dark') document.documentElement.setAttribute('data-theme', tema);
     var ofi = localStorage.getItem('forjador-oficina');
     if (ofi === 'forja' || ofi === 'bombas' || ofi === 'herbalismo') document.documentElement.setAttribute('data-oficina', ofi);
@@ -2955,12 +2955,6 @@
   'use strict';
   var STORAGE_KEY = 'forjador-calc-v5';
 
-  // Ícones
-  var ICON_X = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-  var ICON_PLUS = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>';
-  var ICON_WARN = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5 21.5 20h-19zM12 10v4.5M12 17.2v.3"/></svg>';
-  var ICON_MINUS = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg>';
-
   // [id, categoria, tier, nome, multiplicador, dureza, modificador, vantagens, desvantagens]
   var MATERIALS_DB = [
     ['metal_cobre','Metais','D','Cobre',2,'d4','-1','Não perde durabilidade por eletricidade.',''],
@@ -3582,11 +3576,6 @@
     return fmt(horas) + 'h (' + dias + (dias === 1 ? ' dia' : ' dias') + ')';
   }
 
-  // Links ?s= e ?l= levam app e versão: quando o Forjador e o Cozinheiro morarem
-  // no mesmo site, um não carrega por engano o link do outro.
-  var APP_ID = 'forjador';
-  var APP_LINK_V = 1;
-
   function encodeJsonB64(obj) {
     var json = JSON.stringify(obj);
     var bytes = unescape(encodeURIComponent(json));
@@ -3599,10 +3588,20 @@
       return JSON.parse(decodeURIComponent(escape(atob(b64))));
     } catch (e) { return null; }
   }
-  // Links antigos (sem app) continuam valendo; links de outro app são recusados
+  // Links ?s= e ?l= levam APP_ID (definido em regras/estado.js de cada app). Assim,
+  // quando a Forja e o Cozinheiro morarem no mesmo site, um não carrega o link do outro.
+  // Links antigos (sem app) continuam valendo.
   function linkDesteApp(obj) {
     return !!obj && typeof obj === 'object' && (obj.app == null || obj.app === APP_ID);
   }
+  var ICON_X = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  var ICON_PLUS = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>';
+  var ICON_WARN = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5 21.5 20h-19zM12 10v4.5M12 17.2v.3"/></svg>';
+  var ICON_MINUS = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14"/></svg>';
+  var ICON_CHECK = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  var APP_ID = 'forjador';
+  var APP_LINK_V = 1;
+
   var DEFAULTS = {
     oficina: 'forja',
     pde: '',
@@ -3680,6 +3679,9 @@
   function estadoPadrao() {
     return JSON.parse(JSON.stringify(DEFAULTS));
   }
+  // Regras que valem para mais de uma classe. Talento Artesão: 20% de desconto
+  // na compra de itens não mágicos (a Forja aplica uma ou duas vezes, p. 124).
+  var ARTESAO_DESCONTO = 20;
   var CATEGORIA_ORDER = ['Metais', 'Vegetais', 'Geológicos', 'Orgânicos'];
   var TIER_ORDER = ['D', 'C', 'B', 'A', 'S'];
   var CATEGORIA_ALIASES = {
@@ -3689,7 +3691,6 @@
     'Orgânicos': ['organico', 'organicos']
   };
 
-  var ARTESAO_DESCONTO = 20;
   var FORJADOR_DIVISOR = 2;
   var ARMADURA_FRACAO = 0.2;
   var DUREZA_RANK = { 'd4': 1, 'd6': 2, 'd8': 3, 'd10': 4, 'd12': 5, 'd20': 6, 'd100': 7, '∞': 8 };
@@ -6268,7 +6269,6 @@
     });
   }
 
-  var ICON_CHECK = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   function morphBtn(btn, confirmedHtml) {
     if (!btn) return;
     if (!btn._origHtml) btn._origHtml = btn.innerHTML;
@@ -6624,23 +6624,17 @@
     forja: {
       title: 'Forja de Equipamento',
       sub: 'Armas, armaduras, escudos, focos e instrumentos do Guia, com cálculo de custo, materiais e tempo de forja.',
-      forjaLabel: 'Modo forja',
-      themeLight: '#b0551f',
-      themeDark: '#1a1815'
+      forjaLabel: 'Modo forja'
     },
     bombas: {
       title: 'Bombas e Munições',
       sub: 'As 16 bombas e bombinhas (p. 216–220), munições com modificações (p. 160) e as 11 pólvoras do Guia.',
-      forjaLabel: 'Modo pólvora',
-      themeLight: '#a82c2c',
-      themeDark: '#171619'
+      forjaLabel: 'Modo pólvora'
     },
     herbalismo: {
       title: 'Herbalismo e Poções',
       sub: 'As 23 receitas herbáceas e os 8 ramos do Guia (p. 148–150), com cálculo de custo, tempo e venda.',
-      forjaLabel: 'Modo jardim',
-      themeLight: '#2c6b44',
-      themeDark: '#131915'
+      forjaLabel: 'Modo jardim'
     }
   };
 
@@ -8404,6 +8398,8 @@
   var root = document.documentElement;
   var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
   var themeMeta = document.querySelector('meta[name="theme-color"]');
+  // Cada app diz no <html> (data-tema-key) em que chave guarda o tema
+  var TEMA_KEY = root.getAttribute('data-tema-key') || 'tema';
 
   function current() {
     var forced = root.getAttribute('data-theme');
@@ -8416,20 +8412,16 @@
     var label = t === 'dark' ? 'Mudar para tema diurno' : 'Mudar para tema noturno';
     btn.setAttribute('aria-label', label);
     btn.title = label;
-    var ofi = root.getAttribute('data-oficina') || 'forja';
-    var metaColors = {
-      forja: t === 'dark' ? '#1a1815' : '#ede6d9',
-      bombas: t === 'dark' ? '#171619' : '#ebe7e5',
-      herbalismo: t === 'dark' ? '#131915' : '#e6ebe3'
-    };
-    if (themeMeta) themeMeta.setAttribute('content', metaColors[ofi] || metaColors.forja);
+    // A barra do navegador acompanha o fundo da aba e do tema atuais
+    var bg = getComputedStyle(root).getPropertyValue('--bg').trim();
+    if (themeMeta && bg) themeMeta.setAttribute('content', bg);
   }
   window.addEventListener('oficina-change', sync);
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function apply(next) {
     root.setAttribute('data-theme', next);
-    try { localStorage.setItem('forjador-tema', next); } catch (e) {}
+    try { localStorage.setItem(TEMA_KEY, next); } catch (e) {}
     sync();
   }
 
