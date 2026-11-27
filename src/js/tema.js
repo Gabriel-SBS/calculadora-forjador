@@ -1,4 +1,3 @@
-// Tema claro / escuro: segue o sistema até a pessoa escolher, depois lembra
 (function () {
   'use strict';
   var btn = document.getElementById('theme-btn');
@@ -39,11 +38,10 @@
     var next = current() === 'dark' ? 'light' : 'dark';
     if (!document.startViewTransition || reduce) { apply(next); return; }
 
-    // Onda: o tema novo nasce no botão e se expande até cobrir a tela
+    // Calcula origem e raio da transição a partir do botão
     var r = btn.getBoundingClientRect();
     var x = r.left + r.width / 2, y = r.top + r.height / 2;
     var raio = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
-    // Centro e alcance da onda (o CSS anima o raio; as ondulações vêm atrás da frente)
     root.style.setProperty('--wave-x', x + 'px');
     root.style.setProperty('--wave-y', y + 'px');
     root.style.setProperty('--wave-max', Math.ceil(raio + 440) + 'px');

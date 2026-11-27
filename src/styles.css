@@ -1,8 +1,5 @@
-  /* =========================================================
-     1. Tokens
-     ========================================================= */
   :root {
-    /* Cor — tema claro (papel de oficina) */
+    /* Cores do tema claro */
     --bg: #ede6d9;
     --surface: #f8f3e8;
     --surface-2: #efe6d5;
@@ -110,9 +107,6 @@
     --shadow-lift: 0 10px 32px rgba(0,0,0,.5);
   }
 
-  /* =========================================================
-     1b. Paletas por Oficina (Bombas & Herbalismo)
-     ========================================================= */
   :root[data-oficina="bombas"] {
     --bg: #ebe7e5;
     --surface: #f7f4f2;
@@ -204,9 +198,6 @@
     --ember-hot: #c9f2a7;
   }
 
-  /* =========================================================
-     2. Base
-     ========================================================= */
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
   html { color-scheme: light dark; }
@@ -224,13 +215,13 @@
   }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  /* Detalhes do navegador com o tema da página */
+  /* Scrollbar e seleção */
   ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--text); }
   input, select { caret-color: var(--accent); }
   html { scrollbar-color: var(--border-strong) var(--bg); }
   .mat-dropdown, .mods-list { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 
-  /* Ícones desenhados */
+  /* Ícones SVG */
   .ico { width: 1em; height: 1em; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .sr-only {
     position: absolute;
@@ -244,8 +235,7 @@
     border: 0;
   }
 
-  /* Troca de tema em onda (View Transitions) */
-  /* A frente da onda é macia e deixa 3 ondulações para trás antes de assentar */
+  /* Transição circular de tema (View Transitions) */
   @property --wave-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
   :root.theme-wave::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
   :root.theme-wave::view-transition-new(root) {
@@ -279,9 +269,6 @@
     gap: var(--sp-5);
   }
 
-  /* =========================================================
-     3. Cabeçalho
-     ========================================================= */
   .hero {
     position: relative;
     display: flex;
@@ -299,25 +286,18 @@
   .hero-text { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; }
   .hero-title-row { display: flex; align-items: center; gap: var(--sp-3); }
   .hero-mark {
-    width: 38px;
-    height: 38px;
+    width: 30px;
+    height: 30px;
     flex-shrink: 0;
     display: grid;
     place-items: center;
-    border-radius: 10px;
     color: var(--accent);
-    background:
-      radial-gradient(90% 90% at 30% 20%, color-mix(in srgb, var(--ember-hot) 18%, transparent), transparent 70%),
-      color-mix(in srgb, var(--accent) 12%, var(--surface));
-    border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 2px rgba(0,0,0,.08);
-    transition: border-color var(--t-med), box-shadow var(--t-med), color var(--t-med);
+    transition: color var(--t-med), filter var(--t-med);
   }
-  .hero-mark svg { width: 22px; height: 22px; }
+  .hero-mark svg { width: 28px; height: 28px; }
   .forja-on .hero-mark {
     color: var(--ember);
-    border-color: color-mix(in srgb, var(--ember) 60%, var(--border));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 0 14px color-mix(in srgb, var(--ember) 28%, transparent);
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--ember) 45%, transparent));
   }
 
   /* Barra de exibição (dureza, modo forja) */
@@ -346,7 +326,7 @@
   }
   .view-switch + .view-switch { border-left: 1px solid var(--border); }
 
-  /* Botão de tema: lua no claro, sol no escuro */
+  /* Botão de tema */
   .theme-btn {
     width: 32px;
     height: 32px;
@@ -360,7 +340,7 @@
     cursor: pointer;
     transition: color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .theme-btn svg { grid-area: 1 / 1; transition: transform 250ms var(--ease-out), opacity 200ms ease; }
+  .theme-btn svg { grid-area: 1 / 1; transition: transform 250ms var(--ease-out), opacity 200ms var(--ease-out); }
   .theme-btn .i-sun { opacity: 0; transform: rotate(-90deg) scale(.9); }
   .theme-btn[data-current="dark"] .i-sun { opacity: 1; transform: none; }
   .theme-btn[data-current="dark"] .i-moon { opacity: 0; transform: rotate(90deg) scale(.9); }
@@ -380,9 +360,6 @@
   }
   .sub { margin: 0; color: var(--text-dim); font-size: var(--fs-lg); max-width: 48ch; }
 
-  /* =========================================================
-     4. Cartões
-     ========================================================= */
   .panel, .result, .compare, .vantagens, .production, .magicos, .lista {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -413,22 +390,19 @@
 
   /* Lista de ajustes (interruptores agrupados) */
   .settings-list {
-    border: 1px solid var(--border);
-    border-radius: var(--r-sm);
-    background: color-mix(in srgb, var(--surface-2) 50%, transparent);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
-  .setting { padding: var(--sp-3) var(--sp-4); }
+  .setting { padding: var(--sp-3) 0; }
   .setting + .setting { border-top: 1px solid var(--border); }
   .setting-sub {
     margin-top: var(--sp-3);
-    padding: var(--sp-3);
-    border-radius: var(--r-sm);
-    background: color-mix(in srgb, var(--surface-2) 70%, var(--surface));
-    border: 1px solid var(--border);
+    padding-top: var(--sp-3);
+    border-top: 1px dashed var(--border);
   }
   .compare, .vantagens, .production { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-1); }
 
-  /* Rótulo de seção (padrão único) */
+  /* Rótulo de seção */
   .result-label, .compare-title, .production-title, .vantagens-title, .magicos-summary {
     margin: 0;
     font-size: var(--fs-xs);
@@ -439,7 +413,7 @@
   }
   .compare-title, .production-title, .vantagens-title { margin-bottom: var(--sp-2); }
 
-  /* Texto de apoio (padrão único) */
+  /* Texto de apoio */
   .mao-obra-note, .production-note, .magicos-note, .equip-info, .mat-cap-note {
     margin: 0;
     font-size: var(--fs-xs);
@@ -448,9 +422,6 @@
   }
   .production-note { margin: var(--sp-2) 0; }
 
-  /* =========================================================
-     5. Campos
-     ========================================================= */
   .field-group { display: flex; flex-direction: column; gap: var(--sp-2); }
   label, .label {
     font-size: var(--fs-sm);
@@ -497,9 +468,6 @@
   input::placeholder { color: var(--text-dim); opacity: .7; }
   input:disabled, select:disabled { opacity: .5; cursor: not-allowed; }
 
-  /* =========================================================
-     6. Botões
-     ========================================================= */
   .btn-ghost {
     display: inline-flex;
     align-items: center;
@@ -649,9 +617,6 @@
   }
   .switch[aria-checked="true"] .knob { transform: translateX(18px); background: var(--accent-ink); }
 
-  /* =========================================================
-     7. Materiais
-     ========================================================= */
   #material-rows { display: flex; flex-direction: column; gap: var(--sp-2); }
   .material-row {
     display: flex;
@@ -686,8 +651,48 @@
     align-items: center;
   }
   .mat-combo { position: relative; min-width: 0; }
+  .mat-combo .mat-search { padding-right: 36px; }
+  .mat-clear-btn {
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-dim);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
+  }
+  .mat-clear-btn:active { transform: translateY(-50%) scale(0.92); }
+  .mat-clear-btn[hidden] { display: none; }
+  .mat-clear-btn .ico { width: 14px; height: 14px; }
+  .mods-warn {
+    margin-top: var(--sp-2);
+    padding: 8px 11px;
+    border-radius: var(--r-sm);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: color-mix(in srgb, var(--accent) 9%, var(--surface-2));
+    color: var(--ink);
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .mods-warn ul { margin: 4px 0 0; padding-left: 18px; }
+  .mods-warn .mw-head { display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--accent); }
+  .mods-toggle-all { margin-top: var(--sp-2); width: 100%; justify-content: center; font-size: 12.5px; }
+  .chip-lucro { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); background: color-mix(in srgb, var(--accent) 12%, var(--surface-2)); }
+  .chip-lucro .pc-v { color: var(--accent); }
+  .li-open-btn { padding: 2px 9px; font-size: 11.5px; min-height: 24px; margin-left: 6px; }
+  .tipo-info code.search-ex { cursor: pointer; transition: background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast); }
+  .tipo-info code.search-ex:hover { border-color: var(--accent); color: var(--accent); }
   .material-row[data-tier] .mat-search {
-    border-left: 3px solid var(--tier-color);
+    border-color: color-mix(in srgb, var(--tier-color) 55%, var(--border));
   }
   .tier-select {
     font-family: var(--font-mono);
@@ -708,6 +713,7 @@
     left: 0;
     right: 0;
     z-index: 30;
+    transform-origin: top center;
     max-height: 280px;
     overflow-y: auto;
     background: var(--surface);
@@ -715,7 +721,6 @@
     border-radius: var(--r-sm);
     box-shadow: var(--shadow-lift);
     padding: var(--sp-1);
-    transform-origin: top;
     animation: drop 150ms var(--ease-out);
   }
   .mat-group-label {
@@ -832,9 +837,6 @@
   .mode { display: flex; flex-direction: column; gap: var(--sp-3); }
   #lucro-wrap { max-width: 200px; }
 
-  /* =========================================================
-     8. Resultado
-     ========================================================= */
   .panel {
     box-shadow: inset 0 1px 0 rgba(255,255,255,.06), var(--shadow);
   }
@@ -942,9 +944,7 @@
   /* Conta incompleta */
   .result-empty {
     margin: 0;
-    padding: var(--sp-3) var(--sp-4);
-    border: 1px dashed var(--border-strong);
-    border-radius: var(--r-sm);
+    padding: var(--sp-2) 0;
     font-size: var(--fs-md);
     color: var(--text-dim);
   }
@@ -956,9 +956,16 @@
   .result-actions .btn-ghost { flex: 1 1 auto; }
   .result-help-row { display: flex; justify-content: flex-end; margin-top: -6px; }
   .btn-strong {
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
-    color: var(--text);
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+  .btn-strong .ico { stroke: currentColor; }
+  .btn-strong.is-confirmed {
+    background: var(--good);
+    border-color: var(--good);
+    color: var(--accent-ink);
   }
   .btn-ghost.is-morphing {
     filter: blur(1.8px);
@@ -1114,6 +1121,79 @@
     background: color-mix(in srgb, var(--good) 14%, transparent);
     border: 1px solid color-mix(in srgb, var(--good) 35%, transparent);
   }
+  .cm-use-btn {
+    margin-top: auto;
+    padding: 6px 10px;
+    min-height: 32px;
+    width: 100%;
+    justify-content: center;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+  }
+  .equip-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .equip-info[hidden] { display: none; }
+  .eq-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+  .eq-chip.eq-chip-main {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .eq-chip.eq-chip-warn {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface-2));
+    font-weight: 600;
+  }
+  .v-pills-label {
+    margin: 4px 0 0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .lucro-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .btn-chip {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text-dim);
+    border-radius: var(--r-pill);
+    padding: 4px 11px;
+    min-height: 28px;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--t-fast), background-color var(--t-fast), color var(--t-fast), transform var(--t-press) var(--ease-out);
+  }
+  .btn-chip:active { transform: scale(0.96); }
+  .btn-chip.active {
+    border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+    color: var(--accent);
+  }
+  .high-level-details { margin-top: var(--sp-2); }
+  .high-level-details .settings-list { margin-top: 0; border-top: none; border-bottom: none; }
   .cm-empty {
     grid-column: 1 / -1;
     margin: 0;
@@ -1171,7 +1251,7 @@
   .toast-btn:focus-visible { outline-color: var(--bg); }
   @media (max-width: 1059.98px) { .toast { bottom: calc(96px + env(safe-area-inset-bottom)); } }
 
-  /* Tempo: segundo número do painel */
+  /* Tempo no painel */
   .kpi-time {
     display: flex;
     justify-content: space-between;
@@ -1186,7 +1266,7 @@
   .kpi-time-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: var(--fs-sm); color: var(--text-dim); }
   .kpi-time-value strong { font-size: var(--fs-xl); font-weight: 600; color: var(--text); }
 
-  /* A conta, em forma de recibo */
+  /* Detalhamento do custo */
   .receipt {
     margin-top: var(--sp-1);
     padding: var(--sp-3) var(--sp-4) var(--sp-4);
@@ -1322,9 +1402,6 @@
   .v-pills-row-y { margin: 4px 0; }
   .v-empty { font-size: var(--fs-sm); color: var(--text-dim);  }
 
-  /* =========================================================
-     9. Itens mágicos
-     ========================================================= */
   .magicos:not([open]) { overflow: hidden; }
   .magicos-summary {
     cursor: pointer;
@@ -1361,9 +1438,6 @@
   .mg-line .mg-v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; margin-left: auto; text-align: right; }
   .mg-warning { margin: var(--sp-1) 0 0; color: var(--accent); font-size: var(--fs-sm); }
 
-  /* =========================================================
-     10. Rodapé
-     ========================================================= */
   .foot {
     display: flex;
     justify-content: space-between;
@@ -1374,7 +1448,7 @@
   }
   .foot p { margin: 0; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); overflow-wrap: anywhere; }
 
-  /* Seções secundárias planas: o resultado é o único cartão em destaque ao lado do formulário */
+  /* Seções secundárias sem borda de cartão */
   .compare, .vantagens, .production, .lista, .magicos {
     background: transparent;
     border: none;
@@ -1387,7 +1461,7 @@
   .magicos-summary { padding-left: 0; padding-right: 0; }
   .magicos-body { padding-left: 0; padding-right: 0; }
 
-  /* Grupos da seção O Forjador e explicações sob demanda */
+  /* Seção O Forjador e blocos de ajuda */
   .group-label { margin: 0 0 calc(-1 * var(--sp-2)); font-size: var(--fs-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); }
   .explain > summary {
     cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px;
@@ -1401,9 +1475,6 @@
   .explain[open] > summary::before { transform: rotate(45deg); }
   .explain > p { margin-top: var(--sp-2); }
 
-  /* =========================================================
-     10b. Navegação de Oficinas, Bombas & Herbalismo
-     ========================================================= */
   body {
     transition: background-color 220ms ease, color 220ms ease;
   }
@@ -1496,7 +1567,7 @@
   .ramo-branco { background: #f5f5f2; box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); }
   .ramo-preto { background: #242228; box-shadow: inset 0 0 0 1px rgba(255,255,255,.35); }
 
-  /* Tabela de ramos & rolador de mesa */
+  /* Tabela de ramos */
   .ramos-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1578,9 +1649,6 @@
     :root:not([data-theme="light"]) .li-tag-herbalismo { color: #68b884; background: color-mix(in srgb, #68b884 18%, transparent); }
   }
 
-  /* =========================================================
-     11. Layout: lateral fixa no computador
-     ========================================================= */
   @media (min-width: 720px) and (max-width: 1059.98px) {
     .page { max-width: 720px; }
   }
@@ -1679,7 +1747,7 @@
     .hero { align-items: flex-start; }
   }
 
-  /* Telas de toque: alvos maiores e dropdown que cabe acima do teclado virtual */
+  /* Ajustes para touch */
   @media (pointer: coarse) {
     .seg-btn { min-height: 40px; }
     .btn-ghost { height: 40px; }
@@ -1688,14 +1756,12 @@
     .li-qty-btn { width: 32px; height: 32px; }
     .theme-btn { width: 38px; height: 38px; flex-shrink: 0; }
     .btn-info, .btn-reset { min-height: 36px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
+    .btn-chip { min-height: 36px; padding: 6px 13px; }
     .toast-btn { height: 38px; }
     .mat-dropdown { max-height: min(240px, 42vh); -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
     .mat-option { min-height: 40px; padding: 9px var(--sp-2); }
   }
 
-  /* =========================================================
-     12. Modo forja (opcional, desligado por padrão)
-     ========================================================= */
   #embers { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; display: none; }
   .forge-glow {
     position: fixed; left: 0; right: 0; bottom: -20vh; height: 45vh; pointer-events: none; z-index: 0;
@@ -1710,9 +1776,6 @@
   .forja-on #embers { display: block; }
   .forja-on .forge-glow { opacity: .7; animation: forge-breathe 6s ease-in-out infinite; }
 
-  /* =========================================================
-     13. Animações
-     ========================================================= */
   @keyframes slide-in { from { opacity: 0; transform: translateX(-10px) scale(0.98); } to { opacity: 1; transform: none; } }
   @keyframes row-out { to { opacity: 0; transform: translateX(-10px) scale(0.97); } }
   @keyframes drop { from { opacity: 0; transform: translateY(-4px) scale(0.98); } to { opacity: 1; transform: none; } }
@@ -1735,21 +1798,22 @@
   .v-item.is-entering:nth-child(6) { animation-delay: 160ms; }
 
   @media (prefers-reduced-motion: reduce) {
-    /* entradas viram fade, sem deslocamento */
+    /* só fade, sem deslocar */
     .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]), .tipo-info:not([hidden]),
     .prop-chip.is-entering, .v-item.is-entering, [data-oficina-panel]:not([hidden]),
-    .hero-mark .mark-ico, .roller-output.is-rolled { animation-name: fade-in; }
+    .hero-mark .mark-ico { animation-name: fade-in; }
     body, .oficina-tabs { transition: none; }
     .material-row.is-leaving, .lista-item.is-leaving { animation: none; }
-    /* efeitos decorativos param */
+    /* pausa efeitos decorativos */
     .prop-chip.chip-obra::after, .prop-chip.chip-excalibur::after, .forja-on .forge-glow { animation: none; }
-    /* nada se move: só cor e opacidade mudam */
+    /* reduz movimento */
     .switch .knob, .theme-btn svg, .c-bar span, .mods-summary::before, .magicos-summary::before, .explain > summary::before, .seg-pill {
       transition-property: opacity, background-color, color, border-color;
       will-change: auto;
     }
     .btn-ghost.is-morphing { filter: none; }
-    .seg-btn:active, .btn-ghost:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .btn-info:active, .btn-reset:active, .mods-summary:active, .magicos-summary:active, .explain > summary:active, .switch:active, .cost-bar:active { transform: none; }
+    .seg-btn:active, .btn-ghost:active, .btn-chip:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .btn-info:active, .btn-reset:active, .mods-summary:active, .magicos-summary:active, .explain > summary:active, .switch:active, .cost-bar:active { transform: none; }
+    .mat-clear-btn:active { transform: translateY(-50%); }
     .theme-btn svg { transform: none !important; }
     .toast, .toast.show { transform: translate(-50%, 0); }
     .cost-bar { transform: none; opacity: 0; pointer-events: none; transition: opacity 200ms ease; }
@@ -1757,23 +1821,24 @@
   }
   @keyframes fade-in { from { opacity: 0; } }
 
-  /* Hover só em aparelhos com mouse (no toque o hover gruda depois do toque) */
+  /* Hover só com mouse (no touch fica preso) */
   @media (hover: hover) and (pointer: fine) {
     .view-switch:hover { color: var(--text); }
     .theme-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
     input:hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--border-strong); }
     .btn-info:hover { color: var(--accent); }
     .btn-ghost:hover:not(:disabled) { border-color: var(--border-strong); background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 88%, var(--text)); border-color: color-mix(in srgb, var(--accent) 88%, var(--text)); }
+    .btn-chip:hover:not(.active) { border-color: var(--border-strong); color: var(--text); }
     .btn-remove:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
     .btn-reset:hover { color: var(--accent); }
     .seg-btn:hover:not(.active) { color: var(--text); background: color-mix(in srgb, var(--text) 5%, transparent); }
     .mat-option:hover { background: var(--surface-2); }
     .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
-    .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 20%, transparent); border-color: var(--accent); }
     .toast-btn:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
     .mods-summary:hover, .magicos-summary:hover, .explain > summary:hover { color: var(--accent); }
     .ramo-row:hover { border-color: var(--border-strong); }
     .li-check:hover { border-color: var(--accent); }
     .li-qty-btn:hover:not(:disabled) { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+    .mat-clear-btn:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
   }
-  .roller-output.is-rolled { animation: chip-in 180ms var(--ease-out) both; }

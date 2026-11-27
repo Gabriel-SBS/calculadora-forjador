@@ -1,4 +1,3 @@
-  // --- Resumo do item atual (para copiar e para a lista) ---
   var SITE_URL = 'https://gabriel-sbs.github.io/calculadora-forjador/';
   var TIPO_NOME = { arma: 'Arma', armadura: 'Armadura', municao: 'Munição', polvora: 'Pólvora' };
 
@@ -9,13 +8,36 @@
   }
   function fmtMod(m) { return (m >= 0 ? '+' : '−') + Math.abs(m); }
 
+  function encodeJsonB64(obj) {
+    var json = JSON.stringify(obj);
+    var bytes = unescape(encodeURIComponent(json));
+    return btoa(bytes).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function decodeJsonB64(str) {
+    try {
+      var b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      return JSON.parse(decodeURIComponent(escape(atob(b64))));
+    } catch (e) { return null; }
+  }
+
   function resumoAtual() {
-    if (state.oficina === 'bombas') return resumoBombaAtual();
-    if (state.oficina === 'herbalismo') return resumoHerbalAtual();
+    var snap = encodeShareState();
+    if (state.oficina === 'bombas') {
+      var rb = resumoBombaAtual();
+      if (rb) rb.snap = snap;
+      return rb;
+    }
+    if (state.oficina === 'herbalismo') {
+      var rh = resumoHerbalAtual();
+      if (rh) rh.snap = snap;
+      return rh;
+    }
     var c = calculate();
     if (emptyReason(c)) return null;
     var soModMun = !!(c.modMun && c.modMun.existente);
     var props = soModMun ? null : itemProps();
+    var w = state.tipoItem === 'polvora' || soModMun ? null : calcItemWeight();
     var mats = state.tipoItem === 'polvora' || soModMun ? [] : state.materials
       .filter(function (m) { return m.name || m.materialId; })
       .map(function (m) {
@@ -37,6 +59,8 @@
       horas: lastForjadorHoras,
       dureza: props && state.mostrarDureza ? props.dureza : null,
       mod: props ? props.mod : null,
+      pesoKg: w ? w.finalKg : null,
+      snap: snap,
       obra: !!(props && props.obra),
       pressa: !!state.pressa,
       rende: soModMun || state.modo === 'conserto' ? '' : state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
@@ -76,6 +100,7 @@
     var tags = [r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : ''].filter(Boolean);
     if (r.mod != null) props.push('Modificador ' + fmtMod(r.mod) + (tags.length ? ' (' + tags.join(', ') + ')' : ''));
     if (r.dureza) props.push('Dureza ' + r.dureza);
+    if (r.pesoKg != null) props.push('Peso ' + fmtKg(r.pesoKg));
     if (props.length) linhas.push(props.join(' · '));
     if (r.mods && r.mods.length) linhas.push('Modificações: ' + r.mods.join(', '));
     return linhas.join('\n');
@@ -150,7 +175,7 @@
     });
   }
 
-  // --- Lista da sessão: vários itens, com quantidade, status de fabricado e totais ---
+  // Lista da sessão (itens salvos, quantidades e totais)
   var LISTA_KEY = 'forjador-lista-v1';
   var listaSection = document.getElementById('lista-section');
   var listaItemsEl = document.getElementById('lista-items');
@@ -163,22 +188,25 @@
     try { localStorage.setItem(LISTA_KEY, JSON.stringify(lista)); } catch (e) {}
   }
   function totaisLista() {
-    var po = 0, horas = 0, semTempo = 0, pendPo = 0, pendHoras = 0, feitos = 0, totalQtd = 0;
+    var po = 0, horas = 0, semTempo = 0, pendPo = 0, pendHoras = 0, feitos = 0, totalQtd = 0, kg = 0, pendKg = 0;
     lista.forEach(function (r) {
       var q = Math.max(1, r.qtd || 1);
       var v = (r.valor || 0) * q;
       var h = r.horas != null ? r.horas * q : null;
+      var w = r.pesoKg != null ? r.pesoKg * q : 0;
       po += v;
+      kg += w;
       totalQtd += q;
       if (h != null) horas += h; else semTempo++;
       if (r.feito) {
         feitos++;
       } else {
         pendPo += v;
+        pendKg += w;
         if (h != null) pendHoras += h;
       }
     });
-    return { po: po, horas: horas, semTempo: semTempo, pendPo: pendPo, pendHoras: pendHoras, feitos: feitos, totalQtd: totalQtd };
+    return { po: po, horas: horas, semTempo: semTempo, pendPo: pendPo, pendHoras: pendHoras, feitos: feitos, totalQtd: totalQtd, kg: kg, pendKg: pendKg };
   }
 
   function renderLista() {
@@ -252,6 +280,23 @@
       qtyWrap.appendChild(btnDec);
       qtyWrap.appendChild(qtyVal);
       qtyWrap.appendChild(btnInc);
+      if (r.snap) {
+        var btnOpen = document.createElement('button');
+        btnOpen.type = 'button';
+        btnOpen.className = 'btn-ghost li-open-btn';
+        btnOpen.textContent = 'Abrir';
+        btnOpen.title = 'Recarregar este item na calculadora';
+        btnOpen.addEventListener('click', function () {
+          var parsed = decodeJsonB64(r.snap);
+          if (!parsed || typeof parsed !== 'object') return;
+          state = Object.assign(JSON.parse(JSON.stringify(DEFAULTS)), parsed);
+          saveState();
+          hydrateForm();
+          window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+          showToast(r.nome + ' carregado na calculadora.');
+        });
+        qtyWrap.appendChild(btnOpen);
+      }
 
       info.appendChild(nome);
       if (sub.textContent) info.appendChild(sub);
@@ -295,10 +340,12 @@
       listaItemsEl.appendChild(li);
     });
     var t = totaisLista();
+    var clearDoneBtnEl = document.getElementById('lista-clear-done-btn');
+    if (clearDoneBtnEl) clearDoneBtnEl.hidden = t.feitos === 0;
     listaTotalEl.innerHTML = '';
     var tl = document.createElement('span');
     tl.className = 'lt-label';
-    tl.textContent = 'Total · ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens');
+    tl.textContent = 'Total · ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens') + (t.kg > 0 ? ' · ' + fmtKg(t.kg) : '');
     var tv = document.createElement('span');
     tv.className = 'lt-valor';
     tv.textContent = fmtMoeda(t.po);
@@ -314,7 +361,9 @@
       tp.className = 'lt-pend';
       tp.textContent = t.feitos === lista.length
         ? 'Todos os itens marcados como fabricados.'
-        : 'Pendente (' + (lista.length - t.feitos) + '): ' + fmtMoeda(t.pendPo) + (t.pendHoras ? ' · ' + fmtHorasForjador(t.pendHoras) : '');
+        : 'Pendente (' + (lista.length - t.feitos) + '): ' + fmtMoeda(t.pendPo) +
+          (t.pendHoras ? ' · ' + fmtHorasForjador(t.pendHoras) : '') +
+          (t.pendKg > 0 ? ' · ' + fmtKg(t.pendKg) : '');
       listaTotalEl.appendChild(tp);
     }
   }
@@ -339,7 +388,8 @@
     var t = totaisLista();
     var partes = lista.map(textoResumo);
     partes.push('Total: ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) +
-      (t.horas ? ' · ' + fmtHorasForjador(t.horas) : ''));
+      (t.horas ? ' · ' + fmtHorasForjador(t.horas) : '') +
+      (t.kg > 0 ? ' · ' + fmtKg(t.kg) : ''));
     copiarTexto(partes.join('\n\n') + '\n' + SITE_URL).then(function () {
       morphBtn(listaCopyBtnEl, ICON_CHECK + ' Copiada');
       showToast('Lista copiada.');
@@ -347,6 +397,40 @@
       showToast('Não consegui copiar automaticamente neste navegador.');
     });
   });
+
+  var listaShareBtnEl = document.getElementById('lista-share-btn');
+  if (listaShareBtnEl) {
+    listaShareBtnEl.addEventListener('click', function () {
+      if (!lista.length) return;
+      var base = (window.location.protocol === 'http:' || window.location.protocol === 'https:')
+        ? window.location.origin + window.location.pathname
+        : SITE_URL;
+      var url = base + '?l=' + encodeJsonB64(lista);
+      copiarTexto(url).then(function () {
+        morphBtn(listaShareBtnEl, ICON_CHECK + ' Link copiado');
+        showToast('Link da lista copiado. Quem abrir recebe todos os itens.');
+      }, function () {
+        showToast('Não consegui copiar o link automaticamente neste navegador.');
+      });
+    });
+  }
+
+  var listaClearDoneBtn = document.getElementById('lista-clear-done-btn');
+  if (listaClearDoneBtn) {
+    listaClearDoneBtn.addEventListener('click', function () {
+      var copia = lista.slice();
+      var removidos = lista.filter(function (r) { return r.feito; }).length;
+      if (!removidos) return;
+      lista = lista.filter(function (r) { return !r.feito; });
+      salvarLista();
+      renderLista();
+      showToast(removidos + (removidos === 1 ? ' item concluído removido.' : ' itens concluídos removidos.'), 'Desfazer', function () {
+        lista = copia;
+        salvarLista();
+        renderLista();
+      });
+    });
+  }
 
   document.getElementById('lista-clear-btn').addEventListener('click', function () {
     var copia = lista.slice();
@@ -359,5 +443,33 @@
       renderLista();
     });
   });
+
+  // Carrega lista compartilhada (?l=...) se houver na URL
+  (function loadSharedLista() {
+    var q = window.location.search || '';
+    var m = q.match(/[?&]l=([A-Za-z0-9_-]+)/);
+    if (!m) return;
+    var parsed = decodeJsonB64(m[1]);
+    if (!Array.isArray(parsed) || !parsed.length) return;
+    var anterior = lista.slice();
+    lista = parsed;
+    salvarLista();
+    try {
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    } catch (e) {}
+    setTimeout(function () {
+      if (anterior.length) {
+        showToast('Lista compartilhada carregada (' + lista.length + ' itens).', 'Restaurar anterior', function () {
+          lista = anterior;
+          salvarLista();
+          renderLista();
+        }, 6000);
+      } else {
+        showToast('Lista compartilhada carregada (' + lista.length + ' itens).');
+      }
+    }, 200);
+  })();
 
   renderLista();

@@ -1,6 +1,3 @@
-  // =========================================================
-  // Oficinas (Forja | Bombas | Herbalismo)
-  // =========================================================
   var OFICINA_KEY = 'forjador-oficina';
   var OFICINA_META = {
     forja: {
@@ -19,7 +16,7 @@
     },
     herbalismo: {
       title: 'Herbalismo e Poções',
-      sub: 'As 23 receitas herbáceas e os 8 ramos do Guia (p. 148–150), com rolador de forrageamento e herbolário.',
+      sub: 'As 23 receitas herbáceas e os 8 ramos do Guia (p. 148–150), com cálculo de custo, tempo e venda.',
       forjaLabel: 'Modo jardim',
       themeLight: '#2c6b44',
       themeDark: '#131915'
@@ -70,7 +67,7 @@
     });
   });
 
-  // --- Helpers de selos de ramos ---
+  // Selos dos ramos de herbalismo
   function makeRamoPill(id, qtd, extraLabel) {
     var r = RAMOS_MAP[id];
     var sp = document.createElement('span');
@@ -86,8 +83,7 @@
     return sp;
   }
 
-  // Combobox pesquisável idêntico ao Equipamento do Guia e Lista de Materiais (Forja)
-  // Fica escondido até o usuário começar a digitar, com cabeçalhos .mat-group-label e alinhamento .mo-name / .mo-mult
+  // Busca com dropdown que só abre quando o usuário digita
   function buildCatalogCombo(items, getInitial, placeholder, labelId, formatMeta, onPick, onClear) {
     var wrap = document.createElement('div');
     wrap.className = 'mat-combo';
@@ -105,6 +101,10 @@
     dropdown.setAttribute('role', 'listbox');
     dropdown.hidden = true;
     wrap.appendChild(input);
+    var syncCatClear = attachComboClear(wrap, input, function () {
+      close();
+      if (onClear) onClear();
+    });
     wrap.appendChild(dropdown);
 
     var opts = [];
@@ -119,6 +119,7 @@
     function syncInput() {
       var cur = getInitial();
       input.value = cur ? cur.nome : '';
+      syncCatClear();
     }
     syncInput();
 
@@ -131,6 +132,7 @@
     }
     function pick(item) {
       input.value = item.nome;
+      syncCatClear();
       close();
       if (window.Forja && (item.tier === 'S' || item.id === 'santa_granada')) {
         window.Forja.sparksAt(input, 'purple');
@@ -167,7 +169,7 @@
       dropdown.innerHTML = '';
       opts = [];
       hi = -1;
-      // Igual ao Forjador: só abre quando há texto digitado
+      // Só abre com texto digitado
       if (!nq) { close(); return; }
 
       var list = items.filter(function (it) {
@@ -251,7 +253,7 @@
     return wrap;
   }
 
-  // Botões "Como funciona a pesquisa?" (mesmo padrão visual de "Como funciona?")
+  // Abre e fecha os blocos de ajuda da pesquisa
   Array.prototype.forEach.call(document.querySelectorAll('[data-info-toggle]'), function (btn) {
     btn.addEventListener('click', function () {
       var target = document.getElementById(btn.getAttribute('data-info-toggle'));

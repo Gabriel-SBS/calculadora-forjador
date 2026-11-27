@@ -5,7 +5,7 @@
         function () { return bombaById(state.bombaId); },
         'Buscar bomba (ex.: estilhaço, fumaça, santa granada)',
         'bomba-combo-label',
-        function (b) { return fmtMoeda(b.preco) + ' · CD ' + b.cd; },
+        function (b) { return fmtMoeda(b.preco) + ' · CD ' + b.cd + ' · ' + b.raio; },
         function (b) { state.bombaId = b.id; saveState(); update(); },
         function () { state.bombaId = ''; saveState(); update(); }
       );
@@ -70,6 +70,7 @@
     bmAmmoExistenteSwitch.setAttribute('aria-checked', state.bmMunModExistente ? 'true' : 'false');
     bmPressaSwitch.setAttribute('aria-checked', state.bmPressa ? 'true' : 'false');
     bmObraSwitch.setAttribute('aria-checked', state.bmObra ? 'true' : 'false');
+    bmAjudanteSwitch.setAttribute('aria-checked', state.bmAjudante ? 'true' : 'false');
     bmPolvQtdInput.value = state.bmPolvQtd || 1;
     renderBmAmmoMods();
     setBmTipo(state.bmTipo || 'bomba', true);
@@ -111,6 +112,7 @@
 
     herbalQtdInput.value = state.herbalQtd || 1;
     herbalArtesaoSwitch.setAttribute('aria-checked', state.herbalArtesao !== false ? 'true' : 'false');
+    if (herbalAjudanteSwitch) herbalAjudanteSwitch.setAttribute('aria-checked', state.herbalAjudante ? 'true' : 'false');
     herbalOrigemBtns.forEach(function (x) {
       var on = x.getAttribute('data-horigem') === (state.herbalOrigem || 'comprar-ramos');
       x.classList.toggle('active', on);
@@ -133,9 +135,9 @@
         window._compMatCombos[slot] = buildCatalogCombo(
           MATERIALS_DB,
           function () { return state.compMats[slot] ? materialById(state.compMats[slot]) : null; },
-          'Buscar material ' + (slot + 1) + ' (ex.: aço, mitral, tier b)',
+          'Buscar material ' + (slot + 1) + ' (ex.: aço, mithral, tier b)',
           'comp-mat-' + slot + '-label',
-          function (m) { return 'Tier ' + m.tier + ' · ×' + m.mult; },
+          function (m) { return 'Tier ' + m.tier + ' · ×' + m.mult + (m.mod && m.mod !== '+0' && m.mod !== '0' ? ' · ' + m.mod : ''); },
           function (m) { state.compMats[slot] = m.id; saveState(); renderCompMateriais(); },
           function () { state.compMats[slot] = ''; saveState(); renderCompMateriais(); }
         );
@@ -157,6 +159,7 @@
     pressaSwitch.setAttribute('aria-checked', state.pressa ? 'true' : 'false');
     fracaoSwitch.setAttribute('aria-checked', state.fracaoFixa ? 'true' : 'false');
     lucroInput.value = state.lucro;
+    syncLucroPresets();
     magicoRaridadeSelect.value = state.magicoRaridade || 'comum';
     peritoSwitch.setAttribute('aria-checked', state.peritoItensMagicos ? 'true' : 'false');
     especialistaSwitch.setAttribute('aria-checked', state.especialistaItensMagicos ? 'true' : 'false');
@@ -211,3 +214,52 @@
       setCostBar(!entries[0].isIntersecting);
     }, { threshold: 0.15 }).observe(resultCard);
   }
+
+  // Exemplos clicáveis dentro de "Como funciona a pesquisa?"
+  var SEARCH_INFO_TARGET = {
+    'equip-search-info': '#equip-wrap .mat-search',
+    'mat-search-info': '#materials-wrap .mat-search',
+    'bomba-search-info': '#bomba-combo-wrap .mat-search',
+    'bomba-polvora-search-info': '#bomba-polvora-wrap .mat-search',
+    'bm-mat-search-info': '#bm-mun-mat-wrap .mat-search',
+    'polv-search-info': '#bm-polv-wrap .mat-search',
+    'herbal-search-info': '#herbal-combo-wrap .mat-search'
+  };
+  Object.keys(SEARCH_INFO_TARGET).forEach(function (infoId) {
+    var box = document.getElementById(infoId);
+    if (!box) return;
+    Array.prototype.forEach.call(box.querySelectorAll('code'), function (codeEl) {
+      codeEl.classList.add('search-ex');
+      codeEl.setAttribute('role', 'button');
+      codeEl.setAttribute('tabindex', '0');
+      codeEl.title = 'Clique para buscar "' + codeEl.textContent + '"';
+      function runExample() {
+        var target = document.querySelector(SEARCH_INFO_TARGET[infoId]);
+        if (!target) return;
+        target.value = codeEl.textContent;
+        target.focus();
+        target.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      codeEl.addEventListener('click', runExample);
+      codeEl.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); runExample(); }
+      });
+    });
+  });
+
+  // Atalho '/' foca a busca principal da aba ativa
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key !== '/' || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    var tag = ev.target && ev.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (ev.target && ev.target.isContentEditable)) return;
+    var sel = state.oficina === 'herbalismo'
+      ? '#herbal-combo-wrap .mat-search'
+      : state.oficina === 'bombas'
+        ? (state.bmTipo === 'municao' ? '#bm-mun-mat-wrap .mat-search' : state.bmTipo === 'polvora' ? '#bm-polv-wrap .mat-search' : '#bomba-combo-wrap .mat-search')
+        : '#equip-wrap .mat-search';
+    var input = document.querySelector(sel);
+    if (!input) return;
+    ev.preventDefault();
+    input.focus();
+    input.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+  });

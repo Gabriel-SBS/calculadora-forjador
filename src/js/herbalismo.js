@@ -1,6 +1,3 @@
-  // =========================================================
-  // Oficina 3: Herbalismo (p. 148–150)
-  // =========================================================
   var herbalComboWrap = document.getElementById('herbal-combo-wrap');
   var herbalEquipInfo = document.getElementById('herbal-equip-info');
   var herbalInfoBtn = document.getElementById('herbal-info-btn');
@@ -11,12 +8,16 @@
   var herbalOrigemSeg = document.getElementById('herbal-origem-seg');
   var herbalOrigemBtns = Array.prototype.slice.call(herbalOrigemSeg.querySelectorAll('.seg-btn'));
   var herbalArtesaoSwitch = document.getElementById('herbal-artesao-switch');
+  var herbalArtesaoSub = document.getElementById('herbal-artesao-sub');
+  var herbalAjudanteSetting = document.getElementById('herbal-ajudante-setting');
+  var herbalAjudanteSwitch = document.getElementById('herbal-ajudante-switch');
   var herbalModoSeg = document.getElementById('herbal-modo-seg');
   var herbalModoBtns = Array.prototype.slice.call(herbalModoSeg.querySelectorAll('.seg-btn'));
   var herbalLucroWrap = document.getElementById('herbal-lucro-wrap');
   var herbalLucroInput = document.getElementById('herbal-lucro');
+  var herbalQtdPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#herbal-qtd-presets .btn-chip'));
+  var herbalLucroPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#herbal-lucro-presets .btn-chip'));
   var ramosGridEl = document.getElementById('ramos-grid');
-  var herbalRollerOut = document.getElementById('herbal-roller-out');
   var herbalComboEl = null;
 
   herbalTipoInfo.innerHTML =
@@ -24,6 +25,7 @@
     '<ul>' +
     '<li><strong>Preparo:</strong> criar qualquer item herbáceo exige 1 hora e um Kit de Herbalismo (ou Kit de Venenos para venenos).</li>' +
     '<li><strong>Forragear ramos:</strong> 1 hora em ambiente não-urbano + teste de Natureza ou Sobrevivência CD 14 → role 1d20 na tabela e ganhe 2 ramos.</li>' +
+    '<li><strong>Receitas memorizadas (p. 148–149):</strong> sem proficiência: máx. 2 · Natureza: 2 iniciais (máx. 4) · Kit de Herbalismo: 3 iniciais (máx. 6) · Curandeiro nv. 1+: sabe todas e ensina em 1 minuto (normalmente 1h).</li>' +
     '<li><strong>Ação bônus:</strong> a regra recomenda tomar poções e aplicar venenos com ação bônus (D&amp;D 2024).</li>' +
     '</ul>';
   herbalInfoBtn.addEventListener('click', function () {
@@ -66,51 +68,6 @@
   }
   renderRamosTable();
 
-  function ramoByRoll(roll) {
-    for (var i = 0; i < RAMOS_DB.length; i++) {
-      if (roll >= RAMOS_DB[i].min && roll <= RAMOS_DB[i].max) return RAMOS_DB[i];
-    }
-    return RAMOS_DB[0];
-  }
-
-  function showRollOutput(html) {
-    herbalRollerOut.hidden = false;
-    herbalRollerOut.classList.remove('is-rolled');
-    herbalRollerOut.innerHTML = html;
-    void herbalRollerOut.offsetWidth;
-    herbalRollerOut.classList.add('is-rolled');
-  }
-
-  var btnForragear = document.getElementById('btn-forragear');
-  var btnHerbolario = document.getElementById('btn-herbolario');
-  var rollCount = 0;
-
-  btnForragear.addEventListener('click', function () {
-    rollCount += 1;
-    var roll = Math.floor(Math.random() * 20) + 1;
-    var r = ramoByRoll(roll);
-    morphBtn(btnForragear, ICON_CHECK + ' Rolou ' + roll);
-    showRollOutput('Forrageamento #' + rollCount + ' (1h · teste Natureza/Sobrevivência CD 14): rolou <strong>' + roll + '</strong> → encontrou <strong>2× Ramo ' + r.nome + '</strong> (' + fmtMoeda(r.preco * 2) + ' em loja / ' + fmtMoeda(r.preco) + ' na venda).');
-  });
-
-  btnHerbolario.addEventListener('click', function () {
-    rollCount += 1;
-    var numCores = Math.floor(Math.random() * 4) + 2; // 2 a 5 lotes disponíveis no dia
-    var estoque = {};
-    for (var i = 0; i < numCores; i++) {
-      var roll = Math.floor(Math.random() * 20) + 1;
-      var r = ramoByRoll(roll);
-      var q = Math.floor(Math.random() * 4) + 1;
-      estoque[r.id] = (estoque[r.id] || 0) + q;
-    }
-    var partes = Object.keys(estoque).map(function (id) {
-      var r = RAMOS_MAP[id];
-      return '<strong>' + estoque[id] + '× ' + r.nome + '</strong> (' + fmtMoeda(r.preco) + '/un.)';
-    });
-    morphBtn(btnHerbolario, ICON_CHECK + ' Estoque gerado');
-    showRollOutput('Estoque do Herbolário #' + rollCount + ' (1d20 cor + 1d4 qtd): ' + partes.join(' · ') + '.');
-  });
-
   function calcHerbal() {
     var h = herbalById(state.herbalId);
     if (!h) return null;
@@ -136,7 +93,7 @@
     var baseVenda = proprio > 0 ? proprio : custoRamosCheio * disc;
     var lucroValor = state.herbalModo === 'vendido' ? baseVenda * (lucroPct / 100) : 0;
     var final = state.herbalModo === 'vendido' ? baseVenda + lucroValor : proprio;
-    var horas = state.herbalOrigem === 'comprar-pronto' ? 0 : qtd;
+    var horas = state.herbalOrigem === 'comprar-pronto' ? 0 : qtd * (state.herbalAjudante ? 0.5 : 1);
     return {
       h: h, qtd: qtd, ramosUnit: ramosUnit, extraUnit: extraUnit,
       custoRamosCheio: custoRamosCheio, precoLojaTotal: precoLojaTotal,
@@ -148,15 +105,38 @@
   var ICON_STAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.9z"/></svg>';
   var lastHerbalVantKey = '';
 
+  function syncHerbalPresets() {
+    var hq = String(state.herbalQtd || 1);
+    herbalQtdPresetBtns.forEach(function (b) {
+      var on = b.dataset.qtd === hq;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    var hl = String(state.herbalLucro == null ? 50 : state.herbalLucro).trim();
+    herbalLucroPresetBtns.forEach(function (b) {
+      var on = b.dataset.lucro === hl;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
   function renderHerbalInfo(ch) {
     herbalDetalhesSection.hidden = false;
-    herbalEquipInfo.textContent = 'Loja ' + fmtMoeda(ch.h.preco) + ' · Rende ' + ch.h.rende + ' · 1h de preparo';
-    herbalEquipInfo.hidden = false;
+    var kitCurto = ch.h.categoria === 'Venenos' ? 'Kit de Venenos' : 'Kit de Herbalismo';
+    var hChips = [
+      { txt: 'Loja ' + fmtMoeda(ch.h.preco), main: true },
+      { txt: 'Rende ' + ch.h.rende },
+      { txt: '1h · ' + kitCurto }
+    ];
+    if (state.herbalOrigem === 'comprar-ramos' && ch.custoRamosCheio > ch.precoLojaTotal) {
+      hChips.push({ txt: 'Mais barato comprar pronto (' + fmtMoeda(ch.precoLojaTotal) + ')', warn: true });
+    }
+    renderEquipChips(herbalEquipInfo, hChips);
 
     var enter = ch.h.id !== lastHerbalVantKey;
     lastHerbalVantKey = ch.h.id;
 
-    // Renderiza na seção plana .vantagens abaixo do formulário (mesma linguagem visual da Forja)
+    // Mostra os detalhes da receita abaixo do formulário
     herbalInfoCard.innerHTML = '';
 
     var item = document.createElement('div');
@@ -173,15 +153,21 @@
     head.appendChild(tg);
     item.appendChild(head);
 
+    var ingLbl = document.createElement('p');
+    ingLbl.className = 'v-pills-label';
+    ingLbl.textContent = 'Ramos necessários' + (ch.qtd > 1 ? ' (' + ch.qtd + ' lotes)' : '');
+    item.appendChild(ingLbl);
+
     var ing = document.createElement('div');
     ing.className = 'recipe-ing v-pills-row-y';
     ch.h.ramos.forEach(function (rm) {
-      ing.appendChild(makeRamoPill(rm.id, rm.qtd, rm.label || ''));
+      var lbl = rm.label ? (ch.qtd > 1 ? ch.qtd + '× (' + rm.label + ')' : rm.label) : '';
+      ing.appendChild(makeRamoPill(rm.id, rm.qtd * ch.qtd, lbl));
     });
     if (ch.h.extraText) {
       var ex = document.createElement('span');
       ex.className = 'ramo-pill';
-      ex.textContent = ch.h.extraText;
+      ex.textContent = (ch.qtd > 1 && ch.h.extraCusto > 0) ? (ch.qtd + '× ' + ch.h.extraText) : ch.h.extraText;
       ing.appendChild(ex);
     }
     item.appendChild(ing);
@@ -194,7 +180,7 @@
 
     if (ch.h.destaque === 'Forjador') {
       var fRow = document.createElement('div');
-      fRow.className = 'v-row v-con';
+      fRow.className = 'v-row v-pro';
       fRow.innerHTML = '<span class="v-icon">' + ICON_STAR + '</span><span class="v-text"></span>';
       fRow.querySelector('.v-text').textContent = 'Essencial para o Forjador (p. 150): protege armas e armaduras contra ferrugem, umidade e a primeira tentativa de quebra durante 1 semana inteira.';
       item.appendChild(fRow);
@@ -204,6 +190,13 @@
 
   function updateHerbalismo() {
     herbalLucroWrap.hidden = state.herbalModo !== 'vendido';
+    if (herbalAjudanteSetting) herbalAjudanteSetting.hidden = state.herbalOrigem === 'comprar-pronto';
+    if (herbalArtesaoSub) {
+      herbalArtesaoSub.textContent = state.herbalOrigem === 'forragear'
+        ? 'Vale só na venda ou se a receita tiver item base extra'
+        : 'Desconto na compra de ramos ou itens herbáceos não-mágicos';
+    }
+    syncHerbalPresets();
     var ch = calcHerbal();
     var labelTxt = state.herbalModo === 'vendido'
       ? 'Preço de venda'
@@ -241,9 +234,12 @@
     resultLabel.textContent = labelTxt;
     cbLabel.textContent = labelTxt;
 
+    var kitNome = ch.h.categoria === 'Venenos' ? 'Kit de Venenos' : 'Kit de Herbalismo';
     if (kpiTimeLabelEl) kpiTimeLabelEl.textContent = state.herbalOrigem === 'comprar-pronto' ? 'Aquisição' : 'Tempo de preparo';
-    resultTimeEl.textContent = state.herbalOrigem === 'comprar-pronto' ? 'Imediato' : (ch.horas + 'h');
-    resultTimeSubEl.textContent = state.herbalOrigem === 'comprar-pronto' ? '· compra em herbolário' : '· Kit de Herbalismo';
+    resultTimeEl.textContent = state.herbalOrigem === 'comprar-pronto' ? 'Imediato' : (fmt(ch.horas) + 'h');
+    resultTimeSubEl.textContent = state.herbalOrigem === 'comprar-pronto'
+      ? '· compra em herbolário'
+      : '· ' + kitNome + (state.herbalAjudante ? ' (ajudante)' : '');
     cbTime.textContent = resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent;
 
     resultPropsEl.innerHTML = '';
@@ -254,6 +250,11 @@
       var dChip = propChip('Destaque', ch.h.destaque);
       dChip.classList.add('chip-obra');
       resultPropsEl.appendChild(dChip);
+    }
+    if (state.herbalModo === 'vendido' && ch.lucroValor > 0) {
+      var hlChip = propChip('Lucro líquido', '+' + fmtMoeda(ch.lucroValor));
+      hlChip.classList.add('chip-lucro');
+      resultPropsEl.appendChild(hlChip);
     }
 
     breakdownEl.innerHTML = '';
@@ -333,6 +334,30 @@
   });
   herbalArtesaoSwitch.addEventListener('click', function () {
     setArtesao(!state.artesao);
+  });
+  if (herbalAjudanteSwitch) {
+    herbalAjudanteSwitch.addEventListener('click', function () {
+      state.herbalAjudante = !state.herbalAjudante;
+      herbalAjudanteSwitch.setAttribute('aria-checked', state.herbalAjudante ? 'true' : 'false');
+      saveState();
+      update();
+    });
+  }
+  herbalQtdPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.herbalQtd = Number(b.dataset.qtd);
+      herbalQtdInput.value = state.herbalQtd;
+      saveState();
+      update();
+    });
+  });
+  herbalLucroPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.herbalLucro = Number(b.dataset.lucro);
+      herbalLucroInput.value = state.herbalLucro;
+      saveState();
+      update();
+    });
   });
   herbalModoBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {

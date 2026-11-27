@@ -121,7 +121,7 @@
       </div>
 
       <div class="field-group">
-        <label for="pde" id="pde-label">PDE — Preço de Equipamento (po)</label>
+        <label for="pde" id="pde-label">PDE (preço base em po)</label>
         <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" aria-describedby="pde-moeda" />
         <p class="field-hint" id="pde-moeda" hidden></p>
       </div>
@@ -150,7 +150,7 @@
       <div class="toggle-row" id="fracao-wrap" hidden>
         <div class="toggle-label">
           <span class="t-name">Fração fixa do PDE</span>
-          <span class="t-sub">Regra opcional: só 20% do PDE é sensível ao material — suaviza armaduras caras</span>
+          <span class="t-sub">Regra opcional: só 20% do PDE é sensível ao material (suaviza armaduras caras)</span>
         </div>
         <button type="button" class="switch" id="fracao-switch" role="switch" aria-checked="false" aria-label="Fração fixa do PDE">
           <span class="knob"></span>
@@ -182,7 +182,7 @@
           </ul>
         </div>
         <div id="material-rows"></div>
-        <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais — além disso, não altera o custo.</p>
+        <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais (além disso, não altera o custo).</p>
         <div class="juncao" id="juncao-info" hidden></div>
       </div>
 
@@ -200,6 +200,7 @@
             </button>
           </div>
           <div class="mods-list" id="mods-list"></div>
+          <div class="mods-warn" id="mods-warn" role="status" hidden></div>
         </div>
       </details>
     </section>
@@ -280,39 +281,58 @@
         <div class="setting">
           <div class="toggle-row">
             <div class="toggle-label">
-              <span class="t-name">O Melhor dos Melhores</span>
-              <span class="t-sub">Forjador nível 14: gasta o dobro de materiais e o item vira Obra-Prima</span>
+              <span class="t-name">Com ajudante</span>
+              <span class="t-sub">Outro personagem ajuda na forja: metade do tempo</span>
             </div>
-            <button type="button" class="switch" id="melhor-switch" role="switch" aria-checked="false" aria-label="O Melhor dos Melhores">
-              <span class="knob"></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="setting" id="auto-forj-setting">
-          <div class="toggle-row">
-            <div class="toggle-label">
-              <span class="t-name">Criações Automáticas</span>
-              <span class="t-sub">Forja Arcana nível 17: ferramenta automatizada ajuda em materiais raros e itens mágicos (tempo ÷2)</span>
-            </div>
-            <button type="button" class="switch" id="auto-forj-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
-              <span class="knob"></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="setting" id="excalibur-setting">
-          <div class="toggle-row">
-            <div class="toggle-label">
-              <span class="t-name">Excalibur</span>
-              <span class="t-sub">Forjador nível 20: arma ou foco com até 6 materiais (4 Tier S + 2 Tier A ou menor), tempo de 1 Tier S e encantamento Lendário sem StarMetal (+0h)</span>
-            </div>
-            <button type="button" class="switch" id="excalibur-switch" role="switch" aria-checked="false" aria-label="Excalibur">
+            <button type="button" class="switch" id="ajudante-switch" role="switch" aria-checked="false" aria-label="Com ajudante">
               <span class="knob"></span>
             </button>
           </div>
         </div>
       </div>
+
+      <details class="mods high-level-details" id="forj-high-details">
+        <summary class="mods-summary">Nível alto (14–20) <span class="mods-total" id="forj-high-count"></span></summary>
+        <div class="mods-body">
+          <div class="settings-list" role="group" aria-label="Recursos de nível alto">
+            <div class="setting">
+              <div class="toggle-row">
+                <div class="toggle-label">
+                  <span class="t-name">O Melhor dos Melhores</span>
+                  <span class="t-sub">Forjador nível 14: gasta o dobro de materiais e o item vira Obra-Prima</span>
+                </div>
+                <button type="button" class="switch" id="melhor-switch" role="switch" aria-checked="false" aria-label="O Melhor dos Melhores">
+                  <span class="knob"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="setting" id="auto-forj-setting">
+              <div class="toggle-row">
+                <div class="toggle-label">
+                  <span class="t-name">Criações Automáticas</span>
+                  <span class="t-sub">Forja Arcana nível 17: ferramenta automatizada ajuda em materiais raros e itens mágicos (tempo ÷2)</span>
+                </div>
+                <button type="button" class="switch" id="auto-forj-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
+                  <span class="knob"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="setting" id="excalibur-setting">
+              <div class="toggle-row">
+                <div class="toggle-label">
+                  <span class="t-name">Excalibur</span>
+                  <span class="t-sub">Forjador nível 20: arma ou foco com até 6 materiais (4 Tier S + 2 Tier A ou menor), tempo de 1 Tier S e encantamento Lendário sem StarMetal (+0h)</span>
+                </div>
+                <button type="button" class="switch" id="excalibur-switch" role="switch" aria-checked="false" aria-label="Excalibur">
+                  <span class="knob"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
 
       <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2.</p>
     </section>
@@ -334,6 +354,11 @@
         <div class="field-group" id="lucro-wrap" hidden>
           <label for="lucro">Margem de lucro (%)</label>
           <input id="lucro" type="number" min="0" step="1" inputmode="numeric" />
+          <div class="lucro-presets" id="lucro-presets" role="group" aria-label="Atalhos de margem">
+            <button type="button" class="btn-chip" data-lucro="25">25%</button>
+            <button type="button" class="btn-chip" data-lucro="50">50%</button>
+            <button type="button" class="btn-chip" data-lucro="100">100%</button>
+          </div>
         </div>
         <p class="magicos-note" id="conserto-note" hidden>Um item quebrado (penalidade −5) custa metade do valor para ser consertado (p. 173). Com o Trabalhador Itinerante (p. 124), o Forjador paga só a matéria-prima desse serviço (metade do conserto, ou grátis se já tiver o material).</p>
       </div>
@@ -410,6 +435,12 @@
         <div class="field-group">
           <label for="bomba-qtd" id="bomba-qtd-label">Quantidade de bombas</label>
           <input id="bomba-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+          <div class="lucro-presets" id="bomba-qtd-presets" role="group" aria-label="Atalhos de quantidade">
+            <button type="button" class="btn-chip" data-qtd="1">1</button>
+            <button type="button" class="btn-chip" data-qtd="3">3</button>
+            <button type="button" class="btn-chip" data-qtd="5">5</button>
+            <button type="button" class="btn-chip" data-qtd="10">10</button>
+          </div>
         </div>
       </div>
 
@@ -451,6 +482,11 @@
             <div class="field-group">
               <label for="bm-ammo-qtd">Quantas munições transformar</label>
               <input id="bm-ammo-qtd" type="number" min="1" step="1" value="5" inputmode="numeric" />
+              <div class="lucro-presets" id="bm-ammo-qtd-presets" role="group" aria-label="Atalhos de quantidade de munições">
+                <button type="button" class="btn-chip" data-qtd="5">5 (média 2d4)</button>
+                <button type="button" class="btn-chip" data-qtd="10">10</button>
+                <button type="button" class="btn-chip" data-qtd="20">20 (aljava)</button>
+              </div>
               <p class="field-hint">A criação rende 2d4 munições; a média é 5.</p>
             </div>
             <div class="toggle-row">
@@ -487,6 +523,12 @@
         <div class="field-group">
           <label for="bm-polv-qtd">Quantidade de lotes (rende 1d4 cada)</label>
           <input id="bm-polv-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+          <div class="lucro-presets" id="bm-polv-qtd-presets" role="group" aria-label="Atalhos de lotes de pólvora">
+            <button type="button" class="btn-chip" data-qtd="1">1</button>
+            <button type="button" class="btn-chip" data-qtd="3">3</button>
+            <button type="button" class="btn-chip" data-qtd="5">5</button>
+            <button type="button" class="btn-chip" data-qtd="10">10</button>
+          </div>
         </div>
       </div>
     </section>
@@ -558,7 +600,7 @@
                 <label for="bomba-des">Mod. de Destreza</label>
                 <input id="bomba-des" type="number" min="-5" max="10" step="1" value="3" />
               </div>
-              <div class="field-group">
+              <div class="field-group" id="bomba-bp-wrap" hidden>
                 <label for="bomba-bp">Bônus de Proficiência</label>
                 <input id="bomba-bp" type="number" min="2" max="6" step="1" value="2" inputmode="numeric" />
               </div>
@@ -604,6 +646,17 @@
               </button>
             </div>
           </div>
+          <div class="setting">
+            <div class="toggle-row">
+              <div class="toggle-label">
+                <span class="t-name">Com ajudante</span>
+                <span class="t-sub">Outro personagem ajuda na fabricação: metade do tempo</span>
+              </div>
+              <button type="button" class="switch" id="bm-ajudante-switch" role="switch" aria-checked="false" aria-label="Com ajudante">
+                <span class="knob"></span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -625,6 +678,11 @@
         <div class="field-group" id="bomba-lucro-wrap" hidden>
           <label for="bomba-lucro">Margem de lucro (%)</label>
           <input id="bomba-lucro" type="number" min="0" step="1" value="50" inputmode="numeric" />
+          <div class="lucro-presets" id="bomba-lucro-presets" role="group" aria-label="Atalhos de margem">
+            <button type="button" class="btn-chip" data-lucro="25">25%</button>
+            <button type="button" class="btn-chip" data-lucro="50">50%</button>
+            <button type="button" class="btn-chip" data-lucro="100">100%</button>
+          </div>
         </div>
       </div>
     </section>
@@ -659,6 +717,12 @@
       <div class="field-group">
         <label for="herbal-qtd">Quantidade de doses / lotes</label>
         <input id="herbal-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+        <div class="lucro-presets" id="herbal-qtd-presets" role="group" aria-label="Atalhos de quantidade">
+          <button type="button" class="btn-chip" data-qtd="1">1</button>
+          <button type="button" class="btn-chip" data-qtd="3">3</button>
+          <button type="button" class="btn-chip" data-qtd="5">5</button>
+          <button type="button" class="btn-chip" data-qtd="10">10</button>
+        </div>
       </div>
 
       <div class="field-group">
@@ -689,9 +753,20 @@
           <div class="toggle-row">
             <div class="toggle-label">
               <span class="t-name">Talento Artesão (−20%)</span>
-              <span class="t-sub">Desconto na compra de ramos ou itens herbáceos não-mágicos</span>
+              <span class="t-sub" id="herbal-artesao-sub">Desconto na compra de ramos ou itens herbáceos não-mágicos</span>
             </div>
             <button type="button" class="switch" id="herbal-artesao-switch" role="switch" aria-checked="true" aria-label="Talento Artesão no herbalismo">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+        <div class="setting" id="herbal-ajudante-setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Com ajudante</span>
+              <span class="t-sub">Outro personagem ajuda no preparo: metade do tempo</span>
+            </div>
+            <button type="button" class="switch" id="herbal-ajudante-switch" role="switch" aria-checked="false" aria-label="Com ajudante no herbalismo">
               <span class="knob"></span>
             </button>
           </div>
@@ -716,6 +791,11 @@
         <div class="field-group" id="herbal-lucro-wrap" hidden>
           <label for="herbal-lucro">Margem de lucro (%)</label>
           <input id="herbal-lucro" type="number" min="0" step="1" value="50" inputmode="numeric" />
+          <div class="lucro-presets" id="herbal-lucro-presets" role="group" aria-label="Atalhos de margem">
+            <button type="button" class="btn-chip" data-lucro="25">25%</button>
+            <button type="button" class="btn-chip" data-lucro="50">50%</button>
+            <button type="button" class="btn-chip" data-lucro="100">100%</button>
+          </div>
         </div>
       </div>
     </section>
@@ -770,6 +850,7 @@
     <h2 class="production-title">Tempo de Produção</h2>
     <p class="production-note" id="production-note"></p>
     <div id="production-rows"></div>
+    <p class="production-note">Hora extra (acima de 12h/dia no Forjador ou 8h/dia comum): TR de Constituição CD 10 (+1 por hora extra) ou 1 nível de exaustão (p. 125 e 170).</p>
   </section>
 
   <section class="vantagens" id="bomba-detalhes-section" data-oficina-panel="bombas" hidden>
@@ -784,12 +865,7 @@
 
   <section class="production" id="herbal-mesa-section" data-oficina-panel="herbalismo" hidden>
     <h2 class="production-title">Forrageamento e Herbolário</h2>
-    <p class="production-note">Forragear leva 1 hora (teste de Natureza ou Sobrevivência CD 14 → 2 ramos). Herbolários renovam o estoque diariamente (p. 148).</p>
-    <div class="roller-actions">
-      <button type="button" class="btn-ghost btn-strong" id="btn-forragear">Rolar Forragear (1d20 → 2 ramos)</button>
-      <button type="button" class="btn-ghost" id="btn-herbolario">Gerar estoque de Herbolário</button>
-    </div>
-    <div class="roller-output" id="herbal-roller-out" hidden></div>
+    <p class="production-note">Forragear leva 1 hora (teste de Natureza ou Sobrevivência CD 14 → role 1d20 na tabela abaixo e ganhe 2 ramos). Herbolários renovam o estoque diariamente com 1d20 por cor e 1d4 por quantidade (p. 148).</p>
   </section>
 
   <details class="magicos" id="herbal-ramos-details" data-oficina-panel="herbalismo" hidden>
@@ -807,6 +883,8 @@
       </div>
       <div class="lista-actions">
         <button type="button" class="btn-ghost" id="lista-copy-btn">Copiar lista</button>
+        <button type="button" class="btn-ghost" id="lista-share-btn">Copiar link</button>
+        <button type="button" class="btn-reset" id="lista-clear-done-btn" hidden>limpar concluídos</button>
         <button type="button" class="btn-reset" id="lista-clear-btn">limpar</button>
       </div>
     </div>
@@ -856,7 +934,7 @@
   </details>
 
   <details class="magicos" id="magicos-details" data-oficina-panel="forja">
-    <summary class="magicos-summary">Itens Mágicos e Transmutação <span class="magicos-sub">(Forjador Arcano / Alquimista)</span></summary>
+    <summary class="magicos-summary">Itens Mágicos e Transmutação <span class="magicos-sub">(Forjador Arcano / Alquimista)</span> <span class="mods-total" id="magicos-active-count"></span></summary>
     <div class="magicos-body">
 
       <div class="magicos-block">
@@ -919,15 +997,7 @@
             <span class="knob"></span>
           </button>
         </div>
-        <div class="toggle-row">
-          <div class="toggle-label">
-            <span class="t-name">Criações Automáticas</span>
-            <span class="t-sub">17º nível de Forjador Arcano: ferramenta automatizada ajuda, tempo ÷2</span>
-          </div>
-          <button type="button" class="switch" id="automaticas-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
-            <span class="knob"></span>
-          </button>
-        </div>
+        <p class="magicos-note" id="magico-auto-note">Criações Automáticas (nv. 17) é ativado em <strong>O Forjador → Nível alto</strong> e vale também para encantamentos.</p>
         <div class="toggle-row">
           <div class="toggle-label">
             <span class="t-name">Versado em Itens Mágicos</span>
@@ -946,9 +1016,9 @@
         <div class="field-group">
           <label for="transmut-nivel">Nível da característica</label>
           <select id="transmut-nivel">
-            <option value="3">3º — Transmutação (Tier D/C, mesma categoria)</option>
-            <option value="7">7º — Avançada (qualquer categoria, até Tier B)</option>
-            <option value="13">13º — Suprema (D/C/B grátis, Tier A permitido)</option>
+            <option value="3">3º: Transmutação (Tier D/C, mesma categoria)</option>
+            <option value="7">7º: Avançada (qualquer categoria, até Tier B)</option>
+            <option value="13">13º: Suprema (D/C/B grátis, Tier A permitido)</option>
           </select>
         </div>
         <div class="mg-grid">
@@ -1022,8 +1092,7 @@
   Array.prototype.forEach.call(document.querySelectorAll('input[type="number"][min]'), check);
 })();
 
-// Grupos de opção (botões segmentados): setas do teclado, indicador deslizante e um só ponto de foco por grupo
-// + abertura/fechamento suave de gavetas <details> via Web Animations API
+// Navegação por teclado nos botões segmentados e animação dos <details>
 (function () {
   'use strict';
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1076,7 +1145,7 @@
       else if (ev.key === 'End') next = btns[btns.length - 1];
       if (!next) return;
       ev.preventDefault();
-      // Ações por teclado não animam (regra do emil-design-eng)
+      // Troca pelo teclado vai direto, sem animar
       skipNextAnim = true;
       next.click();
       next.focus();
@@ -1098,7 +1167,7 @@
     pillUpdaters.forEach(function (fn) { fn(); });
   }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
 
-  // Gavetas <details>: expansão e fechamento interrompíveis com tempos assimétricos (abre em 220ms, fecha em 165ms)
+  // Abre e fecha os <details> de forma suave
   Array.prototype.forEach.call(document.querySelectorAll('details.mods, details.magicos, details.explain'), function (det) {
     var sum = det.querySelector('summary');
     if (!sum || !det.animate) return;

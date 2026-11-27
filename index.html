@@ -24,11 +24,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Work+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  /* =========================================================
-     1. Tokens
-     ========================================================= */
   :root {
-    /* Cor — tema claro (papel de oficina) */
+    /* Cores do tema claro */
     --bg: #ede6d9;
     --surface: #f8f3e8;
     --surface-2: #efe6d5;
@@ -136,9 +133,6 @@
     --shadow-lift: 0 10px 32px rgba(0,0,0,.5);
   }
 
-  /* =========================================================
-     1b. Paletas por Oficina (Bombas & Herbalismo)
-     ========================================================= */
   :root[data-oficina="bombas"] {
     --bg: #ebe7e5;
     --surface: #f7f4f2;
@@ -230,9 +224,6 @@
     --ember-hot: #c9f2a7;
   }
 
-  /* =========================================================
-     2. Base
-     ========================================================= */
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
   html { color-scheme: light dark; }
@@ -250,13 +241,13 @@
   }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  /* Detalhes do navegador com o tema da página */
+  /* Scrollbar e seleção */
   ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--text); }
   input, select { caret-color: var(--accent); }
   html { scrollbar-color: var(--border-strong) var(--bg); }
   .mat-dropdown, .mods-list { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 
-  /* Ícones desenhados */
+  /* Ícones SVG */
   .ico { width: 1em; height: 1em; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .sr-only {
     position: absolute;
@@ -270,8 +261,7 @@
     border: 0;
   }
 
-  /* Troca de tema em onda (View Transitions) */
-  /* A frente da onda é macia e deixa 3 ondulações para trás antes de assentar */
+  /* Transição circular de tema (View Transitions) */
   @property --wave-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
   :root.theme-wave::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
   :root.theme-wave::view-transition-new(root) {
@@ -305,9 +295,6 @@
     gap: var(--sp-5);
   }
 
-  /* =========================================================
-     3. Cabeçalho
-     ========================================================= */
   .hero {
     position: relative;
     display: flex;
@@ -325,25 +312,18 @@
   .hero-text { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; }
   .hero-title-row { display: flex; align-items: center; gap: var(--sp-3); }
   .hero-mark {
-    width: 38px;
-    height: 38px;
+    width: 30px;
+    height: 30px;
     flex-shrink: 0;
     display: grid;
     place-items: center;
-    border-radius: 10px;
     color: var(--accent);
-    background:
-      radial-gradient(90% 90% at 30% 20%, color-mix(in srgb, var(--ember-hot) 18%, transparent), transparent 70%),
-      color-mix(in srgb, var(--accent) 12%, var(--surface));
-    border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 2px rgba(0,0,0,.08);
-    transition: border-color var(--t-med), box-shadow var(--t-med), color var(--t-med);
+    transition: color var(--t-med), filter var(--t-med);
   }
-  .hero-mark svg { width: 22px; height: 22px; }
+  .hero-mark svg { width: 28px; height: 28px; }
   .forja-on .hero-mark {
     color: var(--ember);
-    border-color: color-mix(in srgb, var(--ember) 60%, var(--border));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 0 14px color-mix(in srgb, var(--ember) 28%, transparent);
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--ember) 45%, transparent));
   }
 
   /* Barra de exibição (dureza, modo forja) */
@@ -372,7 +352,7 @@
   }
   .view-switch + .view-switch { border-left: 1px solid var(--border); }
 
-  /* Botão de tema: lua no claro, sol no escuro */
+  /* Botão de tema */
   .theme-btn {
     width: 32px;
     height: 32px;
@@ -386,7 +366,7 @@
     cursor: pointer;
     transition: color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
   }
-  .theme-btn svg { grid-area: 1 / 1; transition: transform 250ms var(--ease-out), opacity 200ms ease; }
+  .theme-btn svg { grid-area: 1 / 1; transition: transform 250ms var(--ease-out), opacity 200ms var(--ease-out); }
   .theme-btn .i-sun { opacity: 0; transform: rotate(-90deg) scale(.9); }
   .theme-btn[data-current="dark"] .i-sun { opacity: 1; transform: none; }
   .theme-btn[data-current="dark"] .i-moon { opacity: 0; transform: rotate(90deg) scale(.9); }
@@ -406,9 +386,6 @@
   }
   .sub { margin: 0; color: var(--text-dim); font-size: var(--fs-lg); max-width: 48ch; }
 
-  /* =========================================================
-     4. Cartões
-     ========================================================= */
   .panel, .result, .compare, .vantagens, .production, .magicos, .lista {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -439,22 +416,19 @@
 
   /* Lista de ajustes (interruptores agrupados) */
   .settings-list {
-    border: 1px solid var(--border);
-    border-radius: var(--r-sm);
-    background: color-mix(in srgb, var(--surface-2) 50%, transparent);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
-  .setting { padding: var(--sp-3) var(--sp-4); }
+  .setting { padding: var(--sp-3) 0; }
   .setting + .setting { border-top: 1px solid var(--border); }
   .setting-sub {
     margin-top: var(--sp-3);
-    padding: var(--sp-3);
-    border-radius: var(--r-sm);
-    background: color-mix(in srgb, var(--surface-2) 70%, var(--surface));
-    border: 1px solid var(--border);
+    padding-top: var(--sp-3);
+    border-top: 1px dashed var(--border);
   }
   .compare, .vantagens, .production { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-1); }
 
-  /* Rótulo de seção (padrão único) */
+  /* Rótulo de seção */
   .result-label, .compare-title, .production-title, .vantagens-title, .magicos-summary {
     margin: 0;
     font-size: var(--fs-xs);
@@ -465,7 +439,7 @@
   }
   .compare-title, .production-title, .vantagens-title { margin-bottom: var(--sp-2); }
 
-  /* Texto de apoio (padrão único) */
+  /* Texto de apoio */
   .mao-obra-note, .production-note, .magicos-note, .equip-info, .mat-cap-note {
     margin: 0;
     font-size: var(--fs-xs);
@@ -474,9 +448,6 @@
   }
   .production-note { margin: var(--sp-2) 0; }
 
-  /* =========================================================
-     5. Campos
-     ========================================================= */
   .field-group { display: flex; flex-direction: column; gap: var(--sp-2); }
   label, .label {
     font-size: var(--fs-sm);
@@ -523,9 +494,6 @@
   input::placeholder { color: var(--text-dim); opacity: .7; }
   input:disabled, select:disabled { opacity: .5; cursor: not-allowed; }
 
-  /* =========================================================
-     6. Botões
-     ========================================================= */
   .btn-ghost {
     display: inline-flex;
     align-items: center;
@@ -675,9 +643,6 @@
   }
   .switch[aria-checked="true"] .knob { transform: translateX(18px); background: var(--accent-ink); }
 
-  /* =========================================================
-     7. Materiais
-     ========================================================= */
   #material-rows { display: flex; flex-direction: column; gap: var(--sp-2); }
   .material-row {
     display: flex;
@@ -712,8 +677,48 @@
     align-items: center;
   }
   .mat-combo { position: relative; min-width: 0; }
+  .mat-combo .mat-search { padding-right: 36px; }
+  .mat-clear-btn {
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-dim);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: color var(--t-fast), background-color var(--t-fast), transform var(--t-press) var(--ease-out);
+  }
+  .mat-clear-btn:active { transform: translateY(-50%) scale(0.92); }
+  .mat-clear-btn[hidden] { display: none; }
+  .mat-clear-btn .ico { width: 14px; height: 14px; }
+  .mods-warn {
+    margin-top: var(--sp-2);
+    padding: 8px 11px;
+    border-radius: var(--r-sm);
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: color-mix(in srgb, var(--accent) 9%, var(--surface-2));
+    color: var(--ink);
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .mods-warn ul { margin: 4px 0 0; padding-left: 18px; }
+  .mods-warn .mw-head { display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--accent); }
+  .mods-toggle-all { margin-top: var(--sp-2); width: 100%; justify-content: center; font-size: 12.5px; }
+  .chip-lucro { border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); background: color-mix(in srgb, var(--accent) 12%, var(--surface-2)); }
+  .chip-lucro .pc-v { color: var(--accent); }
+  .li-open-btn { padding: 2px 9px; font-size: 11.5px; min-height: 24px; margin-left: 6px; }
+  .tipo-info code.search-ex { cursor: pointer; transition: background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast); }
+  .tipo-info code.search-ex:hover { border-color: var(--accent); color: var(--accent); }
   .material-row[data-tier] .mat-search {
-    border-left: 3px solid var(--tier-color);
+    border-color: color-mix(in srgb, var(--tier-color) 55%, var(--border));
   }
   .tier-select {
     font-family: var(--font-mono);
@@ -734,6 +739,7 @@
     left: 0;
     right: 0;
     z-index: 30;
+    transform-origin: top center;
     max-height: 280px;
     overflow-y: auto;
     background: var(--surface);
@@ -741,7 +747,6 @@
     border-radius: var(--r-sm);
     box-shadow: var(--shadow-lift);
     padding: var(--sp-1);
-    transform-origin: top;
     animation: drop 150ms var(--ease-out);
   }
   .mat-group-label {
@@ -858,9 +863,6 @@
   .mode { display: flex; flex-direction: column; gap: var(--sp-3); }
   #lucro-wrap { max-width: 200px; }
 
-  /* =========================================================
-     8. Resultado
-     ========================================================= */
   .panel {
     box-shadow: inset 0 1px 0 rgba(255,255,255,.06), var(--shadow);
   }
@@ -968,9 +970,7 @@
   /* Conta incompleta */
   .result-empty {
     margin: 0;
-    padding: var(--sp-3) var(--sp-4);
-    border: 1px dashed var(--border-strong);
-    border-radius: var(--r-sm);
+    padding: var(--sp-2) 0;
     font-size: var(--fs-md);
     color: var(--text-dim);
   }
@@ -982,9 +982,16 @@
   .result-actions .btn-ghost { flex: 1 1 auto; }
   .result-help-row { display: flex; justify-content: flex-end; margin-top: -6px; }
   .btn-strong {
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
-    color: var(--text);
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+  .btn-strong .ico { stroke: currentColor; }
+  .btn-strong.is-confirmed {
+    background: var(--good);
+    border-color: var(--good);
+    color: var(--accent-ink);
   }
   .btn-ghost.is-morphing {
     filter: blur(1.8px);
@@ -1140,6 +1147,79 @@
     background: color-mix(in srgb, var(--good) 14%, transparent);
     border: 1px solid color-mix(in srgb, var(--good) 35%, transparent);
   }
+  .cm-use-btn {
+    margin-top: auto;
+    padding: 6px 10px;
+    min-height: 32px;
+    width: 100%;
+    justify-content: center;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+  }
+  .equip-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .equip-info[hidden] { display: none; }
+  .eq-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+  .eq-chip.eq-chip-main {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .eq-chip.eq-chip-warn {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface-2));
+    font-weight: 600;
+  }
+  .v-pills-label {
+    margin: 4px 0 0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .lucro-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .btn-chip {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text-dim);
+    border-radius: var(--r-pill);
+    padding: 4px 11px;
+    min-height: 28px;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--t-fast), background-color var(--t-fast), color var(--t-fast), transform var(--t-press) var(--ease-out);
+  }
+  .btn-chip:active { transform: scale(0.96); }
+  .btn-chip.active {
+    border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+    color: var(--accent);
+  }
+  .high-level-details { margin-top: var(--sp-2); }
+  .high-level-details .settings-list { margin-top: 0; border-top: none; border-bottom: none; }
   .cm-empty {
     grid-column: 1 / -1;
     margin: 0;
@@ -1197,7 +1277,7 @@
   .toast-btn:focus-visible { outline-color: var(--bg); }
   @media (max-width: 1059.98px) { .toast { bottom: calc(96px + env(safe-area-inset-bottom)); } }
 
-  /* Tempo: segundo número do painel */
+  /* Tempo no painel */
   .kpi-time {
     display: flex;
     justify-content: space-between;
@@ -1212,7 +1292,7 @@
   .kpi-time-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: var(--fs-sm); color: var(--text-dim); }
   .kpi-time-value strong { font-size: var(--fs-xl); font-weight: 600; color: var(--text); }
 
-  /* A conta, em forma de recibo */
+  /* Detalhamento do custo */
   .receipt {
     margin-top: var(--sp-1);
     padding: var(--sp-3) var(--sp-4) var(--sp-4);
@@ -1348,9 +1428,6 @@
   .v-pills-row-y { margin: 4px 0; }
   .v-empty { font-size: var(--fs-sm); color: var(--text-dim);  }
 
-  /* =========================================================
-     9. Itens mágicos
-     ========================================================= */
   .magicos:not([open]) { overflow: hidden; }
   .magicos-summary {
     cursor: pointer;
@@ -1387,9 +1464,6 @@
   .mg-line .mg-v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; margin-left: auto; text-align: right; }
   .mg-warning { margin: var(--sp-1) 0 0; color: var(--accent); font-size: var(--fs-sm); }
 
-  /* =========================================================
-     10. Rodapé
-     ========================================================= */
   .foot {
     display: flex;
     justify-content: space-between;
@@ -1400,7 +1474,7 @@
   }
   .foot p { margin: 0; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); overflow-wrap: anywhere; }
 
-  /* Seções secundárias planas: o resultado é o único cartão em destaque ao lado do formulário */
+  /* Seções secundárias sem borda de cartão */
   .compare, .vantagens, .production, .lista, .magicos {
     background: transparent;
     border: none;
@@ -1413,7 +1487,7 @@
   .magicos-summary { padding-left: 0; padding-right: 0; }
   .magicos-body { padding-left: 0; padding-right: 0; }
 
-  /* Grupos da seção O Forjador e explicações sob demanda */
+  /* Seção O Forjador e blocos de ajuda */
   .group-label { margin: 0 0 calc(-1 * var(--sp-2)); font-size: var(--fs-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); }
   .explain > summary {
     cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px;
@@ -1427,9 +1501,6 @@
   .explain[open] > summary::before { transform: rotate(45deg); }
   .explain > p { margin-top: var(--sp-2); }
 
-  /* =========================================================
-     10b. Navegação de Oficinas, Bombas & Herbalismo
-     ========================================================= */
   body {
     transition: background-color 220ms ease, color 220ms ease;
   }
@@ -1522,7 +1593,7 @@
   .ramo-branco { background: #f5f5f2; box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); }
   .ramo-preto { background: #242228; box-shadow: inset 0 0 0 1px rgba(255,255,255,.35); }
 
-  /* Tabela de ramos & rolador de mesa */
+  /* Tabela de ramos */
   .ramos-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1604,9 +1675,6 @@
     :root:not([data-theme="light"]) .li-tag-herbalismo { color: #68b884; background: color-mix(in srgb, #68b884 18%, transparent); }
   }
 
-  /* =========================================================
-     11. Layout: lateral fixa no computador
-     ========================================================= */
   @media (min-width: 720px) and (max-width: 1059.98px) {
     .page { max-width: 720px; }
   }
@@ -1705,7 +1773,7 @@
     .hero { align-items: flex-start; }
   }
 
-  /* Telas de toque: alvos maiores e dropdown que cabe acima do teclado virtual */
+  /* Ajustes para touch */
   @media (pointer: coarse) {
     .seg-btn { min-height: 40px; }
     .btn-ghost { height: 40px; }
@@ -1714,14 +1782,12 @@
     .li-qty-btn { width: 32px; height: 32px; }
     .theme-btn { width: 38px; height: 38px; flex-shrink: 0; }
     .btn-info, .btn-reset { min-height: 36px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
+    .btn-chip { min-height: 36px; padding: 6px 13px; }
     .toast-btn { height: 38px; }
     .mat-dropdown { max-height: min(240px, 42vh); -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
     .mat-option { min-height: 40px; padding: 9px var(--sp-2); }
   }
 
-  /* =========================================================
-     12. Modo forja (opcional, desligado por padrão)
-     ========================================================= */
   #embers { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; display: none; }
   .forge-glow {
     position: fixed; left: 0; right: 0; bottom: -20vh; height: 45vh; pointer-events: none; z-index: 0;
@@ -1736,9 +1802,6 @@
   .forja-on #embers { display: block; }
   .forja-on .forge-glow { opacity: .7; animation: forge-breathe 6s ease-in-out infinite; }
 
-  /* =========================================================
-     13. Animações
-     ========================================================= */
   @keyframes slide-in { from { opacity: 0; transform: translateX(-10px) scale(0.98); } to { opacity: 1; transform: none; } }
   @keyframes row-out { to { opacity: 0; transform: translateX(-10px) scale(0.97); } }
   @keyframes drop { from { opacity: 0; transform: translateY(-4px) scale(0.98); } to { opacity: 1; transform: none; } }
@@ -1761,21 +1824,22 @@
   .v-item.is-entering:nth-child(6) { animation-delay: 160ms; }
 
   @media (prefers-reduced-motion: reduce) {
-    /* entradas viram fade, sem deslocamento */
+    /* só fade, sem deslocar */
     .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]), .tipo-info:not([hidden]),
     .prop-chip.is-entering, .v-item.is-entering, [data-oficina-panel]:not([hidden]),
-    .hero-mark .mark-ico, .roller-output.is-rolled { animation-name: fade-in; }
+    .hero-mark .mark-ico { animation-name: fade-in; }
     body, .oficina-tabs { transition: none; }
     .material-row.is-leaving, .lista-item.is-leaving { animation: none; }
-    /* efeitos decorativos param */
+    /* pausa efeitos decorativos */
     .prop-chip.chip-obra::after, .prop-chip.chip-excalibur::after, .forja-on .forge-glow { animation: none; }
-    /* nada se move: só cor e opacidade mudam */
+    /* reduz movimento */
     .switch .knob, .theme-btn svg, .c-bar span, .mods-summary::before, .magicos-summary::before, .explain > summary::before, .seg-pill {
       transition-property: opacity, background-color, color, border-color;
       will-change: auto;
     }
     .btn-ghost.is-morphing { filter: none; }
-    .seg-btn:active, .btn-ghost:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .btn-info:active, .btn-reset:active, .mods-summary:active, .magicos-summary:active, .explain > summary:active, .switch:active, .cost-bar:active { transform: none; }
+    .seg-btn:active, .btn-ghost:active, .btn-chip:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .btn-info:active, .btn-reset:active, .mods-summary:active, .magicos-summary:active, .explain > summary:active, .switch:active, .cost-bar:active { transform: none; }
+    .mat-clear-btn:active { transform: translateY(-50%); }
     .theme-btn svg { transform: none !important; }
     .toast, .toast.show { transform: translate(-50%, 0); }
     .cost-bar { transform: none; opacity: 0; pointer-events: none; transition: opacity 200ms ease; }
@@ -1783,26 +1847,27 @@
   }
   @keyframes fade-in { from { opacity: 0; } }
 
-  /* Hover só em aparelhos com mouse (no toque o hover gruda depois do toque) */
+  /* Hover só com mouse (no touch fica preso) */
   @media (hover: hover) and (pointer: fine) {
     .view-switch:hover { color: var(--text); }
     .theme-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
     input:hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--border-strong); }
     .btn-info:hover { color: var(--accent); }
     .btn-ghost:hover:not(:disabled) { border-color: var(--border-strong); background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 88%, var(--text)); border-color: color-mix(in srgb, var(--accent) 88%, var(--text)); }
+    .btn-chip:hover:not(.active) { border-color: var(--border-strong); color: var(--text); }
     .btn-remove:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
     .btn-reset:hover { color: var(--accent); }
     .seg-btn:hover:not(.active) { color: var(--text); background: color-mix(in srgb, var(--text) 5%, transparent); }
     .mat-option:hover { background: var(--surface-2); }
     .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
-    .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 20%, transparent); border-color: var(--accent); }
     .toast-btn:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
     .mods-summary:hover, .magicos-summary:hover, .explain > summary:hover { color: var(--accent); }
     .ramo-row:hover { border-color: var(--border-strong); }
     .li-check:hover { border-color: var(--accent); }
     .li-qty-btn:hover:not(:disabled) { color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+    .mat-clear-btn:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
   }
-  .roller-output.is-rolled { animation: chip-in 180ms var(--ease-out) both; }
 
 </style>
 </head>
@@ -1900,7 +1965,7 @@
       </div>
 
       <div class="field-group">
-        <label for="pde" id="pde-label">PDE — Preço de Equipamento (po)</label>
+        <label for="pde" id="pde-label">PDE (preço base em po)</label>
         <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" aria-describedby="pde-moeda" />
         <p class="field-hint" id="pde-moeda" hidden></p>
       </div>
@@ -1929,7 +1994,7 @@
       <div class="toggle-row" id="fracao-wrap" hidden>
         <div class="toggle-label">
           <span class="t-name">Fração fixa do PDE</span>
-          <span class="t-sub">Regra opcional: só 20% do PDE é sensível ao material — suaviza armaduras caras</span>
+          <span class="t-sub">Regra opcional: só 20% do PDE é sensível ao material (suaviza armaduras caras)</span>
         </div>
         <button type="button" class="switch" id="fracao-switch" role="switch" aria-checked="false" aria-label="Fração fixa do PDE">
           <span class="knob"></span>
@@ -1961,7 +2026,7 @@
           </ul>
         </div>
         <div id="material-rows"></div>
-        <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais — além disso, não altera o custo.</p>
+        <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais (além disso, não altera o custo).</p>
         <div class="juncao" id="juncao-info" hidden></div>
       </div>
 
@@ -1979,6 +2044,7 @@
             </button>
           </div>
           <div class="mods-list" id="mods-list"></div>
+          <div class="mods-warn" id="mods-warn" role="status" hidden></div>
         </div>
       </details>
     </section>
@@ -2059,39 +2125,58 @@
         <div class="setting">
           <div class="toggle-row">
             <div class="toggle-label">
-              <span class="t-name">O Melhor dos Melhores</span>
-              <span class="t-sub">Forjador nível 14: gasta o dobro de materiais e o item vira Obra-Prima</span>
+              <span class="t-name">Com ajudante</span>
+              <span class="t-sub">Outro personagem ajuda na forja: metade do tempo</span>
             </div>
-            <button type="button" class="switch" id="melhor-switch" role="switch" aria-checked="false" aria-label="O Melhor dos Melhores">
-              <span class="knob"></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="setting" id="auto-forj-setting">
-          <div class="toggle-row">
-            <div class="toggle-label">
-              <span class="t-name">Criações Automáticas</span>
-              <span class="t-sub">Forja Arcana nível 17: ferramenta automatizada ajuda em materiais raros e itens mágicos (tempo ÷2)</span>
-            </div>
-            <button type="button" class="switch" id="auto-forj-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
-              <span class="knob"></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="setting" id="excalibur-setting">
-          <div class="toggle-row">
-            <div class="toggle-label">
-              <span class="t-name">Excalibur</span>
-              <span class="t-sub">Forjador nível 20: arma ou foco com até 6 materiais (4 Tier S + 2 Tier A ou menor), tempo de 1 Tier S e encantamento Lendário sem StarMetal (+0h)</span>
-            </div>
-            <button type="button" class="switch" id="excalibur-switch" role="switch" aria-checked="false" aria-label="Excalibur">
+            <button type="button" class="switch" id="ajudante-switch" role="switch" aria-checked="false" aria-label="Com ajudante">
               <span class="knob"></span>
             </button>
           </div>
         </div>
       </div>
+
+      <details class="mods high-level-details" id="forj-high-details">
+        <summary class="mods-summary">Nível alto (14–20) <span class="mods-total" id="forj-high-count"></span></summary>
+        <div class="mods-body">
+          <div class="settings-list" role="group" aria-label="Recursos de nível alto">
+            <div class="setting">
+              <div class="toggle-row">
+                <div class="toggle-label">
+                  <span class="t-name">O Melhor dos Melhores</span>
+                  <span class="t-sub">Forjador nível 14: gasta o dobro de materiais e o item vira Obra-Prima</span>
+                </div>
+                <button type="button" class="switch" id="melhor-switch" role="switch" aria-checked="false" aria-label="O Melhor dos Melhores">
+                  <span class="knob"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="setting" id="auto-forj-setting">
+              <div class="toggle-row">
+                <div class="toggle-label">
+                  <span class="t-name">Criações Automáticas</span>
+                  <span class="t-sub">Forja Arcana nível 17: ferramenta automatizada ajuda em materiais raros e itens mágicos (tempo ÷2)</span>
+                </div>
+                <button type="button" class="switch" id="auto-forj-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
+                  <span class="knob"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="setting" id="excalibur-setting">
+              <div class="toggle-row">
+                <div class="toggle-label">
+                  <span class="t-name">Excalibur</span>
+                  <span class="t-sub">Forjador nível 20: arma ou foco com até 6 materiais (4 Tier S + 2 Tier A ou menor), tempo de 1 Tier S e encantamento Lendário sem StarMetal (+0h)</span>
+                </div>
+                <button type="button" class="switch" id="excalibur-switch" role="switch" aria-checked="false" aria-label="Excalibur">
+                  <span class="knob"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
 
       <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2.</p>
     </section>
@@ -2113,6 +2198,11 @@
         <div class="field-group" id="lucro-wrap" hidden>
           <label for="lucro">Margem de lucro (%)</label>
           <input id="lucro" type="number" min="0" step="1" inputmode="numeric" />
+          <div class="lucro-presets" id="lucro-presets" role="group" aria-label="Atalhos de margem">
+            <button type="button" class="btn-chip" data-lucro="25">25%</button>
+            <button type="button" class="btn-chip" data-lucro="50">50%</button>
+            <button type="button" class="btn-chip" data-lucro="100">100%</button>
+          </div>
         </div>
         <p class="magicos-note" id="conserto-note" hidden>Um item quebrado (penalidade −5) custa metade do valor para ser consertado (p. 173). Com o Trabalhador Itinerante (p. 124), o Forjador paga só a matéria-prima desse serviço (metade do conserto, ou grátis se já tiver o material).</p>
       </div>
@@ -2189,6 +2279,12 @@
         <div class="field-group">
           <label for="bomba-qtd" id="bomba-qtd-label">Quantidade de bombas</label>
           <input id="bomba-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+          <div class="lucro-presets" id="bomba-qtd-presets" role="group" aria-label="Atalhos de quantidade">
+            <button type="button" class="btn-chip" data-qtd="1">1</button>
+            <button type="button" class="btn-chip" data-qtd="3">3</button>
+            <button type="button" class="btn-chip" data-qtd="5">5</button>
+            <button type="button" class="btn-chip" data-qtd="10">10</button>
+          </div>
         </div>
       </div>
 
@@ -2230,6 +2326,11 @@
             <div class="field-group">
               <label for="bm-ammo-qtd">Quantas munições transformar</label>
               <input id="bm-ammo-qtd" type="number" min="1" step="1" value="5" inputmode="numeric" />
+              <div class="lucro-presets" id="bm-ammo-qtd-presets" role="group" aria-label="Atalhos de quantidade de munições">
+                <button type="button" class="btn-chip" data-qtd="5">5 (média 2d4)</button>
+                <button type="button" class="btn-chip" data-qtd="10">10</button>
+                <button type="button" class="btn-chip" data-qtd="20">20 (aljava)</button>
+              </div>
               <p class="field-hint">A criação rende 2d4 munições; a média é 5.</p>
             </div>
             <div class="toggle-row">
@@ -2266,6 +2367,12 @@
         <div class="field-group">
           <label for="bm-polv-qtd">Quantidade de lotes (rende 1d4 cada)</label>
           <input id="bm-polv-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+          <div class="lucro-presets" id="bm-polv-qtd-presets" role="group" aria-label="Atalhos de lotes de pólvora">
+            <button type="button" class="btn-chip" data-qtd="1">1</button>
+            <button type="button" class="btn-chip" data-qtd="3">3</button>
+            <button type="button" class="btn-chip" data-qtd="5">5</button>
+            <button type="button" class="btn-chip" data-qtd="10">10</button>
+          </div>
         </div>
       </div>
     </section>
@@ -2337,7 +2444,7 @@
                 <label for="bomba-des">Mod. de Destreza</label>
                 <input id="bomba-des" type="number" min="-5" max="10" step="1" value="3" />
               </div>
-              <div class="field-group">
+              <div class="field-group" id="bomba-bp-wrap" hidden>
                 <label for="bomba-bp">Bônus de Proficiência</label>
                 <input id="bomba-bp" type="number" min="2" max="6" step="1" value="2" inputmode="numeric" />
               </div>
@@ -2383,6 +2490,17 @@
               </button>
             </div>
           </div>
+          <div class="setting">
+            <div class="toggle-row">
+              <div class="toggle-label">
+                <span class="t-name">Com ajudante</span>
+                <span class="t-sub">Outro personagem ajuda na fabricação: metade do tempo</span>
+              </div>
+              <button type="button" class="switch" id="bm-ajudante-switch" role="switch" aria-checked="false" aria-label="Com ajudante">
+                <span class="knob"></span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2404,6 +2522,11 @@
         <div class="field-group" id="bomba-lucro-wrap" hidden>
           <label for="bomba-lucro">Margem de lucro (%)</label>
           <input id="bomba-lucro" type="number" min="0" step="1" value="50" inputmode="numeric" />
+          <div class="lucro-presets" id="bomba-lucro-presets" role="group" aria-label="Atalhos de margem">
+            <button type="button" class="btn-chip" data-lucro="25">25%</button>
+            <button type="button" class="btn-chip" data-lucro="50">50%</button>
+            <button type="button" class="btn-chip" data-lucro="100">100%</button>
+          </div>
         </div>
       </div>
     </section>
@@ -2438,6 +2561,12 @@
       <div class="field-group">
         <label for="herbal-qtd">Quantidade de doses / lotes</label>
         <input id="herbal-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+        <div class="lucro-presets" id="herbal-qtd-presets" role="group" aria-label="Atalhos de quantidade">
+          <button type="button" class="btn-chip" data-qtd="1">1</button>
+          <button type="button" class="btn-chip" data-qtd="3">3</button>
+          <button type="button" class="btn-chip" data-qtd="5">5</button>
+          <button type="button" class="btn-chip" data-qtd="10">10</button>
+        </div>
       </div>
 
       <div class="field-group">
@@ -2468,9 +2597,20 @@
           <div class="toggle-row">
             <div class="toggle-label">
               <span class="t-name">Talento Artesão (−20%)</span>
-              <span class="t-sub">Desconto na compra de ramos ou itens herbáceos não-mágicos</span>
+              <span class="t-sub" id="herbal-artesao-sub">Desconto na compra de ramos ou itens herbáceos não-mágicos</span>
             </div>
             <button type="button" class="switch" id="herbal-artesao-switch" role="switch" aria-checked="true" aria-label="Talento Artesão no herbalismo">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+        <div class="setting" id="herbal-ajudante-setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Com ajudante</span>
+              <span class="t-sub">Outro personagem ajuda no preparo: metade do tempo</span>
+            </div>
+            <button type="button" class="switch" id="herbal-ajudante-switch" role="switch" aria-checked="false" aria-label="Com ajudante no herbalismo">
               <span class="knob"></span>
             </button>
           </div>
@@ -2495,6 +2635,11 @@
         <div class="field-group" id="herbal-lucro-wrap" hidden>
           <label for="herbal-lucro">Margem de lucro (%)</label>
           <input id="herbal-lucro" type="number" min="0" step="1" value="50" inputmode="numeric" />
+          <div class="lucro-presets" id="herbal-lucro-presets" role="group" aria-label="Atalhos de margem">
+            <button type="button" class="btn-chip" data-lucro="25">25%</button>
+            <button type="button" class="btn-chip" data-lucro="50">50%</button>
+            <button type="button" class="btn-chip" data-lucro="100">100%</button>
+          </div>
         </div>
       </div>
     </section>
@@ -2549,6 +2694,7 @@
     <h2 class="production-title">Tempo de Produção</h2>
     <p class="production-note" id="production-note"></p>
     <div id="production-rows"></div>
+    <p class="production-note">Hora extra (acima de 12h/dia no Forjador ou 8h/dia comum): TR de Constituição CD 10 (+1 por hora extra) ou 1 nível de exaustão (p. 125 e 170).</p>
   </section>
 
   <section class="vantagens" id="bomba-detalhes-section" data-oficina-panel="bombas" hidden>
@@ -2563,12 +2709,7 @@
 
   <section class="production" id="herbal-mesa-section" data-oficina-panel="herbalismo" hidden>
     <h2 class="production-title">Forrageamento e Herbolário</h2>
-    <p class="production-note">Forragear leva 1 hora (teste de Natureza ou Sobrevivência CD 14 → 2 ramos). Herbolários renovam o estoque diariamente (p. 148).</p>
-    <div class="roller-actions">
-      <button type="button" class="btn-ghost btn-strong" id="btn-forragear">Rolar Forragear (1d20 → 2 ramos)</button>
-      <button type="button" class="btn-ghost" id="btn-herbolario">Gerar estoque de Herbolário</button>
-    </div>
-    <div class="roller-output" id="herbal-roller-out" hidden></div>
+    <p class="production-note">Forragear leva 1 hora (teste de Natureza ou Sobrevivência CD 14 → role 1d20 na tabela abaixo e ganhe 2 ramos). Herbolários renovam o estoque diariamente com 1d20 por cor e 1d4 por quantidade (p. 148).</p>
   </section>
 
   <details class="magicos" id="herbal-ramos-details" data-oficina-panel="herbalismo" hidden>
@@ -2586,6 +2727,8 @@
       </div>
       <div class="lista-actions">
         <button type="button" class="btn-ghost" id="lista-copy-btn">Copiar lista</button>
+        <button type="button" class="btn-ghost" id="lista-share-btn">Copiar link</button>
+        <button type="button" class="btn-reset" id="lista-clear-done-btn" hidden>limpar concluídos</button>
         <button type="button" class="btn-reset" id="lista-clear-btn">limpar</button>
       </div>
     </div>
@@ -2635,7 +2778,7 @@
   </details>
 
   <details class="magicos" id="magicos-details" data-oficina-panel="forja">
-    <summary class="magicos-summary">Itens Mágicos e Transmutação <span class="magicos-sub">(Forjador Arcano / Alquimista)</span></summary>
+    <summary class="magicos-summary">Itens Mágicos e Transmutação <span class="magicos-sub">(Forjador Arcano / Alquimista)</span> <span class="mods-total" id="magicos-active-count"></span></summary>
     <div class="magicos-body">
 
       <div class="magicos-block">
@@ -2698,15 +2841,7 @@
             <span class="knob"></span>
           </button>
         </div>
-        <div class="toggle-row">
-          <div class="toggle-label">
-            <span class="t-name">Criações Automáticas</span>
-            <span class="t-sub">17º nível de Forjador Arcano: ferramenta automatizada ajuda, tempo ÷2</span>
-          </div>
-          <button type="button" class="switch" id="automaticas-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
-            <span class="knob"></span>
-          </button>
-        </div>
+        <p class="magicos-note" id="magico-auto-note">Criações Automáticas (nv. 17) é ativado em <strong>O Forjador → Nível alto</strong> e vale também para encantamentos.</p>
         <div class="toggle-row">
           <div class="toggle-label">
             <span class="t-name">Versado em Itens Mágicos</span>
@@ -2725,9 +2860,9 @@
         <div class="field-group">
           <label for="transmut-nivel">Nível da característica</label>
           <select id="transmut-nivel">
-            <option value="3">3º — Transmutação (Tier D/C, mesma categoria)</option>
-            <option value="7">7º — Avançada (qualquer categoria, até Tier B)</option>
-            <option value="13">13º — Suprema (D/C/B grátis, Tier A permitido)</option>
+            <option value="3">3º: Transmutação (Tier D/C, mesma categoria)</option>
+            <option value="7">7º: Avançada (qualquer categoria, até Tier B)</option>
+            <option value="13">13º: Suprema (D/C/B grátis, Tier A permitido)</option>
           </select>
         </div>
         <div class="mg-grid">
@@ -2768,11 +2903,11 @@
 <script>
 (function () {
   'use strict';
-  // Tempo de Produção: baseado na tabela Tempo de Criação (Materiais e Criação) + Trabalhador Itinerante (Forjador).
+  // Tempo de criação por tier (Guia + Trabalhador Itinerante)
 
   var STORAGE_KEY = 'forjador-calc-v5';
 
-  // Ícones (mesmo traço do sol e da lua do tema)
+  // Ícones
   var ICON_X = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>';
   var ICON_PLUS = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>';
   var ICON_WARN = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5 21.5 20h-19zM12 10v4.5M12 17.2v.3"/></svg>';
@@ -2853,161 +2988,172 @@
     ['org_ossos_nd18','Orgânicos','S','Ossos (Nd 18+)',500,'d100','+3','Armas/munições ignoram resistência/imunidade não-mágica do mesmo tipo; armas com Munição sem desvantagem a 1,5m; armaduras/escudos reduzem em −3 três tipos de dano aos quais a criatura resistia; foco dá +3 de dano necrótico; vantagem contra medo do mesmo tipo; pesa metade do peso.',''],
     ['org_ossos_tarrasque','Orgânicos','S','Ossos de Tarrasque',500,'∞','+3','Armas/munições ignoram resistência/imunidade não-mágica e causam o dobro de dano em estruturas; armaduras/escudos 1x/dia anulam (1–5 no d6) ou refletem (6 no d6) mísseis mágicos, magias de linha ou de ataque à distância; foco conjura Escudo Arcano 1x/dia como reação sem gastar espaço; imunidade à presença aterradora de Tarrasques.','Indestrutível e inalterável (nem Desejo altera) — sem desvantagem.']
   ].map(function (row) {
+    var id = row[0];
+    var pesoMult = (id === 'metal_ouro' || id === 'veg_iron_wood' || id === 'geo_pedra_ana_refinada') ? 2
+      : (id === 'metal_aco_verde_baatoriano' || id === 'metal_mithral' || id === 'metal_ebano' ||
+         id === 'org_ossos_nd0_5' || id === 'org_ossos_nd6_11' || id === 'org_ossos_nd12_17' ||
+         id === 'org_ossos_nd18' || id === 'org_quitina') ? 0.5
+      : 1;
+    var forcaPesado = (id === 'veg_iron_wood' || id === 'geo_pedra_ana_refinada');
+    var materialVivo = (id === 'metal_elementium' || id === 'veg_fungo_viventis' ||
+      id === 'veg_samambaia_metamorfica' || id === 'veg_samambaia_primordial' ||
+      id === 'veg_hera_lunar' || id === 'org_inseto_treinado' || id === 'org_coral');
     return {
-      id: row[0], categoria: row[1], tier: row[2], nome: row[3],
+      id: id, categoria: row[1], tier: row[2], nome: row[3],
       mult: row[4], dureza: row[5], mod: row[6],
-      vantagens: row[7], desvantagens: row[8]
+      vantagens: row[7], desvantagens: row[8],
+      pesoMult: pesoMult, forcaPesado: forcaPesado, materialVivo: materialVivo
     };
   });
 
   // Equipamentos e PDE (Guia de Xyleff Sualky, p. 155–159)
   var EQUIP_DB = [
-    ["Cestus", "Armas", 10, "leve", "arma", "Ágil"],
-    ["Katar", "Armas", 10, "leve", "arma", "Afligir"],
-    ["Bagh Nakh", "Armas", 10, "leve", "arma", "Drenar"],
-    ["Tonfa", "Armas", 20, "leve", "arma", "Aparar"],
-    ["Tekko-kagi", "Armas", 20, "leve", "arma", "Desarmar"],
-    ["Lu Jiao Dao", "Armas", 20, "leve", "arma", "Ágil"],
-    ["Nunchaku", "Armas", 20, "leve", "arma", "Drenar"],
-    ["Sansetsukon", "Armas", 40, "", "arma", "Desarmar"],
-    ["Agulha", "Armas", 1, "leve", "arma", "Forma"],
-    ["Jitte", "Armas", 25, "leve", "arma", "Desarmar"],
-    ["Adaga", "Armas", 30, "leve", "arma", "Ágil"],
-    ["Kunai", "Armas", 20, "leve", "arma", "Lentidão"],
-    ["Punhal", "Armas", 25, "leve", "arma", "Forma"],
-    ["Adaga Kris", "Armas", 25, "leve", "arma", "Sangramento"],
-    ["Sai", "Armas", 25, "leve", "arma", "Aparar"],
-    ["Hunga-munga", "Armas", 35, "leve", "arma", "Aparar"],
-    ["Kpinga", "Armas", 30, "leve", "arma", "Desarmar"],
-    ["Urumi", "Armas", 35, "leve", "arma", "Sangramento"],
-    ["Espada Curta", "Armas", 40, "leve", "arma", "Afligir"],
-    ["Cimitarra", "Armas", 40, "leve", "arma", "Ágil"],
-    ["Kopesh", "Armas", 45, "leve", "arma", "Drenar"],
-    ["Espada Gancho", "Armas", 40, "leve", "arma", "Desarmar"],
-    ["Lâmina gêmea", "Armas", 80, "", "arma", "Ágil"],
-    ["Falchion", "Armas", 50, "", "arma", "Garantido"],
-    ["Rapieira", "Armas", 50, "", "arma", "Afligir"],
-    ["Estoc", "Armas", 50, "", "arma", "Drenar"],
-    ["Espada Longa", "Armas", 50, "", "arma", "Drenar"],
-    ["Flamberge", "Armas", 50, "", "arma", "Sangramento"],
-    ["Espada Bastarda", "Armas", 50, "", "arma", "Garantido"],
-    ["Katana", "Armas", 60, "", "arma", "Afligir"],
-    ["Espada Grande", "Armas", 55, "pesado", "arma", "Garantido"],
-    ["Clava Colossal", "Armas", 85, "pesado", "arma", "Derrubar"],
-    ["Espada Colossal", "Armas", 85, "pesado", "arma", "Trespassar"],
-    ["Machado Colossal", "Armas", 85, "pesado", "arma", "Crítico"],
-    ["Martelo Colossal", "Armas", 85, "pesado", "arma", "Drenar"],
-    ["Shuriken Gigante", "Armas", 75, "pesado", "arma", "Trespassar"],
-    ["Arco Colossal", "Armas", 80, "pesado", "arma", "Trespassar"],
-    ["Besta Colossal", "Armas", 80, "pesado", "arma", "Empurrar"],
-    ["Azagaia", "Armas", 35, "", "arma", "Lentidão"],
-    ["Lança", "Armas", 40, "", "arma", "Drenar"],
-    ["Tridente", "Armas", 55, "", "arma", "Derrubar"],
-    ["Glaive", "Armas", 50, "pesado", "arma", "Garantido"],
-    ["Alabarda", "Armas", 50, "pesado", "arma", "Trespassar"],
-    ["Lança de montaria", "Armas", 55, "pesado", "arma", "Derrubar"],
-    ["Lança longa", "Armas", 50, "pesado", "arma", "Empurrar"],
-    ["Clava", "Armas", 15, "leve", "arma", "Lentidão"],
-    ["Foice curta", "Armas", 15, "leve", "arma", "Ágil"],
-    ["Martelo leve", "Armas", 20, "leve", "arma", "Ágil"],
-    ["Maça", "Armas", 25, "", "arma", "Drenar"],
-    ["Bordão", "Armas", 35, "", "arma", "Derrubar"],
-    ["Bastão", "Armas", 80, "", "arma", "Empurrar"],
-    ["Machadinha", "Armas", 35, "leve", "arma", "Afligir"],
-    ["Clava Grande", "Armas", 30, "", "arma", "Empurrar"],
-    ["Chicote", "Armas", 35, "", "arma", "Desarmar"],
-    ["Peso com corrente", "Armas", 70, "", "arma", "Forma"],
-    ["Kusarigama", "Armas", 80, "", "arma", "Desarmar"],
-    ["Foice Média", "Armas", 45, "leve", "arma", "Afligir"],
-    ["Foice Dupla", "Armas", 90, "pesado", "arma", "Ágil"],
-    ["Mangual Atroz", "Armas", 80, "", "arma", "Garantido"],
-    ["Foice Grande", "Armas", 40, "pesado", "arma", "Derrubar"],
-    ["Mangual", "Armas", 40, "", "arma", "Drenar"],
-    ["Maça Estrela", "Armas", 40, "", "arma", "Drenar"],
-    ["Machado de batalha", "Armas", 50, "", "arma", "Derrubar"],
-    ["Martelo de guerra", "Armas", 50, "", "arma", "Empurrar"],
-    ["Picareta de guerra", "Armas", 50, "", "arma", "Drenar"],
-    ["Kanabo", "Armas", 55, "pesado", "arma", "Derrubar"],
-    ["Marreta", "Armas", 55, "pesado", "arma", "Crítico"],
-    ["Machado grande", "Armas", 55, "pesado", "arma", "Trespassar"],
-    ["Estilingue", "Armas", 15, "leve", "arma", "Afligir"],
-    ["Dardo", "Armas", 1, "", "arma", "Afligir"],
-    ["Funda", "Armas", 15, "", "arma", "Lentidão"],
-    ["Arpão", "Armas", 35, "", "arma", "Drenar"],
-    ["Boleadeira", "Armas", 10, "", "arma", ""],
-    ["Rede", "Armas", 10, "", "arma", ""],
-    ["Bumerangue", "Armas", 50, "", "arma", "Afligir"],
-    ["Arco curto", "Armas", 25, "", "arma", "Afligir"],
-    ["Besta leve", "Armas", 40, "", "arma", "Lentidão"],
-    ["Zarabatana", "Armas", 1, "", "arma", "Afligir"],
-    ["Shuriken", "Armas", 1, "", "arma", "Drenar"],
-    ["Cartão de Metal", "Armas", 1, "", "arma", "Sangramento"],
-    ["Besta de mão", "Armas", 35, "leve", "arma", "Afligir"],
-    ["Besta dupla", "Armas", 70, "", "arma", "Ágil"],
-    ["Besta de repetição", "Armas", 85, "", "arma", "Drenar"],
-    ["Besta automática", "Armas", 50, "", "arma", "Afligir"],
-    ["Arco longo", "Armas", 40, "pesado", "arma", "Lentidão"],
-    ["Arco composto", "Armas", 40, "pesado", "arma", "Estender"],
-    ["Besta pesada", "Armas", 50, "pesado", "arma", "Empurrar"],
-    ["Mosquete", "Armas", 95, "", "arma", "Lentidão"],
-    ["Pistola", "Armas", 95, "", "arma", "Afligir"],
-    ["Bacamarte", "Armas", 95, "", "arma", "Drenar"],
-    ["Canhão", "Armas", 100, "pesado", "arma", "Empurrar"],
-    ["Arcabuz", "Armas", 85, "", "arma", "Garantido"],
-    ["Broquel", "Escudos", 35, "leve", "armadura", "Aparar"],
-    ["Rodela", "Escudos", 35, "leve", "armadura", "Drenar"],
-    ["Escudo padrão", "Escudos", 50, "", "armadura", "Defletir"],
-    ["Escudo grande", "Escudos", 75, "", "armadura", "Derrubar"],
-    ["Escudo aerodinâmico", "Escudos", 75, "", "armadura", "Forma"],
-    ["Escudo de duas mãos", "Escudos", 100, "", "armadura", "Empurrar"],
+    ["Cestus", "Armas", 10, "leve", "arma", "Ágil", 0.5],
+    ["Katar", "Armas", 10, "leve", "arma", "Afligir", 0.5],
+    ["Bagh Nakh", "Armas", 10, "leve", "arma", "Drenar", 0.5],
+    ["Tonfa", "Armas", 20, "leve", "arma", "Aparar", 1],
+    ["Tekko-kagi", "Armas", 20, "leve", "arma", "Desarmar", 1],
+    ["Lu Jiao Dao", "Armas", 20, "leve", "arma", "Ágil", 1],
+    ["Nunchaku", "Armas", 20, "leve", "arma", "Drenar", 1],
+    ["Sansetsukon", "Armas", 40, "", "arma", "Desarmar", 1],
+    ["Agulha", "Armas", 1, "leve", "arma", "Forma", null],
+    ["Jitte", "Armas", 25, "leve", "arma", "Desarmar", 0.5],
+    ["Adaga", "Armas", 30, "leve", "arma", "Ágil", 0.5],
+    ["Kunai", "Armas", 20, "leve", "arma", "Lentidão", 0.5],
+    ["Punhal", "Armas", 25, "leve", "arma", "Forma", 1],
+    ["Adaga Kris", "Armas", 25, "leve", "arma", "Sangramento", 1],
+    ["Sai", "Armas", 25, "leve", "arma", "Aparar", 0.5],
+    ["Hunga-munga", "Armas", 35, "leve", "arma", "Aparar", 1],
+    ["Kpinga", "Armas", 30, "leve", "arma", "Desarmar", 1],
+    ["Urumi", "Armas", 35, "leve", "arma", "Sangramento", 0.5],
+    ["Espada Curta", "Armas", 40, "leve", "arma", "Afligir", 1],
+    ["Cimitarra", "Armas", 40, "leve", "arma", "Ágil", 1],
+    ["Kopesh", "Armas", 45, "leve", "arma", "Drenar", 2],
+    ["Espada Gancho", "Armas", 40, "leve", "arma", "Desarmar", 2],
+    ["Lâmina gêmea", "Armas", 80, "", "arma", "Ágil", 2],
+    ["Falchion", "Armas", 50, "", "arma", "Garantido", 1],
+    ["Rapieira", "Armas", 50, "", "arma", "Afligir", 1],
+    ["Estoc", "Armas", 50, "", "arma", "Drenar", 1],
+    ["Espada Longa", "Armas", 50, "", "arma", "Drenar", 2],
+    ["Flamberge", "Armas", 50, "", "arma", "Sangramento", 2],
+    ["Espada Bastarda", "Armas", 50, "", "arma", "Garantido", 1],
+    ["Katana", "Armas", 60, "", "arma", "Afligir", 1],
+    ["Espada Grande", "Armas", 55, "pesado", "arma", "Garantido", 3],
+    ["Clava Colossal", "Armas", 85, "pesado", "arma", "Derrubar", 30],
+    ["Espada Colossal", "Armas", 85, "pesado", "arma", "Trespassar", 30],
+    ["Machado Colossal", "Armas", 85, "pesado", "arma", "Crítico", 30],
+    ["Martelo Colossal", "Armas", 85, "pesado", "arma", "Drenar", 30],
+    ["Shuriken Gigante", "Armas", 75, "pesado", "arma", "Trespassar", 10],
+    ["Arco Colossal", "Armas", 80, "pesado", "arma", "Trespassar", 30],
+    ["Besta Colossal", "Armas", 80, "pesado", "arma", "Empurrar", 30],
+    ["Azagaia", "Armas", 35, "", "arma", "Lentidão", 1],
+    ["Lança", "Armas", 40, "", "arma", "Drenar", 1.5],
+    ["Tridente", "Armas", 55, "", "arma", "Derrubar", 2],
+    ["Glaive", "Armas", 50, "pesado", "arma", "Garantido", 3],
+    ["Alabarda", "Armas", 50, "pesado", "arma", "Trespassar", 3],
+    ["Lança de montaria", "Armas", 55, "pesado", "arma", "Derrubar", 3],
+    ["Lança longa", "Armas", 50, "pesado", "arma", "Empurrar", 3],
+    ["Clava", "Armas", 15, "leve", "arma", "Lentidão", 1],
+    ["Foice curta", "Armas", 15, "leve", "arma", "Ágil", 1],
+    ["Martelo leve", "Armas", 20, "leve", "arma", "Ágil", 1],
+    ["Maça", "Armas", 25, "", "arma", "Drenar", 2],
+    ["Bordão", "Armas", 35, "", "arma", "Derrubar", 2],
+    ["Bastão", "Armas", 80, "", "arma", "Empurrar", 1],
+    ["Machadinha", "Armas", 35, "leve", "arma", "Afligir", 1],
+    ["Clava Grande", "Armas", 30, "", "arma", "Empurrar", 4.5],
+    ["Chicote", "Armas", 35, "", "arma", "Desarmar", 1],
+    ["Peso com corrente", "Armas", 70, "", "arma", "Forma", 2],
+    ["Kusarigama", "Armas", 80, "", "arma", "Desarmar", 2],
+    ["Foice Média", "Armas", 45, "leve", "arma", "Afligir", 2],
+    ["Foice Dupla", "Armas", 90, "pesado", "arma", "Ágil", 2],
+    ["Mangual Atroz", "Armas", 80, "", "arma", "Garantido", 4],
+    ["Foice Grande", "Armas", 40, "pesado", "arma", "Derrubar", 2],
+    ["Mangual", "Armas", 40, "", "arma", "Drenar", 1],
+    ["Maça Estrela", "Armas", 40, "", "arma", "Drenar", 2],
+    ["Machado de batalha", "Armas", 50, "", "arma", "Derrubar", 2],
+    ["Martelo de guerra", "Armas", 50, "", "arma", "Empurrar", 2],
+    ["Picareta de guerra", "Armas", 50, "", "arma", "Drenar", 1],
+    ["Kanabo", "Armas", 55, "pesado", "arma", "Derrubar", 5],
+    ["Marreta", "Armas", 55, "pesado", "arma", "Crítico", 5],
+    ["Machado grande", "Armas", 55, "pesado", "arma", "Trespassar", 3],
+    ["Estilingue", "Armas", 15, "leve", "arma", "Afligir", 0.5],
+    ["Dardo", "Armas", 1, "", "arma", "Afligir", 0.1],
+    ["Funda", "Armas", 15, "", "arma", "Lentidão", null],
+    ["Arpão", "Armas", 35, "", "arma", "Drenar", 2],
+    ["Boleadeira", "Armas", 10, "", "arma", "", 1],
+    ["Rede", "Armas", 10, "", "arma", "", 1],
+    ["Bumerangue", "Armas", 50, "", "arma", "Afligir", 1],
+    ["Arco curto", "Armas", 25, "", "arma", "Afligir", 1],
+    ["Besta leve", "Armas", 40, "", "arma", "Lentidão", 2.5],
+    ["Zarabatana", "Armas", 1, "", "arma", "Afligir", 0.5],
+    ["Shuriken", "Armas", 1, "", "arma", "Drenar", null],
+    ["Cartão de Metal", "Armas", 1, "", "arma", "Sangramento", null],
+    ["Besta de mão", "Armas", 35, "leve", "arma", "Afligir", 1.5],
+    ["Besta dupla", "Armas", 70, "", "arma", "Ágil", 1.5],
+    ["Besta de repetição", "Armas", 85, "", "arma", "Drenar", 1.5],
+    ["Besta automática", "Armas", 50, "", "arma", "Afligir", 1.5],
+    ["Arco longo", "Armas", 40, "pesado", "arma", "Lentidão", 1],
+    ["Arco composto", "Armas", 40, "pesado", "arma", "Estender", 1],
+    ["Besta pesada", "Armas", 50, "pesado", "arma", "Empurrar", 8],
+    ["Mosquete", "Armas", 95, "", "arma", "Lentidão", 5],
+    ["Pistola", "Armas", 95, "", "arma", "Afligir", 1.5],
+    ["Bacamarte", "Armas", 95, "", "arma", "Drenar", 5],
+    ["Canhão", "Armas", 100, "pesado", "arma", "Empurrar", 20],
+    ["Arcabuz", "Armas", 85, "", "arma", "Garantido", 6],
+    ["Broquel", "Escudos", 35, "leve", "armadura", "Aparar", 1],
+    ["Rodela", "Escudos", 35, "leve", "armadura", "Drenar", 1],
+    ["Escudo padrão", "Escudos", 50, "", "armadura", "Defletir", 3],
+    ["Escudo grande", "Escudos", 75, "", "armadura", "Derrubar", 5],
+    ["Escudo aerodinâmico", "Escudos", 75, "", "armadura", "Forma", 2],
+    ["Escudo de duas mãos", "Escudos", 100, "", "armadura", "Empurrar", 20],
     // Focos de conjuração (p. 159): tempo de criação igual ao de armas (p. 170)
-    ["Foco arcano: Bastão", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco arcano: Cajado", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco arcano: Cristal", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco arcano: Orbe", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco arcano: Varinha", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco druídico: Cajado de madeira", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco druídico: Ramo de visco", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco druídico: Totem", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Foco druídico: Varinha de teixo", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Símbolo sagrado: Amuleto", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Símbolo sagrado: Emblema", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Símbolo sagrado: Relicário", "Focos de Conjuração", 75, "", "arma", ""],
-    ["Instrumento musical", "Instrumentos e Acessórios", 75, "", "arma", ""],
-    ["Carregador de munição (10 munições)", "Instrumentos e Acessórios", 5, "", "arma", ""],
-    ["Acolchoada", "Armaduras", 10, "leve", "armadura", ""],
-    ["Couro", "Armaduras", 30, "leve", "armadura", ""],
-    ["Brigantina", "Armaduras", 30, "leve", "armadura", ""],
-    ["Couro batido", "Armaduras", 75, "leve", "armadura", ""],
-    ["Peça de Armadura", "Armaduras", 50, "leve", "armadura", ""],
-    ["Gibão de peles", "Armaduras", 10, "", "armadura", ""],
-    ["Camisão de malha", "Armaduras", 30, "", "armadura", ""],
-    ["Brunea", "Armaduras", 30, "", "armadura", ""],
-    ["Peitoral", "Armaduras", 75, "", "armadura", ""],
-    ["Meia-armadura", "Armaduras", 50, "", "armadura", ""],
-    ["Cota de anéis", "Armaduras", 20, "pesado", "armadura", ""],
-    ["Cota de malha", "Armaduras", 75, "pesado", "armadura", ""],
-    ["Cota de talas", "Armaduras", 250, "pesado", "armadura", ""],
-    ["Placas", "Armaduras", 750, "pesado", "armadura", ""],
-    ["Placas encouraçada", "Armaduras", 2000, "pesado", "armadura", ""],
-    ["Flecha (1 unidade)", "Munições", 0.05, "", "municao", ""],
-    ["Virote (1 unidade)", "Munições", 0.05, "", "municao", ""],
-    ["Bala — funda / arma de fogo (1 unidade)", "Munições", 0.05, "", "municao", ""],
-    ["Bala colossal — canhão (1 unidade)", "Munições", 0.05, "pesado", "municao", ""],
-    ["Agulha de Zarabatana (1 unidade)", "Munições", 0.02, "", "municao", ""],
-    ["Pólvora negra", "Pólvoras", 5, "", "polvora", ""],
-    ["Pólvora elukiana", "Pólvoras", 15, "", "polvora", ""],
-    ["Pólvora silente", "Pólvoras", 15, "", "polvora", ""],
-    ["Pólvora fumegante", "Pólvoras", 20, "", "polvora", ""],
-    ["Pólvora potente", "Pólvoras", 30, "", "polvora", ""],
-    ["Pólvora refinada", "Pólvoras", 50, "", "polvora", ""],
-    ["Pólvora de luz", "Pólvoras", 75, "", "polvora", ""],
-    ["Pólvora vermelha", "Pólvoras", 100, "", "polvora", ""],
-    ["Pólvora azul", "Pólvoras", 100, "", "polvora", ""],
-    ["Pólvora amarela", "Pólvoras", 100, "", "polvora", ""],
-    ["Pólvora verde", "Pólvoras", 100, "", "polvora", ""]
+    ["Foco arcano: Bastão", "Focos de Conjuração", 75, "", "arma", "", 1],
+    ["Foco arcano: Cajado", "Focos de Conjuração", 75, "", "arma", "", 2],
+    ["Foco arcano: Cristal", "Focos de Conjuração", 75, "", "arma", "", 0.5],
+    ["Foco arcano: Orbe", "Focos de Conjuração", 75, "", "arma", "", 1.5],
+    ["Foco arcano: Varinha", "Focos de Conjuração", 75, "", "arma", "", 0.5],
+    ["Foco druídico: Cajado de madeira", "Focos de Conjuração", 75, "", "arma", "", 2],
+    ["Foco druídico: Ramo de visco", "Focos de Conjuração", 75, "", "arma", "", null],
+    ["Foco druídico: Totem", "Focos de Conjuração", 75, "", "arma", "", null],
+    ["Foco druídico: Varinha de teixo", "Focos de Conjuração", 75, "", "arma", "", 0.5],
+    ["Símbolo sagrado: Amuleto", "Focos de Conjuração", 75, "", "arma", "", 0.5],
+    ["Símbolo sagrado: Emblema", "Focos de Conjuração", 75, "", "arma", "", null],
+    ["Símbolo sagrado: Relicário", "Focos de Conjuração", 75, "", "arma", "", 1],
+    ["Instrumento musical", "Instrumentos e Acessórios", 75, "", "arma", "", null],
+    ["Carregador de munição (10 munições)", "Instrumentos e Acessórios", 5, "", "arma", "", null],
+    ["Acolchoada", "Armaduras", 10, "leve", "armadura", "", 4],
+    ["Couro", "Armaduras", 30, "leve", "armadura", "", 5],
+    ["Brigantina", "Armaduras", 30, "leve", "armadura", "", 6],
+    ["Couro batido", "Armaduras", 75, "leve", "armadura", "", 6],
+    ["Peça de Armadura", "Armaduras", 50, "leve", "armadura", "", 2],
+    ["Gibão de peles", "Armaduras", 10, "", "armadura", "", 6],
+    ["Camisão de malha", "Armaduras", 30, "", "armadura", "", 10],
+    ["Brunea", "Armaduras", 30, "", "armadura", "", 22],
+    ["Peitoral", "Armaduras", 75, "", "armadura", "", 10],
+    ["Meia-armadura", "Armaduras", 50, "", "armadura", "", 20],
+    ["Cota de anéis", "Armaduras", 20, "pesado", "armadura", "", 20],
+    ["Cota de malha", "Armaduras", 75, "pesado", "armadura", "", 27],
+    ["Cota de talas", "Armaduras", 250, "pesado", "armadura", "", 30],
+    ["Placas", "Armaduras", 750, "pesado", "armadura", "", 32],
+    ["Placas encouraçada", "Armaduras", 2000, "pesado", "armadura", "", 45],
+    ["Flecha (1 unidade)", "Munições", 0.05, "", "municao", "", 0.005],
+    ["Virote (1 unidade)", "Munições", 0.05, "", "municao", "", 0.005],
+    ["Bala — funda / arma de fogo (1 unidade)", "Munições", 0.05, "", "municao", "", 0.0375],
+    ["Bala colossal — canhão (1 unidade)", "Munições", 0.05, "pesado", "municao", "", 1.0375],
+    ["Agulha de Zarabatana (1 unidade)", "Munições", 0.02, "", "municao", "", null],
+    ["Pólvora negra", "Pólvoras", 5, "", "polvora", "", null],
+    ["Pólvora elukiana", "Pólvoras", 15, "", "polvora", "", null],
+    ["Pólvora silente", "Pólvoras", 15, "", "polvora", "", null],
+    ["Pólvora fumegante", "Pólvoras", 20, "", "polvora", "", null],
+    ["Pólvora potente", "Pólvoras", 30, "", "polvora", "", null],
+    ["Pólvora refinada", "Pólvoras", 50, "", "polvora", "", null],
+    ["Pólvora de luz", "Pólvoras", 75, "", "polvora", "", null],
+    ["Pólvora vermelha", "Pólvoras", 100, "", "polvora", "", null],
+    ["Pólvora azul", "Pólvoras", 100, "", "polvora", "", null],
+    ["Pólvora amarela", "Pólvoras", 100, "", "polvora", "", null],
+    ["Pólvora verde", "Pólvoras", 100, "", "polvora", "", null]
   ].map(function (r) {
-    return { nome: r[0], grupo: r[1], pde: r[2], peso: r[3], tipo: r[4], maestria: r[5] };
+    return { nome: r[0], grupo: r[1], pde: r[2], peso: r[3], tipo: r[4], maestria: r[5], pesoKg: r[6] != null ? r[6] : null };
   });
 
   // Modificações (Guia de Xyleff Sualky, p. 163–168): [nome, custo, compatível, efeito]
@@ -3064,19 +3210,19 @@
 
   // Munições (p. 171): horas por tier, rendem 2d4 e custam o equivalente a 4 unidades
   var MUNICAO_HORAS = { D: 1, C: 1, B: 6, A: 12, S: 24 };
-  // Cargas de Pólvora para Bombas (p. 217 + preços p. 160)
+  // Cargas de Pólvora (armas de fogo p. 159 + bombas p. 217 + preços p. 160)
   var POLVORAS_BOMBA_DB = [
-    { id: 'negra', categoria: 'Básica e Utilitária', nome: 'Pólvora Negra (padrão)', preco: 5, efeito: 'Pólvora padrão já inclusa no preço base da bomba.' },
-    { id: 'elukiana', categoria: 'Básica e Utilitária', nome: 'Pólvora Elukiana', preco: 15, efeito: 'O pavio queima mesmo submerso e a bomba explode debaixo d’água.' },
-    { id: 'silente', categoria: 'Básica e Utilitária', nome: 'Pólvora Silente', preco: 15, efeito: 'O pavio não faz som enquanto queima.' },
-    { id: 'fumegante', categoria: 'Básica e Utilitária', nome: 'Pólvora Fumegante', preco: 20, efeito: 'Cria o efeito da Bomba de Fumaça no local (ou dobra a duração se já for de Fumaça; na Bombinha de Fumaça estende +2 rodadas).' },
-    { id: 'luz', categoria: 'Básica e Utilitária', nome: 'Pólvora de Luz', preco: 75, efeito: 'Cria o efeito da Bomba de Clarão na área (ou dobra a duração se já for de Clarão).' },
-    { id: 'poderosa', categoria: 'Potência e Dano', nome: 'Pólvora Poderosa (Potente)', preco: 30, efeito: 'Dobra o raio da explosão e a área de efeito da bomba.' },
-    { id: 'refinada', categoria: 'Potência e Dano', nome: 'Pólvora Refinada', preco: 50, efeito: 'Causa dano extra igual ao seu nível de personagem (mesmo tipo da bomba, ou fogo se não causar dano).' },
-    { id: 'vermelha', categoria: 'Elemental', nome: 'Pólvora Vermelha', preco: 100, efeito: 'Muda o dano da bomba para Fogo (ou soma seu bônus de proficiência se já causar Fogo).' },
-    { id: 'azul', categoria: 'Elemental', nome: 'Pólvora Azul', preco: 100, efeito: 'Muda o dano da bomba para Frio (ou soma seu bônus de proficiência se já causar Frio).' },
-    { id: 'amarela', categoria: 'Elemental', nome: 'Pólvora Amarela', preco: 100, efeito: 'Muda o dano da bomba para Eletricidade (ou soma seu bônus de proficiência se já causar Eletricidade).' },
-    { id: 'verde', categoria: 'Elemental', nome: 'Pólvora Verde', preco: 100, efeito: 'Muda o dano da bomba para Ácido (ou soma seu bônus de proficiência se já causar Ácido).' }
+    { id: 'negra', categoria: 'Básica e Utilitária', nome: 'Pólvora Negra (padrão)', preco: 5, efeitoArma: 'Opção mais barata e comum de pólvora para disparos padrão.', efeito: 'Pólvora padrão já inclusa no preço base da bomba.' },
+    { id: 'elukiana', categoria: 'Básica e Utilitária', nome: 'Pólvora Elukiana', preco: 15, efeitoArma: 'Mantém suas propriedades mesmo molhada ou submersa, permitindo disparos debaixo d’água.', efeito: 'O pavio queima mesmo submerso e a bomba explode debaixo d’água.' },
+    { id: 'silente', categoria: 'Básica e Utilitária', nome: 'Pólvora Silente', preco: 15, efeitoArma: 'Suprime o estrondo do disparo, que não pode ser ouvido além de 3 metros.', efeito: 'O pavio não faz som enquanto queima.' },
+    { id: 'fumegante', categoria: 'Básica e Utilitária', nome: 'Pólvora Fumegante', preco: 20, efeitoArma: 'Gera área de fumaça leve (penumbra) a 1,5 m à frente após o disparo até o início do seu próximo turno.', efeito: 'Cria o efeito da Bomba de Fumaça no local (ou dobra a duração se já for de Fumaça; na Bombinha de Fumaça estende +2 rodadas).' },
+    { id: 'luz', categoria: 'Básica e Utilitária', nome: 'Pólvora de Luz', preco: 75, efeitoArma: 'Clarão no alcance do queima-roupa: criaturas fazem TR de Constituição (CD 8 + DES + BP) ou ficam cegas até o início do próximo turno delas (1× por combate).', efeito: 'Cria o efeito da Bomba de Clarão na área (ou dobra a duração se já for de Clarão).' },
+    { id: 'poderosa', categoria: 'Potência e Dano', nome: 'Pólvora Poderosa (Potente)', preco: 30, efeitoArma: 'Aumenta o dano do ataque em +1d10, eleva em +3 o valor para ativar Emperrado e empurra usuário Pequeno ou menor 1,5 m para trás.', efeito: 'Dobra o raio da explosão e a área de efeito da bomba.' },
+    { id: 'refinada', categoria: 'Potência e Dano', nome: 'Pólvora Refinada', preco: 50, efeitoArma: 'Composição estável que concede +1 nas jogadas de ataque.', efeito: 'Causa dano extra igual ao seu nível de personagem (mesmo tipo da bomba, ou fogo se não causar dano).' },
+    { id: 'vermelha', categoria: 'Elemental', nome: 'Pólvora Vermelha', preco: 100, efeitoArma: 'Dano de queima-roupa vira o dobro do seu bônus de proficiência (fogo).', efeito: 'Muda o dano da bomba para Fogo (ou soma seu bônus de proficiência se já causar Fogo).' },
+    { id: 'azul', categoria: 'Elemental', nome: 'Pólvora Azul', preco: 100, efeitoArma: 'Dano de queima-roupa vira o dobro do seu bônus de proficiência e passa a causar dano de frio.', efeito: 'Muda o dano da bomba para Frio (ou soma seu bônus de proficiência se já causar Frio).' },
+    { id: 'amarela', categoria: 'Elemental', nome: 'Pólvora Amarela', preco: 100, efeitoArma: 'Dano de queima-roupa vira o dobro do seu bônus de proficiência e passa a causar dano elétrico.', efeito: 'Muda o dano da bomba para Eletricidade (ou soma seu bônus de proficiência se já causar Eletricidade).' },
+    { id: 'verde', categoria: 'Elemental', nome: 'Pólvora Verde', preco: 100, efeitoArma: 'Dano de queima-roupa vira o dobro do seu bônus de proficiência e passa a causar dano ácido.', efeito: 'Muda o dano da bomba para Ácido (ou soma seu bônus de proficiência se já causar Ácido).' }
   ];
 
   // 16 Bombas do Guia (p. 217–220)
@@ -3202,7 +3348,7 @@
   RAMOS_DB.forEach(function (r) { RAMOS_MAP[r.id] = r; });
 
 
-  // 23 Receitas de Herbalismo (p. 149–150) — 1h por item
+  // Receitas de Herbalismo (p. 149-150, 1h por item)
   var HERBAL_DB = [
     {
       id: 'oleo_linhaca', categoria: 'Manutenção e Utilidades', nome: 'Óleo de Linhaça Fervido', preco: 1, rende: '1d10 usos', destaque: 'Forjador',
@@ -3385,6 +3531,7 @@
     artesaoModo: 'duplo',
     materiaisPossuidos: false,
     pressa: false,
+    ajudante: false,
     mostrarDureza: true,
     tipoItem: 'arma',
     fracaoFixa: false,
@@ -3425,6 +3572,7 @@
     bmMunModExistente: false,
     bmPressa: false,
     bmObra: false,
+    bmAjudante: false,
     bmPolvId: '',
     bmPolvQtd: 1,
     // Oficina Herbalismo
@@ -3432,6 +3580,7 @@
     herbalQtd: 1,
     herbalOrigem: 'comprar-ramos',
     herbalArtesao: true,
+    herbalAjudante: false,
     herbalModo: 'proprio',
     herbalLucro: 50
   };
@@ -3517,8 +3666,7 @@
     return rounded.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   }
 
-  // Moedas do D&D (Livro do Jogador): 1 po = 10 pp = 100 pc. Electro e platina ficam de fora,
-  // como o próprio livro sugere (são incomuns em transações). Arredonda para a peça de cobre.
+  // 1 po = 10 pp = 100 pc (sem electro/platina, arredonda em pc)
   function moedas(n) {
     var c = Math.round(Math.abs(isFinite(n) ? n : 0) * 100);
     var partes = [];
@@ -3533,7 +3681,7 @@
     var m = moedas(n);
     return (m.neg ? '−' : '') + m.partes.map(function (p) { return p[0] + ' ' + p[1]; }).join(' ');
   }
-  // Versão do número grande: a primeira moeda em destaque, as outras menores
+  // Destaca a moeda principal e diminui o resto
   function htmlMoeda(n) {
     var m = moedas(n);
     return m.partes.map(function (p, i) {
@@ -3546,7 +3694,7 @@
     return isFinite(n) ? n : (fallback || 0);
   }
 
-  // --- DOM refs ---
+  // Elementos da tela
   var pdeInput = document.getElementById('pde');
   var artesaoSwitch = document.getElementById('artesao-switch');
   var artesaoModoWrap = document.getElementById('artesao-modo-wrap');
@@ -3601,10 +3749,11 @@
   var modsTotal = document.getElementById('mods-total');
   var transmutNivelSelect = document.getElementById('transmut-nivel');
 
-  // Switches simples: id do botão → chave do estado → o que recalcular
+  // Switches simples (id do botão, chave no estado e ação)
   var SIMPLE_SWITCHES = [
     ['existente-switch', 'modExistente', 'main'],
     ['obra-switch', 'obraPrima', 'main'],
+    ['ajudante-switch', 'ajudante', 'main'],
     ['melhor-switch', 'melhorDosMelhores', 'main'],
     ['encantar-switch', 'encantarExistente', 'magic'],
     ['desencantado-switch', 'desencantado', 'magic'],
@@ -3612,13 +3761,37 @@
   ];
 
   var autoForjSwitch = document.getElementById('auto-forj-switch');
-  var autoMagicSwitch = document.getElementById('automaticas-switch');
   var excaliburSwitch = document.getElementById('excalibur-switch');
   var excaliburSetting = document.getElementById('excalibur-setting');
   var consertoNoteEl = document.getElementById('conserto-note');
+  var forjHighCountEl = document.getElementById('forj-high-count');
+  var magicosActiveCountEl = document.getElementById('magicos-active-count');
+  var lucroPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#lucro-presets .btn-chip'));
 
   function maxMaterials() {
     return state && state.excalibur && state.tipoItem === 'arma' ? 6 : 4;
+  }
+
+  function attachComboClear(wrap, input, onClear) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'mat-clear-btn';
+    btn.innerHTML = ICON_X;
+    btn.setAttribute('aria-label', 'Limpar campo');
+    btn.title = 'Limpar';
+    function sync() { btn.hidden = !input.value; }
+    btn.addEventListener('mousedown', function (ev) {
+      ev.preventDefault();
+      input.value = '';
+      sync();
+      if (onClear) onClear();
+      else input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.focus();
+    });
+    input.addEventListener('input', sync);
+    wrap.appendChild(btn);
+    sync();
+    return sync;
   }
 
   function buildMaterialCombo(idx, mat, multInput, tierSelect) {
@@ -3658,6 +3831,7 @@
       state.materials[idx].mult = m.mult;
       state.materials[idx].tier = m.tier;
       input.value = m.nome;
+      syncClear();
       var rowEl = input.closest('.material-row');
       if (rowEl) rowEl.dataset.tier = m.tier;
       if (m.tier === 'S' && window.Forja) window.Forja.sparksAt(input, 'purple');
@@ -3669,7 +3843,8 @@
       multInput.title = tierSelect.title = 'Definido pelo material — apague o nome para digitar um material personalizado';
       saveState();
       closeDropdown();
-      update();
+      if (m.forcaPesado && state.peso !== 'pesado') setPeso('pesado');
+      else update();
     }
 
     function highlight(newIndex) {
@@ -3714,7 +3889,8 @@
           nameSpan.textContent = m.nome;
           var multSpan = document.createElement('span');
           multSpan.className = 'mo-mult';
-          multSpan.textContent = '×' + m.mult;
+          var modTxt = m.mod && m.mod !== '+0' && m.mod !== '0' ? ' · ' + m.mod : '';
+          multSpan.textContent = '×' + m.mult + modTxt;
           opt.appendChild(nameSpan);
           opt.appendChild(multSpan);
           opt.addEventListener('mousedown', function (e) {
@@ -3770,6 +3946,7 @@
     });
 
     wrap.appendChild(input);
+    var syncClear = attachComboClear(wrap, input);
     wrap.appendChild(dropdown);
     return wrap;
   }
@@ -3901,8 +4078,7 @@
       proprio = possuidos ? 0 : subtotal / divisor;
     }
 
-    // Modificação de munição: preço fixo por munição, fora do multiplicador do material.
-    // O Forjador paga metade (Trabalhador Itinerante) e o Artesão desconta, como no resto.
+    // Mod de munição soma por unidade, fora do multiplicador do material
     var proprioItem = proprio;
     var modMun = null;
     var mm = state.tipoItem === 'municao' ? MUNICAO_MODS[state.municaoMod] : null;
@@ -3914,11 +4090,16 @@
       proprio = modMun.existente ? pagoMod : proprio + pagoMod;
     }
 
-    var consertoCheio = cheio / 2;
+    var temMaterialVivo = (state.materials || []).some(function (row) {
+      var m = row.materialId ? materialById(row.materialId) : null;
+      return !!(m && m.materialVivo);
+    });
+    var consertoVivo = conserto && temMaterialVivo;
+    var consertoCheio = consertoVivo ? 0 : cheio / 2;
     var lucroValor = 0;
     var final = proprio;
     if (conserto) {
-      final = proprio / 2;
+      final = consertoVivo ? 0 : proprio / 2;
     } else if (state.modo === 'vendido') {
       lucroValor = proprio * (lucro / 100);
       final = proprio + lucroValor;
@@ -3929,7 +4110,8 @@
       pdeDesc: pdeDesc, matDesc: matDesc, subtotal: subtotal, proprio: proprio,
       cheio: cheio, cheioPadrao: cheioPadrao, usaFracaoFixa: usaFracaoFixa,
       lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota,
-      duplo: duplo, modMun: modMun, proprioItem: proprioItem, conserto: conserto, consertoCheio: consertoCheio
+      duplo: duplo, modMun: modMun, proprioItem: proprioItem, conserto: conserto,
+      consertoCheio: consertoCheio, consertoVivo: consertoVivo
     };
   }
 
@@ -3998,6 +4180,127 @@
     });
   }
 
+  function capFirst(s) {
+    return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+  }
+
+  function clauseTargets(clause) {
+    var s = clause.toLowerCase();
+    var t = {};
+    var hasArmasComMun = /armas?\s+com\s+(a\s+propriedade\s+)?muni[cç][aã]o/.test(s);
+    var hasArmasCorpo = /armas?\s+corpo\s+a\s+corpo|armas?\s+de\s+(corte|perfura|concuss|arremesso)|arremesso/.test(s);
+    var hasArmasDist = /armas?\s+[àa]\s+dist[âa]ncia|ou\s+[àa]\s+dist[âa]ncia/.test(s);
+    var hasArmasMunSlash = /armas?\/muni[cç]/.test(s);
+    var hasArmasGen = /\barmas?\b/.test(s) && !hasArmasComMun && !hasArmasCorpo && !hasArmasDist && !hasArmasMunSlash;
+    var hasMunicao = hasArmasMunSlash || /(?:^|[\s,/(])muni[cç][oõ]es\b|disparos\s+de\s+muni[cç][aã]o|\bmuni[cç][aã]o\s+(com|gera|quebra)/.test(s);
+    var hasArmadura = /\barmaduras?\b/.test(s);
+    var hasEscudo = /\bescudos?\b/.test(s);
+    var hasFoco = /\bfocos?\b|\bcanalizadores?\b/.test(s);
+
+    if (hasArmasCorpo || hasArmasMunSlash || hasArmasGen) t.melee = true;
+    if (hasArmasComMun || hasArmasDist || hasArmasMunSlash || hasArmasGen) t.ranged = true;
+    if (hasMunicao) t.municao = true;
+    if (hasArmadura) t.armadura = true;
+    if (hasEscudo) t.escudo = true;
+    if (hasFoco) t.foco = true;
+    return t;
+  }
+
+  function matchesItemCtx(targets, itemCtx) {
+    var keys = Object.keys(targets);
+    if (!keys.length || !itemCtx || itemCtx === 'all') return true;
+    if (itemCtx === 'arma_all') return !!(targets.melee || targets.ranged);
+    if (itemCtx === 'armadura_escudo') return !!(targets.armadura || targets.escudo);
+    return !!targets[itemCtx];
+  }
+
+  function cleanClauseForCtx(txt, itemCtx) {
+    if (!txt || !itemCtx || itemCtx === 'all') return txt;
+    var s = txt;
+    if (itemCtx === 'municao') {
+      s = s
+        .replace(/armas\s+corpo\s+a\s+corpo,\s*de\s+arremesso\s+ou\s+(?:à\s+distância|muni[cç][oõ]es)/gi, 'munições')
+        .replace(/armas\s+de\s+(?:corte\/perfura[cç][aã]o|concuss[aã]o)\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas\s+corpo\s+a\s+corpo\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas,\s*escudos\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas\/muni[cç][oõ]es/gi, 'munições')
+        .replace(/muni[cç][oõ]es\s+e\s+armas\s+de\s+arremesso/gi, 'munições')
+        .replace(/\b(em\s+)armas\s+corpo\s+a\s+corpo,\s*de\s+arremesso\s+ou\s+muni[cç][oõ]es/gi, '$1munições')
+        .replace(/\barmas\s+corpo\s+a\s+corpo\s+ou\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/\s*\(exceto\s+muni[cç][oõ]es\)/gi, '');
+    } else {
+      // Na Forja não há munição: remove referências a munições das frases de armas/escudos
+      s = s
+        .replace(/armas\/muni[cç][oõ]es/gi, 'armas')
+        .replace(/armas\s+de\s+corte\/perfura[cç][aã]o\s+e\s+muni[cç][oõ]es/gi, 'armas de corte/perfuração')
+        .replace(/armas\s+corpo\s+a\s+corpo,\s*de\s+arremesso\s+ou\s+muni[cç][oõ]es/gi, 'armas corpo a corpo ou de arremesso')
+        .replace(/armas\s+corpo\s+a\s+corpo\s+e\s+muni[cç][oõ]es/gi, 'armas corpo a corpo')
+        .replace(/armas\s+e\s+muni[cç][oõ]es/gi, 'armas')
+        .replace(/armas,\s*escudos\s+e\s+muni[cç][oõ]es/gi, itemCtx === 'escudo' ? 'escudos' : 'armas')
+        .replace(/muni[cç][oõ]es\s+e\s+armas\s+de\s+arremesso/gi, 'armas de arremesso')
+        .replace(/,\s*de\s+arremesso\s+ou\s+muni[cç][oõ]es/gi, ' ou de arremesso')
+        .replace(/\s*\(armas\/muni[cç][oõ]es\)/gi, ' (armas)')
+        .replace(/\s*\(sempre\s+ativa\s+em\s+cr[ií]ticos\s+de\s+arma\s+ou\s+disparos\s+de\s+muni[cç][aã]o\)/gi, ' (sempre ativa em críticos de arma)');
+      if (itemCtx === 'armadura') {
+        s = s
+          .replace(/armaduras\s+m[ée]dias\/pesadas\s+e\s+escudos/gi, 'armaduras médias/pesadas')
+          .replace(/armaduras\/escudos/gi, 'armaduras')
+          .replace(/armaduras\s+e\s+escudos/gi, 'armaduras')
+          .replace(/armadura\s+ou\s+escudo/gi, 'armadura');
+      } else if (itemCtx === 'escudo') {
+        s = s
+          .replace(/armaduras\s+m[ée]dias\/pesadas\s+e\s+escudos/gi, 'escudos')
+          .replace(/armaduras\/escudos/gi, 'escudos')
+          .replace(/armaduras\s+e\s+escudos/gi, 'escudos')
+          .replace(/armadura\s+ou\s+escudo/gi, 'escudo');
+      }
+    }
+    return capFirst(s.trim());
+  }
+
+  function filterMaterialClauses(text, itemCtx) {
+    if (!text) return [];
+    var sharedPrefix = '';
+    var body = text;
+    var m = text.match(/^(Ao sofrer ou canalizar[^:]+:|Material vivo(?:\s+[^:]+)?\:)\s*(.+)$/i);
+    if (m && m[2].indexOf(';') !== -1) {
+      sharedPrefix = m[1];
+      body = m[2];
+    }
+    var parts = body.split(';').map(function (p) { return p.replace(/^[,;\s]+|[,;\s]+$/g, ''); }).filter(Boolean);
+    var out = [];
+    if (sharedPrefix && /^Material vivo/i.test(sharedPrefix)) {
+      out.push(sharedPrefix.replace(/:$/, '') + '.');
+      sharedPrefix = '';
+    }
+    parts.forEach(function (p) {
+      var targets = clauseTargets(p);
+      if (matchesItemCtx(targets, itemCtx)) {
+        var cleaned = cleanClauseForCtx(p, itemCtx);
+        var txt = sharedPrefix ? (sharedPrefix + ' ' + cleaned.charAt(0).toLowerCase() + cleaned.slice(1)) : cleaned;
+        out.push(/[.!?]$/.test(txt) ? txt : txt + '.');
+      }
+    });
+    return out;
+  }
+
+  function currentForjaCtx() {
+    if (state.equipNome) {
+      var eq = null;
+      EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+      if (eq) {
+        if (eq.grupo === 'Escudos') return 'escudo';
+        if (eq.grupo === 'Focos de Conjuração') return 'foco';
+        if (eq.tipo === 'armadura') return 'armadura';
+        if (RANGED_AMMO_SET[eq.nome]) return 'ranged';
+        return 'melee';
+      }
+    }
+    if (state.tipoItem === 'armadura') return 'armadura_escudo';
+    return 'arma_all';
+  }
+
   var lastVantKey = '';
   function renderVantagens() {
     vantagensRowsEl.innerHTML = '';
@@ -4014,7 +4317,8 @@
       return;
     }
 
-    var vantKey = known.map(function (m) { return m.id; }).join(',') + '|' + state.mostrarDureza;
+    var itemCtx = currentForjaCtx();
+    var vantKey = known.map(function (m) { return m.id; }).join(',') + '|' + state.mostrarDureza + '|' + itemCtx;
     var animateIn = lastVantKey !== '' && vantKey !== lastVantKey;
     lastVantKey = vantKey;
 
@@ -4042,19 +4346,31 @@
       head.appendChild(tag);
       item.appendChild(head);
 
-      var pro = document.createElement('div');
-      pro.className = 'v-row v-pro';
-      pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
-      pro.querySelector('.v-text').textContent = m.vantagens || 'Sem propriedade mecânica adicional além do bônus.';
-      item.appendChild(pro);
+      var pros = filterMaterialClauses(m.vantagens, itemCtx);
+      if (pros.length) {
+        pros.forEach(function (txt) {
+          var pro = document.createElement('div');
+          pro.className = 'v-row v-pro';
+          pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+          pro.querySelector('.v-text').textContent = txt;
+          item.appendChild(pro);
+        });
+      } else {
+        var none = document.createElement('div');
+        none.className = 'v-row v-dim';
+        none.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+        none.querySelector('.v-text').textContent = 'Sem propriedade específica para este tipo de item (mantém o bônus e a dureza do material).';
+        item.appendChild(none);
+      }
 
-      if (m.desvantagens) {
+      var cons = filterMaterialClauses(m.desvantagens, itemCtx);
+      cons.forEach(function (txt) {
         var con = document.createElement('div');
         con.className = 'v-row v-con';
         con.innerHTML = '<span class="v-icon">' + ICON_MINUS + '</span><span class="v-text"></span>';
-        con.querySelector('.v-text').textContent = m.desvantagens;
+        con.querySelector('.v-text').textContent = txt;
         item.appendChild(con);
-      }
+      });
 
       vantagensRowsEl.appendChild(item);
     });
@@ -4155,22 +4471,23 @@
     var comumHoras = totalHoras * timeFactor;
     var comumAjudanteHoras = comumHoras / 2;
 
-    lastForjadorHoras = forjadorHoras;
-    var diasForjador = Math.ceil(forjadorHoras / FORJADOR_HORAS_DIA);
-    resultTimeEl.textContent = fmt(forjadorHoras) + 'h';
-    resultTimeSubEl.textContent = '· ' + diasForjador + (diasForjador === 1 ? ' dia' : ' dias');
+    var horasEfetivas = state.ajudante ? forjadorAjudanteHoras : forjadorHoras;
+    lastForjadorHoras = horasEfetivas;
+    var diasForjador = Math.ceil(horasEfetivas / FORJADOR_HORAS_DIA);
+    resultTimeEl.textContent = fmt(horasEfetivas) + 'h';
+    resultTimeSubEl.textContent = '· ' + diasForjador + (diasForjador === 1 ? ' dia' : ' dias') + (state.ajudante ? ' (ajudante)' : '');
 
     productionRowsEl.appendChild(pRow(
       'Forjador (sozinho)' + (usaAuto ? ' + Criações Automáticas' : ''),
       'Trabalhador Itinerante: 2/3 do tempo' + (usaAuto ? ' · ÷2 ferramenta automatizada' : '') + ' · ' + FORJADOR_HORAS_DIA + 'h de trabalho/dia',
       fmtTempo(forjadorHoras, FORJADOR_HORAS_DIA),
-      usaAuto
+      !state.ajudante
     ));
     productionRowsEl.appendChild(pRow(
-      'Forjador (com ajudante)',
+      'Forjador (com ajudante)' + (usaAuto ? ' + Criações Automáticas' : ''),
       'metade do tempo do Forjador · ' + FORJADOR_HORAS_DIA + 'h/dia',
       fmtTempo(forjadorAjudanteHoras, FORJADOR_HORAS_DIA),
-      !usaAuto
+      !!state.ajudante
     ));
     productionRowsEl.appendChild(pRow(
       'Outra classe, não-Forjador (sozinho)',
@@ -4260,40 +4577,172 @@
     return chip;
   }
 
+  function fmtKg(kg) {
+    if (kg == null || !isFinite(kg)) return '';
+    var rounded = Math.round(kg * 100) / 100;
+    return rounded.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' kg';
+  }
+
+  function calcItemWeight() {
+    var e = null;
+    EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) e = x; });
+    if (!e || e.pesoKg == null) return null;
+    var mult = 1;
+    var notas = [];
+    var forcaPesado = false;
+    (state.materials || []).forEach(function (row) {
+      var m = row.materialId ? materialById(row.materialId) : null;
+      if (!m) return;
+      if (m.pesoMult && m.pesoMult !== 1) {
+        mult *= m.pesoMult;
+        notas.push(m.nome + (m.pesoMult === 0.5 ? ' ÷2' : ' ×2'));
+      }
+      if (m.forcaPesado) forcaPesado = true;
+    });
+    var leveMod = (state.mods || []).indexOf(1) !== -1;
+    if (leveMod) {
+      mult *= 0.75;
+      notas.push('Estrutura Leve −25%');
+    }
+    return {
+      baseKg: e.pesoKg,
+      finalKg: e.pesoKg * mult,
+      mult: mult,
+      leveMod: leveMod,
+      forcaPesado: forcaPesado,
+      notas: notas
+    };
+  }
+
+  var RANGED_AMMO_SET = {
+    'Estilingue': 1, 'Funda': 1, 'Arco curto': 1, 'Besta leve': 1, 'Zarabatana': 1,
+    'Besta de mão': 1, 'Besta dupla': 1, 'Besta de repetição': 1, 'Besta automática': 1,
+    'Arco longo': 1, 'Arco composto': 1, 'Besta pesada': 1, 'Arco Colossal': 1, 'Besta Colossal': 1,
+    'Mosquete': 1, 'Pistola': 1, 'Bacamarte': 1, 'Canhão': 1, 'Arcabuz': 1
+  };
+  function modAplicacao() {
+    if (state.tipoItem === 'armadura') return 'CA';
+    if (state.equipNome) {
+      var eq = null;
+      EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+      if (eq) {
+        if (eq.grupo === 'Focos de Conjuração') return 'Ataque de magia';
+        if (eq.grupo === 'Instrumentos e Acessórios') return 'Teste';
+        if (RANGED_AMMO_SET[eq.nome]) return 'Só ataque';
+      }
+    }
+    return 'Ataque e dano';
+  }
+
   var lastPropKey = '';
-  function renderResultProps() {
+  function renderResultProps(c) {
     var soModMun = state.tipoItem === 'municao' && state.municaoModExistente && !!MUNICAO_MODS[state.municaoMod];
     var props = state.tipoItem === 'polvora' || soModMun ? null : itemProps();
+    var w = state.tipoItem === 'polvora' || soModMun ? null : calcItemWeight();
+    var lucro = (state.modo === 'vendido' && c && c.lucroValor > 0) ? c.lucroValor : 0;
     resultPropsEl.innerHTML = '';
-    if (!props) {
+    if (!props && !w && !lucro) {
       lastPropKey = '';
       resultPropsEl.hidden = true;
       return;
     }
+    var hasMithral = false;
+    var hasForcaPesado = false;
+    (state.materials || []).forEach(function (row) {
+      var m = row.materialId ? materialById(row.materialId) : null;
+      if (!m) return;
+      if (m.id === 'metal_mithral') hasMithral = true;
+      if (m.forcaPesado) hasForcaPesado = true;
+    });
+    var modTarget = modAplicacao();
     var exc = !!(state.excalibur && state.tipoItem === 'arma');
-    var propKey = [props.dureza, props.mod, props.obra, state.pressa, state.mostrarDureza, exc].join('|');
+    var propKey = [
+      props ? props.dureza : '',
+      props ? props.mod : '',
+      props ? props.obra : '',
+      state.pressa,
+      state.mostrarDureza,
+      exc,
+      w ? w.finalKg : '',
+      w ? w.notas.join(',') : '',
+      hasMithral,
+      hasForcaPesado,
+      modTarget,
+      lucro
+    ].join('|');
     var animateIn = lastPropKey !== '' && propKey !== lastPropKey;
     lastPropKey = propKey;
 
     resultPropsEl.hidden = false;
-    if (state.mostrarDureza) {
+    if (props && state.mostrarDureza) {
       var durChip = propChip('Dureza', props.dureza);
       if (animateIn) durChip.classList.add('is-entering');
       resultPropsEl.appendChild(durChip);
     }
-    var tags = [];
-    if (props.obra) tags.push('Obra-Prima');
-    if (state.pressa) tags.push('Pressa');
-    var modChip = propChip('Modificador' + (tags.length ? ' (' + tags.join(', ') + ')' : ''), (props.mod > 0 ? '+' : '') + props.mod);
-    if (props.obra) modChip.classList.add('chip-obra');
-    if (animateIn) modChip.classList.add('is-entering');
-    resultPropsEl.appendChild(modChip);
+    if (props) {
+      var tags = [];
+      if (props.obra) tags.push('Obra-Prima');
+      if (state.pressa) tags.push('Pressa');
+      var modChip = propChip('Modificador · ' + modTarget + (tags.length ? ' (' + tags.join(', ') + ')' : ''), (props.mod > 0 ? '+' : '') + props.mod);
+      if (props.obra) modChip.classList.add('chip-obra');
+      if (animateIn) modChip.classList.add('is-entering');
+      resultPropsEl.appendChild(modChip);
+    }
+    if (w) {
+      var pesoChip = propChip('Peso' + (w.notas.length ? ' (' + w.notas.join(', ') + ')' : ''), fmtKg(w.finalKg));
+      if (animateIn) pesoChip.classList.add('is-entering');
+      resultPropsEl.appendChild(pesoChip);
+    }
+    if (hasMithral) {
+      var miChip = propChip('Mithral', 'Sem req. Força / Furtividade');
+      if (animateIn) miChip.classList.add('is-entering');
+      resultPropsEl.appendChild(miChip);
+    }
+    if (hasForcaPesado) {
+      var fpChip = propChip('Requisito', 'Pesado · +2 Força');
+      if (animateIn) fpChip.classList.add('is-entering');
+      resultPropsEl.appendChild(fpChip);
+    }
     if (exc) {
       var excChip = propChip('Artefato', 'Excalibur');
       excChip.classList.add('chip-excalibur');
       if (animateIn) excChip.classList.add('is-entering');
       resultPropsEl.appendChild(excChip);
     }
+    if (lucro > 0) {
+      var lucChip = propChip('Lucro líquido', '+' + fmtMoeda(lucro));
+      lucChip.classList.add('chip-lucro');
+      if (animateIn) lucChip.classList.add('is-entering');
+      resultPropsEl.appendChild(lucChip);
+    }
+  }
+
+  var FIREARMS_SET = { 'Mosquete': 1, 'Pistola': 1, 'Bacamarte': 1, 'Canhão': 1, 'Arcabuz': 1 };
+  var modsWarnEl = document.getElementById('mods-warn');
+  function renderModsWarn() {
+    if (!modsWarnEl) return;
+    var avisos = [];
+    var mods = state.mods || [];
+    if (mods.indexOf(2) !== -1 && state.peso === 'pesado') {
+      avisos.push('Estrutura Ocultável exige item sem propriedade Pesada / armadura não pesada.');
+    }
+    if (mods.indexOf(3) !== -1 && (state.tipoItem === 'armadura' || (state.equipNome && !FIREARMS_SET[state.equipNome]))) {
+      avisos.push('Câmara Expandida se aplica apenas a armas de fogo (com Ignição).');
+    }
+    if (mods.indexOf(0) !== -1 && state.tipoItem === 'armadura') {
+      avisos.push('Dano Extra se aplica apenas a armas corpo a corpo ou de arremesso.');
+    }
+    if (mods.indexOf(4) !== -1 && state.tipoItem === 'armadura') {
+      avisos.push('Suporte para Baioneta se aplica apenas a armas com Munição ou focos.');
+    }
+    if (!avisos.length) {
+      modsWarnEl.hidden = true;
+      modsWarnEl.innerHTML = '';
+      return;
+    }
+    modsWarnEl.hidden = false;
+    modsWarnEl.innerHTML = '<div class="mw-head">' + ICON_WARN + '<span>Atenção à compatibilidade (você ainda pode manter se o Mestre liberar)</span></div><ul>' +
+      avisos.map(function (a) { return '<li>' + a + '</li>'; }).join('') + '</ul>';
   }
 
   function buildSimpleCombo(placeholder, initialId, onPick, labelId) {
@@ -4347,6 +4796,7 @@
         opt.addEventListener('mousedown', function (e) {
           e.preventDefault();
           input.value = m.nome;
+          syncSimpleClear();
           close();
           onPick(m.id);
         });
@@ -4367,6 +4817,10 @@
     });
 
     wrap.appendChild(input);
+    var syncSimpleClear = attachComboClear(wrap, input, function () {
+      close();
+      onPick('');
+    });
     wrap.appendChild(dropdown);
     return wrap;
   }
@@ -4469,7 +4923,7 @@
       }
     }
 
-    // --- Transmutação (Forjador Alquimista 3º / 7º / 13º, p. 130–131) ---
+    // Transmutação do Forjador Alquimista (p. 130-131)
     var nivel = parseInt(state.transmutNivel, 10) || 3;
     var origem = materialById(state.transmutOrigemId);
     var destino = materialById(state.transmutDestinoId);
@@ -4477,6 +4931,7 @@
 
     if (!origem || !destino) {
       transmutResultEl.appendChild(mgWarning('Escolha o material de origem e de destino.'));
+      syncMagicosBadge();
       return;
     }
     var rOrigem = TIER_ORDER.indexOf(origem.tier);
@@ -4504,6 +4959,34 @@
 
     transmutResultEl.appendChild(mgLine('Custo (' + notaCusto + ')', fmtMoeda(custoTransmut)));
     transmutResultEl.appendChild(mgLine('Tempo de trabalho', fmt(tempoTransmut) + 'h' + (complexa ? ' (Tier B ou A: 8h por material transformado)' : ' (Tier D/C: 1h + 1h por tier acima)')));
+    syncMagicosBadge();
+  }
+
+  function syncMagicosBadge() {
+    if (!magicosActiveCountEl) return;
+    var partes = [];
+    if (state.magicoRaridade && state.magicoRaridade !== 'comum') {
+      var opt = magicoRaridadeSelect && magicoRaridadeSelect.options[magicoRaridadeSelect.selectedIndex];
+      partes.push(opt ? opt.text : state.magicoRaridade);
+    }
+    var optsAtivas = 0;
+    if (state.encantarExistente) optsAtivas++;
+    if (state.desencantado) optsAtivas++;
+    if (state.peritoItensMagicos) optsAtivas++;
+    if (state.especialistaItensMagicos) optsAtivas++;
+    if (state.versadoItensMagicos) optsAtivas++;
+    if (optsAtivas) partes.push(optsAtivas === 1 ? '1 opção' : optsAtivas + ' opções');
+    if (state.transmutOrigemId && state.transmutDestinoId) partes.push('Transmutação');
+    magicosActiveCountEl.textContent = partes.join(' · ');
+  }
+
+  function syncHighLevelBadge() {
+    if (!forjHighCountEl) return;
+    var n = 0;
+    if (state.melhorDosMelhores) n++;
+    if (state.criacoesAutomaticas) n++;
+    if (state.excalibur && state.tipoItem === 'arma') n++;
+    forjHighCountEl.textContent = n ? (n === 1 ? '1 ativo' : n + ' ativos') : '';
   }
 
   function deltaPct(value, cheio) {
@@ -4518,7 +5001,7 @@
   var cbValue = document.getElementById('cb-value');
   var cbLabel = document.getElementById('cb-label');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Digitar num campo muda o resultado a cada tecla: aí o número troca na hora, sem contagem
+  // Enquanto digita, atualiza direto sem animar o número
   var lastTypedAt = 0;
   document.addEventListener('input', function (e) {
     if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) lastTypedAt = performance.now();
@@ -4550,7 +5033,7 @@
     })(t0);
   }
 
-  // Conta incompleta: diz o que falta em vez de mostrar uma coluna de zeros
+  // Mostra o que falta preencher em vez de zeros
   function emptyReason(c) {
     if (c.modMun && c.modMun.existente) return '';
     if (state.tipoItem === 'municao' && state.municaoModExistente) return 'Escolha uma modificação de munição para calcular o custo.';
@@ -4569,7 +5052,7 @@
     if (state.oficina === 'herbalismo') { updateHerbalismo(); return; }
     if (kpiTimeLabelEl) kpiTimeLabelEl.textContent = 'Tempo do Forjador';
     var c = calculate();
-    // PDE com centavos (munições, por exemplo): mostra em moedas do D&D
+    // PDE fracionado sai em pp/pc
     var pdeNum = num(state.pde, 0);
     pdeMoedaEl.hidden = !(pdeNum > 0 && Math.round(pdeNum * 100) % 100 !== 0);
     pdeMoedaEl.textContent = fmt(pdeNum) + ' po = ' + fmtMoeda(pdeNum);
@@ -4631,7 +5114,15 @@
     }
     breakdownEl.appendChild(bRow(c.conserto ? 'Custo do conserto' : state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(c.final), true));
 
-    var formulaStr = c.possuidos
+    if (consertoNoteEl && c.conserto) {
+      consertoNoteEl.textContent = c.consertoVivo
+        ? 'Material vivo quebrado não se conserta com po: exige magia de ressurreição, sem gasto em ouro (p. 173).'
+        : 'Um item quebrado (penalidade −5) custa metade do valor do item novo para consertar (p. 173). Reparar +1 de durabilidade antes de quebrar é grátis em um Descanso Curto com ferramentas.';
+    }
+
+    var formulaStr = c.consertoVivo
+      ? 'material vivo quebrado — magia de ressurreição (0 po, p. 173)'
+      : c.possuidos
       ? 'materiais em posse — grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
       : c.conserto
         ? (c.usaFracaoFixa
@@ -4674,12 +5165,14 @@
 
     renderVantagens();
     renderProduction();
-    renderResultProps();
+    renderResultProps(c);
+    renderModsWarn();
     renderJuncao();
     renderCompMateriais();
+    syncHighLevelBadge();
     updateMagicos();
 
-    // Tempo na barra de custo + aviso para leitor de tela (só o valor final, sem a contagem animada)
+    // Atualiza o tempo na barra mobile e no aviso de acessibilidade
     var temTempo = resultTimeEl.textContent !== '—';
     cbTime.textContent = temTempo ? resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent : '';
     clearTimeout(liveTimer);
@@ -4690,7 +5183,7 @@
     }, 700);
   }
 
-  // --- Comparador de Materiais Lado a Lado (Forja) ---
+  // Comparador de materiais
   var compMatGridEl = document.getElementById('comp-mat-grid');
   function calcSingleMaterial(mat) {
     var base = baseValue();
@@ -4709,17 +5202,24 @@
     var final = state.modo === 'vendido' ? proprio * (1 + lucroPct / 100) : proprio;
 
     var baseHoras = TIER_HOURS[mat.tier] || 24;
-    var adj = state.peso === 'leve' ? -8 : state.peso === 'pesado' ? 8 : 0;
+    var pesoEfetivo = mat.forcaPesado ? 'pesado' : state.peso;
+    var adj = pesoEfetivo === 'leve' ? -8 : pesoEfetivo === 'pesado' ? 8 : 0;
     var horas = Math.max(1, baseHoras + adj) * (2 / 3);
     if (state.criacoesAutomaticas && (mat.tier === 'A' || mat.tier === 'S')) horas /= 2;
     if (state.pressa) horas /= 2;
+    if (state.ajudante) horas /= 2;
 
     var modNum = parseInt(mat.mod, 10) || 0;
     if (state.obraPrima) modNum = Math.min(3, modNum + 1);
     if (state.melhorDosMelhores && modNum < 3) modNum += 1;
     if (state.pressa) modNum -= 1;
 
-    return { mat: mat, final: final, horas: horas, modNum: modNum, dureza: mat.dureza };
+    var eq = null;
+    EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+    var leveMod = (state.mods || []).indexOf(1) !== -1;
+    var pesoKg = eq && eq.pesoKg != null ? eq.pesoKg * (mat.pesoMult || 1) * (leveMod ? 0.75 : 1) : null;
+
+    return { mat: mat, final: final, horas: horas, modNum: modNum, dureza: mat.dureza, pesoKg: pesoKg, forcaPesado: !!mat.forcaPesado };
   }
 
   function renderCompMateriais() {
@@ -4780,12 +5280,16 @@
         card.appendChild(tag2);
       }
 
-      [
+      var stats = [
         ['Tempo (Forjador)', fmt(r.horas) + 'h'],
         ['Modificador', fmtMod(r.modNum)],
         ['Dureza', state.mostrarDureza ? r.dureza : '—'],
         ['Multiplicador', '×' + r.mat.mult]
-      ].forEach(function (st) {
+      ];
+      if (r.pesoKg != null) {
+        stats.push(['Peso', fmtKg(r.pesoKg) + (r.forcaPesado ? ' · Pesado' : '')]);
+      }
+      stats.forEach(function (st) {
         var line = document.createElement('div');
         line.className = 'cm-stat';
         var k = document.createElement('span');
@@ -4796,11 +5300,30 @@
         line.appendChild(v);
         card.appendChild(line);
       });
+
+      var useBtn = document.createElement('button');
+      useBtn.type = 'button';
+      useBtn.className = 'btn-ghost cm-use-btn';
+      useBtn.textContent = 'Usar este';
+      useBtn.addEventListener('click', function () {
+        state.materials = [{ materialId: r.mat.id, name: r.mat.nome, mult: r.mat.mult, tier: r.mat.tier }];
+        if (r.mat.forcaPesado && state.peso !== 'pesado') setPeso('pesado');
+        saveState();
+        renderMaterials();
+        update();
+        updateMagicos();
+        showToast('Material aplicado: ' + r.mat.nome);
+        var matSec = document.getElementById('sec-mat');
+        if (matSec && matSec.getBoundingClientRect().top < 0) {
+          matSec.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        }
+      });
+      card.appendChild(useBtn);
       compMatGridEl.appendChild(card);
     });
   }
 
-  // --- Equipamento do Guia (Forja: armas, escudos, armaduras, focos e instrumentos) ---
+  // Busca de equipamento do Guia
   function searchEquip(q) {
     q = normalizeSearch(q);
     if (!q) return [];
@@ -4812,11 +5335,22 @@
   function showEquipInfo() {
     var e = null;
     EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) e = x; });
-    if (!e) { equipInfo.hidden = true; return; }
-    var partes = [e.grupo, 'PDE ' + fmtMoeda(e.pde)];
-    if (e.peso) partes.push(e.peso === 'leve' ? 'Leve (−8h)' : 'Pesado (+8h)');
-    if (e.maestria) partes.push('Maestria: ' + e.maestria);
-    equipInfo.textContent = partes.join(' · ');
+    if (!e) { equipInfo.hidden = true; equipInfo.innerHTML = ''; return; }
+    var chips = [
+      { txt: e.grupo, main: true },
+      { txt: 'PDE ' + fmtMoeda(e.pde) }
+    ];
+    if (e.pesoKg != null) chips.push({ txt: fmtKg(e.pesoKg) });
+    if (e.peso) chips.push({ txt: e.peso === 'leve' ? 'Leve (−8h)' : 'Pesado (+8h)' });
+    else chips.push({ txt: 'Normal' });
+    if (e.maestria) chips.push({ txt: 'Maestria: ' + e.maestria });
+    equipInfo.innerHTML = '';
+    chips.forEach(function (ch) {
+      var s = document.createElement('span');
+      s.className = 'eq-chip' + (ch.main ? ' eq-chip-main' : '');
+      s.textContent = ch.txt;
+      equipInfo.appendChild(s);
+    });
     equipInfo.hidden = false;
   }
 
@@ -4827,7 +5361,7 @@
     input.type = 'text';
     input.className = 'mat-search';
     input.autocomplete = 'off';
-    input.placeholder = 'Buscar arma, armadura, escudo, foco ou instrumento';
+    input.placeholder = 'Buscar arma, armadura, escudo ou foco';
     input.setAttribute('aria-labelledby', 'equip-label');
     input.value = state.equipNome || '';
     var dropdown = document.createElement('div');
@@ -4840,10 +5374,12 @@
       state.pde = e.pde;
       pdeInput.value = e.pde;
       input.value = e.nome;
+      syncEquipClear();
       close();
       setTipo(e.tipo);
       setPeso(e.peso);
       showEquipInfo();
+      renderMods();
       updateMagicos();
     }
     function open(q) {
@@ -4867,7 +5403,7 @@
         n.textContent = e.nome;
         var p = document.createElement('span');
         p.className = 'mo-mult';
-        p.textContent = fmtMoeda(e.pde);
+        p.textContent = fmtMoeda(e.pde) + (e.pesoKg != null ? ' · ' + fmtKg(e.pesoKg) : '');
         opt.appendChild(n);
         opt.appendChild(p);
         opt.addEventListener('mousedown', function (ev) { ev.preventDefault(); pick(e); });
@@ -4884,19 +5420,66 @@
     input.addEventListener('focus', function () { input.select(); });
     input.addEventListener('blur', function () { setTimeout(close, 120); });
     wrap.appendChild(input);
+    var syncEquipClear = attachComboClear(wrap, input, function () {
+      state.equipNome = '';
+      equipInfo.hidden = true;
+      close();
+      renderMods();
+      saveState();
+      update();
+    });
     wrap.appendChild(dropdown);
     return wrap;
   }
 
-  // --- Modificações ---
+  // Modificações
+  var showAllMods = false;
+  function modIsCompatible(idx) {
+    var ctx = currentForjaCtx();
+    var eq = null;
+    if (state.equipNome) {
+      EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+    }
+    var isWeapon = ctx === 'melee' || ctx === 'ranged' || ctx === 'arma_all';
+    var isMelee = ctx === 'melee' || ctx === 'arma_all';
+    var isRanged = ctx === 'ranged' || ctx === 'arma_all';
+    var isFirearm = eq ? !!FIREARMS_SET[eq.nome] : ctx === 'arma_all';
+    var isCrossbow = eq ? /besta/i.test(eq.nome) : ctx === 'arma_all';
+    var hasMaestria = eq ? !!eq.maestria : (ctx !== 'foco' && ctx !== 'armadura');
+
+    switch (idx) {
+      case 1: case 5: case 6: case 9: case 11: return true;
+      case 2: return state.peso !== 'pesado';
+      case 0: case 13: case 19: case 23: case 24: case 25: return isMelee;
+      case 8: return isMelee && (!eq || state.peso === 'leve');
+      case 3: return isFirearm;
+      case 4: return isRanged || ctx === 'foco';
+      case 7: return isWeapon;
+      case 10: return isCrossbow;
+      case 12: return isFirearm || isCrossbow;
+      case 14: case 15: case 17: return hasMaestria;
+      case 16: return isWeapon || ctx === 'escudo' || ctx === 'armadura_escudo';
+      case 18: case 21: return isRanged;
+      case 20: case 22: return isWeapon;
+      default: return true;
+    }
+  }
+
   function renderMods() {
     modsList.innerHTML = '';
+    var hiddenCount = 0;
     MODS_DB.forEach(function (m, i) {
+      var checked = state.mods.indexOf(i) !== -1;
+      var compat = modIsCompatible(i);
+      if (!showAllMods && !compat && !checked) {
+        hiddenCount++;
+        return;
+      }
       var lab = document.createElement('label');
       lab.className = 'mod-item';
       var cb = document.createElement('input');
       cb.type = 'checkbox';
-      cb.checked = state.mods.indexOf(i) !== -1;
+      cb.checked = checked;
       cb.addEventListener('change', function () {
         var pos = state.mods.indexOf(i);
         if (cb.checked && pos === -1) state.mods.push(i);
@@ -4921,6 +5504,19 @@
       lab.appendChild(desc);
       modsList.appendChild(lab);
     });
+    if (hiddenCount > 0 || showAllMods) {
+      var toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.className = 'btn-ghost mods-toggle-all';
+      toggleBtn.textContent = showAllMods
+        ? 'Mostrar só compatíveis com este item'
+        : 'Mostrar todas as modificações (+' + hiddenCount + ' de outros tipos)';
+      toggleBtn.addEventListener('click', function () {
+        showAllMods = !showAllMods;
+        renderMods();
+      });
+      modsList.appendChild(toggleBtn);
+    }
     updateModsTotal();
   }
 
@@ -4939,6 +5535,7 @@
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
+    renderMods();
     saveState();
     update();
   }
@@ -4987,9 +5584,10 @@
         'Tempo por tier: C/D 24h, B 48h, A 96h, S 192h. Com mais de um material, o tempo de cada um se soma.',
         'Leve tira 8h, Pesada soma 8h. O Forjador trabalha em 2/3 do tempo e aguenta 12h por dia.',
         'Até 4 materiais: dureza e bônus ficam com o maior. Pressa corta o tempo pela metade e dá −1.',
-        'Obra-Prima com 20 natural (17–20 com Prodígio): +1, até +3.'
+        'Obra-Prima com 20 natural (17–20 com Prodígio): +1, até +3.',
+        'Teste de dureza (opcional, p. 172–173): 4+ não sofre desgaste; 1–3 aplica −1 cumulativo (se já estiver negativo, quebra; em −5 quebra automático). Um Descanso Curto com ferramentas recupera +1.'
       ],
-      fonte: 'p. 124–125, 163 e 170–172'
+      fonte: 'p. 124–125, 163 e 170–173'
     },
     armadura: {
       titulo: 'Criar uma armadura ou escudo',
@@ -4997,9 +5595,10 @@
         'Mesmas regras da arma: PDE × materiais, o Forjador paga metade, e o tempo por tier se soma entre os materiais.',
         'Armadura leve tira 8h; armadura pesada soma 8h. Escudos entram aqui.',
         'O modificador do material vira bônus (ou penalidade) de CA.',
+        'Teste de dureza (opcional, p. 172–173): 4+ não sofre desgaste; 1–3 aplica −1 cumulativo (quebra quando a penalidade zera a CA da armadura ou escudo). Descanso Curto com ferramentas recupera +1.',
         'Fração fixa é uma regra opcional desta calculadora, fora do Guia: só 20% do PDE é multiplicado pelo material, para suavizar armaduras caras.'
       ],
-      fonte: 'p. 169–172'
+      fonte: 'p. 169–173'
     }
   };
   var tipoInfoBtn = document.getElementById('tipo-info-btn');
@@ -5042,6 +5641,7 @@
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
     fracaoWrap.hidden = tipo !== 'armadura';
+    renderMods();
     saveState();
     update();
   }
@@ -5063,7 +5663,7 @@
     if (!silent) { saveState(); update(); }
   }
 
-  // --- wire static inputs ---
+  // Eventos dos campos fixos
   pdeInput.addEventListener('input', function () {
     state.pde = pdeInput.value;
     state.equipNome = '';
@@ -5127,16 +5727,33 @@
     saveState();
     updateMagicos();
   });
+  function syncLucroPresets() {
+    var cur = String(state.lucro == null ? '' : state.lucro).trim();
+    lucroPresetBtns.forEach(function (b) {
+      var on = b.dataset.lucro === cur;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
   lucroInput.addEventListener('input', function () {
     state.lucro = lucroInput.value;
+    syncLucroPresets();
     saveState();
     update();
+  });
+  lucroPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.lucro = Number(b.dataset.lucro);
+      lucroInput.value = state.lucro;
+      syncLucroPresets();
+      saveState();
+      update();
+    });
   });
 
   function syncAutoSwitches() {
     var val = state.criacoesAutomaticas ? 'true' : 'false';
-    autoForjSwitch.setAttribute('aria-checked', val);
-    autoMagicSwitch.setAttribute('aria-checked', val);
+    if (autoForjSwitch) autoForjSwitch.setAttribute('aria-checked', val);
   }
   function toggleCriacoesAutomaticas() {
     state.criacoesAutomaticas = !state.criacoesAutomaticas;
@@ -5145,8 +5762,7 @@
     update();
     updateMagicos();
   }
-  autoForjSwitch.addEventListener('click', toggleCriacoesAutomaticas);
-  autoMagicSwitch.addEventListener('click', toggleCriacoesAutomaticas);
+  if (autoForjSwitch) autoForjSwitch.addEventListener('click', toggleCriacoesAutomaticas);
 
   excaliburSwitch.addEventListener('click', function () {
     state.excalibur = !state.excalibur;
@@ -5200,7 +5816,7 @@
     btn.addEventListener('click', function () { setTipo(btn.dataset.tipo); });
   });
 
-  // --- Aviso flutuante (com ação opcional, como "Desfazer") ---
+  // Toast com opção de desfazer
   var toastEl = document.getElementById('toast');
   var toastMsg = document.getElementById('toast-msg');
   var toastAction = document.getElementById('toast-undo');
@@ -5266,7 +5882,6 @@
       hydrateForm();
     });
   });
-  // --- Resumo do item atual (para copiar e para a lista) ---
   var SITE_URL = 'https://gabriel-sbs.github.io/calculadora-forjador/';
   var TIPO_NOME = { arma: 'Arma', armadura: 'Armadura', municao: 'Munição', polvora: 'Pólvora' };
 
@@ -5277,13 +5892,36 @@
   }
   function fmtMod(m) { return (m >= 0 ? '+' : '−') + Math.abs(m); }
 
+  function encodeJsonB64(obj) {
+    var json = JSON.stringify(obj);
+    var bytes = unescape(encodeURIComponent(json));
+    return btoa(bytes).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function decodeJsonB64(str) {
+    try {
+      var b64 = str.replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      return JSON.parse(decodeURIComponent(escape(atob(b64))));
+    } catch (e) { return null; }
+  }
+
   function resumoAtual() {
-    if (state.oficina === 'bombas') return resumoBombaAtual();
-    if (state.oficina === 'herbalismo') return resumoHerbalAtual();
+    var snap = encodeShareState();
+    if (state.oficina === 'bombas') {
+      var rb = resumoBombaAtual();
+      if (rb) rb.snap = snap;
+      return rb;
+    }
+    if (state.oficina === 'herbalismo') {
+      var rh = resumoHerbalAtual();
+      if (rh) rh.snap = snap;
+      return rh;
+    }
     var c = calculate();
     if (emptyReason(c)) return null;
     var soModMun = !!(c.modMun && c.modMun.existente);
     var props = soModMun ? null : itemProps();
+    var w = state.tipoItem === 'polvora' || soModMun ? null : calcItemWeight();
     var mats = state.tipoItem === 'polvora' || soModMun ? [] : state.materials
       .filter(function (m) { return m.name || m.materialId; })
       .map(function (m) {
@@ -5305,6 +5943,8 @@
       horas: lastForjadorHoras,
       dureza: props && state.mostrarDureza ? props.dureza : null,
       mod: props ? props.mod : null,
+      pesoKg: w ? w.finalKg : null,
+      snap: snap,
       obra: !!(props && props.obra),
       pressa: !!state.pressa,
       rende: soModMun || state.modo === 'conserto' ? '' : state.tipoItem === 'municao' ? '2d4 unidades' : state.tipoItem === 'polvora' ? '1d4 unidades' : ''
@@ -5344,6 +5984,7 @@
     var tags = [r.obra ? 'Obra-Prima' : '', r.pressa ? 'Pressa' : ''].filter(Boolean);
     if (r.mod != null) props.push('Modificador ' + fmtMod(r.mod) + (tags.length ? ' (' + tags.join(', ') + ')' : ''));
     if (r.dureza) props.push('Dureza ' + r.dureza);
+    if (r.pesoKg != null) props.push('Peso ' + fmtKg(r.pesoKg));
     if (props.length) linhas.push(props.join(' · '));
     if (r.mods && r.mods.length) linhas.push('Modificações: ' + r.mods.join(', '));
     return linhas.join('\n');
@@ -5418,7 +6059,7 @@
     });
   }
 
-  // --- Lista da sessão: vários itens, com quantidade, status de fabricado e totais ---
+  // Lista da sessão (itens salvos, quantidades e totais)
   var LISTA_KEY = 'forjador-lista-v1';
   var listaSection = document.getElementById('lista-section');
   var listaItemsEl = document.getElementById('lista-items');
@@ -5431,22 +6072,25 @@
     try { localStorage.setItem(LISTA_KEY, JSON.stringify(lista)); } catch (e) {}
   }
   function totaisLista() {
-    var po = 0, horas = 0, semTempo = 0, pendPo = 0, pendHoras = 0, feitos = 0, totalQtd = 0;
+    var po = 0, horas = 0, semTempo = 0, pendPo = 0, pendHoras = 0, feitos = 0, totalQtd = 0, kg = 0, pendKg = 0;
     lista.forEach(function (r) {
       var q = Math.max(1, r.qtd || 1);
       var v = (r.valor || 0) * q;
       var h = r.horas != null ? r.horas * q : null;
+      var w = r.pesoKg != null ? r.pesoKg * q : 0;
       po += v;
+      kg += w;
       totalQtd += q;
       if (h != null) horas += h; else semTempo++;
       if (r.feito) {
         feitos++;
       } else {
         pendPo += v;
+        pendKg += w;
         if (h != null) pendHoras += h;
       }
     });
-    return { po: po, horas: horas, semTempo: semTempo, pendPo: pendPo, pendHoras: pendHoras, feitos: feitos, totalQtd: totalQtd };
+    return { po: po, horas: horas, semTempo: semTempo, pendPo: pendPo, pendHoras: pendHoras, feitos: feitos, totalQtd: totalQtd, kg: kg, pendKg: pendKg };
   }
 
   function renderLista() {
@@ -5520,6 +6164,23 @@
       qtyWrap.appendChild(btnDec);
       qtyWrap.appendChild(qtyVal);
       qtyWrap.appendChild(btnInc);
+      if (r.snap) {
+        var btnOpen = document.createElement('button');
+        btnOpen.type = 'button';
+        btnOpen.className = 'btn-ghost li-open-btn';
+        btnOpen.textContent = 'Abrir';
+        btnOpen.title = 'Recarregar este item na calculadora';
+        btnOpen.addEventListener('click', function () {
+          var parsed = decodeJsonB64(r.snap);
+          if (!parsed || typeof parsed !== 'object') return;
+          state = Object.assign(JSON.parse(JSON.stringify(DEFAULTS)), parsed);
+          saveState();
+          hydrateForm();
+          window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+          showToast(r.nome + ' carregado na calculadora.');
+        });
+        qtyWrap.appendChild(btnOpen);
+      }
 
       info.appendChild(nome);
       if (sub.textContent) info.appendChild(sub);
@@ -5563,10 +6224,12 @@
       listaItemsEl.appendChild(li);
     });
     var t = totaisLista();
+    var clearDoneBtnEl = document.getElementById('lista-clear-done-btn');
+    if (clearDoneBtnEl) clearDoneBtnEl.hidden = t.feitos === 0;
     listaTotalEl.innerHTML = '';
     var tl = document.createElement('span');
     tl.className = 'lt-label';
-    tl.textContent = 'Total · ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens');
+    tl.textContent = 'Total · ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens') + (t.kg > 0 ? ' · ' + fmtKg(t.kg) : '');
     var tv = document.createElement('span');
     tv.className = 'lt-valor';
     tv.textContent = fmtMoeda(t.po);
@@ -5582,7 +6245,9 @@
       tp.className = 'lt-pend';
       tp.textContent = t.feitos === lista.length
         ? 'Todos os itens marcados como fabricados.'
-        : 'Pendente (' + (lista.length - t.feitos) + '): ' + fmtMoeda(t.pendPo) + (t.pendHoras ? ' · ' + fmtHorasForjador(t.pendHoras) : '');
+        : 'Pendente (' + (lista.length - t.feitos) + '): ' + fmtMoeda(t.pendPo) +
+          (t.pendHoras ? ' · ' + fmtHorasForjador(t.pendHoras) : '') +
+          (t.pendKg > 0 ? ' · ' + fmtKg(t.pendKg) : '');
       listaTotalEl.appendChild(tp);
     }
   }
@@ -5607,7 +6272,8 @@
     var t = totaisLista();
     var partes = lista.map(textoResumo);
     partes.push('Total: ' + t.totalQtd + (t.totalQtd === 1 ? ' item' : ' itens') + ' · ' + fmtMoeda(t.po) +
-      (t.horas ? ' · ' + fmtHorasForjador(t.horas) : ''));
+      (t.horas ? ' · ' + fmtHorasForjador(t.horas) : '') +
+      (t.kg > 0 ? ' · ' + fmtKg(t.kg) : ''));
     copiarTexto(partes.join('\n\n') + '\n' + SITE_URL).then(function () {
       morphBtn(listaCopyBtnEl, ICON_CHECK + ' Copiada');
       showToast('Lista copiada.');
@@ -5615,6 +6281,40 @@
       showToast('Não consegui copiar automaticamente neste navegador.');
     });
   });
+
+  var listaShareBtnEl = document.getElementById('lista-share-btn');
+  if (listaShareBtnEl) {
+    listaShareBtnEl.addEventListener('click', function () {
+      if (!lista.length) return;
+      var base = (window.location.protocol === 'http:' || window.location.protocol === 'https:')
+        ? window.location.origin + window.location.pathname
+        : SITE_URL;
+      var url = base + '?l=' + encodeJsonB64(lista);
+      copiarTexto(url).then(function () {
+        morphBtn(listaShareBtnEl, ICON_CHECK + ' Link copiado');
+        showToast('Link da lista copiado. Quem abrir recebe todos os itens.');
+      }, function () {
+        showToast('Não consegui copiar o link automaticamente neste navegador.');
+      });
+    });
+  }
+
+  var listaClearDoneBtn = document.getElementById('lista-clear-done-btn');
+  if (listaClearDoneBtn) {
+    listaClearDoneBtn.addEventListener('click', function () {
+      var copia = lista.slice();
+      var removidos = lista.filter(function (r) { return r.feito; }).length;
+      if (!removidos) return;
+      lista = lista.filter(function (r) { return !r.feito; });
+      salvarLista();
+      renderLista();
+      showToast(removidos + (removidos === 1 ? ' item concluído removido.' : ' itens concluídos removidos.'), 'Desfazer', function () {
+        lista = copia;
+        salvarLista();
+        renderLista();
+      });
+    });
+  }
 
   document.getElementById('lista-clear-btn').addEventListener('click', function () {
     var copia = lista.slice();
@@ -5628,10 +6328,35 @@
     });
   });
 
+  // Carrega lista compartilhada (?l=...) se houver na URL
+  (function loadSharedLista() {
+    var q = window.location.search || '';
+    var m = q.match(/[?&]l=([A-Za-z0-9_-]+)/);
+    if (!m) return;
+    var parsed = decodeJsonB64(m[1]);
+    if (!Array.isArray(parsed) || !parsed.length) return;
+    var anterior = lista.slice();
+    lista = parsed;
+    salvarLista();
+    try {
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    } catch (e) {}
+    setTimeout(function () {
+      if (anterior.length) {
+        showToast('Lista compartilhada carregada (' + lista.length + ' itens).', 'Restaurar anterior', function () {
+          lista = anterior;
+          salvarLista();
+          renderLista();
+        }, 6000);
+      } else {
+        showToast('Lista compartilhada carregada (' + lista.length + ' itens).');
+      }
+    }, 200);
+  })();
+
   renderLista();
-  // =========================================================
-  // Oficinas (Forja | Bombas | Herbalismo)
-  // =========================================================
   var OFICINA_KEY = 'forjador-oficina';
   var OFICINA_META = {
     forja: {
@@ -5650,7 +6375,7 @@
     },
     herbalismo: {
       title: 'Herbalismo e Poções',
-      sub: 'As 23 receitas herbáceas e os 8 ramos do Guia (p. 148–150), com rolador de forrageamento e herbolário.',
+      sub: 'As 23 receitas herbáceas e os 8 ramos do Guia (p. 148–150), com cálculo de custo, tempo e venda.',
       forjaLabel: 'Modo jardim',
       themeLight: '#2c6b44',
       themeDark: '#131915'
@@ -5701,7 +6426,7 @@
     });
   });
 
-  // --- Helpers de selos de ramos ---
+  // Selos dos ramos de herbalismo
   function makeRamoPill(id, qtd, extraLabel) {
     var r = RAMOS_MAP[id];
     var sp = document.createElement('span');
@@ -5717,8 +6442,7 @@
     return sp;
   }
 
-  // Combobox pesquisável idêntico ao Equipamento do Guia e Lista de Materiais (Forja)
-  // Fica escondido até o usuário começar a digitar, com cabeçalhos .mat-group-label e alinhamento .mo-name / .mo-mult
+  // Busca com dropdown que só abre quando o usuário digita
   function buildCatalogCombo(items, getInitial, placeholder, labelId, formatMeta, onPick, onClear) {
     var wrap = document.createElement('div');
     wrap.className = 'mat-combo';
@@ -5736,6 +6460,10 @@
     dropdown.setAttribute('role', 'listbox');
     dropdown.hidden = true;
     wrap.appendChild(input);
+    var syncCatClear = attachComboClear(wrap, input, function () {
+      close();
+      if (onClear) onClear();
+    });
     wrap.appendChild(dropdown);
 
     var opts = [];
@@ -5750,6 +6478,7 @@
     function syncInput() {
       var cur = getInitial();
       input.value = cur ? cur.nome : '';
+      syncCatClear();
     }
     syncInput();
 
@@ -5762,6 +6491,7 @@
     }
     function pick(item) {
       input.value = item.nome;
+      syncCatClear();
       close();
       if (window.Forja && (item.tier === 'S' || item.id === 'santa_granada')) {
         window.Forja.sparksAt(input, 'purple');
@@ -5798,7 +6528,7 @@
       dropdown.innerHTML = '';
       opts = [];
       hi = -1;
-      // Igual ao Forjador: só abre quando há texto digitado
+      // Só abre com texto digitado
       if (!nq) { close(); return; }
 
       var list = items.filter(function (it) {
@@ -5882,7 +6612,7 @@
     return wrap;
   }
 
-  // Botões "Como funciona a pesquisa?" (mesmo padrão visual de "Como funciona?")
+  // Abre e fecha os blocos de ajuda da pesquisa
   Array.prototype.forEach.call(document.querySelectorAll('[data-info-toggle]'), function (btn) {
     btn.addEventListener('click', function () {
       var target = document.getElementById(btn.getAttribute('data-info-toggle'));
@@ -5892,9 +6622,6 @@
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
   });
-  // =========================================================
-  // Oficina 2: Bombas, Munições e Pólvora (p. 160, 171, 216–220)
-  // =========================================================
   var bmTipoSeg = document.getElementById('bm-tipo-seg');
   var bmTipoBtns = Array.prototype.slice.call(bmTipoSeg.querySelectorAll('.seg-btn'));
   var bmViewBomba = document.getElementById('bm-view-bomba');
@@ -5926,11 +6653,16 @@
   var bombaPossuidosSwitch = document.getElementById('bomba-possuidos-switch');
   var bombaDesInput = document.getElementById('bomba-des');
   var bombaBpInput = document.getElementById('bomba-bp');
+  var bombaBpWrap = document.getElementById('bomba-bp-wrap');
   var bombaMestreSwitch = document.getElementById('bomba-mestre-switch');
   var bombaModoSeg = document.getElementById('bomba-modo-seg');
   var bombaModoBtns = Array.prototype.slice.call(bombaModoSeg.querySelectorAll('.seg-btn'));
   var bombaLucroWrap = document.getElementById('bomba-lucro-wrap');
   var bombaLucroInput = document.getElementById('bomba-lucro');
+  var bombaQtdPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#bomba-qtd-presets .btn-chip'));
+  var bmAmmoQtdPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#bm-ammo-qtd-presets .btn-chip'));
+  var bmPolvQtdPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#bm-polv-qtd-presets .btn-chip'));
+  var bombaLucroPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#bomba-lucro-presets .btn-chip'));
 
   // Controles de Munição
   var bmMunSelect = document.getElementById('bm-mun-select');
@@ -5943,6 +6675,7 @@
   var bmAmmoExistenteSwitch = document.getElementById('bm-ammo-existente-switch');
   var bmPressaSwitch = document.getElementById('bm-pressa-switch');
   var bmObraSwitch = document.getElementById('bm-obra-switch');
+  var bmAjudanteSwitch = document.getElementById('bm-ajudante-switch');
 
   // Controles de Pólvora
   var bmPolvWrap = document.getElementById('bm-polv-wrap');
@@ -5981,7 +6714,8 @@
       '<p class="ti-head">Criação de Pólvoras · p. 160 e 171</p><ul>' +
       '<li><strong>Lote:</strong> paga o preço de <strong>2 cargas</strong> e rende <strong>1d4 cargas</strong>. Não usa materiais nem modificações.</li>' +
       '<li><strong>Tempo:</strong> 8 horas de base por lote (5,33h para o Forjador pelo Trabalhador Itinerante).</li>' +
-      '<li><strong>Uso em bombas:</strong> com Kit de Alquimista e uma ação, substitua a Pólvora Negra de qualquer bomba por uma carga especial (p. 217).</li></ul>'
+      '<li><strong>Uso em bombas:</strong> com Kit de Alquimista e uma ação, substitua a Pólvora Negra de qualquer bomba por uma carga especial (p. 217).</li>' +
+      '<li><strong>Especialista em Pólvora (p. 212):</strong> talento que permite consumir 2 cargas diferentes no mesmo disparo com Ignição (sem combinar duas elementais) e reduz Emperrado em −2.</li></ul>'
   };
 
   function syncBmInfoHtml() {
@@ -6079,7 +6813,7 @@
     b.addEventListener('click', function () { setBmTipo(b.getAttribute('data-bmtipo')); });
   });
 
-  // --- Cálculos dos 3 sub-modos ---
+  // Cálculos dos 3 modos
   function calcBombas() {
     var b = bombaById(state.bombaId);
     if (!b) return null;
@@ -6152,7 +6886,7 @@
     var horasBase = mat ? (MUNICAO_HORAS[mat.tier] || 1) : 1;
     var horas = modMun && modMun.existente
       ? null
-      : horasBase * (state.bombaForjador ? 2 / 3 : 1) * (state.bmPressa ? 0.5 : 1);
+      : horasBase * (state.bombaForjador ? 2 / 3 : 1) * (state.bmPressa ? 0.5 : 1) * (state.bmAjudante ? 0.5 : 1);
 
     var modNum = mat ? (parseInt(mat.mod, 10) || 0) : 0;
     if (state.bmObra) modNum = Math.min(3, modNum + 1);
@@ -6179,7 +6913,7 @@
     var lucroPct = num(state.bombaLucro, 50);
     var lucroValor = state.bombaModo === 'vendido' ? proprio * (lucroPct / 100) : 0;
     var final = proprio + lucroValor;
-    var horas = 8 * qtd * (state.bombaForjador ? 2 / 3 : 1) * (state.bmPressa ? 0.5 : 1);
+    var horas = 8 * qtd * (state.bombaForjador ? 2 / 3 : 1) * (state.bmPressa ? 0.5 : 1) * (state.bmAjudante ? 0.5 : 1);
     return {
       p: p, qtd: qtd, cheioTotal: cheioTotal, proprio: proprio,
       lucroPct: lucroPct, lucroValor: lucroValor, final: final,
@@ -6187,26 +6921,79 @@
     };
   }
 
-  // --- Renderização de detalhes na seção plana .vantagens ---
+  // Detalhes da bomba/munição/pólvora abaixo do formulário
   var ICON_NOTE = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 7h14M5 12h14M5 17h9"/></svg>';
   var lastBmVantKey = '';
+
+  function renderEquipChips(el, chips) {
+    if (!el) return;
+    el.innerHTML = '';
+    chips.forEach(function (ch) {
+      var s = document.createElement('span');
+      s.className = 'eq-chip' + (ch.main ? ' eq-chip-main' : '') + (ch.warn ? ' eq-chip-warn' : '');
+      s.textContent = ch.txt;
+      el.appendChild(s);
+    });
+    el.hidden = !chips.length;
+  }
+
+  function syncBmPresets() {
+    var bq = String(state.bombaQtd || 1);
+    bombaQtdPresetBtns.forEach(function (b) {
+      var on = b.dataset.qtd === bq;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    var aq = String(state.bmMunModQtd == null ? 5 : state.bmMunModQtd);
+    bmAmmoQtdPresetBtns.forEach(function (b) {
+      var on = b.dataset.qtd === aq;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    var pq = String(state.bmPolvQtd || 1);
+    bmPolvQtdPresetBtns.forEach(function (b) {
+      var on = b.dataset.qtd === pq;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    var bl = String(state.bombaLucro == null ? 50 : state.bombaLucro).trim();
+    bombaLucroPresetBtns.forEach(function (b) {
+      var on = b.dataset.lucro === bl;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
 
   function renderBombaInfo(cb) {
     bombaDetalhesSection.hidden = false;
     bombaDetalhesTitle.textContent = 'Receita e efeitos da bomba';
     var raioEfetivo = (cb.p.id === 'poderosa' && !cb.isBombinha) ? cb.b.raio + ' (×2 Poderosa)' : cb.b.raio;
-    bombaEquipInfo.textContent = 'Preço base ' + fmtMoeda(cb.b.preco) + ' · CD Fab. ' + cb.b.cd + ' · Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo' : raioEfetivo) + ' · TR ' + cb.b.tr;
-    bombaEquipInfo.hidden = false;
+    renderEquipChips(bombaEquipInfo, [
+      { txt: fmtMoeda(cb.b.preco), main: true },
+      { txt: 'CD Fab. ' + cb.b.cd },
+      { txt: 'Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo' : raioEfetivo) },
+      { txt: 'TR ' + cb.b.tr }
+    ]);
     if (bombaPolvoraInfo) {
       if (!state.bombaPolvora) {
         bombaPolvoraInfo.hidden = true;
+        bombaPolvoraInfo.innerHTML = '';
+      } else if (cb.p.id === 'negra') {
+        renderEquipChips(bombaPolvoraInfo, [
+          { txt: 'Padrão da receita', main: true },
+          { txt: 'Sem custo extra (' + fmtMoeda(cb.p.preco) + '/carga)' }
+        ]);
+      } else if (cb.polvoraBloqueada) {
+        renderEquipChips(bombaPolvoraInfo, [
+          { txt: 'Bombinha usa só Pólvora Negra (p. 216)', warn: true },
+          { txt: cb.p.categoria }
+        ]);
       } else {
-        bombaPolvoraInfo.textContent = cb.p.id === 'negra'
-          ? 'Carga padrão da receita · sem custo adicional (' + fmtMoeda(cb.p.preco) + '/carga)'
-          : cb.polvoraBloqueada
-            ? cb.p.categoria + ' · não se aplica a esta bombinha (p. 216)'
-            : cb.p.categoria + ' · +' + fmtMoeda(cb.p.preco - 5) + '/carga (' + fmtMoeda(cb.p.preco) + ' cheia)';
-        bombaPolvoraInfo.hidden = false;
+        renderEquipChips(bombaPolvoraInfo, [
+          { txt: cb.p.categoria, main: true },
+          { txt: '+' + fmtMoeda(cb.p.preco - 5) + '/carga' },
+          { txt: fmtMoeda(cb.p.preco) + ' cheia' }
+        ]);
       }
     }
 
@@ -6242,6 +7029,10 @@
     item.appendChild(recRow);
 
     if (cb.b.ramos && cb.b.ramos.length) {
+      var pillsLbl = document.createElement('p');
+      pillsLbl.className = 'v-pills-label';
+      pillsLbl.textContent = 'Ramos na receita';
+      item.appendChild(pillsLbl);
       var pillsWrap = document.createElement('div');
       pillsWrap.className = 'recipe-ing v-pills-row';
       cb.b.ramos.forEach(function (rm) { pillsWrap.appendChild(makeRamoPill(rm.id, rm.qtd, rm.alt || '')); });
@@ -6275,9 +7066,24 @@
     }
   }
 
+  function municaoPesoKg(cm) {
+    var m = null;
+    MUNICOES_LIST.forEach(function (x) { if (x.nome === state.bmMunId) m = x; });
+    if (!m || m.pesoKg == null) return null;
+    var mult = cm && cm.mat && cm.mat.pesoMult ? cm.mat.pesoMult : 1;
+    return m.pesoKg * mult;
+  }
+
   function renderBmMunInfo(cm) {
-    var colossalNote = (state.bmMunId || '').indexOf('colossal') !== -1 ? ' · +1 kg (evita ½ dano em armas colossais, p. 159)' : '';
-    bmMunInfo.textContent = '1 unidade = ' + fmtMoeda(cm.pdeUnit) + ' · Lote (4×) = ' + fmtMoeda(cm.pdeLote) + ' · rende 2d4 unidades' + colossalNote;
+    var kgUnit = municaoPesoKg(cm);
+    var chips = [
+      { txt: '1 un. = ' + fmtMoeda(cm.pdeUnit), main: true },
+      { txt: 'Lote (4×) = ' + fmtMoeda(cm.pdeLote) },
+      { txt: 'Rende 2d4 un.' }
+    ];
+    if (kgUnit != null) chips.push({ txt: '20 un.: ' + fmtKg(kgUnit * 20) });
+    if ((state.bmMunId || '').indexOf('colossal') !== -1) chips.push({ txt: '+1 kg/un. (armas colossais)' });
+    renderEquipChips(bmMunInfo, chips);
     if (!cm.mat) { bombaDetalhesSection.hidden = true; return; }
     bombaDetalhesSection.hidden = false;
     bombaDetalhesTitle.textContent = 'Material da munição';
@@ -6307,27 +7113,42 @@
     head.appendChild(tg);
     item.appendChild(head);
 
-    var pro = document.createElement('div');
-    pro.className = 'v-row v-pro';
-    pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
-    pro.querySelector('.v-text').textContent = cm.mat.vantagens || 'Sem propriedade mecânica adicional além do bônus no dano.';
-    item.appendChild(pro);
+    var pros = filterMaterialClauses(cm.mat.vantagens, 'municao');
+    if (pros.length) {
+      pros.forEach(function (txt) {
+        var pro = document.createElement('div');
+        pro.className = 'v-row v-pro';
+        pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+        pro.querySelector('.v-text').textContent = txt;
+        item.appendChild(pro);
+      });
+    } else {
+      var none = document.createElement('div');
+      none.className = 'v-row v-dim';
+      none.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+      none.querySelector('.v-text').textContent = 'Sem propriedade mecânica adicional para munições além do bônus no dano.';
+      item.appendChild(none);
+    }
 
-    if (cm.mat.desvantagens) {
+    var cons = filterMaterialClauses(cm.mat.desvantagens, 'municao');
+    cons.forEach(function (txt) {
       var con = document.createElement('div');
       con.className = 'v-row v-con';
       con.innerHTML = '<span class="v-icon">' + ICON_MINUS + '</span><span class="v-text"></span>';
-      con.querySelector('.v-text').textContent = cm.mat.desvantagens;
+      con.querySelector('.v-text').textContent = txt;
       item.appendChild(con);
-    }
+    });
     bombaInfoCard.appendChild(item);
   }
 
   function renderBmPolvInfo(cp) {
     bombaDetalhesSection.hidden = false;
     bombaDetalhesTitle.textContent = 'Propriedades da pólvora';
-    bmPolvInfo.textContent = '1 carga = ' + fmtMoeda(cp.p.preco) + ' · Lote (2×) = ' + fmtMoeda(cp.p.preco * 2) + ' · rende 1d4 cargas';
-    bmPolvInfo.hidden = false;
+    renderEquipChips(bmPolvInfo, [
+      { txt: '1 carga = ' + fmtMoeda(cp.p.preco), main: true },
+      { txt: 'Lote (2×) = ' + fmtMoeda(cp.p.preco * 2) },
+      { txt: 'Rende 1d4 cargas' }
+    ]);
     var vKey = 'p:' + cp.p.id;
     var enter = vKey !== lastBmVantKey;
     lastBmVantKey = vKey;
@@ -6347,19 +7168,28 @@
     head.appendChild(tg);
     item.appendChild(head);
 
+    if (cp.p.efeitoArma) {
+      var proArma = document.createElement('div');
+      proArma.className = 'v-row v-pro';
+      proArma.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+      proArma.querySelector('.v-text').textContent = 'Em armas de fogo (p. 159): ' + cp.p.efeitoArma;
+      item.appendChild(proArma);
+    }
     var pro = document.createElement('div');
     pro.className = 'v-row v-pro';
     pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
-    pro.querySelector('.v-text').textContent = cp.p.efeito;
+    pro.querySelector('.v-text').textContent = 'Em bombas (p. 217): ' + cp.p.efeito;
     item.appendChild(pro);
     bombaInfoCard.appendChild(item);
   }
 
-  // --- Update principal da Oficina Bombas e Munições ---
+  // Atualiza o painel de resultado da aba Bombas e Munições
   function updateBombas() {
     bombaArtesaoSub.textContent = '−20% em compras de itens não-mágicos';
     if (bombaArtesaoModoWrap) bombaArtesaoModoWrap.hidden = !state.bombaArtesao;
+    if (bombaBpWrap) bombaBpWrap.hidden = !state.bombaMestre;
     bombaLucroWrap.hidden = state.bombaModo !== 'vendido';
+    syncBmPresets();
 
     var modo = state.bmTipo || 'bomba';
     resultCard.classList.remove('is-empty');
@@ -6417,7 +7247,7 @@
         resultTimeSubEl.textContent = '· combine com o Mestre';
       } else {
         resultTimeEl.textContent = fmt(cm.horas) + 'h';
-        resultTimeSubEl.textContent = '· rende 2d4 un.';
+        resultTimeSubEl.textContent = '· rende 2d4 un.' + (state.bmAjudante ? ' (ajudante)' : '');
       }
       cbTime.textContent = resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent;
 
@@ -6427,10 +7257,20 @@
         resultPropsEl.appendChild(propChip('Dano', fmtMod(cm.modNum)));
         resultPropsEl.appendChild(propChip('Dureza', cm.mat.dureza));
       }
+      if (cm.final > 0 && !(cm.modMun && cm.modMun.existente)) {
+        resultPropsEl.hidden = false;
+        resultPropsEl.appendChild(propChip('Média por un.', '~' + fmtMoeda(cm.final / 5)));
+      }
       if (state.bmObra) {
         var oChip = propChip('Qualidade', 'Obra-Prima');
         oChip.classList.add('chip-obra');
         resultPropsEl.appendChild(oChip);
+      }
+      if (state.bombaModo === 'vendido' && cm.lucroValor > 0) {
+        resultPropsEl.hidden = false;
+        var mlChip = propChip('Lucro líquido', '+' + fmtMoeda(cm.lucroValor));
+        mlChip.classList.add('chip-lucro');
+        resultPropsEl.appendChild(mlChip);
       }
 
       breakdownEl.innerHTML = '';
@@ -6482,13 +7322,21 @@
 
       if (kpiTimeLabelEl) kpiTimeLabelEl.textContent = 'Tempo de preparo';
       resultTimeEl.textContent = fmt(cp.horas) + 'h';
-      resultTimeSubEl.textContent = '· rende ' + (cp.qtd === 1 ? '1d4' : cp.qtd + 'd4') + ' cargas';
+      resultTimeSubEl.textContent = '· rende ' + (cp.qtd === 1 ? '1d4' : cp.qtd + 'd4') + ' cargas' + (state.bmAjudante ? ' (ajudante)' : '');
       cbTime.textContent = resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent;
 
       resultPropsEl.innerHTML = '';
       resultPropsEl.hidden = false;
       resultPropsEl.appendChild(propChip('Rende', (cp.qtd === 1 ? '1d4' : cp.qtd + 'd4') + ' cargas'));
-      resultPropsEl.appendChild(propChip('1 carga', fmtMoeda(cp.p.preco)));
+      resultPropsEl.appendChild(propChip('1 carga (loja)', fmtMoeda(cp.p.preco)));
+      if (cp.final > 0) {
+        resultPropsEl.appendChild(propChip('Média por carga', '~' + fmtMoeda(cp.final / (cp.qtd * 2.5))));
+      }
+      if (state.bombaModo === 'vendido' && cp.lucroValor > 0) {
+        var plChip = propChip('Lucro líquido', '+' + fmtMoeda(cp.lucroValor));
+        plChip.classList.add('chip-lucro');
+        resultPropsEl.appendChild(plChip);
+      }
 
       breakdownEl.innerHTML = '';
       breakdownEl.appendChild(bRow(cp.p.nome + ' (' + (cp.qtd * 2) + ' cargas base)', fmtMoeda(cp.cheioTotal)));
@@ -6541,15 +7389,27 @@
     resultTimeSubEl.textContent = '· Kit de Alquimista';
     cbTime.textContent = resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent;
 
+    var raioChip = (cb.p.id === 'poderosa' && !cb.isBombinha) ? cb.b.raio + ' (×2 Poderosa)' : cb.b.raio;
     resultPropsEl.innerHTML = '';
     resultPropsEl.hidden = false;
     resultPropsEl.appendChild(propChip('CD Detonação', String(cb.cdDetonacao)));
     resultPropsEl.appendChild(propChip('CD Fabricação', String(cb.b.cd)));
-    resultPropsEl.appendChild(propChip('Raio', cb.isBombinha ? '1,5 m / 1 alvo' : cb.b.raio));
+    resultPropsEl.appendChild(propChip('Raio', cb.isBombinha ? '1,5 m / 1 alvo' : raioChip));
+    if (cb.isBombinha) {
+      resultPropsEl.appendChild(propChip('Peso', '0,1 kg/un.'));
+      if (cb.final > 0) {
+        resultPropsEl.appendChild(propChip('Média por un.', '~' + fmtMoeda(cb.final / (cb.qtd * 5))));
+      }
+    }
     if (state.bombaMestre) {
       var mChip = propChip('Ação', 'Bônus (Mestre)');
       mChip.classList.add('chip-obra');
       resultPropsEl.appendChild(mChip);
+    }
+    if (state.bombaModo === 'vendido' && cb.lucroValor > 0) {
+      var blChip = propChip('Lucro líquido', '+' + fmtMoeda(cb.lucroValor));
+      blChip.classList.add('chip-lucro');
+      resultPropsEl.appendChild(blChip);
     }
 
     breakdownEl.innerHTML = '';
@@ -6601,6 +7461,8 @@
       var cm = calcBmMunicao();
       if (!cm || (!(cm.pdeUnit > 0) && !(cm.modMun && cm.modMun.existente))) return null;
       var baseNome = (state.bmMunId || 'Munição').replace(' (1 unidade)', '');
+      var kgUnit = municaoPesoKg(cm);
+      var pesoTxt = kgUnit != null ? ' · Peso (20 un.) ' + fmtKg(kgUnit * 20) : '';
       return {
         id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
         oficina: 'bombas',
@@ -6612,7 +7474,7 @@
         venda: state.bombaModo === 'vendido',
         horas: cm.horas,
         rende: cm.modMun && cm.modMun.existente ? '' : '2d4 unidades',
-        detalhes: (cm.mat ? 'Dano ' + fmtMod(cm.modNum) + ' · Dureza ' + cm.mat.dureza : 'Modificação em munição existente') + (cm.modMun ? ' · ' + cm.modMun.nome + ' (' + cm.modMun.qtd + ')' : '')
+        detalhes: (cm.mat ? 'Dano ' + fmtMod(cm.modNum) + ' · Dureza ' + cm.mat.dureza : 'Modificação em munição existente') + (cm.modMun ? ' · ' + cm.modMun.nome + ' (' + cm.modMun.qtd + ')' : '') + pesoTxt
       };
     }
     if (state.bmTipo === 'polvora') {
@@ -6637,6 +7499,7 @@
     var nome = (cb.qtd > 1 ? cb.qtd + '× ' : '') + cb.b.nome +
       (cb.isBombinha ? ' (Bombinhas)' : '') +
       (cb.p.id !== 'negra' && !cb.polvoraBloqueada ? ' [' + cb.p.nome + ']' : '');
+    var raioRes = (cb.p.id === 'poderosa' && !cb.isBombinha) ? cb.b.raio + ' (×2 Poderosa)' : cb.b.raio;
     return {
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       oficina: 'bombas',
@@ -6648,7 +7511,7 @@
       venda: state.bombaModo === 'vendido',
       horas: cb.isBombinha ? +(cb.qtd / 60).toFixed(2) : null,
       rende: cb.isBombinha ? (cb.qtd === 1 ? '2d4 bombinhas' : (cb.qtd * 2) + 'd4 bombinhas') : '',
-      detalhes: 'CD Detonação ' + cb.cdDetonacao + ' · CD Fab. ' + cb.b.cd + ' · Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo' : cb.b.raio) + ' · TR ' + cb.b.tr,
+      detalhes: 'CD Detonação ' + cb.cdDetonacao + ' · CD Fab. ' + cb.b.cd + ' · Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo · Peso 0,1 kg/un.' : raioRes) + ' · TR ' + cb.b.tr,
       receita: cb.b.receita
     };
   }
@@ -6702,7 +7565,8 @@
     [bombaMestreSwitch, 'bombaMestre'],
     [bmAmmoExistenteSwitch, 'bmMunModExistente'],
     [bmPressaSwitch, 'bmPressa'],
-    [bmObraSwitch, 'bmObra']
+    [bmObraSwitch, 'bmObra'],
+    [bmAjudanteSwitch, 'bmAjudante']
   ].forEach(function (pair) {
     pair[0].addEventListener('click', function () {
       state[pair[1]] = !state[pair[1]];
@@ -6710,9 +7574,36 @@
       saveState(); update();
     });
   });
-  // =========================================================
-  // Oficina 3: Herbalismo (p. 148–150)
-  // =========================================================
+
+  bombaQtdPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.bombaQtd = Number(b.dataset.qtd);
+      bombaQtdInput.value = state.bombaQtd;
+      saveState(); update();
+    });
+  });
+  bmAmmoQtdPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.bmMunModQtd = Number(b.dataset.qtd);
+      bmAmmoQtdInput.value = state.bmMunModQtd;
+      updateBmAmmoModsTotal();
+      saveState(); update();
+    });
+  });
+  bmPolvQtdPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.bmPolvQtd = Number(b.dataset.qtd);
+      bmPolvQtdInput.value = state.bmPolvQtd;
+      saveState(); update();
+    });
+  });
+  bombaLucroPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.bombaLucro = Number(b.dataset.lucro);
+      bombaLucroInput.value = state.bombaLucro;
+      saveState(); update();
+    });
+  });
   var herbalComboWrap = document.getElementById('herbal-combo-wrap');
   var herbalEquipInfo = document.getElementById('herbal-equip-info');
   var herbalInfoBtn = document.getElementById('herbal-info-btn');
@@ -6723,12 +7614,16 @@
   var herbalOrigemSeg = document.getElementById('herbal-origem-seg');
   var herbalOrigemBtns = Array.prototype.slice.call(herbalOrigemSeg.querySelectorAll('.seg-btn'));
   var herbalArtesaoSwitch = document.getElementById('herbal-artesao-switch');
+  var herbalArtesaoSub = document.getElementById('herbal-artesao-sub');
+  var herbalAjudanteSetting = document.getElementById('herbal-ajudante-setting');
+  var herbalAjudanteSwitch = document.getElementById('herbal-ajudante-switch');
   var herbalModoSeg = document.getElementById('herbal-modo-seg');
   var herbalModoBtns = Array.prototype.slice.call(herbalModoSeg.querySelectorAll('.seg-btn'));
   var herbalLucroWrap = document.getElementById('herbal-lucro-wrap');
   var herbalLucroInput = document.getElementById('herbal-lucro');
+  var herbalQtdPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#herbal-qtd-presets .btn-chip'));
+  var herbalLucroPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#herbal-lucro-presets .btn-chip'));
   var ramosGridEl = document.getElementById('ramos-grid');
-  var herbalRollerOut = document.getElementById('herbal-roller-out');
   var herbalComboEl = null;
 
   herbalTipoInfo.innerHTML =
@@ -6736,6 +7631,7 @@
     '<ul>' +
     '<li><strong>Preparo:</strong> criar qualquer item herbáceo exige 1 hora e um Kit de Herbalismo (ou Kit de Venenos para venenos).</li>' +
     '<li><strong>Forragear ramos:</strong> 1 hora em ambiente não-urbano + teste de Natureza ou Sobrevivência CD 14 → role 1d20 na tabela e ganhe 2 ramos.</li>' +
+    '<li><strong>Receitas memorizadas (p. 148–149):</strong> sem proficiência: máx. 2 · Natureza: 2 iniciais (máx. 4) · Kit de Herbalismo: 3 iniciais (máx. 6) · Curandeiro nv. 1+: sabe todas e ensina em 1 minuto (normalmente 1h).</li>' +
     '<li><strong>Ação bônus:</strong> a regra recomenda tomar poções e aplicar venenos com ação bônus (D&amp;D 2024).</li>' +
     '</ul>';
   herbalInfoBtn.addEventListener('click', function () {
@@ -6778,51 +7674,6 @@
   }
   renderRamosTable();
 
-  function ramoByRoll(roll) {
-    for (var i = 0; i < RAMOS_DB.length; i++) {
-      if (roll >= RAMOS_DB[i].min && roll <= RAMOS_DB[i].max) return RAMOS_DB[i];
-    }
-    return RAMOS_DB[0];
-  }
-
-  function showRollOutput(html) {
-    herbalRollerOut.hidden = false;
-    herbalRollerOut.classList.remove('is-rolled');
-    herbalRollerOut.innerHTML = html;
-    void herbalRollerOut.offsetWidth;
-    herbalRollerOut.classList.add('is-rolled');
-  }
-
-  var btnForragear = document.getElementById('btn-forragear');
-  var btnHerbolario = document.getElementById('btn-herbolario');
-  var rollCount = 0;
-
-  btnForragear.addEventListener('click', function () {
-    rollCount += 1;
-    var roll = Math.floor(Math.random() * 20) + 1;
-    var r = ramoByRoll(roll);
-    morphBtn(btnForragear, ICON_CHECK + ' Rolou ' + roll);
-    showRollOutput('Forrageamento #' + rollCount + ' (1h · teste Natureza/Sobrevivência CD 14): rolou <strong>' + roll + '</strong> → encontrou <strong>2× Ramo ' + r.nome + '</strong> (' + fmtMoeda(r.preco * 2) + ' em loja / ' + fmtMoeda(r.preco) + ' na venda).');
-  });
-
-  btnHerbolario.addEventListener('click', function () {
-    rollCount += 1;
-    var numCores = Math.floor(Math.random() * 4) + 2; // 2 a 5 lotes disponíveis no dia
-    var estoque = {};
-    for (var i = 0; i < numCores; i++) {
-      var roll = Math.floor(Math.random() * 20) + 1;
-      var r = ramoByRoll(roll);
-      var q = Math.floor(Math.random() * 4) + 1;
-      estoque[r.id] = (estoque[r.id] || 0) + q;
-    }
-    var partes = Object.keys(estoque).map(function (id) {
-      var r = RAMOS_MAP[id];
-      return '<strong>' + estoque[id] + '× ' + r.nome + '</strong> (' + fmtMoeda(r.preco) + '/un.)';
-    });
-    morphBtn(btnHerbolario, ICON_CHECK + ' Estoque gerado');
-    showRollOutput('Estoque do Herbolário #' + rollCount + ' (1d20 cor + 1d4 qtd): ' + partes.join(' · ') + '.');
-  });
-
   function calcHerbal() {
     var h = herbalById(state.herbalId);
     if (!h) return null;
@@ -6848,7 +7699,7 @@
     var baseVenda = proprio > 0 ? proprio : custoRamosCheio * disc;
     var lucroValor = state.herbalModo === 'vendido' ? baseVenda * (lucroPct / 100) : 0;
     var final = state.herbalModo === 'vendido' ? baseVenda + lucroValor : proprio;
-    var horas = state.herbalOrigem === 'comprar-pronto' ? 0 : qtd;
+    var horas = state.herbalOrigem === 'comprar-pronto' ? 0 : qtd * (state.herbalAjudante ? 0.5 : 1);
     return {
       h: h, qtd: qtd, ramosUnit: ramosUnit, extraUnit: extraUnit,
       custoRamosCheio: custoRamosCheio, precoLojaTotal: precoLojaTotal,
@@ -6860,15 +7711,38 @@
   var ICON_STAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.9z"/></svg>';
   var lastHerbalVantKey = '';
 
+  function syncHerbalPresets() {
+    var hq = String(state.herbalQtd || 1);
+    herbalQtdPresetBtns.forEach(function (b) {
+      var on = b.dataset.qtd === hq;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    var hl = String(state.herbalLucro == null ? 50 : state.herbalLucro).trim();
+    herbalLucroPresetBtns.forEach(function (b) {
+      var on = b.dataset.lucro === hl;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
   function renderHerbalInfo(ch) {
     herbalDetalhesSection.hidden = false;
-    herbalEquipInfo.textContent = 'Loja ' + fmtMoeda(ch.h.preco) + ' · Rende ' + ch.h.rende + ' · 1h de preparo';
-    herbalEquipInfo.hidden = false;
+    var kitCurto = ch.h.categoria === 'Venenos' ? 'Kit de Venenos' : 'Kit de Herbalismo';
+    var hChips = [
+      { txt: 'Loja ' + fmtMoeda(ch.h.preco), main: true },
+      { txt: 'Rende ' + ch.h.rende },
+      { txt: '1h · ' + kitCurto }
+    ];
+    if (state.herbalOrigem === 'comprar-ramos' && ch.custoRamosCheio > ch.precoLojaTotal) {
+      hChips.push({ txt: 'Mais barato comprar pronto (' + fmtMoeda(ch.precoLojaTotal) + ')', warn: true });
+    }
+    renderEquipChips(herbalEquipInfo, hChips);
 
     var enter = ch.h.id !== lastHerbalVantKey;
     lastHerbalVantKey = ch.h.id;
 
-    // Renderiza na seção plana .vantagens abaixo do formulário (mesma linguagem visual da Forja)
+    // Mostra os detalhes da receita abaixo do formulário
     herbalInfoCard.innerHTML = '';
 
     var item = document.createElement('div');
@@ -6885,15 +7759,21 @@
     head.appendChild(tg);
     item.appendChild(head);
 
+    var ingLbl = document.createElement('p');
+    ingLbl.className = 'v-pills-label';
+    ingLbl.textContent = 'Ramos necessários' + (ch.qtd > 1 ? ' (' + ch.qtd + ' lotes)' : '');
+    item.appendChild(ingLbl);
+
     var ing = document.createElement('div');
     ing.className = 'recipe-ing v-pills-row-y';
     ch.h.ramos.forEach(function (rm) {
-      ing.appendChild(makeRamoPill(rm.id, rm.qtd, rm.label || ''));
+      var lbl = rm.label ? (ch.qtd > 1 ? ch.qtd + '× (' + rm.label + ')' : rm.label) : '';
+      ing.appendChild(makeRamoPill(rm.id, rm.qtd * ch.qtd, lbl));
     });
     if (ch.h.extraText) {
       var ex = document.createElement('span');
       ex.className = 'ramo-pill';
-      ex.textContent = ch.h.extraText;
+      ex.textContent = (ch.qtd > 1 && ch.h.extraCusto > 0) ? (ch.qtd + '× ' + ch.h.extraText) : ch.h.extraText;
       ing.appendChild(ex);
     }
     item.appendChild(ing);
@@ -6906,7 +7786,7 @@
 
     if (ch.h.destaque === 'Forjador') {
       var fRow = document.createElement('div');
-      fRow.className = 'v-row v-con';
+      fRow.className = 'v-row v-pro';
       fRow.innerHTML = '<span class="v-icon">' + ICON_STAR + '</span><span class="v-text"></span>';
       fRow.querySelector('.v-text').textContent = 'Essencial para o Forjador (p. 150): protege armas e armaduras contra ferrugem, umidade e a primeira tentativa de quebra durante 1 semana inteira.';
       item.appendChild(fRow);
@@ -6916,6 +7796,13 @@
 
   function updateHerbalismo() {
     herbalLucroWrap.hidden = state.herbalModo !== 'vendido';
+    if (herbalAjudanteSetting) herbalAjudanteSetting.hidden = state.herbalOrigem === 'comprar-pronto';
+    if (herbalArtesaoSub) {
+      herbalArtesaoSub.textContent = state.herbalOrigem === 'forragear'
+        ? 'Vale só na venda ou se a receita tiver item base extra'
+        : 'Desconto na compra de ramos ou itens herbáceos não-mágicos';
+    }
+    syncHerbalPresets();
     var ch = calcHerbal();
     var labelTxt = state.herbalModo === 'vendido'
       ? 'Preço de venda'
@@ -6953,9 +7840,12 @@
     resultLabel.textContent = labelTxt;
     cbLabel.textContent = labelTxt;
 
+    var kitNome = ch.h.categoria === 'Venenos' ? 'Kit de Venenos' : 'Kit de Herbalismo';
     if (kpiTimeLabelEl) kpiTimeLabelEl.textContent = state.herbalOrigem === 'comprar-pronto' ? 'Aquisição' : 'Tempo de preparo';
-    resultTimeEl.textContent = state.herbalOrigem === 'comprar-pronto' ? 'Imediato' : (ch.horas + 'h');
-    resultTimeSubEl.textContent = state.herbalOrigem === 'comprar-pronto' ? '· compra em herbolário' : '· Kit de Herbalismo';
+    resultTimeEl.textContent = state.herbalOrigem === 'comprar-pronto' ? 'Imediato' : (fmt(ch.horas) + 'h');
+    resultTimeSubEl.textContent = state.herbalOrigem === 'comprar-pronto'
+      ? '· compra em herbolário'
+      : '· ' + kitNome + (state.herbalAjudante ? ' (ajudante)' : '');
     cbTime.textContent = resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent;
 
     resultPropsEl.innerHTML = '';
@@ -6966,6 +7856,11 @@
       var dChip = propChip('Destaque', ch.h.destaque);
       dChip.classList.add('chip-obra');
       resultPropsEl.appendChild(dChip);
+    }
+    if (state.herbalModo === 'vendido' && ch.lucroValor > 0) {
+      var hlChip = propChip('Lucro líquido', '+' + fmtMoeda(ch.lucroValor));
+      hlChip.classList.add('chip-lucro');
+      resultPropsEl.appendChild(hlChip);
     }
 
     breakdownEl.innerHTML = '';
@@ -7046,6 +7941,30 @@
   herbalArtesaoSwitch.addEventListener('click', function () {
     setArtesao(!state.artesao);
   });
+  if (herbalAjudanteSwitch) {
+    herbalAjudanteSwitch.addEventListener('click', function () {
+      state.herbalAjudante = !state.herbalAjudante;
+      herbalAjudanteSwitch.setAttribute('aria-checked', state.herbalAjudante ? 'true' : 'false');
+      saveState();
+      update();
+    });
+  }
+  herbalQtdPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.herbalQtd = Number(b.dataset.qtd);
+      herbalQtdInput.value = state.herbalQtd;
+      saveState();
+      update();
+    });
+  });
+  herbalLucroPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.herbalLucro = Number(b.dataset.lucro);
+      herbalLucroInput.value = state.herbalLucro;
+      saveState();
+      update();
+    });
+  });
   herbalModoBtns.forEach(function (btn) {
     btn.addEventListener('click', function () {
       state.herbalModo = btn.getAttribute('data-hmodo');
@@ -7070,7 +7989,7 @@
         function () { return bombaById(state.bombaId); },
         'Buscar bomba (ex.: estilhaço, fumaça, santa granada)',
         'bomba-combo-label',
-        function (b) { return fmtMoeda(b.preco) + ' · CD ' + b.cd; },
+        function (b) { return fmtMoeda(b.preco) + ' · CD ' + b.cd + ' · ' + b.raio; },
         function (b) { state.bombaId = b.id; saveState(); update(); },
         function () { state.bombaId = ''; saveState(); update(); }
       );
@@ -7135,6 +8054,7 @@
     bmAmmoExistenteSwitch.setAttribute('aria-checked', state.bmMunModExistente ? 'true' : 'false');
     bmPressaSwitch.setAttribute('aria-checked', state.bmPressa ? 'true' : 'false');
     bmObraSwitch.setAttribute('aria-checked', state.bmObra ? 'true' : 'false');
+    bmAjudanteSwitch.setAttribute('aria-checked', state.bmAjudante ? 'true' : 'false');
     bmPolvQtdInput.value = state.bmPolvQtd || 1;
     renderBmAmmoMods();
     setBmTipo(state.bmTipo || 'bomba', true);
@@ -7176,6 +8096,7 @@
 
     herbalQtdInput.value = state.herbalQtd || 1;
     herbalArtesaoSwitch.setAttribute('aria-checked', state.herbalArtesao !== false ? 'true' : 'false');
+    if (herbalAjudanteSwitch) herbalAjudanteSwitch.setAttribute('aria-checked', state.herbalAjudante ? 'true' : 'false');
     herbalOrigemBtns.forEach(function (x) {
       var on = x.getAttribute('data-horigem') === (state.herbalOrigem || 'comprar-ramos');
       x.classList.toggle('active', on);
@@ -7198,9 +8119,9 @@
         window._compMatCombos[slot] = buildCatalogCombo(
           MATERIALS_DB,
           function () { return state.compMats[slot] ? materialById(state.compMats[slot]) : null; },
-          'Buscar material ' + (slot + 1) + ' (ex.: aço, mitral, tier b)',
+          'Buscar material ' + (slot + 1) + ' (ex.: aço, mithral, tier b)',
           'comp-mat-' + slot + '-label',
-          function (m) { return 'Tier ' + m.tier + ' · ×' + m.mult; },
+          function (m) { return 'Tier ' + m.tier + ' · ×' + m.mult + (m.mod && m.mod !== '+0' && m.mod !== '0' ? ' · ' + m.mod : ''); },
           function (m) { state.compMats[slot] = m.id; saveState(); renderCompMateriais(); },
           function () { state.compMats[slot] = ''; saveState(); renderCompMateriais(); }
         );
@@ -7222,6 +8143,7 @@
     pressaSwitch.setAttribute('aria-checked', state.pressa ? 'true' : 'false');
     fracaoSwitch.setAttribute('aria-checked', state.fracaoFixa ? 'true' : 'false');
     lucroInput.value = state.lucro;
+    syncLucroPresets();
     magicoRaridadeSelect.value = state.magicoRaridade || 'comum';
     peritoSwitch.setAttribute('aria-checked', state.peritoItensMagicos ? 'true' : 'false');
     especialistaSwitch.setAttribute('aria-checked', state.especialistaItensMagicos ? 'true' : 'false');
@@ -7276,6 +8198,55 @@
       setCostBar(!entries[0].isIntersecting);
     }, { threshold: 0.15 }).observe(resultCard);
   }
+
+  // Exemplos clicáveis dentro de "Como funciona a pesquisa?"
+  var SEARCH_INFO_TARGET = {
+    'equip-search-info': '#equip-wrap .mat-search',
+    'mat-search-info': '#materials-wrap .mat-search',
+    'bomba-search-info': '#bomba-combo-wrap .mat-search',
+    'bomba-polvora-search-info': '#bomba-polvora-wrap .mat-search',
+    'bm-mat-search-info': '#bm-mun-mat-wrap .mat-search',
+    'polv-search-info': '#bm-polv-wrap .mat-search',
+    'herbal-search-info': '#herbal-combo-wrap .mat-search'
+  };
+  Object.keys(SEARCH_INFO_TARGET).forEach(function (infoId) {
+    var box = document.getElementById(infoId);
+    if (!box) return;
+    Array.prototype.forEach.call(box.querySelectorAll('code'), function (codeEl) {
+      codeEl.classList.add('search-ex');
+      codeEl.setAttribute('role', 'button');
+      codeEl.setAttribute('tabindex', '0');
+      codeEl.title = 'Clique para buscar "' + codeEl.textContent + '"';
+      function runExample() {
+        var target = document.querySelector(SEARCH_INFO_TARGET[infoId]);
+        if (!target) return;
+        target.value = codeEl.textContent;
+        target.focus();
+        target.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+      codeEl.addEventListener('click', runExample);
+      codeEl.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); runExample(); }
+      });
+    });
+  });
+
+  // Atalho '/' foca a busca principal da aba ativa
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key !== '/' || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    var tag = ev.target && ev.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (ev.target && ev.target.isContentEditable)) return;
+    var sel = state.oficina === 'herbalismo'
+      ? '#herbal-combo-wrap .mat-search'
+      : state.oficina === 'bombas'
+        ? (state.bmTipo === 'municao' ? '#bm-mun-mat-wrap .mat-search' : state.bmTipo === 'polvora' ? '#bm-polv-wrap .mat-search' : '#bomba-combo-wrap .mat-search')
+        : '#equip-wrap .mat-search';
+    var input = document.querySelector(sel);
+    if (!input) return;
+    ev.preventDefault();
+    input.focus();
+    input.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+  });
 })();
 
 // Campos numéricos: valor negativo ou inválido ganha aviso junto ao campo
@@ -7308,8 +8279,7 @@
   Array.prototype.forEach.call(document.querySelectorAll('input[type="number"][min]'), check);
 })();
 
-// Grupos de opção (botões segmentados): setas do teclado, indicador deslizante e um só ponto de foco por grupo
-// + abertura/fechamento suave de gavetas <details> via Web Animations API
+// Navegação por teclado nos botões segmentados e animação dos <details>
 (function () {
   'use strict';
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -7362,7 +8332,7 @@
       else if (ev.key === 'End') next = btns[btns.length - 1];
       if (!next) return;
       ev.preventDefault();
-      // Ações por teclado não animam (regra do emil-design-eng)
+      // Troca pelo teclado vai direto, sem animar
       skipNextAnim = true;
       next.click();
       next.focus();
@@ -7384,7 +8354,7 @@
     pillUpdaters.forEach(function (fn) { fn(); });
   }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
 
-  // Gavetas <details>: expansão e fechamento interrompíveis com tempos assimétricos (abre em 220ms, fecha em 165ms)
+  // Abre e fecha os <details> de forma suave
   Array.prototype.forEach.call(document.querySelectorAll('details.mods, details.magicos, details.explain'), function (det) {
     var sum = det.querySelector('summary');
     if (!sum || !det.animate) return;
@@ -7423,7 +8393,6 @@
 })();
 </script>
 <script>
-// Tema claro / escuro: segue o sistema até a pessoa escolher, depois lembra
 (function () {
   'use strict';
   var btn = document.getElementById('theme-btn');
@@ -7464,11 +8433,10 @@
     var next = current() === 'dark' ? 'light' : 'dark';
     if (!document.startViewTransition || reduce) { apply(next); return; }
 
-    // Onda: o tema novo nasce no botão e se expande até cobrir a tela
+    // Calcula origem e raio da transição a partir do botão
     var r = btn.getBoundingClientRect();
     var x = r.left + r.width / 2, y = r.top + r.height / 2;
     var raio = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
-    // Centro e alcance da onda (o CSS anima o raio; as ondulações vêm atrás da frente)
     root.style.setProperty('--wave-x', x + 'px');
     root.style.setProperty('--wave-y', y + 'px');
     root.style.setProperty('--wave-max', Math.ceil(raio + 440) + 'px');
@@ -7485,9 +8453,6 @@
 })();
 </script>
 <script>
-// Modo forja: brasas subindo da forja (canvas de fundo, opcional)
-// Física simples: empuxo do calor + turbulência + vento; cada brasa esfria
-// seguindo a cor do corpo negro (branco-amarelo → laranja → vermelho → apaga).
 (function () {
   'use strict';
   var canvas = document.getElementById('embers');
@@ -7509,7 +8474,7 @@
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
-  // ---------- Cor por temperatura por oficina (1 = quente/vivo, 0 = apagado) ----------
+  // Cor por temperatura em cada aba (1 = quente, 0 = apagado)
   var RAMPS = {
     forja: [
       [0.00, 70, 14, 6],
@@ -7581,7 +8546,7 @@
   var activeOficina = document.documentElement.getAttribute('data-oficina') || 'forja';
   var leaves = [], smokes = [], glows = [], glowCooldown = 0.4, grains = [], microSparks = [], wisps = [];
 
-  // ---------- Modo pólvora (3 + 4): Névoa com clarões abafados + Grãos de pólvora inflamando ----------
+  // Névoa e grãos de pólvora (aba Bombas)
   function spawnGlow(initial) {
     var side = Math.random() < 0.78;
     var gx = side
@@ -7592,7 +8557,7 @@
       x: gx, y: gy,
       r: 140 + Math.random() * 170,
       life: initial ? Math.random() * 0.5 : 0,
-      speed: 0.32 + Math.random() * 0.26, // ciclos por segundo (~2–3s de duração)
+      speed: 0.32 + Math.random() * 0.26, // ~2-3s por ciclo
       amber: Math.random() < 0.45
     });
   }
@@ -7665,7 +8630,7 @@
   }
 
   function makeSmokePuff(rgb) {
-    // Nuvem multi-lobulada (5 círculos suaves deslocados) para parecer fumaça real, não bolinha
+    // 5 círculos sobrepostos pra imitar fumaça
     var s = document.createElement('canvas');
     s.width = s.height = 128;
     var g = s.getContext('2d');
@@ -7724,7 +8689,7 @@
   var VIOLET = makeHalo([200, 160, 255], false);
   function lvl(k) { return Math.max(0, Math.min(LEVELS - 1, Math.round(k * (LEVELS - 1)))); }
 
-  // ---------- Campo de turbulência (soma de senoides: barato e suave) ----------
+  // Turbulência com soma de senoides
   function flowX(x, y, time) {
     return Math.sin(y * 0.011 + time * 0.9) * 0.6 + Math.sin(y * 0.027 - time * 1.7 + x * 0.004) * 0.4;
   }
@@ -7735,7 +8700,7 @@
     return Math.sin(time * 0.21) * 0.55 + Math.sin(time * 0.067 + 1.7) * 0.35 + Math.sin(time * 0.53) * 0.1;
   }
 
-  // ---------- Partículas ----------
+  // Partículas
   function spawnEmber(anywhere) {
     var z = 0.35 + Math.random() * 0.65;          // profundidade: 1 = perto
     var big = Math.random() < 0.12;
@@ -7758,7 +8723,7 @@
     };
   }
   function spawnMote() {
-    // brasas grandes desfocadas em primeiro plano (profundidade de campo)
+    // brasas maiores e desfocadas em primeiro plano
     return {
       x: Math.random() * W,
       y: H + 60 + Math.random() * H * 0.5,
@@ -7814,13 +8779,13 @@
     if (!running) start();
   }
 
-  // ---------- Simulação ----------
+  // Simulação
   function step(dt) {
     t += dt;
     var g = gust(t);
 
     if (activeOficina === 'herbalismo') {
-      // Folhas botânicas caindo suavemente com balanço pendular e giro 3D
+      // Folhas caindo com balanço lateral
       var wind = 10 + g * 18;
       for (var li = 0; li < leaves.length; li++) {
         var lf = leaves[li];
@@ -7836,7 +8801,7 @@
     }
 
     if (activeOficina === 'bombas') {
-      // 3 + 4: Névoa de pólvora com clarões abafados + grãos de pólvora negra inflamando
+      // Névoa de pólvora e grãos acendendo
       glowCooldown -= dt;
       if (glowCooldown <= 0 && glows.length < 3) {
         spawnGlow(false);
@@ -7912,7 +8877,7 @@
         if (ms2.life >= ms2.maxLife) microSparks.splice(mi, 1);
       }
 
-      // Faíscas de feedback ao selecionar itens raros (Forja.sparksAt)
+      // Faíscas ao escolher item raro (Forja.sparksAt)
       for (var sj = sparks.length - 1; sj >= 0; sj--) {
         var spk = sparks[sj];
         spk.px = spk.x; spk.py = spk.y;
@@ -7927,7 +8892,7 @@
       return;
     }
 
-    // Forja (padrão): brasas subindo com empuxo térmico + bokeh + faíscas
+    // Forja: brasas subindo, bokeh e faíscas
     for (var i = 0; i < embers.length; i++) {
       var e = embers[i];
       e.px = e.x; e.py = e.y;
@@ -7963,7 +8928,7 @@
     }
   }
 
-  // ---------- Desenho ----------
+  // Desenho
   function drawLeaf(lf, dark) {
     var palette = dark ? LEAF_COLORS_DARK : LEAF_COLORS_LIGHT;
     var col = palette[lf.colorIdx];
@@ -7985,7 +8950,7 @@
     ctx.quadraticCurveTo(-s * 0.72, -s * 0.15, 0, -s);
     ctx.fill();
 
-    // nervura central delicada
+    // nervura central
     ctx.globalAlpha = alpha * 0.55;
     ctx.strokeStyle = dark ? 'rgba(220,245,215,0.7)' : 'rgba(255,252,240,0.65)';
     ctx.lineWidth = Math.max(0.6, s * 0.07);
@@ -8009,7 +8974,7 @@
     }
 
     if (activeOficina === 'bombas') {
-      // 1. Clarões abafados pulsando por trás da névoa (multiply + pigmentos profundos no claro)
+      // Clarões atrás da névoa
       for (var gl = 0; gl < glows.length; gl++) {
         var cw = glows[gl];
         var env = Math.sin(cw.life * Math.PI) * Math.pow(1 - cw.life, 0.42);
@@ -8047,7 +9012,7 @@
         ctx.restore();
       }
 
-      // 2. Névoa de pólvora multi-lobulada girando suavemente
+      // Névoa girando
       ctx.globalCompositeOperation = dark ? 'source-over' : 'multiply';
       var smokeImg = dark ? SMOKE_DARK : SMOKE_LIGHT;
       for (var si = 0; si < smokes.length; si++) {
@@ -8064,7 +9029,7 @@
       ctx.globalAlpha = 1;
       ctx.globalCompositeOperation = 'source-over';
 
-      // 3. Fiozinhos de fumaça deixados pelos grãos inflamados
+      // Rastro de fumaça dos grãos
       for (var wi = 0; wi < wisps.length; wi++) {
         var ws = wisps[wi];
         var wa = Math.sin(ws.life * Math.PI) * (dark ? 0.18 : 0.26);
@@ -8078,7 +9043,7 @@
         ctx.fill();
       }
 
-      // 4. Grãos de pólvora negra e limalha que se inflamam em lampejos silenciosos
+      // Grãos acendendo
       for (var gi = 0; gi < grains.length; gi++) {
         var gr = grains[gi];
         if (gr.igniting > 0) {
@@ -8109,7 +9074,7 @@
         ctx.fill();
       }
 
-      // 5. Micro-faíscas dos grãos inflamados
+      // Faíscas dos grãos
       for (var mi = 0; mi < microSparks.length; mi++) {
         var ms2 = microSparks[mi];
         var ma2 = Math.max(0, 1 - ms2.life / ms2.maxLife);
@@ -8121,7 +9086,7 @@
         ctx.fill();
       }
 
-      // 6. Faíscas de seleção de item raro (Forja.sparksAt)
+      // Faíscas ao escolher item raro (Forja.sparksAt)
       if (sparks.length) {
         ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
         var dimB = dark ? 1 : 0.85;
@@ -8145,7 +9110,7 @@
     ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
     var dim = dark ? 1 : 0.7;
 
-    // 1. bokeh ao fundo/frente
+    // bokeh
     for (var m = 0; m < motes.length; m++) {
       var o = motes[m];
       var fl = 0.8 + 0.2 * Math.sin(t * 1.3 + o.seed);
@@ -8153,12 +9118,12 @@
       ctx.drawImage(BOKEH[lvl(o.temp)], o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
     }
 
-    // 2. brasas: halo + rastro de movimento + núcleo
+    // brasas
     for (var i = 0; i < embers.length; i++) {
       var e = embers[i];
       var fadeIn = Math.min(1, e.life * 2);
       var fadeOut = Math.min(1, e.temp / 0.18);
-      // cintilação irregular: duas frequências + "estalo" ocasional
+      // brilho irregular com estalo ocasional
       var fl = 0.72 + 0.18 * Math.sin(t * e.flick + e.seed) + 0.1 * Math.sin(t * e.flick * 2.7 + e.seed * 3);
       var a = fadeIn * fadeOut * fl * dim;
       if (a <= 0.01) continue;
@@ -8179,7 +9144,7 @@
       ctx.lineWidth = e.r * 1.1;
       ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(e.x, e.y); ctx.stroke();
 
-      // núcleo irregular: elipse que gira (fragmento de carvão, não bolinha)
+      // núcleo oval girando
       ctx.globalAlpha = a;
       ctx.fillStyle = rgba(rampColor(Math.min(1, k + 0.12)), 1);
       ctx.save();
@@ -8191,7 +9156,7 @@
       ctx.restore();
     }
 
-    // 3. faíscas de forja: riscos brilhantes que caem
+    // faíscas caindo
     for (var j = 0; j < sparks.length; j++) {
       var s = sparks[j];
       var kk = 1 - s.life / s.maxLife;
@@ -8210,7 +9175,7 @@
     ctx.globalCompositeOperation = 'source-over';
   }
 
-  // ---------- Ciclo ----------
+  // Loop principal
   function start() {
     if (!enabled) return;
     if (reduce) { draw(); return; }

@@ -63,6 +63,7 @@
     artesaoModo: 'duplo',
     materiaisPossuidos: false,
     pressa: false,
+    ajudante: false,
     mostrarDureza: true,
     tipoItem: 'arma',
     fracaoFixa: false,
@@ -103,6 +104,7 @@
     bmMunModExistente: false,
     bmPressa: false,
     bmObra: false,
+    bmAjudante: false,
     bmPolvId: '',
     bmPolvQtd: 1,
     // Oficina Herbalismo
@@ -110,6 +112,7 @@
     herbalQtd: 1,
     herbalOrigem: 'comprar-ramos',
     herbalArtesao: true,
+    herbalAjudante: false,
     herbalModo: 'proprio',
     herbalLucro: 50
   };
@@ -195,8 +198,7 @@
     return rounded.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   }
 
-  // Moedas do D&D (Livro do Jogador): 1 po = 10 pp = 100 pc. Electro e platina ficam de fora,
-  // como o próprio livro sugere (são incomuns em transações). Arredonda para a peça de cobre.
+  // 1 po = 10 pp = 100 pc (sem electro/platina, arredonda em pc)
   function moedas(n) {
     var c = Math.round(Math.abs(isFinite(n) ? n : 0) * 100);
     var partes = [];
@@ -211,7 +213,7 @@
     var m = moedas(n);
     return (m.neg ? '−' : '') + m.partes.map(function (p) { return p[0] + ' ' + p[1]; }).join(' ');
   }
-  // Versão do número grande: a primeira moeda em destaque, as outras menores
+  // Destaca a moeda principal e diminui o resto
   function htmlMoeda(n) {
     var m = moedas(n);
     return m.partes.map(function (p, i) {
@@ -224,7 +226,7 @@
     return isFinite(n) ? n : (fallback || 0);
   }
 
-  // --- DOM refs ---
+  // Elementos da tela
   var pdeInput = document.getElementById('pde');
   var artesaoSwitch = document.getElementById('artesao-switch');
   var artesaoModoWrap = document.getElementById('artesao-modo-wrap');
@@ -279,10 +281,11 @@
   var modsTotal = document.getElementById('mods-total');
   var transmutNivelSelect = document.getElementById('transmut-nivel');
 
-  // Switches simples: id do botão → chave do estado → o que recalcular
+  // Switches simples (id do botão, chave no estado e ação)
   var SIMPLE_SWITCHES = [
     ['existente-switch', 'modExistente', 'main'],
     ['obra-switch', 'obraPrima', 'main'],
+    ['ajudante-switch', 'ajudante', 'main'],
     ['melhor-switch', 'melhorDosMelhores', 'main'],
     ['encantar-switch', 'encantarExistente', 'magic'],
     ['desencantado-switch', 'desencantado', 'magic'],
@@ -290,13 +293,37 @@
   ];
 
   var autoForjSwitch = document.getElementById('auto-forj-switch');
-  var autoMagicSwitch = document.getElementById('automaticas-switch');
   var excaliburSwitch = document.getElementById('excalibur-switch');
   var excaliburSetting = document.getElementById('excalibur-setting');
   var consertoNoteEl = document.getElementById('conserto-note');
+  var forjHighCountEl = document.getElementById('forj-high-count');
+  var magicosActiveCountEl = document.getElementById('magicos-active-count');
+  var lucroPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#lucro-presets .btn-chip'));
 
   function maxMaterials() {
     return state && state.excalibur && state.tipoItem === 'arma' ? 6 : 4;
+  }
+
+  function attachComboClear(wrap, input, onClear) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'mat-clear-btn';
+    btn.innerHTML = ICON_X;
+    btn.setAttribute('aria-label', 'Limpar campo');
+    btn.title = 'Limpar';
+    function sync() { btn.hidden = !input.value; }
+    btn.addEventListener('mousedown', function (ev) {
+      ev.preventDefault();
+      input.value = '';
+      sync();
+      if (onClear) onClear();
+      else input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.focus();
+    });
+    input.addEventListener('input', sync);
+    wrap.appendChild(btn);
+    sync();
+    return sync;
   }
 
   function buildMaterialCombo(idx, mat, multInput, tierSelect) {
@@ -336,6 +363,7 @@
       state.materials[idx].mult = m.mult;
       state.materials[idx].tier = m.tier;
       input.value = m.nome;
+      syncClear();
       var rowEl = input.closest('.material-row');
       if (rowEl) rowEl.dataset.tier = m.tier;
       if (m.tier === 'S' && window.Forja) window.Forja.sparksAt(input, 'purple');
@@ -347,7 +375,8 @@
       multInput.title = tierSelect.title = 'Definido pelo material — apague o nome para digitar um material personalizado';
       saveState();
       closeDropdown();
-      update();
+      if (m.forcaPesado && state.peso !== 'pesado') setPeso('pesado');
+      else update();
     }
 
     function highlight(newIndex) {
@@ -392,7 +421,8 @@
           nameSpan.textContent = m.nome;
           var multSpan = document.createElement('span');
           multSpan.className = 'mo-mult';
-          multSpan.textContent = '×' + m.mult;
+          var modTxt = m.mod && m.mod !== '+0' && m.mod !== '0' ? ' · ' + m.mod : '';
+          multSpan.textContent = '×' + m.mult + modTxt;
           opt.appendChild(nameSpan);
           opt.appendChild(multSpan);
           opt.addEventListener('mousedown', function (e) {
@@ -448,6 +478,7 @@
     });
 
     wrap.appendChild(input);
+    var syncClear = attachComboClear(wrap, input);
     wrap.appendChild(dropdown);
     return wrap;
   }
@@ -579,8 +610,7 @@
       proprio = possuidos ? 0 : subtotal / divisor;
     }
 
-    // Modificação de munição: preço fixo por munição, fora do multiplicador do material.
-    // O Forjador paga metade (Trabalhador Itinerante) e o Artesão desconta, como no resto.
+    // Mod de munição soma por unidade, fora do multiplicador do material
     var proprioItem = proprio;
     var modMun = null;
     var mm = state.tipoItem === 'municao' ? MUNICAO_MODS[state.municaoMod] : null;
@@ -592,11 +622,16 @@
       proprio = modMun.existente ? pagoMod : proprio + pagoMod;
     }
 
-    var consertoCheio = cheio / 2;
+    var temMaterialVivo = (state.materials || []).some(function (row) {
+      var m = row.materialId ? materialById(row.materialId) : null;
+      return !!(m && m.materialVivo);
+    });
+    var consertoVivo = conserto && temMaterialVivo;
+    var consertoCheio = consertoVivo ? 0 : cheio / 2;
     var lucroValor = 0;
     var final = proprio;
     if (conserto) {
-      final = proprio / 2;
+      final = consertoVivo ? 0 : proprio / 2;
     } else if (state.modo === 'vendido') {
       lucroValor = proprio * (lucro / 100);
       final = proprio + lucroValor;
@@ -607,7 +642,8 @@
       pdeDesc: pdeDesc, matDesc: matDesc, subtotal: subtotal, proprio: proprio,
       cheio: cheio, cheioPadrao: cheioPadrao, usaFracaoFixa: usaFracaoFixa,
       lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota,
-      duplo: duplo, modMun: modMun, proprioItem: proprioItem, conserto: conserto, consertoCheio: consertoCheio
+      duplo: duplo, modMun: modMun, proprioItem: proprioItem, conserto: conserto,
+      consertoCheio: consertoCheio, consertoVivo: consertoVivo
     };
   }
 
@@ -676,6 +712,127 @@
     });
   }
 
+  function capFirst(s) {
+    return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
+  }
+
+  function clauseTargets(clause) {
+    var s = clause.toLowerCase();
+    var t = {};
+    var hasArmasComMun = /armas?\s+com\s+(a\s+propriedade\s+)?muni[cç][aã]o/.test(s);
+    var hasArmasCorpo = /armas?\s+corpo\s+a\s+corpo|armas?\s+de\s+(corte|perfura|concuss|arremesso)|arremesso/.test(s);
+    var hasArmasDist = /armas?\s+[àa]\s+dist[âa]ncia|ou\s+[àa]\s+dist[âa]ncia/.test(s);
+    var hasArmasMunSlash = /armas?\/muni[cç]/.test(s);
+    var hasArmasGen = /\barmas?\b/.test(s) && !hasArmasComMun && !hasArmasCorpo && !hasArmasDist && !hasArmasMunSlash;
+    var hasMunicao = hasArmasMunSlash || /(?:^|[\s,/(])muni[cç][oõ]es\b|disparos\s+de\s+muni[cç][aã]o|\bmuni[cç][aã]o\s+(com|gera|quebra)/.test(s);
+    var hasArmadura = /\barmaduras?\b/.test(s);
+    var hasEscudo = /\bescudos?\b/.test(s);
+    var hasFoco = /\bfocos?\b|\bcanalizadores?\b/.test(s);
+
+    if (hasArmasCorpo || hasArmasMunSlash || hasArmasGen) t.melee = true;
+    if (hasArmasComMun || hasArmasDist || hasArmasMunSlash || hasArmasGen) t.ranged = true;
+    if (hasMunicao) t.municao = true;
+    if (hasArmadura) t.armadura = true;
+    if (hasEscudo) t.escudo = true;
+    if (hasFoco) t.foco = true;
+    return t;
+  }
+
+  function matchesItemCtx(targets, itemCtx) {
+    var keys = Object.keys(targets);
+    if (!keys.length || !itemCtx || itemCtx === 'all') return true;
+    if (itemCtx === 'arma_all') return !!(targets.melee || targets.ranged);
+    if (itemCtx === 'armadura_escudo') return !!(targets.armadura || targets.escudo);
+    return !!targets[itemCtx];
+  }
+
+  function cleanClauseForCtx(txt, itemCtx) {
+    if (!txt || !itemCtx || itemCtx === 'all') return txt;
+    var s = txt;
+    if (itemCtx === 'municao') {
+      s = s
+        .replace(/armas\s+corpo\s+a\s+corpo,\s*de\s+arremesso\s+ou\s+(?:à\s+distância|muni[cç][oõ]es)/gi, 'munições')
+        .replace(/armas\s+de\s+(?:corte\/perfura[cç][aã]o|concuss[aã]o)\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas\s+corpo\s+a\s+corpo\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas,\s*escudos\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas\s+e\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/armas\/muni[cç][oõ]es/gi, 'munições')
+        .replace(/muni[cç][oõ]es\s+e\s+armas\s+de\s+arremesso/gi, 'munições')
+        .replace(/\b(em\s+)armas\s+corpo\s+a\s+corpo,\s*de\s+arremesso\s+ou\s+muni[cç][oõ]es/gi, '$1munições')
+        .replace(/\barmas\s+corpo\s+a\s+corpo\s+ou\s+muni[cç][oõ]es/gi, 'munições')
+        .replace(/\s*\(exceto\s+muni[cç][oõ]es\)/gi, '');
+    } else {
+      // Na Forja não há munição: remove referências a munições das frases de armas/escudos
+      s = s
+        .replace(/armas\/muni[cç][oõ]es/gi, 'armas')
+        .replace(/armas\s+de\s+corte\/perfura[cç][aã]o\s+e\s+muni[cç][oõ]es/gi, 'armas de corte/perfuração')
+        .replace(/armas\s+corpo\s+a\s+corpo,\s*de\s+arremesso\s+ou\s+muni[cç][oõ]es/gi, 'armas corpo a corpo ou de arremesso')
+        .replace(/armas\s+corpo\s+a\s+corpo\s+e\s+muni[cç][oõ]es/gi, 'armas corpo a corpo')
+        .replace(/armas\s+e\s+muni[cç][oõ]es/gi, 'armas')
+        .replace(/armas,\s*escudos\s+e\s+muni[cç][oõ]es/gi, itemCtx === 'escudo' ? 'escudos' : 'armas')
+        .replace(/muni[cç][oõ]es\s+e\s+armas\s+de\s+arremesso/gi, 'armas de arremesso')
+        .replace(/,\s*de\s+arremesso\s+ou\s+muni[cç][oõ]es/gi, ' ou de arremesso')
+        .replace(/\s*\(armas\/muni[cç][oõ]es\)/gi, ' (armas)')
+        .replace(/\s*\(sempre\s+ativa\s+em\s+cr[ií]ticos\s+de\s+arma\s+ou\s+disparos\s+de\s+muni[cç][aã]o\)/gi, ' (sempre ativa em críticos de arma)');
+      if (itemCtx === 'armadura') {
+        s = s
+          .replace(/armaduras\s+m[ée]dias\/pesadas\s+e\s+escudos/gi, 'armaduras médias/pesadas')
+          .replace(/armaduras\/escudos/gi, 'armaduras')
+          .replace(/armaduras\s+e\s+escudos/gi, 'armaduras')
+          .replace(/armadura\s+ou\s+escudo/gi, 'armadura');
+      } else if (itemCtx === 'escudo') {
+        s = s
+          .replace(/armaduras\s+m[ée]dias\/pesadas\s+e\s+escudos/gi, 'escudos')
+          .replace(/armaduras\/escudos/gi, 'escudos')
+          .replace(/armaduras\s+e\s+escudos/gi, 'escudos')
+          .replace(/armadura\s+ou\s+escudo/gi, 'escudo');
+      }
+    }
+    return capFirst(s.trim());
+  }
+
+  function filterMaterialClauses(text, itemCtx) {
+    if (!text) return [];
+    var sharedPrefix = '';
+    var body = text;
+    var m = text.match(/^(Ao sofrer ou canalizar[^:]+:|Material vivo(?:\s+[^:]+)?\:)\s*(.+)$/i);
+    if (m && m[2].indexOf(';') !== -1) {
+      sharedPrefix = m[1];
+      body = m[2];
+    }
+    var parts = body.split(';').map(function (p) { return p.replace(/^[,;\s]+|[,;\s]+$/g, ''); }).filter(Boolean);
+    var out = [];
+    if (sharedPrefix && /^Material vivo/i.test(sharedPrefix)) {
+      out.push(sharedPrefix.replace(/:$/, '') + '.');
+      sharedPrefix = '';
+    }
+    parts.forEach(function (p) {
+      var targets = clauseTargets(p);
+      if (matchesItemCtx(targets, itemCtx)) {
+        var cleaned = cleanClauseForCtx(p, itemCtx);
+        var txt = sharedPrefix ? (sharedPrefix + ' ' + cleaned.charAt(0).toLowerCase() + cleaned.slice(1)) : cleaned;
+        out.push(/[.!?]$/.test(txt) ? txt : txt + '.');
+      }
+    });
+    return out;
+  }
+
+  function currentForjaCtx() {
+    if (state.equipNome) {
+      var eq = null;
+      EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+      if (eq) {
+        if (eq.grupo === 'Escudos') return 'escudo';
+        if (eq.grupo === 'Focos de Conjuração') return 'foco';
+        if (eq.tipo === 'armadura') return 'armadura';
+        if (RANGED_AMMO_SET[eq.nome]) return 'ranged';
+        return 'melee';
+      }
+    }
+    if (state.tipoItem === 'armadura') return 'armadura_escudo';
+    return 'arma_all';
+  }
+
   var lastVantKey = '';
   function renderVantagens() {
     vantagensRowsEl.innerHTML = '';
@@ -692,7 +849,8 @@
       return;
     }
 
-    var vantKey = known.map(function (m) { return m.id; }).join(',') + '|' + state.mostrarDureza;
+    var itemCtx = currentForjaCtx();
+    var vantKey = known.map(function (m) { return m.id; }).join(',') + '|' + state.mostrarDureza + '|' + itemCtx;
     var animateIn = lastVantKey !== '' && vantKey !== lastVantKey;
     lastVantKey = vantKey;
 
@@ -720,19 +878,31 @@
       head.appendChild(tag);
       item.appendChild(head);
 
-      var pro = document.createElement('div');
-      pro.className = 'v-row v-pro';
-      pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
-      pro.querySelector('.v-text').textContent = m.vantagens || 'Sem propriedade mecânica adicional além do bônus.';
-      item.appendChild(pro);
+      var pros = filterMaterialClauses(m.vantagens, itemCtx);
+      if (pros.length) {
+        pros.forEach(function (txt) {
+          var pro = document.createElement('div');
+          pro.className = 'v-row v-pro';
+          pro.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+          pro.querySelector('.v-text').textContent = txt;
+          item.appendChild(pro);
+        });
+      } else {
+        var none = document.createElement('div');
+        none.className = 'v-row v-dim';
+        none.innerHTML = '<span class="v-icon">' + ICON_PLUS + '</span><span class="v-text"></span>';
+        none.querySelector('.v-text').textContent = 'Sem propriedade específica para este tipo de item (mantém o bônus e a dureza do material).';
+        item.appendChild(none);
+      }
 
-      if (m.desvantagens) {
+      var cons = filterMaterialClauses(m.desvantagens, itemCtx);
+      cons.forEach(function (txt) {
         var con = document.createElement('div');
         con.className = 'v-row v-con';
         con.innerHTML = '<span class="v-icon">' + ICON_MINUS + '</span><span class="v-text"></span>';
-        con.querySelector('.v-text').textContent = m.desvantagens;
+        con.querySelector('.v-text').textContent = txt;
         item.appendChild(con);
-      }
+      });
 
       vantagensRowsEl.appendChild(item);
     });
@@ -833,22 +1003,23 @@
     var comumHoras = totalHoras * timeFactor;
     var comumAjudanteHoras = comumHoras / 2;
 
-    lastForjadorHoras = forjadorHoras;
-    var diasForjador = Math.ceil(forjadorHoras / FORJADOR_HORAS_DIA);
-    resultTimeEl.textContent = fmt(forjadorHoras) + 'h';
-    resultTimeSubEl.textContent = '· ' + diasForjador + (diasForjador === 1 ? ' dia' : ' dias');
+    var horasEfetivas = state.ajudante ? forjadorAjudanteHoras : forjadorHoras;
+    lastForjadorHoras = horasEfetivas;
+    var diasForjador = Math.ceil(horasEfetivas / FORJADOR_HORAS_DIA);
+    resultTimeEl.textContent = fmt(horasEfetivas) + 'h';
+    resultTimeSubEl.textContent = '· ' + diasForjador + (diasForjador === 1 ? ' dia' : ' dias') + (state.ajudante ? ' (ajudante)' : '');
 
     productionRowsEl.appendChild(pRow(
       'Forjador (sozinho)' + (usaAuto ? ' + Criações Automáticas' : ''),
       'Trabalhador Itinerante: 2/3 do tempo' + (usaAuto ? ' · ÷2 ferramenta automatizada' : '') + ' · ' + FORJADOR_HORAS_DIA + 'h de trabalho/dia',
       fmtTempo(forjadorHoras, FORJADOR_HORAS_DIA),
-      usaAuto
+      !state.ajudante
     ));
     productionRowsEl.appendChild(pRow(
-      'Forjador (com ajudante)',
+      'Forjador (com ajudante)' + (usaAuto ? ' + Criações Automáticas' : ''),
       'metade do tempo do Forjador · ' + FORJADOR_HORAS_DIA + 'h/dia',
       fmtTempo(forjadorAjudanteHoras, FORJADOR_HORAS_DIA),
-      !usaAuto
+      !!state.ajudante
     ));
     productionRowsEl.appendChild(pRow(
       'Outra classe, não-Forjador (sozinho)',
@@ -938,40 +1109,172 @@
     return chip;
   }
 
+  function fmtKg(kg) {
+    if (kg == null || !isFinite(kg)) return '';
+    var rounded = Math.round(kg * 100) / 100;
+    return rounded.toLocaleString('pt-BR', { maximumFractionDigits: 2 }) + ' kg';
+  }
+
+  function calcItemWeight() {
+    var e = null;
+    EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) e = x; });
+    if (!e || e.pesoKg == null) return null;
+    var mult = 1;
+    var notas = [];
+    var forcaPesado = false;
+    (state.materials || []).forEach(function (row) {
+      var m = row.materialId ? materialById(row.materialId) : null;
+      if (!m) return;
+      if (m.pesoMult && m.pesoMult !== 1) {
+        mult *= m.pesoMult;
+        notas.push(m.nome + (m.pesoMult === 0.5 ? ' ÷2' : ' ×2'));
+      }
+      if (m.forcaPesado) forcaPesado = true;
+    });
+    var leveMod = (state.mods || []).indexOf(1) !== -1;
+    if (leveMod) {
+      mult *= 0.75;
+      notas.push('Estrutura Leve −25%');
+    }
+    return {
+      baseKg: e.pesoKg,
+      finalKg: e.pesoKg * mult,
+      mult: mult,
+      leveMod: leveMod,
+      forcaPesado: forcaPesado,
+      notas: notas
+    };
+  }
+
+  var RANGED_AMMO_SET = {
+    'Estilingue': 1, 'Funda': 1, 'Arco curto': 1, 'Besta leve': 1, 'Zarabatana': 1,
+    'Besta de mão': 1, 'Besta dupla': 1, 'Besta de repetição': 1, 'Besta automática': 1,
+    'Arco longo': 1, 'Arco composto': 1, 'Besta pesada': 1, 'Arco Colossal': 1, 'Besta Colossal': 1,
+    'Mosquete': 1, 'Pistola': 1, 'Bacamarte': 1, 'Canhão': 1, 'Arcabuz': 1
+  };
+  function modAplicacao() {
+    if (state.tipoItem === 'armadura') return 'CA';
+    if (state.equipNome) {
+      var eq = null;
+      EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+      if (eq) {
+        if (eq.grupo === 'Focos de Conjuração') return 'Ataque de magia';
+        if (eq.grupo === 'Instrumentos e Acessórios') return 'Teste';
+        if (RANGED_AMMO_SET[eq.nome]) return 'Só ataque';
+      }
+    }
+    return 'Ataque e dano';
+  }
+
   var lastPropKey = '';
-  function renderResultProps() {
+  function renderResultProps(c) {
     var soModMun = state.tipoItem === 'municao' && state.municaoModExistente && !!MUNICAO_MODS[state.municaoMod];
     var props = state.tipoItem === 'polvora' || soModMun ? null : itemProps();
+    var w = state.tipoItem === 'polvora' || soModMun ? null : calcItemWeight();
+    var lucro = (state.modo === 'vendido' && c && c.lucroValor > 0) ? c.lucroValor : 0;
     resultPropsEl.innerHTML = '';
-    if (!props) {
+    if (!props && !w && !lucro) {
       lastPropKey = '';
       resultPropsEl.hidden = true;
       return;
     }
+    var hasMithral = false;
+    var hasForcaPesado = false;
+    (state.materials || []).forEach(function (row) {
+      var m = row.materialId ? materialById(row.materialId) : null;
+      if (!m) return;
+      if (m.id === 'metal_mithral') hasMithral = true;
+      if (m.forcaPesado) hasForcaPesado = true;
+    });
+    var modTarget = modAplicacao();
     var exc = !!(state.excalibur && state.tipoItem === 'arma');
-    var propKey = [props.dureza, props.mod, props.obra, state.pressa, state.mostrarDureza, exc].join('|');
+    var propKey = [
+      props ? props.dureza : '',
+      props ? props.mod : '',
+      props ? props.obra : '',
+      state.pressa,
+      state.mostrarDureza,
+      exc,
+      w ? w.finalKg : '',
+      w ? w.notas.join(',') : '',
+      hasMithral,
+      hasForcaPesado,
+      modTarget,
+      lucro
+    ].join('|');
     var animateIn = lastPropKey !== '' && propKey !== lastPropKey;
     lastPropKey = propKey;
 
     resultPropsEl.hidden = false;
-    if (state.mostrarDureza) {
+    if (props && state.mostrarDureza) {
       var durChip = propChip('Dureza', props.dureza);
       if (animateIn) durChip.classList.add('is-entering');
       resultPropsEl.appendChild(durChip);
     }
-    var tags = [];
-    if (props.obra) tags.push('Obra-Prima');
-    if (state.pressa) tags.push('Pressa');
-    var modChip = propChip('Modificador' + (tags.length ? ' (' + tags.join(', ') + ')' : ''), (props.mod > 0 ? '+' : '') + props.mod);
-    if (props.obra) modChip.classList.add('chip-obra');
-    if (animateIn) modChip.classList.add('is-entering');
-    resultPropsEl.appendChild(modChip);
+    if (props) {
+      var tags = [];
+      if (props.obra) tags.push('Obra-Prima');
+      if (state.pressa) tags.push('Pressa');
+      var modChip = propChip('Modificador · ' + modTarget + (tags.length ? ' (' + tags.join(', ') + ')' : ''), (props.mod > 0 ? '+' : '') + props.mod);
+      if (props.obra) modChip.classList.add('chip-obra');
+      if (animateIn) modChip.classList.add('is-entering');
+      resultPropsEl.appendChild(modChip);
+    }
+    if (w) {
+      var pesoChip = propChip('Peso' + (w.notas.length ? ' (' + w.notas.join(', ') + ')' : ''), fmtKg(w.finalKg));
+      if (animateIn) pesoChip.classList.add('is-entering');
+      resultPropsEl.appendChild(pesoChip);
+    }
+    if (hasMithral) {
+      var miChip = propChip('Mithral', 'Sem req. Força / Furtividade');
+      if (animateIn) miChip.classList.add('is-entering');
+      resultPropsEl.appendChild(miChip);
+    }
+    if (hasForcaPesado) {
+      var fpChip = propChip('Requisito', 'Pesado · +2 Força');
+      if (animateIn) fpChip.classList.add('is-entering');
+      resultPropsEl.appendChild(fpChip);
+    }
     if (exc) {
       var excChip = propChip('Artefato', 'Excalibur');
       excChip.classList.add('chip-excalibur');
       if (animateIn) excChip.classList.add('is-entering');
       resultPropsEl.appendChild(excChip);
     }
+    if (lucro > 0) {
+      var lucChip = propChip('Lucro líquido', '+' + fmtMoeda(lucro));
+      lucChip.classList.add('chip-lucro');
+      if (animateIn) lucChip.classList.add('is-entering');
+      resultPropsEl.appendChild(lucChip);
+    }
+  }
+
+  var FIREARMS_SET = { 'Mosquete': 1, 'Pistola': 1, 'Bacamarte': 1, 'Canhão': 1, 'Arcabuz': 1 };
+  var modsWarnEl = document.getElementById('mods-warn');
+  function renderModsWarn() {
+    if (!modsWarnEl) return;
+    var avisos = [];
+    var mods = state.mods || [];
+    if (mods.indexOf(2) !== -1 && state.peso === 'pesado') {
+      avisos.push('Estrutura Ocultável exige item sem propriedade Pesada / armadura não pesada.');
+    }
+    if (mods.indexOf(3) !== -1 && (state.tipoItem === 'armadura' || (state.equipNome && !FIREARMS_SET[state.equipNome]))) {
+      avisos.push('Câmara Expandida se aplica apenas a armas de fogo (com Ignição).');
+    }
+    if (mods.indexOf(0) !== -1 && state.tipoItem === 'armadura') {
+      avisos.push('Dano Extra se aplica apenas a armas corpo a corpo ou de arremesso.');
+    }
+    if (mods.indexOf(4) !== -1 && state.tipoItem === 'armadura') {
+      avisos.push('Suporte para Baioneta se aplica apenas a armas com Munição ou focos.');
+    }
+    if (!avisos.length) {
+      modsWarnEl.hidden = true;
+      modsWarnEl.innerHTML = '';
+      return;
+    }
+    modsWarnEl.hidden = false;
+    modsWarnEl.innerHTML = '<div class="mw-head">' + ICON_WARN + '<span>Atenção à compatibilidade (você ainda pode manter se o Mestre liberar)</span></div><ul>' +
+      avisos.map(function (a) { return '<li>' + a + '</li>'; }).join('') + '</ul>';
   }
 
   function buildSimpleCombo(placeholder, initialId, onPick, labelId) {
@@ -1025,6 +1328,7 @@
         opt.addEventListener('mousedown', function (e) {
           e.preventDefault();
           input.value = m.nome;
+          syncSimpleClear();
           close();
           onPick(m.id);
         });
@@ -1045,6 +1349,10 @@
     });
 
     wrap.appendChild(input);
+    var syncSimpleClear = attachComboClear(wrap, input, function () {
+      close();
+      onPick('');
+    });
     wrap.appendChild(dropdown);
     return wrap;
   }
@@ -1147,7 +1455,7 @@
       }
     }
 
-    // --- Transmutação (Forjador Alquimista 3º / 7º / 13º, p. 130–131) ---
+    // Transmutação do Forjador Alquimista (p. 130-131)
     var nivel = parseInt(state.transmutNivel, 10) || 3;
     var origem = materialById(state.transmutOrigemId);
     var destino = materialById(state.transmutDestinoId);
@@ -1155,6 +1463,7 @@
 
     if (!origem || !destino) {
       transmutResultEl.appendChild(mgWarning('Escolha o material de origem e de destino.'));
+      syncMagicosBadge();
       return;
     }
     var rOrigem = TIER_ORDER.indexOf(origem.tier);
@@ -1182,6 +1491,34 @@
 
     transmutResultEl.appendChild(mgLine('Custo (' + notaCusto + ')', fmtMoeda(custoTransmut)));
     transmutResultEl.appendChild(mgLine('Tempo de trabalho', fmt(tempoTransmut) + 'h' + (complexa ? ' (Tier B ou A: 8h por material transformado)' : ' (Tier D/C: 1h + 1h por tier acima)')));
+    syncMagicosBadge();
+  }
+
+  function syncMagicosBadge() {
+    if (!magicosActiveCountEl) return;
+    var partes = [];
+    if (state.magicoRaridade && state.magicoRaridade !== 'comum') {
+      var opt = magicoRaridadeSelect && magicoRaridadeSelect.options[magicoRaridadeSelect.selectedIndex];
+      partes.push(opt ? opt.text : state.magicoRaridade);
+    }
+    var optsAtivas = 0;
+    if (state.encantarExistente) optsAtivas++;
+    if (state.desencantado) optsAtivas++;
+    if (state.peritoItensMagicos) optsAtivas++;
+    if (state.especialistaItensMagicos) optsAtivas++;
+    if (state.versadoItensMagicos) optsAtivas++;
+    if (optsAtivas) partes.push(optsAtivas === 1 ? '1 opção' : optsAtivas + ' opções');
+    if (state.transmutOrigemId && state.transmutDestinoId) partes.push('Transmutação');
+    magicosActiveCountEl.textContent = partes.join(' · ');
+  }
+
+  function syncHighLevelBadge() {
+    if (!forjHighCountEl) return;
+    var n = 0;
+    if (state.melhorDosMelhores) n++;
+    if (state.criacoesAutomaticas) n++;
+    if (state.excalibur && state.tipoItem === 'arma') n++;
+    forjHighCountEl.textContent = n ? (n === 1 ? '1 ativo' : n + ' ativos') : '';
   }
 
   function deltaPct(value, cheio) {
@@ -1196,7 +1533,7 @@
   var cbValue = document.getElementById('cb-value');
   var cbLabel = document.getElementById('cb-label');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Digitar num campo muda o resultado a cada tecla: aí o número troca na hora, sem contagem
+  // Enquanto digita, atualiza direto sem animar o número
   var lastTypedAt = 0;
   document.addEventListener('input', function (e) {
     if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) lastTypedAt = performance.now();
@@ -1228,7 +1565,7 @@
     })(t0);
   }
 
-  // Conta incompleta: diz o que falta em vez de mostrar uma coluna de zeros
+  // Mostra o que falta preencher em vez de zeros
   function emptyReason(c) {
     if (c.modMun && c.modMun.existente) return '';
     if (state.tipoItem === 'municao' && state.municaoModExistente) return 'Escolha uma modificação de munição para calcular o custo.';
@@ -1247,7 +1584,7 @@
     if (state.oficina === 'herbalismo') { updateHerbalismo(); return; }
     if (kpiTimeLabelEl) kpiTimeLabelEl.textContent = 'Tempo do Forjador';
     var c = calculate();
-    // PDE com centavos (munições, por exemplo): mostra em moedas do D&D
+    // PDE fracionado sai em pp/pc
     var pdeNum = num(state.pde, 0);
     pdeMoedaEl.hidden = !(pdeNum > 0 && Math.round(pdeNum * 100) % 100 !== 0);
     pdeMoedaEl.textContent = fmt(pdeNum) + ' po = ' + fmtMoeda(pdeNum);
@@ -1309,7 +1646,15 @@
     }
     breakdownEl.appendChild(bRow(c.conserto ? 'Custo do conserto' : state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(c.final), true));
 
-    var formulaStr = c.possuidos
+    if (consertoNoteEl && c.conserto) {
+      consertoNoteEl.textContent = c.consertoVivo
+        ? 'Material vivo quebrado não se conserta com po: exige magia de ressurreição, sem gasto em ouro (p. 173).'
+        : 'Um item quebrado (penalidade −5) custa metade do valor do item novo para consertar (p. 173). Reparar +1 de durabilidade antes de quebrar é grátis em um Descanso Curto com ferramentas.';
+    }
+
+    var formulaStr = c.consertoVivo
+      ? 'material vivo quebrado — magia de ressurreição (0 po, p. 173)'
+      : c.possuidos
       ? 'materiais em posse — grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
       : c.conserto
         ? (c.usaFracaoFixa
@@ -1352,12 +1697,14 @@
 
     renderVantagens();
     renderProduction();
-    renderResultProps();
+    renderResultProps(c);
+    renderModsWarn();
     renderJuncao();
     renderCompMateriais();
+    syncHighLevelBadge();
     updateMagicos();
 
-    // Tempo na barra de custo + aviso para leitor de tela (só o valor final, sem a contagem animada)
+    // Atualiza o tempo na barra mobile e no aviso de acessibilidade
     var temTempo = resultTimeEl.textContent !== '—';
     cbTime.textContent = temTempo ? resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent : '';
     clearTimeout(liveTimer);
@@ -1368,7 +1715,7 @@
     }, 700);
   }
 
-  // --- Comparador de Materiais Lado a Lado (Forja) ---
+  // Comparador de materiais
   var compMatGridEl = document.getElementById('comp-mat-grid');
   function calcSingleMaterial(mat) {
     var base = baseValue();
@@ -1387,17 +1734,24 @@
     var final = state.modo === 'vendido' ? proprio * (1 + lucroPct / 100) : proprio;
 
     var baseHoras = TIER_HOURS[mat.tier] || 24;
-    var adj = state.peso === 'leve' ? -8 : state.peso === 'pesado' ? 8 : 0;
+    var pesoEfetivo = mat.forcaPesado ? 'pesado' : state.peso;
+    var adj = pesoEfetivo === 'leve' ? -8 : pesoEfetivo === 'pesado' ? 8 : 0;
     var horas = Math.max(1, baseHoras + adj) * (2 / 3);
     if (state.criacoesAutomaticas && (mat.tier === 'A' || mat.tier === 'S')) horas /= 2;
     if (state.pressa) horas /= 2;
+    if (state.ajudante) horas /= 2;
 
     var modNum = parseInt(mat.mod, 10) || 0;
     if (state.obraPrima) modNum = Math.min(3, modNum + 1);
     if (state.melhorDosMelhores && modNum < 3) modNum += 1;
     if (state.pressa) modNum -= 1;
 
-    return { mat: mat, final: final, horas: horas, modNum: modNum, dureza: mat.dureza };
+    var eq = null;
+    EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+    var leveMod = (state.mods || []).indexOf(1) !== -1;
+    var pesoKg = eq && eq.pesoKg != null ? eq.pesoKg * (mat.pesoMult || 1) * (leveMod ? 0.75 : 1) : null;
+
+    return { mat: mat, final: final, horas: horas, modNum: modNum, dureza: mat.dureza, pesoKg: pesoKg, forcaPesado: !!mat.forcaPesado };
   }
 
   function renderCompMateriais() {
@@ -1458,12 +1812,16 @@
         card.appendChild(tag2);
       }
 
-      [
+      var stats = [
         ['Tempo (Forjador)', fmt(r.horas) + 'h'],
         ['Modificador', fmtMod(r.modNum)],
         ['Dureza', state.mostrarDureza ? r.dureza : '—'],
         ['Multiplicador', '×' + r.mat.mult]
-      ].forEach(function (st) {
+      ];
+      if (r.pesoKg != null) {
+        stats.push(['Peso', fmtKg(r.pesoKg) + (r.forcaPesado ? ' · Pesado' : '')]);
+      }
+      stats.forEach(function (st) {
         var line = document.createElement('div');
         line.className = 'cm-stat';
         var k = document.createElement('span');
@@ -1474,11 +1832,30 @@
         line.appendChild(v);
         card.appendChild(line);
       });
+
+      var useBtn = document.createElement('button');
+      useBtn.type = 'button';
+      useBtn.className = 'btn-ghost cm-use-btn';
+      useBtn.textContent = 'Usar este';
+      useBtn.addEventListener('click', function () {
+        state.materials = [{ materialId: r.mat.id, name: r.mat.nome, mult: r.mat.mult, tier: r.mat.tier }];
+        if (r.mat.forcaPesado && state.peso !== 'pesado') setPeso('pesado');
+        saveState();
+        renderMaterials();
+        update();
+        updateMagicos();
+        showToast('Material aplicado: ' + r.mat.nome);
+        var matSec = document.getElementById('sec-mat');
+        if (matSec && matSec.getBoundingClientRect().top < 0) {
+          matSec.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        }
+      });
+      card.appendChild(useBtn);
       compMatGridEl.appendChild(card);
     });
   }
 
-  // --- Equipamento do Guia (Forja: armas, escudos, armaduras, focos e instrumentos) ---
+  // Busca de equipamento do Guia
   function searchEquip(q) {
     q = normalizeSearch(q);
     if (!q) return [];
@@ -1490,11 +1867,22 @@
   function showEquipInfo() {
     var e = null;
     EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) e = x; });
-    if (!e) { equipInfo.hidden = true; return; }
-    var partes = [e.grupo, 'PDE ' + fmtMoeda(e.pde)];
-    if (e.peso) partes.push(e.peso === 'leve' ? 'Leve (−8h)' : 'Pesado (+8h)');
-    if (e.maestria) partes.push('Maestria: ' + e.maestria);
-    equipInfo.textContent = partes.join(' · ');
+    if (!e) { equipInfo.hidden = true; equipInfo.innerHTML = ''; return; }
+    var chips = [
+      { txt: e.grupo, main: true },
+      { txt: 'PDE ' + fmtMoeda(e.pde) }
+    ];
+    if (e.pesoKg != null) chips.push({ txt: fmtKg(e.pesoKg) });
+    if (e.peso) chips.push({ txt: e.peso === 'leve' ? 'Leve (−8h)' : 'Pesado (+8h)' });
+    else chips.push({ txt: 'Normal' });
+    if (e.maestria) chips.push({ txt: 'Maestria: ' + e.maestria });
+    equipInfo.innerHTML = '';
+    chips.forEach(function (ch) {
+      var s = document.createElement('span');
+      s.className = 'eq-chip' + (ch.main ? ' eq-chip-main' : '');
+      s.textContent = ch.txt;
+      equipInfo.appendChild(s);
+    });
     equipInfo.hidden = false;
   }
 
@@ -1505,7 +1893,7 @@
     input.type = 'text';
     input.className = 'mat-search';
     input.autocomplete = 'off';
-    input.placeholder = 'Buscar arma, armadura, escudo, foco ou instrumento';
+    input.placeholder = 'Buscar arma, armadura, escudo ou foco';
     input.setAttribute('aria-labelledby', 'equip-label');
     input.value = state.equipNome || '';
     var dropdown = document.createElement('div');
@@ -1518,10 +1906,12 @@
       state.pde = e.pde;
       pdeInput.value = e.pde;
       input.value = e.nome;
+      syncEquipClear();
       close();
       setTipo(e.tipo);
       setPeso(e.peso);
       showEquipInfo();
+      renderMods();
       updateMagicos();
     }
     function open(q) {
@@ -1545,7 +1935,7 @@
         n.textContent = e.nome;
         var p = document.createElement('span');
         p.className = 'mo-mult';
-        p.textContent = fmtMoeda(e.pde);
+        p.textContent = fmtMoeda(e.pde) + (e.pesoKg != null ? ' · ' + fmtKg(e.pesoKg) : '');
         opt.appendChild(n);
         opt.appendChild(p);
         opt.addEventListener('mousedown', function (ev) { ev.preventDefault(); pick(e); });
@@ -1562,19 +1952,66 @@
     input.addEventListener('focus', function () { input.select(); });
     input.addEventListener('blur', function () { setTimeout(close, 120); });
     wrap.appendChild(input);
+    var syncEquipClear = attachComboClear(wrap, input, function () {
+      state.equipNome = '';
+      equipInfo.hidden = true;
+      close();
+      renderMods();
+      saveState();
+      update();
+    });
     wrap.appendChild(dropdown);
     return wrap;
   }
 
-  // --- Modificações ---
+  // Modificações
+  var showAllMods = false;
+  function modIsCompatible(idx) {
+    var ctx = currentForjaCtx();
+    var eq = null;
+    if (state.equipNome) {
+      EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) eq = x; });
+    }
+    var isWeapon = ctx === 'melee' || ctx === 'ranged' || ctx === 'arma_all';
+    var isMelee = ctx === 'melee' || ctx === 'arma_all';
+    var isRanged = ctx === 'ranged' || ctx === 'arma_all';
+    var isFirearm = eq ? !!FIREARMS_SET[eq.nome] : ctx === 'arma_all';
+    var isCrossbow = eq ? /besta/i.test(eq.nome) : ctx === 'arma_all';
+    var hasMaestria = eq ? !!eq.maestria : (ctx !== 'foco' && ctx !== 'armadura');
+
+    switch (idx) {
+      case 1: case 5: case 6: case 9: case 11: return true;
+      case 2: return state.peso !== 'pesado';
+      case 0: case 13: case 19: case 23: case 24: case 25: return isMelee;
+      case 8: return isMelee && (!eq || state.peso === 'leve');
+      case 3: return isFirearm;
+      case 4: return isRanged || ctx === 'foco';
+      case 7: return isWeapon;
+      case 10: return isCrossbow;
+      case 12: return isFirearm || isCrossbow;
+      case 14: case 15: case 17: return hasMaestria;
+      case 16: return isWeapon || ctx === 'escudo' || ctx === 'armadura_escudo';
+      case 18: case 21: return isRanged;
+      case 20: case 22: return isWeapon;
+      default: return true;
+    }
+  }
+
   function renderMods() {
     modsList.innerHTML = '';
+    var hiddenCount = 0;
     MODS_DB.forEach(function (m, i) {
+      var checked = state.mods.indexOf(i) !== -1;
+      var compat = modIsCompatible(i);
+      if (!showAllMods && !compat && !checked) {
+        hiddenCount++;
+        return;
+      }
       var lab = document.createElement('label');
       lab.className = 'mod-item';
       var cb = document.createElement('input');
       cb.type = 'checkbox';
-      cb.checked = state.mods.indexOf(i) !== -1;
+      cb.checked = checked;
       cb.addEventListener('change', function () {
         var pos = state.mods.indexOf(i);
         if (cb.checked && pos === -1) state.mods.push(i);
@@ -1599,6 +2036,19 @@
       lab.appendChild(desc);
       modsList.appendChild(lab);
     });
+    if (hiddenCount > 0 || showAllMods) {
+      var toggleBtn = document.createElement('button');
+      toggleBtn.type = 'button';
+      toggleBtn.className = 'btn-ghost mods-toggle-all';
+      toggleBtn.textContent = showAllMods
+        ? 'Mostrar só compatíveis com este item'
+        : 'Mostrar todas as modificações (+' + hiddenCount + ' de outros tipos)';
+      toggleBtn.addEventListener('click', function () {
+        showAllMods = !showAllMods;
+        renderMods();
+      });
+      modsList.appendChild(toggleBtn);
+    }
     updateModsTotal();
   }
 
@@ -1617,6 +2067,7 @@
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
+    renderMods();
     saveState();
     update();
   }
@@ -1665,9 +2116,10 @@
         'Tempo por tier: C/D 24h, B 48h, A 96h, S 192h. Com mais de um material, o tempo de cada um se soma.',
         'Leve tira 8h, Pesada soma 8h. O Forjador trabalha em 2/3 do tempo e aguenta 12h por dia.',
         'Até 4 materiais: dureza e bônus ficam com o maior. Pressa corta o tempo pela metade e dá −1.',
-        'Obra-Prima com 20 natural (17–20 com Prodígio): +1, até +3.'
+        'Obra-Prima com 20 natural (17–20 com Prodígio): +1, até +3.',
+        'Teste de dureza (opcional, p. 172–173): 4+ não sofre desgaste; 1–3 aplica −1 cumulativo (se já estiver negativo, quebra; em −5 quebra automático). Um Descanso Curto com ferramentas recupera +1.'
       ],
-      fonte: 'p. 124–125, 163 e 170–172'
+      fonte: 'p. 124–125, 163 e 170–173'
     },
     armadura: {
       titulo: 'Criar uma armadura ou escudo',
@@ -1675,9 +2127,10 @@
         'Mesmas regras da arma: PDE × materiais, o Forjador paga metade, e o tempo por tier se soma entre os materiais.',
         'Armadura leve tira 8h; armadura pesada soma 8h. Escudos entram aqui.',
         'O modificador do material vira bônus (ou penalidade) de CA.',
+        'Teste de dureza (opcional, p. 172–173): 4+ não sofre desgaste; 1–3 aplica −1 cumulativo (quebra quando a penalidade zera a CA da armadura ou escudo). Descanso Curto com ferramentas recupera +1.',
         'Fração fixa é uma regra opcional desta calculadora, fora do Guia: só 20% do PDE é multiplicado pelo material, para suavizar armaduras caras.'
       ],
-      fonte: 'p. 169–172'
+      fonte: 'p. 169–173'
     }
   };
   var tipoInfoBtn = document.getElementById('tipo-info-btn');
@@ -1720,6 +2173,7 @@
       btn.setAttribute('aria-checked', active ? 'true' : 'false');
     });
     fracaoWrap.hidden = tipo !== 'armadura';
+    renderMods();
     saveState();
     update();
   }
@@ -1741,7 +2195,7 @@
     if (!silent) { saveState(); update(); }
   }
 
-  // --- wire static inputs ---
+  // Eventos dos campos fixos
   pdeInput.addEventListener('input', function () {
     state.pde = pdeInput.value;
     state.equipNome = '';
@@ -1805,16 +2259,33 @@
     saveState();
     updateMagicos();
   });
+  function syncLucroPresets() {
+    var cur = String(state.lucro == null ? '' : state.lucro).trim();
+    lucroPresetBtns.forEach(function (b) {
+      var on = b.dataset.lucro === cur;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
   lucroInput.addEventListener('input', function () {
     state.lucro = lucroInput.value;
+    syncLucroPresets();
     saveState();
     update();
+  });
+  lucroPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.lucro = Number(b.dataset.lucro);
+      lucroInput.value = state.lucro;
+      syncLucroPresets();
+      saveState();
+      update();
+    });
   });
 
   function syncAutoSwitches() {
     var val = state.criacoesAutomaticas ? 'true' : 'false';
-    autoForjSwitch.setAttribute('aria-checked', val);
-    autoMagicSwitch.setAttribute('aria-checked', val);
+    if (autoForjSwitch) autoForjSwitch.setAttribute('aria-checked', val);
   }
   function toggleCriacoesAutomaticas() {
     state.criacoesAutomaticas = !state.criacoesAutomaticas;
@@ -1823,8 +2294,7 @@
     update();
     updateMagicos();
   }
-  autoForjSwitch.addEventListener('click', toggleCriacoesAutomaticas);
-  autoMagicSwitch.addEventListener('click', toggleCriacoesAutomaticas);
+  if (autoForjSwitch) autoForjSwitch.addEventListener('click', toggleCriacoesAutomaticas);
 
   excaliburSwitch.addEventListener('click', function () {
     state.excalibur = !state.excalibur;
@@ -1878,7 +2348,7 @@
     btn.addEventListener('click', function () { setTipo(btn.dataset.tipo); });
   });
 
-  // --- Aviso flutuante (com ação opcional, como "Desfazer") ---
+  // Toast com opção de desfazer
   var toastEl = document.getElementById('toast');
   var toastMsg = document.getElementById('toast-msg');
   var toastAction = document.getElementById('toast-undo');

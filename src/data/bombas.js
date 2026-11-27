@@ -1,16 +1,16 @@
-  // Cargas de Pólvora para Bombas (p. 217 + preços p. 160)
+  // Cargas de Pólvora (armas de fogo p. 159 + bombas p. 217 + preços p. 160)
   var POLVORAS_BOMBA_DB = [
-    { id: 'negra', categoria: 'Básica e Utilitária', nome: 'Pólvora Negra (padrão)', preco: 5, efeito: 'Pólvora padrão já inclusa no preço base da bomba.' },
-    { id: 'elukiana', categoria: 'Básica e Utilitária', nome: 'Pólvora Elukiana', preco: 15, efeito: 'O pavio queima mesmo submerso e a bomba explode debaixo d’água.' },
-    { id: 'silente', categoria: 'Básica e Utilitária', nome: 'Pólvora Silente', preco: 15, efeito: 'O pavio não faz som enquanto queima.' },
-    { id: 'fumegante', categoria: 'Básica e Utilitária', nome: 'Pólvora Fumegante', preco: 20, efeito: 'Cria o efeito da Bomba de Fumaça no local (ou dobra a duração se já for de Fumaça; na Bombinha de Fumaça estende +2 rodadas).' },
-    { id: 'luz', categoria: 'Básica e Utilitária', nome: 'Pólvora de Luz', preco: 75, efeito: 'Cria o efeito da Bomba de Clarão na área (ou dobra a duração se já for de Clarão).' },
-    { id: 'poderosa', categoria: 'Potência e Dano', nome: 'Pólvora Poderosa (Potente)', preco: 30, efeito: 'Dobra o raio da explosão e a área de efeito da bomba.' },
-    { id: 'refinada', categoria: 'Potência e Dano', nome: 'Pólvora Refinada', preco: 50, efeito: 'Causa dano extra igual ao seu nível de personagem (mesmo tipo da bomba, ou fogo se não causar dano).' },
-    { id: 'vermelha', categoria: 'Elemental', nome: 'Pólvora Vermelha', preco: 100, efeito: 'Muda o dano da bomba para Fogo (ou soma seu bônus de proficiência se já causar Fogo).' },
-    { id: 'azul', categoria: 'Elemental', nome: 'Pólvora Azul', preco: 100, efeito: 'Muda o dano da bomba para Frio (ou soma seu bônus de proficiência se já causar Frio).' },
-    { id: 'amarela', categoria: 'Elemental', nome: 'Pólvora Amarela', preco: 100, efeito: 'Muda o dano da bomba para Eletricidade (ou soma seu bônus de proficiência se já causar Eletricidade).' },
-    { id: 'verde', categoria: 'Elemental', nome: 'Pólvora Verde', preco: 100, efeito: 'Muda o dano da bomba para Ácido (ou soma seu bônus de proficiência se já causar Ácido).' }
+    { id: 'negra', categoria: 'Básica e Utilitária', nome: 'Pólvora Negra (padrão)', preco: 5, efeitoArma: 'Opção mais barata e comum de pólvora para disparos padrão.', efeito: 'Pólvora padrão já inclusa no preço base da bomba.' },
+    { id: 'elukiana', categoria: 'Básica e Utilitária', nome: 'Pólvora Elukiana', preco: 15, efeitoArma: 'Mantém suas propriedades mesmo molhada ou submersa, permitindo disparos debaixo d’água.', efeito: 'O pavio queima mesmo submerso e a bomba explode debaixo d’água.' },
+    { id: 'silente', categoria: 'Básica e Utilitária', nome: 'Pólvora Silente', preco: 15, efeitoArma: 'Suprime o estrondo do disparo, que não pode ser ouvido além de 3 metros.', efeito: 'O pavio não faz som enquanto queima.' },
+    { id: 'fumegante', categoria: 'Básica e Utilitária', nome: 'Pólvora Fumegante', preco: 20, efeitoArma: 'Gera área de fumaça leve (penumbra) a 1,5 m à frente após o disparo até o início do seu próximo turno.', efeito: 'Cria o efeito da Bomba de Fumaça no local (ou dobra a duração se já for de Fumaça; na Bombinha de Fumaça estende +2 rodadas).' },
+    { id: 'luz', categoria: 'Básica e Utilitária', nome: 'Pólvora de Luz', preco: 75, efeitoArma: 'Clarão no alcance do queima-roupa: criaturas fazem TR de Constituição (CD 8 + DES + BP) ou ficam cegas até o início do próximo turno delas (1× por combate).', efeito: 'Cria o efeito da Bomba de Clarão na área (ou dobra a duração se já for de Clarão).' },
+    { id: 'poderosa', categoria: 'Potência e Dano', nome: 'Pólvora Poderosa (Potente)', preco: 30, efeitoArma: 'Aumenta o dano do ataque em +1d10, eleva em +3 o valor para ativar Emperrado e empurra usuário Pequeno ou menor 1,5 m para trás.', efeito: 'Dobra o raio da explosão e a área de efeito da bomba.' },
+    { id: 'refinada', categoria: 'Potência e Dano', nome: 'Pólvora Refinada', preco: 50, efeitoArma: 'Composição estável que concede +1 nas jogadas de ataque.', efeito: 'Causa dano extra igual ao seu nível de personagem (mesmo tipo da bomba, ou fogo se não causar dano).' },
+    { id: 'vermelha', categoria: 'Elemental', nome: 'Pólvora Vermelha', preco: 100, efeitoArma: 'Dano de queima-roupa vira o dobro do seu bônus de proficiência (fogo).', efeito: 'Muda o dano da bomba para Fogo (ou soma seu bônus de proficiência se já causar Fogo).' },
+    { id: 'azul', categoria: 'Elemental', nome: 'Pólvora Azul', preco: 100, efeitoArma: 'Dano de queima-roupa vira o dobro do seu bônus de proficiência e passa a causar dano de frio.', efeito: 'Muda o dano da bomba para Frio (ou soma seu bônus de proficiência se já causar Frio).' },
+    { id: 'amarela', categoria: 'Elemental', nome: 'Pólvora Amarela', preco: 100, efeitoArma: 'Dano de queima-roupa vira o dobro do seu bônus de proficiência e passa a causar dano elétrico.', efeito: 'Muda o dano da bomba para Eletricidade (ou soma seu bônus de proficiência se já causar Eletricidade).' },
+    { id: 'verde', categoria: 'Elemental', nome: 'Pólvora Verde', preco: 100, efeitoArma: 'Dano de queima-roupa vira o dobro do seu bônus de proficiência e passa a causar dano ácido.', efeito: 'Muda o dano da bomba para Ácido (ou soma seu bônus de proficiência se já causar Ácido).' }
   ];
 
   // 16 Bombas do Guia (p. 217–220)
