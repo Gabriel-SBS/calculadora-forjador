@@ -23,7 +23,9 @@ Na **Forja de Equipamento**:
 4. Em **Finalidade**, escolha entre **Uso próprio**, **Para venda** (com margem de lucro e atalhos rápidos de `25%`, `50%` e `100%`, disponível nas três abas) ou **Consertar quebrado** (metade do valor do item, p. 173, com a mão de obra dividida por 2 pelo Trabalhador Itinerante).
 5. O custo e o tempo aparecem no painel de resultado (no computador ele fica fixo na lateral; no celular, uma barra no rodapé mostra os dois enquanto você rola). Logo abaixo vêm a conta passo a passo, a comparação com loja, alquimista ou ferreiro comum e os detalhes de vantagens, receitas ou tempo de produção.
 
-Os valores aparecem em moedas do D&D: peças de ouro (po), prata (pp) e cobre (pc), arredondados para a peça de cobre. Uma flecha, por exemplo, custa 5 pc, e não 0,05 po. Electro e platina ficam de fora porque o Livro do Jogador diz que são incomuns em transações. Os campos de preço continuam em po, como os preços do Guia.
+Os valores aparecem em moedas do D&D: peças de ouro (PO), prata (PP) e cobre (PC), com 1 PO = 10 PP = 100 PC, arredondados para a peça de cobre. Uma flecha, por exemplo, custa 5 PC, e não 0,05 PO. Como não existe moeda menor, **1 PC é o menor custo possível**: um item que dá 0,32 PC na conta sai a 1 PC, e a conta mostra essa linha. Electro e platina ficam de fora porque o Livro do Jogador diz que são incomuns em transações.
+
+Os campos de preço (PDE, PDE da munição e custo do encantamento) têm um seletor **PO / PP / PC** ao lado. Dá para digitar `5` em PC em vez de `0,05` em PO; a calculadora converte sozinha, e o link compartilhado guarda a moeda escolhida.
 
 Os valores ficam salvos no seu navegador, então dá para fechar a página e voltar depois.
 
@@ -50,7 +52,7 @@ Se o sistema estiver com "reduzir movimento" ligado, a troca de tema é instant�
 - Modos "Para venda" (com margem de lucro) e "Consertar quebrado" (metade do valor do item, p. 173, pagando só a matéria-prima pelo Trabalhador Itinerante).
 - As 26 modificações de armas e equipamentos (p. 163–167). Elas entram no valor-base antes de multiplicar pelo material, como o livro manda. Se o item já existe, a calculadora cobra só a modificação vezes o material.
 - Munições custam o preço de 4 unidades e rendem 2d4. Pólvoras custam 2 unidades e rendem 1d4 (p. 171).
-- As 8 modificações de munição (p. 160), uma por munição: preço fixo por munição transformada (a Assobiante sai 5 po a cada 5), fora do multiplicador do material. Dá para modificar munições novas, somando ao custo da criação, ou só transformar as que você já tem.
+- As 8 modificações de munição (p. 160), uma por munição: preço fixo por munição transformada (a Assobiante sai 5 PO a cada 5), fora do multiplicador do material. Dá para modificar munições novas, somando ao custo da criação, ou só transformar as que você já tem.
 
 **Tempo**
 - 24h, 48h, 96h ou 192h conforme o tier, somando quando há mais de um material (regra de junção).
@@ -61,7 +63,7 @@ Se o sistema estiver com "reduzir movimento" ligado, a troca de tema é instant�
 - Peso final em kg (com os pesos oficiais das p. 155–162), ajustando sozinho quando o material dobra (*Ouro*, *Iron-Wood*, *Pedra Anã Refinada*), corta pela metade (*Mithral*, *Ébano*, *Aço Verde Baatoriano*, *Ossos*, *Quitina*) ou recebe a modificação *Estrutura Leve* (`−25%`).
 - Dureza e modificador finais, indicando onde o bônus se aplica (p. 169: ataque e dano, só ataque em armas com munição, ataque de magia em focos, CA em armaduras/escudos ou teste em instrumentos), contando Obra-Prima (+1, até +3) e O Melhor dos Melhores (nível 14).
 - Avisos sem bloqueio quando alguma modificação conflita com o item escolhido (como *Estrutura Ocultável* em item Pesado ou *Câmara Expandida* fora de arma de fogo) e chips de requisito para *Mithral* e materiais que tornam o item Pesado (`+2` Força).
-- Conserto de **Material Vivo** (p. 173): zera o custo em po e lembra que exige magia de ressurreição.
+- Conserto de **Material Vivo** (p. 173): zera o custo em PO e lembra que exige magia de ressurreição.
 - **Excalibur** (20º nível, p. 128): permite combinar até 6 materiais (4 Tier S + 2 Tier A ou mais baixo) numa arma ou foco de conjuração, com o tempo de criação de um único material Tier S e encantamento Lendário sem exigir StarMetal (+0h).
 - Aviso de equipamento SS ou SA quando os materiais passam do que a regra permite.
 - Vantagens e desvantagens dos 69 materiais do livro completo (incluindo a **Pedra Filosofal**, exclusiva do Alquimista de 17º nível, p. 131).
@@ -84,7 +86,7 @@ O talento Artesão dá 20% de desconto na compra de itens não-mágicos. A dúvi
 - **Duas compras (−36%)**, como jogamos na nossa mesa. O Forjador compra a matéria-prima de um NPC e depois paga a fabricação do item, e cada uma recebe os 20%. Descontos seguidos se multiplicam, não se somam: 0,8 × 0,8 = 0,64. Você paga 64% do preço, ou seja, 36% de desconto, e não 40%.
 - **Uma compra (−20%)**, a leitura literal do talento. Como o próprio Forjador fabrica o item, a única compra é a da matéria-prima, e o desconto entra uma vez só. No Herbalismo só existe uma compra direta (os ramos ou a poção pronta), então o desconto entra uma vez só.
 
-Exemplo com uma espada longa de aço (PDE 50 × 30 de Aço = 1.500 po cheio, ÷ 2 pelo Trabalhador Itinerante): 480 po com duas compras, 600 po com uma. Combine com o seu Mestre qual vale.
+Exemplo com uma espada longa de aço (PDE 50 × 30 de Aço = 1.500 PO cheio, ÷ 2 pelo Trabalhador Itinerante): 480 PO com duas compras, 600 PO com uma. Combine com o seu Mestre qual vale.
 
 ## Como montar o arquivo e rodar os testes
 
@@ -109,6 +111,11 @@ A calculadora não decide nada que o Guia deixa para o Mestre: o tempo de itens 
 Achou um número diferente do livro? Abra uma issue dizendo o item, os materiais e a página.
 
 ## O que mudou em cada versão
+
+### v6.1
+- As moedas aparecem com sigla em maiúsculas: PO, PP e PC.
+- Seletor PO / PP / PC nos campos de preço, para digitar o valor direto em prata ou cobre.
+- 1 PC passou a ser o menor custo. Antes, um item de osso com PDE de 1 PC (0,32 PC depois dos descontos) aparecia como 0 PO.
 
 ### v6
 - A busca de equipamento agora funciona pelo teclado (setas, Enter e Esc), como as outras. As quatro buscas da calculadora viraram um componente só, e o leitor de tela anuncia a opção destacada.
