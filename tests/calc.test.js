@@ -27,7 +27,6 @@ function approx(actual, expected, eps = 1e-6) {
   );
 }
 
-// ---------- 1. Integridade dos catálogos do Guia ----------
 test('Catálogos têm as quantidades exatas do Guia de Xyleff Sualky', () => {
   assert.equal(db.MATERIALS_DB.length, 69);
   assert.equal(db.BOMBAS_DB.length, 16);
@@ -70,7 +69,6 @@ test('Munições incluem arma de fogo e bala colossal (p. 159)', () => {
   assert.ok(muns.some((n) => /colossal/i.test(n)), 'Falta Bala colossal');
 });
 
-// ---------- 2. Fórmulas da Forja ----------
 test('Forja: Espada Longa (PDE 50) de Aço (×30) — Artesão duplo vs simples', () => {
   const aco = db.MATERIALS_DB.find((m) => m.nome === 'Aço');
   assert.ok(aco);
@@ -114,7 +112,6 @@ test('Forja: Obra-Prima (máx +3), Pressa (tempo ÷2, mod −1) e Conserto (÷2)
   approx(consertoForjador, 450);
 });
 
-// ---------- 3. Fórmulas de Bombas, Munições e Pólvora ----------
 test('Bombas: Bomba de Pólvora e Empurrão exige 2 cargas de pólvora especial', () => {
   const empurrao = db.BOMBAS_DB.find((b) => b.cargas === 2);
   assert.ok(empurrao, 'Deve existir bomba com 2 cargas');
@@ -145,7 +142,6 @@ test('Munições e Pólvoras: lote 4× munição e 2× pólvora (p. 171)', () =>
   approx(8 * (2 / 3), 16 / 3); // 5,33h Forjador
 });
 
-// ---------- 4. Fórmulas de Herbalismo ----------
 test('Herbalismo: soma dos ramos e venda com ramos forrageados usa base de mercado', () => {
   const oleo = db.HERBAL_DB.find((h) => h.id === 'oleo_linhaca');
   assert.ok(oleo);
@@ -158,7 +154,6 @@ test('Herbalismo: soma dos ramos e venda com ramos forrageados usa base de merca
   approx(precoVenda, ramosUnit * 1.2);
 });
 
-// ---------- 5. Pesos em kg e modificadores de peso ----------
 test('Forja: Pesos em kg do Guia e modificadores de material / Estrutura Leve', () => {
   const byNome = (n) => db.EQUIP_DB.find((e) => e.nome === n);
   assert.equal(byNome('Adaga').pesoKg, 0.5);

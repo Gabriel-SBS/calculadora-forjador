@@ -1,4 +1,3 @@
-  // --- Resumo do item atual (para copiar e para a lista) ---
   var SITE_URL = 'https://gabriel-sbs.github.io/calculadora-forjador/';
   var TIPO_NOME = { arma: 'Arma', armadura: 'Armadura', municao: 'Munição', polvora: 'Pólvora' };
 
@@ -176,7 +175,7 @@
     });
   }
 
-  // --- Lista da sessão: vários itens, com quantidade, status de fabricado e totais ---
+  // Lista da sessão (itens salvos, quantidades e totais)
   var LISTA_KEY = 'forjador-lista-v1';
   var listaSection = document.getElementById('lista-section');
   var listaItemsEl = document.getElementById('lista-items');

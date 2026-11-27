@@ -1,8 +1,5 @@
-  /* =========================================================
-     1. Tokens
-     ========================================================= */
   :root {
-    /* Cor — tema claro (papel de oficina) */
+    /* Cores do tema claro */
     --bg: #ede6d9;
     --surface: #f8f3e8;
     --surface-2: #efe6d5;
@@ -110,9 +107,6 @@
     --shadow-lift: 0 10px 32px rgba(0,0,0,.5);
   }
 
-  /* =========================================================
-     1b. Paletas por Oficina (Bombas & Herbalismo)
-     ========================================================= */
   :root[data-oficina="bombas"] {
     --bg: #ebe7e5;
     --surface: #f7f4f2;
@@ -204,9 +198,6 @@
     --ember-hot: #c9f2a7;
   }
 
-  /* =========================================================
-     2. Base
-     ========================================================= */
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
   html { color-scheme: light dark; }
@@ -224,13 +215,13 @@
   }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  /* Detalhes do navegador com o tema da página */
+  /* Scrollbar e seleção */
   ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--text); }
   input, select { caret-color: var(--accent); }
   html { scrollbar-color: var(--border-strong) var(--bg); }
   .mat-dropdown, .mods-list { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 
-  /* Ícones desenhados */
+  /* Ícones SVG */
   .ico { width: 1em; height: 1em; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .sr-only {
     position: absolute;
@@ -244,8 +235,7 @@
     border: 0;
   }
 
-  /* Troca de tema em onda (View Transitions) */
-  /* A frente da onda é macia e deixa 3 ondulações para trás antes de assentar */
+  /* Transição circular de tema (View Transitions) */
   @property --wave-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
   :root.theme-wave::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
   :root.theme-wave::view-transition-new(root) {
@@ -279,9 +269,6 @@
     gap: var(--sp-5);
   }
 
-  /* =========================================================
-     3. Cabeçalho
-     ========================================================= */
   .hero {
     position: relative;
     display: flex;
@@ -346,7 +333,7 @@
   }
   .view-switch + .view-switch { border-left: 1px solid var(--border); }
 
-  /* Botão de tema: lua no claro, sol no escuro */
+  /* Botão de tema */
   .theme-btn {
     width: 32px;
     height: 32px;
@@ -380,9 +367,6 @@
   }
   .sub { margin: 0; color: var(--text-dim); font-size: var(--fs-lg); max-width: 48ch; }
 
-  /* =========================================================
-     4. Cartões
-     ========================================================= */
   .panel, .result, .compare, .vantagens, .production, .magicos, .lista {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -428,7 +412,7 @@
   }
   .compare, .vantagens, .production { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-1); }
 
-  /* Rótulo de seção (padrão único) */
+  /* Rótulo de seção */
   .result-label, .compare-title, .production-title, .vantagens-title, .magicos-summary {
     margin: 0;
     font-size: var(--fs-xs);
@@ -439,7 +423,7 @@
   }
   .compare-title, .production-title, .vantagens-title { margin-bottom: var(--sp-2); }
 
-  /* Texto de apoio (padrão único) */
+  /* Texto de apoio */
   .mao-obra-note, .production-note, .magicos-note, .equip-info, .mat-cap-note {
     margin: 0;
     font-size: var(--fs-xs);
@@ -448,9 +432,6 @@
   }
   .production-note { margin: var(--sp-2) 0; }
 
-  /* =========================================================
-     5. Campos
-     ========================================================= */
   .field-group { display: flex; flex-direction: column; gap: var(--sp-2); }
   label, .label {
     font-size: var(--fs-sm);
@@ -497,9 +478,6 @@
   input::placeholder { color: var(--text-dim); opacity: .7; }
   input:disabled, select:disabled { opacity: .5; cursor: not-allowed; }
 
-  /* =========================================================
-     6. Botões
-     ========================================================= */
   .btn-ghost {
     display: inline-flex;
     align-items: center;
@@ -649,9 +627,6 @@
   }
   .switch[aria-checked="true"] .knob { transform: translateX(18px); background: var(--accent-ink); }
 
-  /* =========================================================
-     7. Materiais
-     ========================================================= */
   #material-rows { display: flex; flex-direction: column; gap: var(--sp-2); }
   .material-row {
     display: flex;
@@ -873,9 +848,6 @@
   .mode { display: flex; flex-direction: column; gap: var(--sp-3); }
   #lucro-wrap { max-width: 200px; }
 
-  /* =========================================================
-     8. Resultado
-     ========================================================= */
   .panel {
     box-shadow: inset 0 1px 0 rgba(255,255,255,.06), var(--shadow);
   }
@@ -1210,7 +1182,7 @@
   .toast-btn:focus-visible { outline-color: var(--bg); }
   @media (max-width: 1059.98px) { .toast { bottom: calc(96px + env(safe-area-inset-bottom)); } }
 
-  /* Tempo: segundo número do painel */
+  /* Tempo no painel */
   .kpi-time {
     display: flex;
     justify-content: space-between;
@@ -1225,7 +1197,7 @@
   .kpi-time-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: var(--fs-sm); color: var(--text-dim); }
   .kpi-time-value strong { font-size: var(--fs-xl); font-weight: 600; color: var(--text); }
 
-  /* A conta, em forma de recibo */
+  /* Detalhamento do custo */
   .receipt {
     margin-top: var(--sp-1);
     padding: var(--sp-3) var(--sp-4) var(--sp-4);
@@ -1361,9 +1333,6 @@
   .v-pills-row-y { margin: 4px 0; }
   .v-empty { font-size: var(--fs-sm); color: var(--text-dim);  }
 
-  /* =========================================================
-     9. Itens mágicos
-     ========================================================= */
   .magicos:not([open]) { overflow: hidden; }
   .magicos-summary {
     cursor: pointer;
@@ -1400,9 +1369,6 @@
   .mg-line .mg-v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; margin-left: auto; text-align: right; }
   .mg-warning { margin: var(--sp-1) 0 0; color: var(--accent); font-size: var(--fs-sm); }
 
-  /* =========================================================
-     10. Rodapé
-     ========================================================= */
   .foot {
     display: flex;
     justify-content: space-between;
@@ -1413,7 +1379,7 @@
   }
   .foot p { margin: 0; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); overflow-wrap: anywhere; }
 
-  /* Seções secundárias planas: o resultado é o único cartão em destaque ao lado do formulário */
+  /* Seções secundárias sem borda de cartão */
   .compare, .vantagens, .production, .lista, .magicos {
     background: transparent;
     border: none;
@@ -1426,7 +1392,7 @@
   .magicos-summary { padding-left: 0; padding-right: 0; }
   .magicos-body { padding-left: 0; padding-right: 0; }
 
-  /* Grupos da seção O Forjador e explicações sob demanda */
+  /* Seção O Forjador e blocos de ajuda */
   .group-label { margin: 0 0 calc(-1 * var(--sp-2)); font-size: var(--fs-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); }
   .explain > summary {
     cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px;
@@ -1440,9 +1406,6 @@
   .explain[open] > summary::before { transform: rotate(45deg); }
   .explain > p { margin-top: var(--sp-2); }
 
-  /* =========================================================
-     10b. Navegação de Oficinas, Bombas & Herbalismo
-     ========================================================= */
   body {
     transition: background-color 220ms ease, color 220ms ease;
   }
@@ -1535,7 +1498,7 @@
   .ramo-branco { background: #f5f5f2; box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); }
   .ramo-preto { background: #242228; box-shadow: inset 0 0 0 1px rgba(255,255,255,.35); }
 
-  /* Tabela de ramos & rolador de mesa */
+  /* Tabela de ramos */
   .ramos-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1617,9 +1580,6 @@
     :root:not([data-theme="light"]) .li-tag-herbalismo { color: #68b884; background: color-mix(in srgb, #68b884 18%, transparent); }
   }
 
-  /* =========================================================
-     11. Layout: lateral fixa no computador
-     ========================================================= */
   @media (min-width: 720px) and (max-width: 1059.98px) {
     .page { max-width: 720px; }
   }
@@ -1718,7 +1678,7 @@
     .hero { align-items: flex-start; }
   }
 
-  /* Telas de toque: alvos maiores e dropdown que cabe acima do teclado virtual */
+  /* Ajustes para touch */
   @media (pointer: coarse) {
     .seg-btn { min-height: 40px; }
     .btn-ghost { height: 40px; }
@@ -1732,9 +1692,6 @@
     .mat-option { min-height: 40px; padding: 9px var(--sp-2); }
   }
 
-  /* =========================================================
-     12. Modo forja (opcional, desligado por padrão)
-     ========================================================= */
   #embers { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; display: none; }
   .forge-glow {
     position: fixed; left: 0; right: 0; bottom: -20vh; height: 45vh; pointer-events: none; z-index: 0;
@@ -1749,9 +1706,6 @@
   .forja-on #embers { display: block; }
   .forja-on .forge-glow { opacity: .7; animation: forge-breathe 6s ease-in-out infinite; }
 
-  /* =========================================================
-     13. Animações
-     ========================================================= */
   @keyframes slide-in { from { opacity: 0; transform: translateX(-10px) scale(0.98); } to { opacity: 1; transform: none; } }
   @keyframes row-out { to { opacity: 0; transform: translateX(-10px) scale(0.97); } }
   @keyframes drop { from { opacity: 0; transform: translateY(-4px) scale(0.98); } to { opacity: 1; transform: none; } }
@@ -1774,15 +1728,15 @@
   .v-item.is-entering:nth-child(6) { animation-delay: 160ms; }
 
   @media (prefers-reduced-motion: reduce) {
-    /* entradas viram fade, sem deslocamento */
+    /* só fade, sem deslocar */
     .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]), .tipo-info:not([hidden]),
     .prop-chip.is-entering, .v-item.is-entering, [data-oficina-panel]:not([hidden]),
     .hero-mark .mark-ico { animation-name: fade-in; }
     body, .oficina-tabs { transition: none; }
     .material-row.is-leaving, .lista-item.is-leaving { animation: none; }
-    /* efeitos decorativos param */
+    /* pausa efeitos decorativos */
     .prop-chip.chip-obra::after, .prop-chip.chip-excalibur::after, .forja-on .forge-glow { animation: none; }
-    /* nada se move: só cor e opacidade mudam */
+    /* reduz movimento */
     .switch .knob, .theme-btn svg, .c-bar span, .mods-summary::before, .magicos-summary::before, .explain > summary::before, .seg-pill {
       transition-property: opacity, background-color, color, border-color;
       will-change: auto;
@@ -1797,7 +1751,7 @@
   }
   @keyframes fade-in { from { opacity: 0; } }
 
-  /* Hover só em aparelhos com mouse (no toque o hover gruda depois do toque) */
+  /* Hover só com mouse (no touch fica preso) */
   @media (hover: hover) and (pointer: fine) {
     .view-switch:hover { color: var(--text); }
     .theme-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }

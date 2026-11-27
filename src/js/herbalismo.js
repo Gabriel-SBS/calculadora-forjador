@@ -1,6 +1,3 @@
-  // =========================================================
-  // Oficina 3: Herbalismo (p. 148–150)
-  // =========================================================
   var herbalComboWrap = document.getElementById('herbal-combo-wrap');
   var herbalEquipInfo = document.getElementById('herbal-equip-info');
   var herbalInfoBtn = document.getElementById('herbal-info-btn');
@@ -111,7 +108,7 @@
     var enter = ch.h.id !== lastHerbalVantKey;
     lastHerbalVantKey = ch.h.id;
 
-    // Renderiza na seção plana .vantagens abaixo do formulário (mesma linguagem visual da Forja)
+    // Mostra os detalhes da receita abaixo do formulário
     herbalInfoCard.innerHTML = '';
 
     var item = document.createElement('div');

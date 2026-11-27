@@ -13,7 +13,7 @@
   RAMOS_DB.forEach(function (r) { RAMOS_MAP[r.id] = r; });
 
 
-  // 23 Receitas de Herbalismo (p. 149–150) — 1h por item
+  // Receitas de Herbalismo (p. 149-150, 1h por item)
   var HERBAL_DB = [
     {
       id: 'oleo_linhaca', categoria: 'Manutenção e Utilidades', nome: 'Óleo de Linhaça Fervido', preco: 1, rende: '1d10 usos', destaque: 'Forjador',

@@ -1,6 +1,3 @@
-// Modo forja: brasas subindo da forja (canvas de fundo, opcional)
-// Física simples: empuxo do calor + turbulência + vento; cada brasa esfria
-// seguindo a cor do corpo negro (branco-amarelo → laranja → vermelho → apaga).
 (function () {
   'use strict';
   var canvas = document.getElementById('embers');
@@ -22,7 +19,7 @@
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
-  // ---------- Cor por temperatura por oficina (1 = quente/vivo, 0 = apagado) ----------
+  // Cor por temperatura em cada aba (1 = quente, 0 = apagado)
   var RAMPS = {
     forja: [
       [0.00, 70, 14, 6],
@@ -94,7 +91,7 @@
   var activeOficina = document.documentElement.getAttribute('data-oficina') || 'forja';
   var leaves = [], smokes = [], glows = [], glowCooldown = 0.4, grains = [], microSparks = [], wisps = [];
 
-  // ---------- Modo pólvora (3 + 4): Névoa com clarões abafados + Grãos de pólvora inflamando ----------
+  // Névoa e grãos de pólvora (aba Bombas)
   function spawnGlow(initial) {
     var side = Math.random() < 0.78;
     var gx = side
@@ -105,7 +102,7 @@
       x: gx, y: gy,
       r: 140 + Math.random() * 170,
       life: initial ? Math.random() * 0.5 : 0,
-      speed: 0.32 + Math.random() * 0.26, // ciclos por segundo (~2–3s de duração)
+      speed: 0.32 + Math.random() * 0.26, // ~2-3s por ciclo
       amber: Math.random() < 0.45
     });
   }
@@ -178,7 +175,7 @@
   }
 
   function makeSmokePuff(rgb) {
-    // Nuvem multi-lobulada (5 círculos suaves deslocados) para parecer fumaça real, não bolinha
+    // 5 círculos sobrepostos pra imitar fumaça
     var s = document.createElement('canvas');
     s.width = s.height = 128;
     var g = s.getContext('2d');
@@ -237,7 +234,7 @@
   var VIOLET = makeHalo([200, 160, 255], false);
   function lvl(k) { return Math.max(0, Math.min(LEVELS - 1, Math.round(k * (LEVELS - 1)))); }
 
-  // ---------- Campo de turbulência (soma de senoides: barato e suave) ----------
+  // Turbulência com soma de senoides
   function flowX(x, y, time) {
     return Math.sin(y * 0.011 + time * 0.9) * 0.6 + Math.sin(y * 0.027 - time * 1.7 + x * 0.004) * 0.4;
   }
@@ -248,7 +245,7 @@
     return Math.sin(time * 0.21) * 0.55 + Math.sin(time * 0.067 + 1.7) * 0.35 + Math.sin(time * 0.53) * 0.1;
   }
 
-  // ---------- Partículas ----------
+  // Partículas
   function spawnEmber(anywhere) {
     var z = 0.35 + Math.random() * 0.65;          // profundidade: 1 = perto
     var big = Math.random() < 0.12;
@@ -271,7 +268,7 @@
     };
   }
   function spawnMote() {
-    // brasas grandes desfocadas em primeiro plano (profundidade de campo)
+    // brasas maiores e desfocadas em primeiro plano
     return {
       x: Math.random() * W,
       y: H + 60 + Math.random() * H * 0.5,
@@ -327,13 +324,13 @@
     if (!running) start();
   }
 
-  // ---------- Simulação ----------
+  // Simulação
   function step(dt) {
     t += dt;
     var g = gust(t);
 
     if (activeOficina === 'herbalismo') {
-      // Folhas botânicas caindo suavemente com balanço pendular e giro 3D
+      // Folhas caindo com balanço lateral
       var wind = 10 + g * 18;
       for (var li = 0; li < leaves.length; li++) {
         var lf = leaves[li];
@@ -349,7 +346,7 @@
     }
 
     if (activeOficina === 'bombas') {
-      // 3 + 4: Névoa de pólvora com clarões abafados + grãos de pólvora negra inflamando
+      // Névoa de pólvora e grãos acendendo
       glowCooldown -= dt;
       if (glowCooldown <= 0 && glows.length < 3) {
         spawnGlow(false);
@@ -425,7 +422,7 @@
         if (ms2.life >= ms2.maxLife) microSparks.splice(mi, 1);
       }
 
-      // Faíscas de feedback ao selecionar itens raros (Forja.sparksAt)
+      // Faíscas ao escolher item raro (Forja.sparksAt)
       for (var sj = sparks.length - 1; sj >= 0; sj--) {
         var spk = sparks[sj];
         spk.px = spk.x; spk.py = spk.y;
@@ -440,7 +437,7 @@
       return;
     }
 
-    // Forja (padrão): brasas subindo com empuxo térmico + bokeh + faíscas
+    // Forja: brasas subindo, bokeh e faíscas
     for (var i = 0; i < embers.length; i++) {
       var e = embers[i];
       e.px = e.x; e.py = e.y;
@@ -476,7 +473,7 @@
     }
   }
 
-  // ---------- Desenho ----------
+  // Desenho
   function drawLeaf(lf, dark) {
     var palette = dark ? LEAF_COLORS_DARK : LEAF_COLORS_LIGHT;
     var col = palette[lf.colorIdx];
@@ -498,7 +495,7 @@
     ctx.quadraticCurveTo(-s * 0.72, -s * 0.15, 0, -s);
     ctx.fill();
 
-    // nervura central delicada
+    // nervura central
     ctx.globalAlpha = alpha * 0.55;
     ctx.strokeStyle = dark ? 'rgba(220,245,215,0.7)' : 'rgba(255,252,240,0.65)';
     ctx.lineWidth = Math.max(0.6, s * 0.07);
@@ -522,7 +519,7 @@
     }
 
     if (activeOficina === 'bombas') {
-      // 1. Clarões abafados pulsando por trás da névoa (multiply + pigmentos profundos no claro)
+      // Clarões atrás da névoa
       for (var gl = 0; gl < glows.length; gl++) {
         var cw = glows[gl];
         var env = Math.sin(cw.life * Math.PI) * Math.pow(1 - cw.life, 0.42);
@@ -560,7 +557,7 @@
         ctx.restore();
       }
 
-      // 2. Névoa de pólvora multi-lobulada girando suavemente
+      // Névoa girando
       ctx.globalCompositeOperation = dark ? 'source-over' : 'multiply';
       var smokeImg = dark ? SMOKE_DARK : SMOKE_LIGHT;
       for (var si = 0; si < smokes.length; si++) {
@@ -577,7 +574,7 @@
       ctx.globalAlpha = 1;
       ctx.globalCompositeOperation = 'source-over';
 
-      // 3. Fiozinhos de fumaça deixados pelos grãos inflamados
+      // Rastro de fumaça dos grãos
       for (var wi = 0; wi < wisps.length; wi++) {
         var ws = wisps[wi];
         var wa = Math.sin(ws.life * Math.PI) * (dark ? 0.18 : 0.26);
@@ -591,7 +588,7 @@
         ctx.fill();
       }
 
-      // 4. Grãos de pólvora negra e limalha que se inflamam em lampejos silenciosos
+      // Grãos acendendo
       for (var gi = 0; gi < grains.length; gi++) {
         var gr = grains[gi];
         if (gr.igniting > 0) {
@@ -622,7 +619,7 @@
         ctx.fill();
       }
 
-      // 5. Micro-faíscas dos grãos inflamados
+      // Faíscas dos grãos
       for (var mi = 0; mi < microSparks.length; mi++) {
         var ms2 = microSparks[mi];
         var ma2 = Math.max(0, 1 - ms2.life / ms2.maxLife);
@@ -634,7 +631,7 @@
         ctx.fill();
       }
 
-      // 6. Faíscas de seleção de item raro (Forja.sparksAt)
+      // Faíscas ao escolher item raro (Forja.sparksAt)
       if (sparks.length) {
         ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
         var dimB = dark ? 1 : 0.85;
@@ -658,7 +655,7 @@
     ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
     var dim = dark ? 1 : 0.7;
 
-    // 1. bokeh ao fundo/frente
+    // bokeh
     for (var m = 0; m < motes.length; m++) {
       var o = motes[m];
       var fl = 0.8 + 0.2 * Math.sin(t * 1.3 + o.seed);
@@ -666,12 +663,12 @@
       ctx.drawImage(BOKEH[lvl(o.temp)], o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
     }
 
-    // 2. brasas: halo + rastro de movimento + núcleo
+    // brasas
     for (var i = 0; i < embers.length; i++) {
       var e = embers[i];
       var fadeIn = Math.min(1, e.life * 2);
       var fadeOut = Math.min(1, e.temp / 0.18);
-      // cintilação irregular: duas frequências + "estalo" ocasional
+      // brilho irregular com estalo ocasional
       var fl = 0.72 + 0.18 * Math.sin(t * e.flick + e.seed) + 0.1 * Math.sin(t * e.flick * 2.7 + e.seed * 3);
       var a = fadeIn * fadeOut * fl * dim;
       if (a <= 0.01) continue;
@@ -692,7 +689,7 @@
       ctx.lineWidth = e.r * 1.1;
       ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(e.x, e.y); ctx.stroke();
 
-      // núcleo irregular: elipse que gira (fragmento de carvão, não bolinha)
+      // núcleo oval girando
       ctx.globalAlpha = a;
       ctx.fillStyle = rgba(rampColor(Math.min(1, k + 0.12)), 1);
       ctx.save();
@@ -704,7 +701,7 @@
       ctx.restore();
     }
 
-    // 3. faíscas de forja: riscos brilhantes que caem
+    // faíscas caindo
     for (var j = 0; j < sparks.length; j++) {
       var s = sparks[j];
       var kk = 1 - s.life / s.maxLife;
@@ -723,7 +720,7 @@
     ctx.globalCompositeOperation = 'source-over';
   }
 
-  // ---------- Ciclo ----------
+  // Loop principal
   function start() {
     if (!enabled) return;
     if (reduce) { draw(); return; }

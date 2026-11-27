@@ -1,6 +1,3 @@
-  // =========================================================
-  // Oficina 2: Bombas, Munições e Pólvora (p. 160, 171, 216–220)
-  // =========================================================
   var bmTipoSeg = document.getElementById('bm-tipo-seg');
   var bmTipoBtns = Array.prototype.slice.call(bmTipoSeg.querySelectorAll('.seg-btn'));
   var bmViewBomba = document.getElementById('bm-view-bomba');
@@ -186,7 +183,7 @@
     b.addEventListener('click', function () { setBmTipo(b.getAttribute('data-bmtipo')); });
   });
 
-  // --- Cálculos dos 3 sub-modos ---
+  // Cálculos dos 3 modos
   function calcBombas() {
     var b = bombaById(state.bombaId);
     if (!b) return null;
@@ -294,7 +291,7 @@
     };
   }
 
-  // --- Renderização de detalhes na seção plana .vantagens ---
+  // Detalhes da bomba/munição/pólvora abaixo do formulário
   var ICON_NOTE = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 7h14M5 12h14M5 17h9"/></svg>';
   var lastBmVantKey = '';
 
@@ -491,7 +488,7 @@
     bombaInfoCard.appendChild(item);
   }
 
-  // --- Update principal da Oficina Bombas e Munições ---
+  // Atualiza o painel de resultado da aba Bombas e Munições
   function updateBombas() {
     bombaArtesaoSub.textContent = '−20% em compras de itens não-mágicos';
     if (bombaArtesaoModoWrap) bombaArtesaoModoWrap.hidden = !state.bombaArtesao;

@@ -195,8 +195,7 @@
     return rounded.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   }
 
-  // Moedas do D&D (Livro do Jogador): 1 po = 10 pp = 100 pc. Electro e platina ficam de fora,
-  // como o próprio livro sugere (são incomuns em transações). Arredonda para a peça de cobre.
+  // 1 po = 10 pp = 100 pc (sem electro/platina, arredonda em pc)
   function moedas(n) {
     var c = Math.round(Math.abs(isFinite(n) ? n : 0) * 100);
     var partes = [];
@@ -211,7 +210,7 @@
     var m = moedas(n);
     return (m.neg ? '−' : '') + m.partes.map(function (p) { return p[0] + ' ' + p[1]; }).join(' ');
   }
-  // Versão do número grande: a primeira moeda em destaque, as outras menores
+  // Destaca a moeda principal e diminui o resto
   function htmlMoeda(n) {
     var m = moedas(n);
     return m.partes.map(function (p, i) {
@@ -224,7 +223,7 @@
     return isFinite(n) ? n : (fallback || 0);
   }
 
-  // --- DOM refs ---
+  // Elementos da tela
   var pdeInput = document.getElementById('pde');
   var artesaoSwitch = document.getElementById('artesao-switch');
   var artesaoModoWrap = document.getElementById('artesao-modo-wrap');
@@ -279,7 +278,7 @@
   var modsTotal = document.getElementById('mods-total');
   var transmutNivelSelect = document.getElementById('transmut-nivel');
 
-  // Switches simples: id do botão → chave do estado → o que recalcular
+  // Switches simples (id do botão, chave no estado e ação)
   var SIMPLE_SWITCHES = [
     ['existente-switch', 'modExistente', 'main'],
     ['obra-switch', 'obraPrima', 'main'],
@@ -604,8 +603,7 @@
       proprio = possuidos ? 0 : subtotal / divisor;
     }
 
-    // Modificação de munição: preço fixo por munição, fora do multiplicador do material.
-    // O Forjador paga metade (Trabalhador Itinerante) e o Artesão desconta, como no resto.
+    // Mod de munição soma por unidade, fora do multiplicador do material
     var proprioItem = proprio;
     var modMun = null;
     var mm = state.tipoItem === 'municao' ? MUNICAO_MODS[state.municaoMod] : null;
@@ -1449,7 +1447,7 @@
       }
     }
 
-    // --- Transmutação (Forjador Alquimista 3º / 7º / 13º, p. 130–131) ---
+    // Transmutação do Forjador Alquimista (p. 130-131)
     var nivel = parseInt(state.transmutNivel, 10) || 3;
     var origem = materialById(state.transmutOrigemId);
     var destino = materialById(state.transmutDestinoId);
@@ -1498,7 +1496,7 @@
   var cbValue = document.getElementById('cb-value');
   var cbLabel = document.getElementById('cb-label');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Digitar num campo muda o resultado a cada tecla: aí o número troca na hora, sem contagem
+  // Enquanto digita, atualiza direto sem animar o número
   var lastTypedAt = 0;
   document.addEventListener('input', function (e) {
     if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) lastTypedAt = performance.now();
@@ -1530,7 +1528,7 @@
     })(t0);
   }
 
-  // Conta incompleta: diz o que falta em vez de mostrar uma coluna de zeros
+  // Mostra o que falta preencher em vez de zeros
   function emptyReason(c) {
     if (c.modMun && c.modMun.existente) return '';
     if (state.tipoItem === 'municao' && state.municaoModExistente) return 'Escolha uma modificação de munição para calcular o custo.';
@@ -1549,7 +1547,7 @@
     if (state.oficina === 'herbalismo') { updateHerbalismo(); return; }
     if (kpiTimeLabelEl) kpiTimeLabelEl.textContent = 'Tempo do Forjador';
     var c = calculate();
-    // PDE com centavos (munições, por exemplo): mostra em moedas do D&D
+    // PDE fracionado sai em pp/pc
     var pdeNum = num(state.pde, 0);
     pdeMoedaEl.hidden = !(pdeNum > 0 && Math.round(pdeNum * 100) % 100 !== 0);
     pdeMoedaEl.textContent = fmt(pdeNum) + ' po = ' + fmtMoeda(pdeNum);
@@ -1668,7 +1666,7 @@
     renderCompMateriais();
     updateMagicos();
 
-    // Tempo na barra de custo + aviso para leitor de tela (só o valor final, sem a contagem animada)
+    // Atualiza o tempo na barra mobile e no aviso de acessibilidade
     var temTempo = resultTimeEl.textContent !== '—';
     cbTime.textContent = temTempo ? resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent : '';
     clearTimeout(liveTimer);
@@ -1679,7 +1677,7 @@
     }, 700);
   }
 
-  // --- Comparador de Materiais Lado a Lado (Forja) ---
+  // Comparador de materiais
   var compMatGridEl = document.getElementById('comp-mat-grid');
   function calcSingleMaterial(mat) {
     var base = baseValue();
@@ -1799,7 +1797,7 @@
     });
   }
 
-  // --- Equipamento do Guia (Forja: armas, escudos, armaduras, focos e instrumentos) ---
+  // Busca de equipamento do Guia
   function searchEquip(q) {
     q = normalizeSearch(q);
     if (!q) return [];
@@ -1898,7 +1896,7 @@
     return wrap;
   }
 
-  // --- Modificações ---
+  // Modificações
   var showAllMods = false;
   function modIsCompatible(idx) {
     var ctx = currentForjaCtx();
@@ -2129,7 +2127,7 @@
     if (!silent) { saveState(); update(); }
   }
 
-  // --- wire static inputs ---
+  // Eventos dos campos fixos
   pdeInput.addEventListener('input', function () {
     state.pde = pdeInput.value;
     state.equipNome = '';
@@ -2266,7 +2264,7 @@
     btn.addEventListener('click', function () { setTipo(btn.dataset.tipo); });
   });
 
-  // --- Aviso flutuante (com ação opcional, como "Desfazer") ---
+  // Toast com opção de desfazer
   var toastEl = document.getElementById('toast');
   var toastMsg = document.getElementById('toast-msg');
   var toastAction = document.getElementById('toast-undo');

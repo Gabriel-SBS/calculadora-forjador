@@ -24,11 +24,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800&family=Work+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  /* =========================================================
-     1. Tokens
-     ========================================================= */
   :root {
-    /* Cor — tema claro (papel de oficina) */
+    /* Cores do tema claro */
     --bg: #ede6d9;
     --surface: #f8f3e8;
     --surface-2: #efe6d5;
@@ -136,9 +133,6 @@
     --shadow-lift: 0 10px 32px rgba(0,0,0,.5);
   }
 
-  /* =========================================================
-     1b. Paletas por Oficina (Bombas & Herbalismo)
-     ========================================================= */
   :root[data-oficina="bombas"] {
     --bg: #ebe7e5;
     --surface: #f7f4f2;
@@ -230,9 +224,6 @@
     --ember-hot: #c9f2a7;
   }
 
-  /* =========================================================
-     2. Base
-     ========================================================= */
   * { box-sizing: border-box; }
   [hidden] { display: none !important; }
   html { color-scheme: light dark; }
@@ -250,13 +241,13 @@
   }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  /* Detalhes do navegador com o tema da página */
+  /* Scrollbar e seleção */
   ::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); color: var(--text); }
   input, select { caret-color: var(--accent); }
   html { scrollbar-color: var(--border-strong) var(--bg); }
   .mat-dropdown, .mods-list { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
 
-  /* Ícones desenhados */
+  /* Ícones SVG */
   .ico { width: 1em; height: 1em; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .sr-only {
     position: absolute;
@@ -270,8 +261,7 @@
     border: 0;
   }
 
-  /* Troca de tema em onda (View Transitions) */
-  /* A frente da onda é macia e deixa 3 ondulações para trás antes de assentar */
+  /* Transição circular de tema (View Transitions) */
   @property --wave-r { syntax: '<length>'; inherits: false; initial-value: 0px; }
   :root.theme-wave::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
   :root.theme-wave::view-transition-new(root) {
@@ -305,9 +295,6 @@
     gap: var(--sp-5);
   }
 
-  /* =========================================================
-     3. Cabeçalho
-     ========================================================= */
   .hero {
     position: relative;
     display: flex;
@@ -372,7 +359,7 @@
   }
   .view-switch + .view-switch { border-left: 1px solid var(--border); }
 
-  /* Botão de tema: lua no claro, sol no escuro */
+  /* Botão de tema */
   .theme-btn {
     width: 32px;
     height: 32px;
@@ -406,9 +393,6 @@
   }
   .sub { margin: 0; color: var(--text-dim); font-size: var(--fs-lg); max-width: 48ch; }
 
-  /* =========================================================
-     4. Cartões
-     ========================================================= */
   .panel, .result, .compare, .vantagens, .production, .magicos, .lista {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -454,7 +438,7 @@
   }
   .compare, .vantagens, .production { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-1); }
 
-  /* Rótulo de seção (padrão único) */
+  /* Rótulo de seção */
   .result-label, .compare-title, .production-title, .vantagens-title, .magicos-summary {
     margin: 0;
     font-size: var(--fs-xs);
@@ -465,7 +449,7 @@
   }
   .compare-title, .production-title, .vantagens-title { margin-bottom: var(--sp-2); }
 
-  /* Texto de apoio (padrão único) */
+  /* Texto de apoio */
   .mao-obra-note, .production-note, .magicos-note, .equip-info, .mat-cap-note {
     margin: 0;
     font-size: var(--fs-xs);
@@ -474,9 +458,6 @@
   }
   .production-note { margin: var(--sp-2) 0; }
 
-  /* =========================================================
-     5. Campos
-     ========================================================= */
   .field-group { display: flex; flex-direction: column; gap: var(--sp-2); }
   label, .label {
     font-size: var(--fs-sm);
@@ -523,9 +504,6 @@
   input::placeholder { color: var(--text-dim); opacity: .7; }
   input:disabled, select:disabled { opacity: .5; cursor: not-allowed; }
 
-  /* =========================================================
-     6. Botões
-     ========================================================= */
   .btn-ghost {
     display: inline-flex;
     align-items: center;
@@ -675,9 +653,6 @@
   }
   .switch[aria-checked="true"] .knob { transform: translateX(18px); background: var(--accent-ink); }
 
-  /* =========================================================
-     7. Materiais
-     ========================================================= */
   #material-rows { display: flex; flex-direction: column; gap: var(--sp-2); }
   .material-row {
     display: flex;
@@ -899,9 +874,6 @@
   .mode { display: flex; flex-direction: column; gap: var(--sp-3); }
   #lucro-wrap { max-width: 200px; }
 
-  /* =========================================================
-     8. Resultado
-     ========================================================= */
   .panel {
     box-shadow: inset 0 1px 0 rgba(255,255,255,.06), var(--shadow);
   }
@@ -1236,7 +1208,7 @@
   .toast-btn:focus-visible { outline-color: var(--bg); }
   @media (max-width: 1059.98px) { .toast { bottom: calc(96px + env(safe-area-inset-bottom)); } }
 
-  /* Tempo: segundo número do painel */
+  /* Tempo no painel */
   .kpi-time {
     display: flex;
     justify-content: space-between;
@@ -1251,7 +1223,7 @@
   .kpi-time-value { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: var(--fs-sm); color: var(--text-dim); }
   .kpi-time-value strong { font-size: var(--fs-xl); font-weight: 600; color: var(--text); }
 
-  /* A conta, em forma de recibo */
+  /* Detalhamento do custo */
   .receipt {
     margin-top: var(--sp-1);
     padding: var(--sp-3) var(--sp-4) var(--sp-4);
@@ -1387,9 +1359,6 @@
   .v-pills-row-y { margin: 4px 0; }
   .v-empty { font-size: var(--fs-sm); color: var(--text-dim);  }
 
-  /* =========================================================
-     9. Itens mágicos
-     ========================================================= */
   .magicos:not([open]) { overflow: hidden; }
   .magicos-summary {
     cursor: pointer;
@@ -1426,9 +1395,6 @@
   .mg-line .mg-v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 600; margin-left: auto; text-align: right; }
   .mg-warning { margin: var(--sp-1) 0 0; color: var(--accent); font-size: var(--fs-sm); }
 
-  /* =========================================================
-     10. Rodapé
-     ========================================================= */
   .foot {
     display: flex;
     justify-content: space-between;
@@ -1439,7 +1405,7 @@
   }
   .foot p { margin: 0; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-dim); overflow-wrap: anywhere; }
 
-  /* Seções secundárias planas: o resultado é o único cartão em destaque ao lado do formulário */
+  /* Seções secundárias sem borda de cartão */
   .compare, .vantagens, .production, .lista, .magicos {
     background: transparent;
     border: none;
@@ -1452,7 +1418,7 @@
   .magicos-summary { padding-left: 0; padding-right: 0; }
   .magicos-body { padding-left: 0; padding-right: 0; }
 
-  /* Grupos da seção O Forjador e explicações sob demanda */
+  /* Seção O Forjador e blocos de ajuda */
   .group-label { margin: 0 0 calc(-1 * var(--sp-2)); font-size: var(--fs-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); }
   .explain > summary {
     cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px;
@@ -1466,9 +1432,6 @@
   .explain[open] > summary::before { transform: rotate(45deg); }
   .explain > p { margin-top: var(--sp-2); }
 
-  /* =========================================================
-     10b. Navegação de Oficinas, Bombas & Herbalismo
-     ========================================================= */
   body {
     transition: background-color 220ms ease, color 220ms ease;
   }
@@ -1561,7 +1524,7 @@
   .ramo-branco { background: #f5f5f2; box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); }
   .ramo-preto { background: #242228; box-shadow: inset 0 0 0 1px rgba(255,255,255,.35); }
 
-  /* Tabela de ramos & rolador de mesa */
+  /* Tabela de ramos */
   .ramos-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1643,9 +1606,6 @@
     :root:not([data-theme="light"]) .li-tag-herbalismo { color: #68b884; background: color-mix(in srgb, #68b884 18%, transparent); }
   }
 
-  /* =========================================================
-     11. Layout: lateral fixa no computador
-     ========================================================= */
   @media (min-width: 720px) and (max-width: 1059.98px) {
     .page { max-width: 720px; }
   }
@@ -1744,7 +1704,7 @@
     .hero { align-items: flex-start; }
   }
 
-  /* Telas de toque: alvos maiores e dropdown que cabe acima do teclado virtual */
+  /* Ajustes para touch */
   @media (pointer: coarse) {
     .seg-btn { min-height: 40px; }
     .btn-ghost { height: 40px; }
@@ -1758,9 +1718,6 @@
     .mat-option { min-height: 40px; padding: 9px var(--sp-2); }
   }
 
-  /* =========================================================
-     12. Modo forja (opcional, desligado por padrão)
-     ========================================================= */
   #embers { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; display: none; }
   .forge-glow {
     position: fixed; left: 0; right: 0; bottom: -20vh; height: 45vh; pointer-events: none; z-index: 0;
@@ -1775,9 +1732,6 @@
   .forja-on #embers { display: block; }
   .forja-on .forge-glow { opacity: .7; animation: forge-breathe 6s ease-in-out infinite; }
 
-  /* =========================================================
-     13. Animações
-     ========================================================= */
   @keyframes slide-in { from { opacity: 0; transform: translateX(-10px) scale(0.98); } to { opacity: 1; transform: none; } }
   @keyframes row-out { to { opacity: 0; transform: translateX(-10px) scale(0.97); } }
   @keyframes drop { from { opacity: 0; transform: translateY(-4px) scale(0.98); } to { opacity: 1; transform: none; } }
@@ -1800,15 +1754,15 @@
   .v-item.is-entering:nth-child(6) { animation-delay: 160ms; }
 
   @media (prefers-reduced-motion: reduce) {
-    /* entradas viram fade, sem deslocamento */
+    /* só fade, sem deslocar */
     .material-row.is-new, .lista-item, .mat-dropdown:not([hidden]), .tipo-info:not([hidden]),
     .prop-chip.is-entering, .v-item.is-entering, [data-oficina-panel]:not([hidden]),
     .hero-mark .mark-ico { animation-name: fade-in; }
     body, .oficina-tabs { transition: none; }
     .material-row.is-leaving, .lista-item.is-leaving { animation: none; }
-    /* efeitos decorativos param */
+    /* pausa efeitos decorativos */
     .prop-chip.chip-obra::after, .prop-chip.chip-excalibur::after, .forja-on .forge-glow { animation: none; }
-    /* nada se move: só cor e opacidade mudam */
+    /* reduz movimento */
     .switch .knob, .theme-btn svg, .c-bar span, .mods-summary::before, .magicos-summary::before, .explain > summary::before, .seg-pill {
       transition-property: opacity, background-color, color, border-color;
       will-change: auto;
@@ -1823,7 +1777,7 @@
   }
   @keyframes fade-in { from { opacity: 0; } }
 
-  /* Hover só em aparelhos com mouse (no toque o hover gruda depois do toque) */
+  /* Hover só com mouse (no touch fica preso) */
   @media (hover: hover) and (pointer: fine) {
     .view-switch:hover { color: var(--text); }
     .theme-btn:hover { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
@@ -2807,11 +2761,11 @@
 <script>
 (function () {
   'use strict';
-  // Tempo de Produção: baseado na tabela Tempo de Criação (Materiais e Criação) + Trabalhador Itinerante (Forjador).
+  // Tempo de criação por tier (Guia + Trabalhador Itinerante)
 
   var STORAGE_KEY = 'forjador-calc-v5';
 
-  // Ícones (mesmo traço do sol e da lua do tema)
+  // Ícones
   var ICON_X = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>';
   var ICON_PLUS = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg>';
   var ICON_WARN = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5 21.5 20h-19zM12 10v4.5M12 17.2v.3"/></svg>';
@@ -3252,7 +3206,7 @@
   RAMOS_DB.forEach(function (r) { RAMOS_MAP[r.id] = r; });
 
 
-  // 23 Receitas de Herbalismo (p. 149–150) — 1h por item
+  // Receitas de Herbalismo (p. 149-150, 1h por item)
   var HERBAL_DB = [
     {
       id: 'oleo_linhaca', categoria: 'Manutenção e Utilidades', nome: 'Óleo de Linhaça Fervido', preco: 1, rende: '1d10 usos', destaque: 'Forjador',
@@ -3567,8 +3521,7 @@
     return rounded.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   }
 
-  // Moedas do D&D (Livro do Jogador): 1 po = 10 pp = 100 pc. Electro e platina ficam de fora,
-  // como o próprio livro sugere (são incomuns em transações). Arredonda para a peça de cobre.
+  // 1 po = 10 pp = 100 pc (sem electro/platina, arredonda em pc)
   function moedas(n) {
     var c = Math.round(Math.abs(isFinite(n) ? n : 0) * 100);
     var partes = [];
@@ -3583,7 +3536,7 @@
     var m = moedas(n);
     return (m.neg ? '−' : '') + m.partes.map(function (p) { return p[0] + ' ' + p[1]; }).join(' ');
   }
-  // Versão do número grande: a primeira moeda em destaque, as outras menores
+  // Destaca a moeda principal e diminui o resto
   function htmlMoeda(n) {
     var m = moedas(n);
     return m.partes.map(function (p, i) {
@@ -3596,7 +3549,7 @@
     return isFinite(n) ? n : (fallback || 0);
   }
 
-  // --- DOM refs ---
+  // Elementos da tela
   var pdeInput = document.getElementById('pde');
   var artesaoSwitch = document.getElementById('artesao-switch');
   var artesaoModoWrap = document.getElementById('artesao-modo-wrap');
@@ -3651,7 +3604,7 @@
   var modsTotal = document.getElementById('mods-total');
   var transmutNivelSelect = document.getElementById('transmut-nivel');
 
-  // Switches simples: id do botão → chave do estado → o que recalcular
+  // Switches simples (id do botão, chave no estado e ação)
   var SIMPLE_SWITCHES = [
     ['existente-switch', 'modExistente', 'main'],
     ['obra-switch', 'obraPrima', 'main'],
@@ -3976,8 +3929,7 @@
       proprio = possuidos ? 0 : subtotal / divisor;
     }
 
-    // Modificação de munição: preço fixo por munição, fora do multiplicador do material.
-    // O Forjador paga metade (Trabalhador Itinerante) e o Artesão desconta, como no resto.
+    // Mod de munição soma por unidade, fora do multiplicador do material
     var proprioItem = proprio;
     var modMun = null;
     var mm = state.tipoItem === 'municao' ? MUNICAO_MODS[state.municaoMod] : null;
@@ -4821,7 +4773,7 @@
       }
     }
 
-    // --- Transmutação (Forjador Alquimista 3º / 7º / 13º, p. 130–131) ---
+    // Transmutação do Forjador Alquimista (p. 130-131)
     var nivel = parseInt(state.transmutNivel, 10) || 3;
     var origem = materialById(state.transmutOrigemId);
     var destino = materialById(state.transmutDestinoId);
@@ -4870,7 +4822,7 @@
   var cbValue = document.getElementById('cb-value');
   var cbLabel = document.getElementById('cb-label');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  // Digitar num campo muda o resultado a cada tecla: aí o número troca na hora, sem contagem
+  // Enquanto digita, atualiza direto sem animar o número
   var lastTypedAt = 0;
   document.addEventListener('input', function (e) {
     if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) lastTypedAt = performance.now();
@@ -4902,7 +4854,7 @@
     })(t0);
   }
 
-  // Conta incompleta: diz o que falta em vez de mostrar uma coluna de zeros
+  // Mostra o que falta preencher em vez de zeros
   function emptyReason(c) {
     if (c.modMun && c.modMun.existente) return '';
     if (state.tipoItem === 'municao' && state.municaoModExistente) return 'Escolha uma modificação de munição para calcular o custo.';
@@ -4921,7 +4873,7 @@
     if (state.oficina === 'herbalismo') { updateHerbalismo(); return; }
     if (kpiTimeLabelEl) kpiTimeLabelEl.textContent = 'Tempo do Forjador';
     var c = calculate();
-    // PDE com centavos (munições, por exemplo): mostra em moedas do D&D
+    // PDE fracionado sai em pp/pc
     var pdeNum = num(state.pde, 0);
     pdeMoedaEl.hidden = !(pdeNum > 0 && Math.round(pdeNum * 100) % 100 !== 0);
     pdeMoedaEl.textContent = fmt(pdeNum) + ' po = ' + fmtMoeda(pdeNum);
@@ -5040,7 +4992,7 @@
     renderCompMateriais();
     updateMagicos();
 
-    // Tempo na barra de custo + aviso para leitor de tela (só o valor final, sem a contagem animada)
+    // Atualiza o tempo na barra mobile e no aviso de acessibilidade
     var temTempo = resultTimeEl.textContent !== '—';
     cbTime.textContent = temTempo ? resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent : '';
     clearTimeout(liveTimer);
@@ -5051,7 +5003,7 @@
     }, 700);
   }
 
-  // --- Comparador de Materiais Lado a Lado (Forja) ---
+  // Comparador de materiais
   var compMatGridEl = document.getElementById('comp-mat-grid');
   function calcSingleMaterial(mat) {
     var base = baseValue();
@@ -5171,7 +5123,7 @@
     });
   }
 
-  // --- Equipamento do Guia (Forja: armas, escudos, armaduras, focos e instrumentos) ---
+  // Busca de equipamento do Guia
   function searchEquip(q) {
     q = normalizeSearch(q);
     if (!q) return [];
@@ -5270,7 +5222,7 @@
     return wrap;
   }
 
-  // --- Modificações ---
+  // Modificações
   var showAllMods = false;
   function modIsCompatible(idx) {
     var ctx = currentForjaCtx();
@@ -5501,7 +5453,7 @@
     if (!silent) { saveState(); update(); }
   }
 
-  // --- wire static inputs ---
+  // Eventos dos campos fixos
   pdeInput.addEventListener('input', function () {
     state.pde = pdeInput.value;
     state.equipNome = '';
@@ -5638,7 +5590,7 @@
     btn.addEventListener('click', function () { setTipo(btn.dataset.tipo); });
   });
 
-  // --- Aviso flutuante (com ação opcional, como "Desfazer") ---
+  // Toast com opção de desfazer
   var toastEl = document.getElementById('toast');
   var toastMsg = document.getElementById('toast-msg');
   var toastAction = document.getElementById('toast-undo');
@@ -5704,7 +5656,6 @@
       hydrateForm();
     });
   });
-  // --- Resumo do item atual (para copiar e para a lista) ---
   var SITE_URL = 'https://gabriel-sbs.github.io/calculadora-forjador/';
   var TIPO_NOME = { arma: 'Arma', armadura: 'Armadura', municao: 'Munição', polvora: 'Pólvora' };
 
@@ -5882,7 +5833,7 @@
     });
   }
 
-  // --- Lista da sessão: vários itens, com quantidade, status de fabricado e totais ---
+  // Lista da sessão (itens salvos, quantidades e totais)
   var LISTA_KEY = 'forjador-lista-v1';
   var listaSection = document.getElementById('lista-section');
   var listaItemsEl = document.getElementById('lista-items');
@@ -6180,9 +6131,6 @@
   })();
 
   renderLista();
-  // =========================================================
-  // Oficinas (Forja | Bombas | Herbalismo)
-  // =========================================================
   var OFICINA_KEY = 'forjador-oficina';
   var OFICINA_META = {
     forja: {
@@ -6252,7 +6200,7 @@
     });
   });
 
-  // --- Helpers de selos de ramos ---
+  // Selos dos ramos de herbalismo
   function makeRamoPill(id, qtd, extraLabel) {
     var r = RAMOS_MAP[id];
     var sp = document.createElement('span');
@@ -6268,8 +6216,7 @@
     return sp;
   }
 
-  // Combobox pesquisável idêntico ao Equipamento do Guia e Lista de Materiais (Forja)
-  // Fica escondido até o usuário começar a digitar, com cabeçalhos .mat-group-label e alinhamento .mo-name / .mo-mult
+  // Busca com dropdown que só abre quando o usuário digita
   function buildCatalogCombo(items, getInitial, placeholder, labelId, formatMeta, onPick, onClear) {
     var wrap = document.createElement('div');
     wrap.className = 'mat-combo';
@@ -6355,7 +6302,7 @@
       dropdown.innerHTML = '';
       opts = [];
       hi = -1;
-      // Igual ao Forjador: só abre quando há texto digitado
+      // Só abre com texto digitado
       if (!nq) { close(); return; }
 
       var list = items.filter(function (it) {
@@ -6439,7 +6386,7 @@
     return wrap;
   }
 
-  // Botões "Como funciona a pesquisa?" (mesmo padrão visual de "Como funciona?")
+  // Abre e fecha os blocos de ajuda da pesquisa
   Array.prototype.forEach.call(document.querySelectorAll('[data-info-toggle]'), function (btn) {
     btn.addEventListener('click', function () {
       var target = document.getElementById(btn.getAttribute('data-info-toggle'));
@@ -6449,9 +6396,6 @@
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
   });
-  // =========================================================
-  // Oficina 2: Bombas, Munições e Pólvora (p. 160, 171, 216–220)
-  // =========================================================
   var bmTipoSeg = document.getElementById('bm-tipo-seg');
   var bmTipoBtns = Array.prototype.slice.call(bmTipoSeg.querySelectorAll('.seg-btn'));
   var bmViewBomba = document.getElementById('bm-view-bomba');
@@ -6637,7 +6581,7 @@
     b.addEventListener('click', function () { setBmTipo(b.getAttribute('data-bmtipo')); });
   });
 
-  // --- Cálculos dos 3 sub-modos ---
+  // Cálculos dos 3 modos
   function calcBombas() {
     var b = bombaById(state.bombaId);
     if (!b) return null;
@@ -6745,7 +6689,7 @@
     };
   }
 
-  // --- Renderização de detalhes na seção plana .vantagens ---
+  // Detalhes da bomba/munição/pólvora abaixo do formulário
   var ICON_NOTE = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 7h14M5 12h14M5 17h9"/></svg>';
   var lastBmVantKey = '';
 
@@ -6942,7 +6886,7 @@
     bombaInfoCard.appendChild(item);
   }
 
-  // --- Update principal da Oficina Bombas e Munições ---
+  // Atualiza o painel de resultado da aba Bombas e Munições
   function updateBombas() {
     bombaArtesaoSub.textContent = '−20% em compras de itens não-mágicos';
     if (bombaArtesaoModoWrap) bombaArtesaoModoWrap.hidden = !state.bombaArtesao;
@@ -7318,9 +7262,6 @@
       saveState(); update();
     });
   });
-  // =========================================================
-  // Oficina 3: Herbalismo (p. 148–150)
-  // =========================================================
   var herbalComboWrap = document.getElementById('herbal-combo-wrap');
   var herbalEquipInfo = document.getElementById('herbal-equip-info');
   var herbalInfoBtn = document.getElementById('herbal-info-btn');
@@ -7431,7 +7372,7 @@
     var enter = ch.h.id !== lastHerbalVantKey;
     lastHerbalVantKey = ch.h.id;
 
-    // Renderiza na seção plana .vantagens abaixo do formulário (mesma linguagem visual da Forja)
+    // Mostra os detalhes da receita abaixo do formulário
     herbalInfoCard.innerHTML = '';
 
     var item = document.createElement('div');
@@ -8040,7 +7981,6 @@
 })();
 </script>
 <script>
-// Tema claro / escuro: segue o sistema até a pessoa escolher, depois lembra
 (function () {
   'use strict';
   var btn = document.getElementById('theme-btn');
@@ -8081,11 +8021,10 @@
     var next = current() === 'dark' ? 'light' : 'dark';
     if (!document.startViewTransition || reduce) { apply(next); return; }
 
-    // Onda: o tema novo nasce no botão e se expande até cobrir a tela
+    // Calcula origem e raio da transição a partir do botão
     var r = btn.getBoundingClientRect();
     var x = r.left + r.width / 2, y = r.top + r.height / 2;
     var raio = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
-    // Centro e alcance da onda (o CSS anima o raio; as ondulações vêm atrás da frente)
     root.style.setProperty('--wave-x', x + 'px');
     root.style.setProperty('--wave-y', y + 'px');
     root.style.setProperty('--wave-max', Math.ceil(raio + 440) + 'px');
@@ -8102,9 +8041,6 @@
 })();
 </script>
 <script>
-// Modo forja: brasas subindo da forja (canvas de fundo, opcional)
-// Física simples: empuxo do calor + turbulência + vento; cada brasa esfria
-// seguindo a cor do corpo negro (branco-amarelo → laranja → vermelho → apaga).
 (function () {
   'use strict';
   var canvas = document.getElementById('embers');
@@ -8126,7 +8062,7 @@
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
-  // ---------- Cor por temperatura por oficina (1 = quente/vivo, 0 = apagado) ----------
+  // Cor por temperatura em cada aba (1 = quente, 0 = apagado)
   var RAMPS = {
     forja: [
       [0.00, 70, 14, 6],
@@ -8198,7 +8134,7 @@
   var activeOficina = document.documentElement.getAttribute('data-oficina') || 'forja';
   var leaves = [], smokes = [], glows = [], glowCooldown = 0.4, grains = [], microSparks = [], wisps = [];
 
-  // ---------- Modo pólvora (3 + 4): Névoa com clarões abafados + Grãos de pólvora inflamando ----------
+  // Névoa e grãos de pólvora (aba Bombas)
   function spawnGlow(initial) {
     var side = Math.random() < 0.78;
     var gx = side
@@ -8209,7 +8145,7 @@
       x: gx, y: gy,
       r: 140 + Math.random() * 170,
       life: initial ? Math.random() * 0.5 : 0,
-      speed: 0.32 + Math.random() * 0.26, // ciclos por segundo (~2–3s de duração)
+      speed: 0.32 + Math.random() * 0.26, // ~2-3s por ciclo
       amber: Math.random() < 0.45
     });
   }
@@ -8282,7 +8218,7 @@
   }
 
   function makeSmokePuff(rgb) {
-    // Nuvem multi-lobulada (5 círculos suaves deslocados) para parecer fumaça real, não bolinha
+    // 5 círculos sobrepostos pra imitar fumaça
     var s = document.createElement('canvas');
     s.width = s.height = 128;
     var g = s.getContext('2d');
@@ -8341,7 +8277,7 @@
   var VIOLET = makeHalo([200, 160, 255], false);
   function lvl(k) { return Math.max(0, Math.min(LEVELS - 1, Math.round(k * (LEVELS - 1)))); }
 
-  // ---------- Campo de turbulência (soma de senoides: barato e suave) ----------
+  // Turbulência com soma de senoides
   function flowX(x, y, time) {
     return Math.sin(y * 0.011 + time * 0.9) * 0.6 + Math.sin(y * 0.027 - time * 1.7 + x * 0.004) * 0.4;
   }
@@ -8352,7 +8288,7 @@
     return Math.sin(time * 0.21) * 0.55 + Math.sin(time * 0.067 + 1.7) * 0.35 + Math.sin(time * 0.53) * 0.1;
   }
 
-  // ---------- Partículas ----------
+  // Partículas
   function spawnEmber(anywhere) {
     var z = 0.35 + Math.random() * 0.65;          // profundidade: 1 = perto
     var big = Math.random() < 0.12;
@@ -8375,7 +8311,7 @@
     };
   }
   function spawnMote() {
-    // brasas grandes desfocadas em primeiro plano (profundidade de campo)
+    // brasas maiores e desfocadas em primeiro plano
     return {
       x: Math.random() * W,
       y: H + 60 + Math.random() * H * 0.5,
@@ -8431,13 +8367,13 @@
     if (!running) start();
   }
 
-  // ---------- Simulação ----------
+  // Simulação
   function step(dt) {
     t += dt;
     var g = gust(t);
 
     if (activeOficina === 'herbalismo') {
-      // Folhas botânicas caindo suavemente com balanço pendular e giro 3D
+      // Folhas caindo com balanço lateral
       var wind = 10 + g * 18;
       for (var li = 0; li < leaves.length; li++) {
         var lf = leaves[li];
@@ -8453,7 +8389,7 @@
     }
 
     if (activeOficina === 'bombas') {
-      // 3 + 4: Névoa de pólvora com clarões abafados + grãos de pólvora negra inflamando
+      // Névoa de pólvora e grãos acendendo
       glowCooldown -= dt;
       if (glowCooldown <= 0 && glows.length < 3) {
         spawnGlow(false);
@@ -8529,7 +8465,7 @@
         if (ms2.life >= ms2.maxLife) microSparks.splice(mi, 1);
       }
 
-      // Faíscas de feedback ao selecionar itens raros (Forja.sparksAt)
+      // Faíscas ao escolher item raro (Forja.sparksAt)
       for (var sj = sparks.length - 1; sj >= 0; sj--) {
         var spk = sparks[sj];
         spk.px = spk.x; spk.py = spk.y;
@@ -8544,7 +8480,7 @@
       return;
     }
 
-    // Forja (padrão): brasas subindo com empuxo térmico + bokeh + faíscas
+    // Forja: brasas subindo, bokeh e faíscas
     for (var i = 0; i < embers.length; i++) {
       var e = embers[i];
       e.px = e.x; e.py = e.y;
@@ -8580,7 +8516,7 @@
     }
   }
 
-  // ---------- Desenho ----------
+  // Desenho
   function drawLeaf(lf, dark) {
     var palette = dark ? LEAF_COLORS_DARK : LEAF_COLORS_LIGHT;
     var col = palette[lf.colorIdx];
@@ -8602,7 +8538,7 @@
     ctx.quadraticCurveTo(-s * 0.72, -s * 0.15, 0, -s);
     ctx.fill();
 
-    // nervura central delicada
+    // nervura central
     ctx.globalAlpha = alpha * 0.55;
     ctx.strokeStyle = dark ? 'rgba(220,245,215,0.7)' : 'rgba(255,252,240,0.65)';
     ctx.lineWidth = Math.max(0.6, s * 0.07);
@@ -8626,7 +8562,7 @@
     }
 
     if (activeOficina === 'bombas') {
-      // 1. Clarões abafados pulsando por trás da névoa (multiply + pigmentos profundos no claro)
+      // Clarões atrás da névoa
       for (var gl = 0; gl < glows.length; gl++) {
         var cw = glows[gl];
         var env = Math.sin(cw.life * Math.PI) * Math.pow(1 - cw.life, 0.42);
@@ -8664,7 +8600,7 @@
         ctx.restore();
       }
 
-      // 2. Névoa de pólvora multi-lobulada girando suavemente
+      // Névoa girando
       ctx.globalCompositeOperation = dark ? 'source-over' : 'multiply';
       var smokeImg = dark ? SMOKE_DARK : SMOKE_LIGHT;
       for (var si = 0; si < smokes.length; si++) {
@@ -8681,7 +8617,7 @@
       ctx.globalAlpha = 1;
       ctx.globalCompositeOperation = 'source-over';
 
-      // 3. Fiozinhos de fumaça deixados pelos grãos inflamados
+      // Rastro de fumaça dos grãos
       for (var wi = 0; wi < wisps.length; wi++) {
         var ws = wisps[wi];
         var wa = Math.sin(ws.life * Math.PI) * (dark ? 0.18 : 0.26);
@@ -8695,7 +8631,7 @@
         ctx.fill();
       }
 
-      // 4. Grãos de pólvora negra e limalha que se inflamam em lampejos silenciosos
+      // Grãos acendendo
       for (var gi = 0; gi < grains.length; gi++) {
         var gr = grains[gi];
         if (gr.igniting > 0) {
@@ -8726,7 +8662,7 @@
         ctx.fill();
       }
 
-      // 5. Micro-faíscas dos grãos inflamados
+      // Faíscas dos grãos
       for (var mi = 0; mi < microSparks.length; mi++) {
         var ms2 = microSparks[mi];
         var ma2 = Math.max(0, 1 - ms2.life / ms2.maxLife);
@@ -8738,7 +8674,7 @@
         ctx.fill();
       }
 
-      // 6. Faíscas de seleção de item raro (Forja.sparksAt)
+      // Faíscas ao escolher item raro (Forja.sparksAt)
       if (sparks.length) {
         ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
         var dimB = dark ? 1 : 0.85;
@@ -8762,7 +8698,7 @@
     ctx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
     var dim = dark ? 1 : 0.7;
 
-    // 1. bokeh ao fundo/frente
+    // bokeh
     for (var m = 0; m < motes.length; m++) {
       var o = motes[m];
       var fl = 0.8 + 0.2 * Math.sin(t * 1.3 + o.seed);
@@ -8770,12 +8706,12 @@
       ctx.drawImage(BOKEH[lvl(o.temp)], o.x - o.r, o.y - o.r, o.r * 2, o.r * 2);
     }
 
-    // 2. brasas: halo + rastro de movimento + núcleo
+    // brasas
     for (var i = 0; i < embers.length; i++) {
       var e = embers[i];
       var fadeIn = Math.min(1, e.life * 2);
       var fadeOut = Math.min(1, e.temp / 0.18);
-      // cintilação irregular: duas frequências + "estalo" ocasional
+      // brilho irregular com estalo ocasional
       var fl = 0.72 + 0.18 * Math.sin(t * e.flick + e.seed) + 0.1 * Math.sin(t * e.flick * 2.7 + e.seed * 3);
       var a = fadeIn * fadeOut * fl * dim;
       if (a <= 0.01) continue;
@@ -8796,7 +8732,7 @@
       ctx.lineWidth = e.r * 1.1;
       ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(e.x, e.y); ctx.stroke();
 
-      // núcleo irregular: elipse que gira (fragmento de carvão, não bolinha)
+      // núcleo oval girando
       ctx.globalAlpha = a;
       ctx.fillStyle = rgba(rampColor(Math.min(1, k + 0.12)), 1);
       ctx.save();
@@ -8808,7 +8744,7 @@
       ctx.restore();
     }
 
-    // 3. faíscas de forja: riscos brilhantes que caem
+    // faíscas caindo
     for (var j = 0; j < sparks.length; j++) {
       var s = sparks[j];
       var kk = 1 - s.life / s.maxLife;
@@ -8827,7 +8763,7 @@
     ctx.globalCompositeOperation = 'source-over';
   }
 
-  // ---------- Ciclo ----------
+  // Loop principal
   function start() {
     if (!enabled) return;
     if (reduce) { draw(); return; }
