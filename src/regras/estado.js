@@ -1,3 +1,6 @@
+  var APP_ID = 'forjador';
+  var APP_LINK_V = 1;
+
   var DEFAULTS = {
     oficina: 'forja',
     pde: '',

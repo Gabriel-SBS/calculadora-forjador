@@ -3,23 +3,17 @@
     forja: {
       title: 'Forja de Equipamento',
       sub: 'Armas, armaduras, escudos, focos e instrumentos do Guia, com cálculo de custo, materiais e tempo de forja.',
-      forjaLabel: 'Modo forja',
-      themeLight: '#b0551f',
-      themeDark: '#1a1815'
+      forjaLabel: 'Modo forja'
     },
     bombas: {
       title: 'Bombas e Munições',
       sub: 'As 16 bombas e bombinhas (p. 216–220), munições com modificações (p. 160) e as 11 pólvoras do Guia.',
-      forjaLabel: 'Modo pólvora',
-      themeLight: '#a82c2c',
-      themeDark: '#171619'
+      forjaLabel: 'Modo pólvora'
     },
     herbalismo: {
       title: 'Herbalismo e Poções',
       sub: 'As 23 receitas herbáceas e os 8 ramos do Guia (p. 148–150), com cálculo de custo, tempo e venda.',
-      forjaLabel: 'Modo jardim',
-      themeLight: '#2c6b44',
-      themeDark: '#131915'
+      forjaLabel: 'Modo jardim'
     }
   };
 

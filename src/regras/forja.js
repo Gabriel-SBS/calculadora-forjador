@@ -7,7 +7,6 @@
     'Orgânicos': ['organico', 'organicos']
   };
 
-  var ARTESAO_DESCONTO = 20;
   var FORJADOR_DIVISOR = 2;
   var ARMADURA_FRACAO = 0.2;
   var DUREZA_RANK = { 'd4': 1, 'd6': 2, 'd8': 3, 'd10': 4, 'd12': 5, 'd20': 6, 'd100': 7, '∞': 8 };

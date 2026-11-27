@@ -68,11 +68,6 @@
     return fmt(horas) + 'h (' + dias + (dias === 1 ? ' dia' : ' dias') + ')';
   }
 
-  // Links ?s= e ?l= levam app e versão: quando o Forjador e o Cozinheiro morarem
-  // no mesmo site, um não carrega por engano o link do outro.
-  var APP_ID = 'forjador';
-  var APP_LINK_V = 1;
-
   function encodeJsonB64(obj) {
     var json = JSON.stringify(obj);
     var bytes = unescape(encodeURIComponent(json));
@@ -85,7 +80,9 @@
       return JSON.parse(decodeURIComponent(escape(atob(b64))));
     } catch (e) { return null; }
   }
-  // Links antigos (sem app) continuam valendo; links de outro app são recusados
+  // Links ?s= e ?l= levam APP_ID (definido em regras/estado.js de cada app). Assim,
+  // quando a Forja e o Cozinheiro morarem no mesmo site, um não carrega o link do outro.
+  // Links antigos (sem app) continuam valendo.
   function linkDesteApp(obj) {
     return !!obj && typeof obj === 'object' && (obj.app == null || obj.app === APP_ID);
   }
