@@ -1,5 +1,3 @@
-  // Tempo de criação por tier (Guia + Trabalhador Itinerante)
-
   var STORAGE_KEY = 'forjador-calc-v5';
 
   // Ícones

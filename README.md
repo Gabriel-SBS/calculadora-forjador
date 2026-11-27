@@ -55,7 +55,7 @@ Se o sistema estiver com "reduzir movimento" ligado, a troca de tema é instant�
 **Tempo**
 - 24h, 48h, 96h ou 192h conforme o tier, somando quando há mais de um material (regra de junção).
 - Leve tira 8 horas, Pesado soma 8 horas, Pressa corta pela metade e o item sai com −1.
-- O Forjador trabalha em 2/3 do tempo e aguenta 12 horas por dia. Também aparece o tempo com um ajudante, com a ferramenta automatizada de **Criações Automáticas** (17º nível da Forja Arcana, que corta pela metade o tempo de materiais raros e itens mágicos, p. 130) e o de alguém de outra classe, para comparar.
+- O Forjador trabalha em 2/3 do tempo e aguenta 12 horas por dia. Também aparece o tempo com um ajudante, com a ferramenta automatizada de **Criações Automáticas** (17º nível da Forja Arcana, que corta pela metade o tempo de materiais raros e itens mágicos, p. 130; a calculadora considera raros os Tier A e S, como na p. 128) e o de alguém de outra classe, para comparar.
 
 **O item pronto**
 - Peso final em kg (com os pesos oficiais das p. 155–162), ajustando sozinho quando o material dobra (*Ouro*, *Iron-Wood*, *Pedra Anã Refinada*), corta pela metade (*Mithral*, *Ébano*, *Aço Verde Baatoriano*, *Ossos*, *Quitina*) ou recebe a modificação *Estrutura Leve* (`−25%`).
@@ -88,7 +88,14 @@ Exemplo com uma espada longa de aço (PDE 50 × 30 de Aço = 1.500 po cheio, ÷ 
 
 ## Como montar o arquivo e rodar os testes
 
-O código fica separado em `src/` (`template.html`, `styles.css`, `data/` e `js/`) e o `build.py` junta tudo no `index.html` único:
+O `build.py` junta tudo de `src/` no `index.html` único. O código fica em quatro pastas, e a ordem importa porque uma camada só usa o que vem antes dela:
+
+- `data/`: os catálogos do Guia (materiais, equipamentos, bombas, pólvoras, receitas e os 8 ramos, que ficam sozinhos em `ramos.js` para o Cozinheiro reaproveitar).
+- `core/`: o que não é regra de jogo. `util.js` tem busca sem acento, moedas e links; `combo.js` é o campo de busca com sugestões usado em todas as buscas.
+- `regras/`: as contas. Recebem o estado e devolvem números, sem tocar na tela.
+- `ui/`: cada oficina lê o formulário, chama `regras/` e desenha o resultado.
+
+Os testes carregam `data/`, `core/util.js` e `regras/` e chamam as funções de verdade, então uma conta quebrada aparece no teste:
 
 ```bash
 python build.py --sync
@@ -102,6 +109,15 @@ A calculadora não decide nada que o Guia deixa para o Mestre: o tempo de itens 
 Achou um número diferente do livro? Abra uma issue dizendo o item, os materiais e a página.
 
 ## O que mudou em cada versão
+
+### v6
+- A busca de equipamento agora funciona pelo teclado (setas, Enter e Esc), como as outras. As quatro buscas da calculadora viraram um componente só, e o leitor de tela anuncia a opção destacada.
+- PDE negativo deixou de gerar custo negativo, e um PDE abaixo de 1 po (como o de uma clava) não vira mais 1 po. O piso de 1 po continua só para a *Remoção de Maestria*, que é onde o Guia pede (p. 163).
+- O Comparador de Materiais passou a bater com o painel: *Obra-Prima* e *O Melhor dos Melhores* dão o mesmo +1 e não somam, e *Criações Automáticas* corta o tempo só de material Tier A ou S nos dois lugares.
+- Abas com a semântica certa para leitor de tela, um `<main>` que vale para as três oficinas, switches com área de toque de 44 px no celular e contraste corrigido na unidade da moeda e no estado vazio.
+- Os links `?s=` e `?l=` agora dizem de qual calculadora vieram; links antigos continuam abrindo.
+- O ícone de Bombas ganhou tampa e pavio aceso (antes parecia o símbolo ♂), e a página tem favicon.
+- O código foi reorganizado em `data/`, `core/`, `regras/` e `ui/`, e os testes passaram a chamar as contas reais (23 testes). Cache offline em `forjador-v6`.
 
 ### v5
 - Entrou o **peso real em kg** de todos os 143 equipamentos do Guia (p. 155–162) na busca, no resultado, no resumo copiado, no Comparador de Materiais, nas munições e na Lista da sessão (que agora soma o peso total e pendente).
