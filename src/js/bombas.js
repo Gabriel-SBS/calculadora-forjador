@@ -29,11 +29,16 @@
   var bombaPossuidosSwitch = document.getElementById('bomba-possuidos-switch');
   var bombaDesInput = document.getElementById('bomba-des');
   var bombaBpInput = document.getElementById('bomba-bp');
+  var bombaBpWrap = document.getElementById('bomba-bp-wrap');
   var bombaMestreSwitch = document.getElementById('bomba-mestre-switch');
   var bombaModoSeg = document.getElementById('bomba-modo-seg');
   var bombaModoBtns = Array.prototype.slice.call(bombaModoSeg.querySelectorAll('.seg-btn'));
   var bombaLucroWrap = document.getElementById('bomba-lucro-wrap');
   var bombaLucroInput = document.getElementById('bomba-lucro');
+  var bombaQtdPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#bomba-qtd-presets .btn-chip'));
+  var bmAmmoQtdPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#bm-ammo-qtd-presets .btn-chip'));
+  var bmPolvQtdPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#bm-polv-qtd-presets .btn-chip'));
+  var bombaLucroPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#bomba-lucro-presets .btn-chip'));
 
   // Controles de Munição
   var bmMunSelect = document.getElementById('bm-mun-select');
@@ -46,6 +51,7 @@
   var bmAmmoExistenteSwitch = document.getElementById('bm-ammo-existente-switch');
   var bmPressaSwitch = document.getElementById('bm-pressa-switch');
   var bmObraSwitch = document.getElementById('bm-obra-switch');
+  var bmAjudanteSwitch = document.getElementById('bm-ajudante-switch');
 
   // Controles de Pólvora
   var bmPolvWrap = document.getElementById('bm-polv-wrap');
@@ -256,7 +262,7 @@
     var horasBase = mat ? (MUNICAO_HORAS[mat.tier] || 1) : 1;
     var horas = modMun && modMun.existente
       ? null
-      : horasBase * (state.bombaForjador ? 2 / 3 : 1) * (state.bmPressa ? 0.5 : 1);
+      : horasBase * (state.bombaForjador ? 2 / 3 : 1) * (state.bmPressa ? 0.5 : 1) * (state.bmAjudante ? 0.5 : 1);
 
     var modNum = mat ? (parseInt(mat.mod, 10) || 0) : 0;
     if (state.bmObra) modNum = Math.min(3, modNum + 1);
@@ -283,7 +289,7 @@
     var lucroPct = num(state.bombaLucro, 50);
     var lucroValor = state.bombaModo === 'vendido' ? proprio * (lucroPct / 100) : 0;
     var final = proprio + lucroValor;
-    var horas = 8 * qtd * (state.bombaForjador ? 2 / 3 : 1) * (state.bmPressa ? 0.5 : 1);
+    var horas = 8 * qtd * (state.bombaForjador ? 2 / 3 : 1) * (state.bmPressa ? 0.5 : 1) * (state.bmAjudante ? 0.5 : 1);
     return {
       p: p, qtd: qtd, cheioTotal: cheioTotal, proprio: proprio,
       lucroPct: lucroPct, lucroValor: lucroValor, final: final,
@@ -295,22 +301,75 @@
   var ICON_NOTE = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 7h14M5 12h14M5 17h9"/></svg>';
   var lastBmVantKey = '';
 
+  function renderEquipChips(el, chips) {
+    if (!el) return;
+    el.innerHTML = '';
+    chips.forEach(function (ch) {
+      var s = document.createElement('span');
+      s.className = 'eq-chip' + (ch.main ? ' eq-chip-main' : '') + (ch.warn ? ' eq-chip-warn' : '');
+      s.textContent = ch.txt;
+      el.appendChild(s);
+    });
+    el.hidden = !chips.length;
+  }
+
+  function syncBmPresets() {
+    var bq = String(state.bombaQtd || 1);
+    bombaQtdPresetBtns.forEach(function (b) {
+      var on = b.dataset.qtd === bq;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    var aq = String(state.bmMunModQtd == null ? 5 : state.bmMunModQtd);
+    bmAmmoQtdPresetBtns.forEach(function (b) {
+      var on = b.dataset.qtd === aq;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    var pq = String(state.bmPolvQtd || 1);
+    bmPolvQtdPresetBtns.forEach(function (b) {
+      var on = b.dataset.qtd === pq;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    var bl = String(state.bombaLucro == null ? 50 : state.bombaLucro).trim();
+    bombaLucroPresetBtns.forEach(function (b) {
+      var on = b.dataset.lucro === bl;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
   function renderBombaInfo(cb) {
     bombaDetalhesSection.hidden = false;
     bombaDetalhesTitle.textContent = 'Receita e efeitos da bomba';
     var raioEfetivo = (cb.p.id === 'poderosa' && !cb.isBombinha) ? cb.b.raio + ' (×2 Poderosa)' : cb.b.raio;
-    bombaEquipInfo.textContent = 'Preço base ' + fmtMoeda(cb.b.preco) + ' · CD Fab. ' + cb.b.cd + ' · Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo' : raioEfetivo) + ' · TR ' + cb.b.tr;
-    bombaEquipInfo.hidden = false;
+    renderEquipChips(bombaEquipInfo, [
+      { txt: fmtMoeda(cb.b.preco), main: true },
+      { txt: 'CD Fab. ' + cb.b.cd },
+      { txt: 'Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo' : raioEfetivo) },
+      { txt: 'TR ' + cb.b.tr }
+    ]);
     if (bombaPolvoraInfo) {
       if (!state.bombaPolvora) {
         bombaPolvoraInfo.hidden = true;
+        bombaPolvoraInfo.innerHTML = '';
+      } else if (cb.p.id === 'negra') {
+        renderEquipChips(bombaPolvoraInfo, [
+          { txt: 'Padrão da receita', main: true },
+          { txt: 'Sem custo extra (' + fmtMoeda(cb.p.preco) + '/carga)' }
+        ]);
+      } else if (cb.polvoraBloqueada) {
+        renderEquipChips(bombaPolvoraInfo, [
+          { txt: 'Bombinha usa só Pólvora Negra (p. 216)', warn: true },
+          { txt: cb.p.categoria }
+        ]);
       } else {
-        bombaPolvoraInfo.textContent = cb.p.id === 'negra'
-          ? 'Carga padrão da receita · sem custo adicional (' + fmtMoeda(cb.p.preco) + '/carga)'
-          : cb.polvoraBloqueada
-            ? cb.p.categoria + ' · não se aplica a esta bombinha (p. 216)'
-            : cb.p.categoria + ' · +' + fmtMoeda(cb.p.preco - 5) + '/carga (' + fmtMoeda(cb.p.preco) + ' cheia)';
-        bombaPolvoraInfo.hidden = false;
+        renderEquipChips(bombaPolvoraInfo, [
+          { txt: cb.p.categoria, main: true },
+          { txt: '+' + fmtMoeda(cb.p.preco - 5) + '/carga' },
+          { txt: fmtMoeda(cb.p.preco) + ' cheia' }
+        ]);
       }
     }
 
@@ -346,6 +405,10 @@
     item.appendChild(recRow);
 
     if (cb.b.ramos && cb.b.ramos.length) {
+      var pillsLbl = document.createElement('p');
+      pillsLbl.className = 'v-pills-label';
+      pillsLbl.textContent = 'Ramos na receita';
+      item.appendChild(pillsLbl);
       var pillsWrap = document.createElement('div');
       pillsWrap.className = 'recipe-ing v-pills-row';
       cb.b.ramos.forEach(function (rm) { pillsWrap.appendChild(makeRamoPill(rm.id, rm.qtd, rm.alt || '')); });
@@ -388,10 +451,15 @@
   }
 
   function renderBmMunInfo(cm) {
-    var colossalNote = (state.bmMunId || '').indexOf('colossal') !== -1 ? ' · +1 kg/un. (evita ½ dano em armas colossais, p. 159)' : '';
     var kgUnit = municaoPesoKg(cm);
-    var pesoNote = kgUnit != null ? ' · Peso (20 un.): ' + fmtKg(kgUnit * 20) : '';
-    bmMunInfo.textContent = '1 unidade = ' + fmtMoeda(cm.pdeUnit) + ' · Lote (4×) = ' + fmtMoeda(cm.pdeLote) + ' · rende 2d4 unidades' + pesoNote + colossalNote;
+    var chips = [
+      { txt: '1 un. = ' + fmtMoeda(cm.pdeUnit), main: true },
+      { txt: 'Lote (4×) = ' + fmtMoeda(cm.pdeLote) },
+      { txt: 'Rende 2d4 un.' }
+    ];
+    if (kgUnit != null) chips.push({ txt: '20 un.: ' + fmtKg(kgUnit * 20) });
+    if ((state.bmMunId || '').indexOf('colossal') !== -1) chips.push({ txt: '+1 kg/un. (armas colossais)' });
+    renderEquipChips(bmMunInfo, chips);
     if (!cm.mat) { bombaDetalhesSection.hidden = true; return; }
     bombaDetalhesSection.hidden = false;
     bombaDetalhesTitle.textContent = 'Material da munição';
@@ -452,8 +520,11 @@
   function renderBmPolvInfo(cp) {
     bombaDetalhesSection.hidden = false;
     bombaDetalhesTitle.textContent = 'Propriedades da pólvora';
-    bmPolvInfo.textContent = '1 carga = ' + fmtMoeda(cp.p.preco) + ' · Lote (2×) = ' + fmtMoeda(cp.p.preco * 2) + ' · rende 1d4 cargas';
-    bmPolvInfo.hidden = false;
+    renderEquipChips(bmPolvInfo, [
+      { txt: '1 carga = ' + fmtMoeda(cp.p.preco), main: true },
+      { txt: 'Lote (2×) = ' + fmtMoeda(cp.p.preco * 2) },
+      { txt: 'Rende 1d4 cargas' }
+    ]);
     var vKey = 'p:' + cp.p.id;
     var enter = vKey !== lastBmVantKey;
     lastBmVantKey = vKey;
@@ -492,7 +563,9 @@
   function updateBombas() {
     bombaArtesaoSub.textContent = '−20% em compras de itens não-mágicos';
     if (bombaArtesaoModoWrap) bombaArtesaoModoWrap.hidden = !state.bombaArtesao;
+    if (bombaBpWrap) bombaBpWrap.hidden = !state.bombaMestre;
     bombaLucroWrap.hidden = state.bombaModo !== 'vendido';
+    syncBmPresets();
 
     var modo = state.bmTipo || 'bomba';
     resultCard.classList.remove('is-empty');
@@ -550,7 +623,7 @@
         resultTimeSubEl.textContent = '· combine com o Mestre';
       } else {
         resultTimeEl.textContent = fmt(cm.horas) + 'h';
-        resultTimeSubEl.textContent = '· rende 2d4 un.';
+        resultTimeSubEl.textContent = '· rende 2d4 un.' + (state.bmAjudante ? ' (ajudante)' : '');
       }
       cbTime.textContent = resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent;
 
@@ -559,6 +632,10 @@
       if (cm.mat) {
         resultPropsEl.appendChild(propChip('Dano', fmtMod(cm.modNum)));
         resultPropsEl.appendChild(propChip('Dureza', cm.mat.dureza));
+      }
+      if (cm.final > 0 && !(cm.modMun && cm.modMun.existente)) {
+        resultPropsEl.hidden = false;
+        resultPropsEl.appendChild(propChip('Média por un.', '~' + fmtMoeda(cm.final / 5)));
       }
       if (state.bmObra) {
         var oChip = propChip('Qualidade', 'Obra-Prima');
@@ -621,13 +698,16 @@
 
       if (kpiTimeLabelEl) kpiTimeLabelEl.textContent = 'Tempo de preparo';
       resultTimeEl.textContent = fmt(cp.horas) + 'h';
-      resultTimeSubEl.textContent = '· rende ' + (cp.qtd === 1 ? '1d4' : cp.qtd + 'd4') + ' cargas';
+      resultTimeSubEl.textContent = '· rende ' + (cp.qtd === 1 ? '1d4' : cp.qtd + 'd4') + ' cargas' + (state.bmAjudante ? ' (ajudante)' : '');
       cbTime.textContent = resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent;
 
       resultPropsEl.innerHTML = '';
       resultPropsEl.hidden = false;
       resultPropsEl.appendChild(propChip('Rende', (cp.qtd === 1 ? '1d4' : cp.qtd + 'd4') + ' cargas'));
-      resultPropsEl.appendChild(propChip('1 carga', fmtMoeda(cp.p.preco)));
+      resultPropsEl.appendChild(propChip('1 carga (loja)', fmtMoeda(cp.p.preco)));
+      if (cp.final > 0) {
+        resultPropsEl.appendChild(propChip('Média por carga', '~' + fmtMoeda(cp.final / (cp.qtd * 2.5))));
+      }
       if (state.bombaModo === 'vendido' && cp.lucroValor > 0) {
         var plChip = propChip('Lucro líquido', '+' + fmtMoeda(cp.lucroValor));
         plChip.classList.add('chip-lucro');
@@ -685,13 +765,17 @@
     resultTimeSubEl.textContent = '· Kit de Alquimista';
     cbTime.textContent = resultTimeEl.textContent + ' ' + resultTimeSubEl.textContent;
 
+    var raioChip = (cb.p.id === 'poderosa' && !cb.isBombinha) ? cb.b.raio + ' (×2 Poderosa)' : cb.b.raio;
     resultPropsEl.innerHTML = '';
     resultPropsEl.hidden = false;
     resultPropsEl.appendChild(propChip('CD Detonação', String(cb.cdDetonacao)));
     resultPropsEl.appendChild(propChip('CD Fabricação', String(cb.b.cd)));
-    resultPropsEl.appendChild(propChip('Raio', cb.isBombinha ? '1,5 m / 1 alvo' : cb.b.raio));
+    resultPropsEl.appendChild(propChip('Raio', cb.isBombinha ? '1,5 m / 1 alvo' : raioChip));
     if (cb.isBombinha) {
       resultPropsEl.appendChild(propChip('Peso', '0,1 kg/un.'));
+      if (cb.final > 0) {
+        resultPropsEl.appendChild(propChip('Média por un.', '~' + fmtMoeda(cb.final / (cb.qtd * 5))));
+      }
     }
     if (state.bombaMestre) {
       var mChip = propChip('Ação', 'Bônus (Mestre)');
@@ -791,6 +875,7 @@
     var nome = (cb.qtd > 1 ? cb.qtd + '× ' : '') + cb.b.nome +
       (cb.isBombinha ? ' (Bombinhas)' : '') +
       (cb.p.id !== 'negra' && !cb.polvoraBloqueada ? ' [' + cb.p.nome + ']' : '');
+    var raioRes = (cb.p.id === 'poderosa' && !cb.isBombinha) ? cb.b.raio + ' (×2 Poderosa)' : cb.b.raio;
     return {
       id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       oficina: 'bombas',
@@ -802,7 +887,7 @@
       venda: state.bombaModo === 'vendido',
       horas: cb.isBombinha ? +(cb.qtd / 60).toFixed(2) : null,
       rende: cb.isBombinha ? (cb.qtd === 1 ? '2d4 bombinhas' : (cb.qtd * 2) + 'd4 bombinhas') : '',
-      detalhes: 'CD Detonação ' + cb.cdDetonacao + ' · CD Fab. ' + cb.b.cd + ' · Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo · Peso 0,1 kg/un.' : cb.b.raio) + ' · TR ' + cb.b.tr,
+      detalhes: 'CD Detonação ' + cb.cdDetonacao + ' · CD Fab. ' + cb.b.cd + ' · Raio ' + (cb.isBombinha ? '1,5 m / 1 alvo · Peso 0,1 kg/un.' : raioRes) + ' · TR ' + cb.b.tr,
       receita: cb.b.receita
     };
   }
@@ -856,11 +941,42 @@
     [bombaMestreSwitch, 'bombaMestre'],
     [bmAmmoExistenteSwitch, 'bmMunModExistente'],
     [bmPressaSwitch, 'bmPressa'],
-    [bmObraSwitch, 'bmObra']
+    [bmObraSwitch, 'bmObra'],
+    [bmAjudanteSwitch, 'bmAjudante']
   ].forEach(function (pair) {
     pair[0].addEventListener('click', function () {
       state[pair[1]] = !state[pair[1]];
       pair[0].setAttribute('aria-checked', state[pair[1]] ? 'true' : 'false');
+      saveState(); update();
+    });
+  });
+
+  bombaQtdPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.bombaQtd = Number(b.dataset.qtd);
+      bombaQtdInput.value = state.bombaQtd;
+      saveState(); update();
+    });
+  });
+  bmAmmoQtdPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.bmMunModQtd = Number(b.dataset.qtd);
+      bmAmmoQtdInput.value = state.bmMunModQtd;
+      updateBmAmmoModsTotal();
+      saveState(); update();
+    });
+  });
+  bmPolvQtdPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.bmPolvQtd = Number(b.dataset.qtd);
+      bmPolvQtdInput.value = state.bmPolvQtd;
+      saveState(); update();
+    });
+  });
+  bombaLucroPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.bombaLucro = Number(b.dataset.lucro);
+      bombaLucroInput.value = state.bombaLucro;
       saveState(); update();
     });
   });

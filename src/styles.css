@@ -1157,6 +1157,20 @@
     color: var(--text);
     font-weight: 600;
   }
+  .eq-chip.eq-chip-warn {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    background: color-mix(in srgb, var(--accent) 12%, var(--surface-2));
+    font-weight: 600;
+  }
+  .v-pills-label {
+    margin: 4px 0 0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
   .lucro-presets {
     display: flex;
     flex-wrap: wrap;

@@ -435,6 +435,12 @@
         <div class="field-group">
           <label for="bomba-qtd" id="bomba-qtd-label">Quantidade de bombas</label>
           <input id="bomba-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+          <div class="lucro-presets" id="bomba-qtd-presets" role="group" aria-label="Atalhos de quantidade">
+            <button type="button" class="btn-chip" data-qtd="1">1</button>
+            <button type="button" class="btn-chip" data-qtd="3">3</button>
+            <button type="button" class="btn-chip" data-qtd="5">5</button>
+            <button type="button" class="btn-chip" data-qtd="10">10</button>
+          </div>
         </div>
       </div>
 
@@ -476,6 +482,11 @@
             <div class="field-group">
               <label for="bm-ammo-qtd">Quantas munições transformar</label>
               <input id="bm-ammo-qtd" type="number" min="1" step="1" value="5" inputmode="numeric" />
+              <div class="lucro-presets" id="bm-ammo-qtd-presets" role="group" aria-label="Atalhos de quantidade de munições">
+                <button type="button" class="btn-chip" data-qtd="5">5 (média 2d4)</button>
+                <button type="button" class="btn-chip" data-qtd="10">10</button>
+                <button type="button" class="btn-chip" data-qtd="20">20 (aljava)</button>
+              </div>
               <p class="field-hint">A criação rende 2d4 munições; a média é 5.</p>
             </div>
             <div class="toggle-row">
@@ -512,6 +523,12 @@
         <div class="field-group">
           <label for="bm-polv-qtd">Quantidade de lotes (rende 1d4 cada)</label>
           <input id="bm-polv-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+          <div class="lucro-presets" id="bm-polv-qtd-presets" role="group" aria-label="Atalhos de lotes de pólvora">
+            <button type="button" class="btn-chip" data-qtd="1">1</button>
+            <button type="button" class="btn-chip" data-qtd="3">3</button>
+            <button type="button" class="btn-chip" data-qtd="5">5</button>
+            <button type="button" class="btn-chip" data-qtd="10">10</button>
+          </div>
         </div>
       </div>
     </section>
@@ -583,7 +600,7 @@
                 <label for="bomba-des">Mod. de Destreza</label>
                 <input id="bomba-des" type="number" min="-5" max="10" step="1" value="3" />
               </div>
-              <div class="field-group">
+              <div class="field-group" id="bomba-bp-wrap" hidden>
                 <label for="bomba-bp">Bônus de Proficiência</label>
                 <input id="bomba-bp" type="number" min="2" max="6" step="1" value="2" inputmode="numeric" />
               </div>
@@ -629,6 +646,17 @@
               </button>
             </div>
           </div>
+          <div class="setting">
+            <div class="toggle-row">
+              <div class="toggle-label">
+                <span class="t-name">Com ajudante</span>
+                <span class="t-sub">Outro personagem ajuda na fabricação: metade do tempo</span>
+              </div>
+              <button type="button" class="switch" id="bm-ajudante-switch" role="switch" aria-checked="false" aria-label="Com ajudante">
+                <span class="knob"></span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -650,6 +678,11 @@
         <div class="field-group" id="bomba-lucro-wrap" hidden>
           <label for="bomba-lucro">Margem de lucro (%)</label>
           <input id="bomba-lucro" type="number" min="0" step="1" value="50" inputmode="numeric" />
+          <div class="lucro-presets" id="bomba-lucro-presets" role="group" aria-label="Atalhos de margem">
+            <button type="button" class="btn-chip" data-lucro="25">25%</button>
+            <button type="button" class="btn-chip" data-lucro="50">50%</button>
+            <button type="button" class="btn-chip" data-lucro="100">100%</button>
+          </div>
         </div>
       </div>
     </section>

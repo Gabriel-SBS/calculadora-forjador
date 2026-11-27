@@ -104,6 +104,7 @@
     bmMunModExistente: false,
     bmPressa: false,
     bmObra: false,
+    bmAjudante: false,
     bmPolvId: '',
     bmPolvQtd: 1,
     // Oficina Herbalismo

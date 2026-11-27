@@ -5,7 +5,7 @@
         function () { return bombaById(state.bombaId); },
         'Buscar bomba (ex.: estilhaço, fumaça, santa granada)',
         'bomba-combo-label',
-        function (b) { return fmtMoeda(b.preco) + ' · CD ' + b.cd; },
+        function (b) { return fmtMoeda(b.preco) + ' · CD ' + b.cd + ' · ' + b.raio; },
         function (b) { state.bombaId = b.id; saveState(); update(); },
         function () { state.bombaId = ''; saveState(); update(); }
       );
@@ -70,6 +70,7 @@
     bmAmmoExistenteSwitch.setAttribute('aria-checked', state.bmMunModExistente ? 'true' : 'false');
     bmPressaSwitch.setAttribute('aria-checked', state.bmPressa ? 'true' : 'false');
     bmObraSwitch.setAttribute('aria-checked', state.bmObra ? 'true' : 'false');
+    bmAjudanteSwitch.setAttribute('aria-checked', state.bmAjudante ? 'true' : 'false');
     bmPolvQtdInput.value = state.bmPolvQtd || 1;
     renderBmAmmoMods();
     setBmTipo(state.bmTipo || 'bomba', true);
