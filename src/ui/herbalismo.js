@@ -240,6 +240,7 @@
       }
       breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(ch.lucroPct) + '%)', '+' + fmtMoeda(ch.lucroValor)));
     }
+    if (ch.subiuPara1pc) breakdownEl.appendChild(bRow('Menor valor possível (não existe moeda abaixo de 1 PC)', '1 PC'));
     breakdownEl.appendChild(bRow(state.herbalModo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(ch.final), true));
 
     formulaNote.textContent = 'Herbalismo (p. 148–150) · 1h por item · venda de ramos para herbolários por metade do preço';

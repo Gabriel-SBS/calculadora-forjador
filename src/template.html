@@ -124,8 +124,11 @@
       </div>
 
       <div class="field-group">
-        <label for="pde" id="pde-label">PDE (preço base em po)</label>
-        <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" aria-describedby="pde-moeda" />
+        <label for="pde" id="pde-label">PDE (preço base)</label>
+        <div class="input-moeda">
+          <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" aria-describedby="pde-moeda" />
+          <select id="pde-moeda-sel" class="moeda-sel" aria-label="Moeda do PDE"><option value="po">PO</option><option value="pp">PP</option><option value="pc">PC</option></select>
+        </div>
         <p class="field-hint" id="pde-moeda" hidden></p>
       </div>
 
@@ -455,8 +458,11 @@
             <select id="bm-mun-select"></select>
           </div>
           <div class="field-group">
-            <label for="bm-mun-pde">PDE de 1 munição (po)</label>
-            <input id="bm-mun-pde" type="number" min="0" step="0.01" value="0.05" inputmode="decimal" />
+            <label for="bm-mun-pde">PDE de 1 munição</label>
+            <div class="input-moeda">
+              <input id="bm-mun-pde" type="number" min="0" step="0.01" value="0.05" inputmode="decimal" />
+              <select id="bm-mun-pde-moeda" class="moeda-sel" aria-label="Moeda do PDE da munição"><option value="po">PO</option><option value="pp">PP</option><option value="pc">PC</option></select>
+            </div>
           </div>
         </div>
         <p class="equip-info" id="bm-mun-info">Custo de 4 unidades · rende 2d4 munições (p. 171)</p>
@@ -585,7 +591,7 @@
           <div class="toggle-row">
             <div class="toggle-label">
               <span class="t-name">Já possui os ingredientes / materiais</span>
-              <span class="t-sub">Custo 0 po (usa componentes já no inventário)</span>
+              <span class="t-sub">Custo 0 PO (usa componentes já no inventário)</span>
             </div>
             <button type="button" class="switch" id="bomba-possuidos-switch" role="switch" aria-checked="false" aria-label="Já possui os ingredientes">
               <span class="knob"></span>
@@ -956,8 +962,11 @@
         </div>
         <div class="mg-grid">
           <div class="field-group">
-            <label for="magico-custo">Custo do encantamento (po)</label>
-            <input id="magico-custo" type="number" min="0" step="0.01" inputmode="decimal" />
+            <label for="magico-custo">Custo do encantamento</label>
+            <div class="input-moeda">
+              <input id="magico-custo" type="number" min="0" step="0.01" inputmode="decimal" />
+              <select id="magico-custo-moeda" class="moeda-sel" aria-label="Moeda do custo do encantamento"><option value="po">PO</option><option value="pp">PP</option><option value="pc">PC</option></select>
+            </div>
           </div>
           <div class="field-group">
             <label for="magico-tempo">Tempo do encantamento (horas)</label>
@@ -1053,7 +1062,7 @@
     <span class="cb-label" id="cb-label">Custo para forjar</span>
     <span class="cb-time" id="cb-time"></span>
   </span>
-  <span class="cb-value" id="cb-value">0 po</span>
+  <span class="cb-value" id="cb-value">0 PO</span>
 </button>
 <p class="sr-only" id="live-result" aria-live="polite"></p>
 <div class="toast" id="toast" role="status" hidden>

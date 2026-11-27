@@ -28,6 +28,7 @@ APP_PARTS = [
     SRC / "regras" / "bombas.js",
     SRC / "regras" / "herbalismo.js",
     SRC / "core" / "combo.js",
+    SRC / "core" / "campo-moeda.js",
     SRC / "ui" / "forja.js",
     SRC / "ui" / "lista.js",
     SRC / "ui" / "oficinas.js",

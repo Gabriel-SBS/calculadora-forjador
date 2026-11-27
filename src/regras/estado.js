@@ -1,6 +1,7 @@
   var DEFAULTS = {
     oficina: 'forja',
     pde: '',
+    pdeMoeda: 'po',
     materials: [
       { materialId: '', name: '', mult: '', tier: '' }
     ],
@@ -23,6 +24,7 @@
     lucro: 30,
     magicoRaridade: 'comum',
     magicoCustoBase: '',
+    magicoCustoMoeda: 'po',
     magicoTempoBase: '',
     encantarExistente: false,
     desencantado: false,
@@ -50,6 +52,7 @@
     bombaLucro: 50,
     bmMunId: '',
     bmMunPde: '',
+    bmMunPdeMoeda: 'po',
     bmMunMatId: '',
     bmMunMod: -1,
     bmMunModQtd: 5,

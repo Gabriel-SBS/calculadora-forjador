@@ -19,7 +19,8 @@
   function bmVenda(s, proprio) {
     var lucroPct = Math.max(0, num(s.bombaLucro, 50));
     var lucroValor = s.bombaModo === 'vendido' ? proprio * (lucroPct / 100) : 0;
-    return { lucroPct: lucroPct, lucroValor: lucroValor, final: proprio + lucroValor };
+    var final = proprio + lucroValor;
+    return { lucroPct: lucroPct, lucroValor: lucroValor, final: minimoPc(final), subiuPara1pc: minimoPc(final) !== final };
   }
 
   function bombaCalc(s) {
@@ -49,7 +50,7 @@
     return {
       b: b, p: p, isBombinha: isBombinha, qtd: qtd,
       cargasEfetivas: cargasEfetivas, extraPolvoraUnit: extraPolvoraUnit, polvoraBloqueada: polvoraBloqueada,
-      cheioTotal: cheioTotal, proprio: proprio, lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final,
+      cheioTotal: cheioTotal, proprio: proprio, lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final, subiuPara1pc: v.subiuPara1pc,
       discFactor: d.discFactor, duplo: d.duplo, divisor: d.divisor, cdDetonacao: cdDetonacao
     };
   }
@@ -91,7 +92,7 @@
     return {
       mat: mat, pdeUnit: pdeUnit, pdeLote: pdeLote, cheioBase: cheioBase, cheioTotal: cheioTotal,
       proprioBase: proprioBase, proprio: proprio, modMun: modMun,
-      lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final,
+      lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final, subiuPara1pc: v.subiuPara1pc,
       discFactor: d.discFactor, duplo: d.duplo, divisor: d.divisor,
       horasBase: horasBase, horas: horas, modNum: modNum
     };
@@ -109,7 +110,7 @@
     var horas = 8 * qtd * (s.bombaForjador ? 2 / 3 : 1) * (s.bmPressa ? 0.5 : 1) * (s.bmAjudante ? 0.5 : 1);
     return {
       p: p, qtd: qtd, cheioTotal: cheioTotal, proprio: proprio,
-      lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final,
+      lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final, subiuPara1pc: v.subiuPara1pc,
       discFactor: d.discFactor, duplo: d.duplo, divisor: d.divisor, horas: horas
     };
   }

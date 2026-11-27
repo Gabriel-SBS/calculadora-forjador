@@ -34,6 +34,6 @@
       h: h, qtd: qtd, ramosUnit: ramosUnit, extraUnit: extraUnit,
       custoRamosCheio: custoRamosCheio, precoLojaTotal: precoLojaTotal,
       disc: disc, proprio: proprio, baseVenda: baseVenda, lucroPct: lucroPct, lucroValor: lucroValor,
-      final: final, horas: horas
+      final: minimoPc(final), subiuPara1pc: minimoPc(final) !== final, horas: horas
     };
   }
