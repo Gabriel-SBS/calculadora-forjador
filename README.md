@@ -19,8 +19,8 @@ Na **Forja de Equipamento**:
 1. Em **Equipamento do Guia**, digite parte do nome (como "espada longa", "cota de malha" ou "orbe") ou a categoria ("armas", "armaduras", "escudos", "focos", "instrumentos"). O PDE, o tipo e o peso são preenchidos sozinhos. Se o item não estiver na lista, digite o PDE à mão.
    Em todas as buscas, o botão **Como funciona a pesquisa?** mostra o que dá para digitar (nome sem acento, categoria, tier, tipo de material, CD, salvaguarda, efeito ou cor do ramo), e **Como funciona?** resume as regras com as páginas do Guia.
 2. Em **Materiais**, busque pelo nome ("aço", "prata", "coral", "pedra filosofal"), pelo tier ("tier d" a "tier s") ou pelo tipo ("metal", "vegetal", "geologico", "organico"). Dá para juntar até 4 materiais no mesmo item (ou até 6 na **Excalibur**, do 20º nível).
-3. Em **O Forjador**, ligue o que vale para o seu personagem. Em **Custo** ficam o talento Artesão (com escolha entre duas compras de −36% ou uma de −20%, sincronizada com *Bombas e Munições*) e se você já tem os materiais; em **Tempo e qualidade**, Pressa, Obra-Prima, O Melhor dos Melhores, Criações Automáticas e Excalibur.
-4. Em **Finalidade**, escolha entre **Uso próprio**, **Para venda** (com margem de lucro, disponível nas três abas) ou **Consertar quebrado** (metade do valor do item, p. 173, com a mão de obra dividida por 2 pelo Trabalhador Itinerante).
+3. Em **O Forjador**, ligue o que vale para o seu personagem. Em **Custo** ficam o talento Artesão (com escolha entre duas compras de −36% ou uma de −20%, sincronizada com *Bombas e Munições*) e se você já tem os materiais; em **Tempo e qualidade**, Pressa, Obra-Prima, **Com ajudante** (que corta o tempo pela metade no painel e na lista) e o bloco recolhível **Nível alto (14–20)** com O Melhor dos Melhores, Criações Automáticas e Excalibur.
+4. Em **Finalidade**, escolha entre **Uso próprio**, **Para venda** (com margem de lucro e atalhos rápidos de `25%`, `50%` e `100%`, disponível nas três abas) ou **Consertar quebrado** (metade do valor do item, p. 173, com a mão de obra dividida por 2 pelo Trabalhador Itinerante).
 5. O custo e o tempo aparecem no painel de resultado (no computador ele fica fixo na lateral; no celular, uma barra no rodapé mostra os dois enquanto você rola). Logo abaixo vêm a conta passo a passo, a comparação com loja, alquimista ou ferreiro comum e os detalhes de vantagens, receitas ou tempo de produção.
 
 Os valores aparecem em moedas do D&D: peças de ouro (po), prata (pp) e cobre (pc), arredondados para a peça de cobre. Uma flecha, por exemplo, custa 5 pc, e não 0,05 po. Electro e platina ficam de fora porque o Livro do Jogador diz que são incomuns em transações. Os campos de preço continuam em po, como os preços do Guia.
@@ -31,7 +31,7 @@ Os valores ficam salvos no seu navegador, então dá para fechar a página e vol
 
 - **Copiar resultado** gera um texto pronto para colar no Discord ou no WhatsApp da mesa, com item, materiais, custo, tempo, modificador e dureza.
 - **Copiar link** gera um endereço (`?s=...`) com a oficina, o item, os materiais e as opções preenchidos. Quem abrir o link vê a mesma conta no navegador.
-- **Adicionar à lista** guarda o item atual na **Lista da sessão**, que soma o custo, o tempo (um item feito depois do outro) e o peso em kg de todos os itens. Dá para mudar a quantidade (`−` e `+`) direto na lista, marcar o que já ficou pronto (separando o pendente do total) e apagar só os itens concluídos. A lista também pode ser copiada inteira e fica salva no navegador até você limpar.
+- **Adicionar à lista** guarda o item atual na **Lista da sessão**, que soma o custo, o tempo (um item feito depois do outro) e o peso em kg de todos os itens. Dá para mudar a quantidade (`−` e `+`) direto na lista, clicar em **Abrir** para recarregar um item salvo na calculadora, marcar o que já ficou pronto (separando o pendente do total) e apagar só os itens concluídos. A lista também pode ser copiada em texto, enviada por link (`?l=...`) e fica salva no navegador até você limpar.
 
 ## Aparência
 
@@ -70,12 +70,12 @@ Se o sistema estiver com "reduzir movimento" ligado, a troca de tema é instant�
 - Custo e horas do encantamento por raridade (p. 169), tempo total somado à fabricação do item e o material exigido: StarWood para raro, StarStone para muito raro, StarMetal para lendário.
 - Habilidades do Forjador que mexem nisso: Perito, Especialista, Criações Automáticas, Versado, Excalibur e a energia de um item desencantado.
 - Transmutação do Forjador Alquimista no 3º, 7º e 13º nível (p. 130–131).
-- Gaveta **Comparar Materiais Lado a Lado** para testar até 3 materiais no item atual e ver custo, tempo do Forjador, modificador, dureza e peso lado a lado.
+- Gaveta **Comparar Materiais Lado a Lado** para testar até 3 materiais no item atual e ver custo, tempo do Forjador, modificador, dureza e peso lado a lado, com botão **Usar este** para aplicar direto no formulário.
 
 **Bombas, Munições e Herbalismo**
-- As 16 bombas do Guia (inteira ou bombinhas com peso `0,1 kg/un.`, 2d4 por lote ou ¼ do preço), troca de carga para as 11 pólvoras (p. 217), fabricação de lotes de pólvora (1d4 cargas em 8h base), nota do talento *Especialista em Pólvora* (p. 212) e CD de detonação (8 + DES + Mestre das Bombas).
-- Munições comuns, bala de arma de fogo e bala colossal de canhão (p. 159), com peso do lote e as 8 modificações da p. 160.
-- As 23 receitas herbáceas e a tabela dos 8 ramos (p. 148–150), comprando ramos, forrageando ou comprando pronto, modo Para venda com margem de lucro e referência de limite de receitas memorizadas (p. 148–149).
+- As 16 bombas do Guia (inteira ou bombinhas com peso `0,1 kg/un.`, 2d4 por lote ou ¼ do preço), troca de carga para as 11 pólvoras (p. 217, incluindo o dobro de raio da Pólvora Poderosa no chip do resultado), fabricação de lotes de pólvora (1d4 cargas em 8h base), nota do talento *Especialista em Pólvora* (p. 212) e CD de detonação (8 + DES, somando proficiência quando *Mestre das Bombas* está ligado).
+- Munições comuns, bala de arma de fogo e bala colossal de canhão (p. 159), com peso do lote, custo médio por unidade ou carga nos lotes aleatórios e as 8 modificações da p. 160 (com atalhos de `5`, `10` e `20` munições).
+- As 23 receitas herbáceas e a tabela dos 8 ramos (p. 148–150), comprando ramos (com aviso quando comprar pronto na loja sai mais barato), forrageando ou comprando pronto, ramos multiplicados pela quantidade de lotes, distinção automática entre *Kit de Herbalismo* e *Kit de Venenos*, modo Para venda com margem de lucro e referência de limite de receitas memorizadas (p. 148–149).
 
 ## Desconto do Artesão: 36% ou 20%?
 
@@ -110,8 +110,12 @@ Achou um número diferente do livro? Abra uma issue dizendo o item, os materiais
 - Vantagens e desvantagens dos materiais agora filtram pelo tipo de item escolhido (arma corpo a corpo, arma com munição, armadura, escudo, foco ou munição), ajustam o texto para não citar munições na Forja nem armas em Munições e separam cada benefício em sua própria linha de `+` (e cada desvantagem em `−`).
 - A lista das 26 modificações na Forja filtra automaticamente pelo equipamento escolhido (com botão para exibir todas caso o Mestre libere exceção), mantendo avisos não bloqueantes quando alguma modificação conflita com o item e chips de requisito para *Mithral* e materiais que aumentam requisito de Força.
 - Na sub-aba de Pólvoras, cada pólvora agora mostra em linhas separadas o efeito em **armas de fogo** (p. 159) e o efeito em **bombas** (p. 217).
-- No modo **Para venda**, as três abas destacam o **Lucro líquido** em po direto nos selos do resultado. Na **Lista da sessão**, agora dá para clicar em **Abrir** para recarregar um item salvo na calculadora e em **Copiar link** (`?l=...`) para enviar a lista inteira pro grupo.
-- Entraram também a colinha rápida de **Teste de dureza** (p. 172–173) no *Como funciona?* da Forja, exemplos clicáveis dentro de *Como funciona a pesquisa?* e o atalho de teclado `/` para pular direto para a busca da aba aberta.
+- No modo **Para venda**, as três abas destacam o **Lucro líquido** em po direto nos selos do resultado e ganharam atalhos rápidos de margem (`25%`, `50%` e `100%`), além de atalhos de quantidade em Bombas, Munições (`5`, `10` e `20`), Pólvoras e Herbalismo.
+- Na **Lista da sessão**, agora dá para clicar em **Abrir** para recarregar um item salvo na calculadora e em **Copiar link** (`?l=...`) para enviar a lista inteira pro grupo.
+- Na aba **Forja**, entraram o switch **Com ajudante** (metade do tempo no painel, na lista e no comparador), o botão **Usar este** no Comparador de Materiais, os recursos de nível alto (14–20) recolhíveis com contador de ativos, a unificação de *Criações Automáticas* e o modificador do material direto na busca (`×30 · +1`).
+- Em **Bombas e Munições**, o chip de Raio agora reflete `(×2 Poderosa)` com Pólvora Poderosa, os lotes aleatórios (`2d4` e `1d4`) mostram o custo médio por unidade ou carga, *Bônus de Proficiência* aparece só quando *Mestre das Bombas* está ligado e *Munição* e *Pólvora* ganharam o switch **Com ajudante**.
+- Em **Herbalismo**, receitas da categoria *Venenos* agora mostram **Kit de Venenos**, as pílulas de ramos multiplicam pela quantidade de lotes escolhida, receitas mais baratas prontas na loja exibem um aviso direto e entrou também o switch **Com ajudante**.
+- Entraram também a colinha rápida de **Teste de dureza** (p. 172–173) no *Como funciona?* da Forja, exemplos clicáveis dentro de *Como funciona a pesquisa?*, resumos em chips compactos nas três abas e o atalho de teclado `/` para pular direto para a busca da aba aberta.
 - Ajustes práticos na interface: botão `×` (com área maior para toque no celular) para limpar qualquer busca em um toque, botão **limpar concluídos** na Lista da sessão (com Desfazer), estado vazio mais limpo no painel de resultado, textos curtos que cabem sem cortar em telas pequenas e retirada dos roladores automáticos do Herbalismo para deixar a tabela dos 8 ramos pronta para quem rola presencialmente ou no Discord.
 - Cache offline (`sw.js`) atualizado para `forjador-v5` e novos testes de peso e materiais vivos em `tests/calc.test.js`.
 
