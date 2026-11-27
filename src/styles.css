@@ -731,7 +731,6 @@
     border-radius: var(--r-sm);
     box-shadow: var(--shadow-lift);
     padding: var(--sp-1);
-    transform-origin: top;
     animation: drop 150ms var(--ease-out);
   }
   .mat-group-label {
@@ -967,10 +966,12 @@
   .result-actions .btn-ghost { flex: 1 1 auto; }
   .result-help-row { display: flex; justify-content: flex-end; margin-top: -6px; }
   .btn-strong {
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
-    color: var(--text);
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 600;
   }
+  .btn-strong .ico { stroke: currentColor; }
   .btn-ghost.is-morphing {
     filter: blur(1.8px);
     opacity: .72;
@@ -1125,6 +1126,65 @@
     background: color-mix(in srgb, var(--good) 14%, transparent);
     border: 1px solid color-mix(in srgb, var(--good) 35%, transparent);
   }
+  .cm-use-btn {
+    margin-top: auto;
+    padding: 6px 10px;
+    min-height: 32px;
+    width: 100%;
+    justify-content: center;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+  }
+  .equip-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .equip-info[hidden] { display: none; }
+  .eq-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: var(--r-pill);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+  .eq-chip.eq-chip-main {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .lucro-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .btn-chip {
+    appearance: none;
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text-dim);
+    border-radius: var(--r-pill);
+    padding: 4px 11px;
+    min-height: 28px;
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color var(--t-fast), background-color var(--t-fast), color var(--t-fast), transform var(--t-press) var(--ease-out);
+  }
+  .btn-chip:active { transform: scale(0.96); }
+  .btn-chip.active {
+    border-color: color-mix(in srgb, var(--accent) 60%, var(--border));
+    background: color-mix(in srgb, var(--accent) 14%, var(--surface-2));
+    color: var(--accent);
+  }
+  .high-level-details { margin-top: var(--sp-2); }
+  .high-level-details .settings-list { margin-top: 0; }
   .cm-empty {
     grid-column: 1 / -1;
     margin: 0;
@@ -1758,6 +1818,8 @@
     input:hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--border-strong); }
     .btn-info:hover { color: var(--accent); }
     .btn-ghost:hover:not(:disabled) { border-color: var(--border-strong); background: color-mix(in srgb, var(--text) 5%, transparent); }
+    .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 88%, #000); border-color: color-mix(in srgb, var(--accent) 88%, #000); }
+    .btn-chip:hover:not(.active) { border-color: var(--border-strong); color: var(--text); }
     .btn-remove:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
     .btn-reset:hover { color: var(--accent); }
     .seg-btn:hover:not(.active) { color: var(--text); background: color-mix(in srgb, var(--text) 5%, transparent); }

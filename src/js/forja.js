@@ -63,6 +63,7 @@
     artesaoModo: 'duplo',
     materiaisPossuidos: false,
     pressa: false,
+    ajudante: false,
     mostrarDureza: true,
     tipoItem: 'arma',
     fracaoFixa: false,
@@ -282,6 +283,7 @@
   var SIMPLE_SWITCHES = [
     ['existente-switch', 'modExistente', 'main'],
     ['obra-switch', 'obraPrima', 'main'],
+    ['ajudante-switch', 'ajudante', 'main'],
     ['melhor-switch', 'melhorDosMelhores', 'main'],
     ['encantar-switch', 'encantarExistente', 'magic'],
     ['desencantado-switch', 'desencantado', 'magic'],
@@ -293,6 +295,9 @@
   var excaliburSwitch = document.getElementById('excalibur-switch');
   var excaliburSetting = document.getElementById('excalibur-setting');
   var consertoNoteEl = document.getElementById('conserto-note');
+  var forjHighCountEl = document.getElementById('forj-high-count');
+  var magicosActiveCountEl = document.getElementById('magicos-active-count');
+  var lucroPresetBtns = Array.prototype.slice.call(document.querySelectorAll('#lucro-presets .btn-chip'));
 
   function maxMaterials() {
     return state && state.excalibur && state.tipoItem === 'arma' ? 6 : 4;
@@ -415,7 +420,8 @@
           nameSpan.textContent = m.nome;
           var multSpan = document.createElement('span');
           multSpan.className = 'mo-mult';
-          multSpan.textContent = '×' + m.mult;
+          var modTxt = m.mod && m.mod !== '+0' && m.mod !== '0' ? ' · ' + m.mod : '';
+          multSpan.textContent = '×' + m.mult + modTxt;
           opt.appendChild(nameSpan);
           opt.appendChild(multSpan);
           opt.addEventListener('mousedown', function (e) {
@@ -996,22 +1002,23 @@
     var comumHoras = totalHoras * timeFactor;
     var comumAjudanteHoras = comumHoras / 2;
 
-    lastForjadorHoras = forjadorHoras;
-    var diasForjador = Math.ceil(forjadorHoras / FORJADOR_HORAS_DIA);
-    resultTimeEl.textContent = fmt(forjadorHoras) + 'h';
-    resultTimeSubEl.textContent = '· ' + diasForjador + (diasForjador === 1 ? ' dia' : ' dias');
+    var horasEfetivas = state.ajudante ? forjadorAjudanteHoras : forjadorHoras;
+    lastForjadorHoras = horasEfetivas;
+    var diasForjador = Math.ceil(horasEfetivas / FORJADOR_HORAS_DIA);
+    resultTimeEl.textContent = fmt(horasEfetivas) + 'h';
+    resultTimeSubEl.textContent = '· ' + diasForjador + (diasForjador === 1 ? ' dia' : ' dias') + (state.ajudante ? ' (ajudante)' : '');
 
     productionRowsEl.appendChild(pRow(
       'Forjador (sozinho)' + (usaAuto ? ' + Criações Automáticas' : ''),
       'Trabalhador Itinerante: 2/3 do tempo' + (usaAuto ? ' · ÷2 ferramenta automatizada' : '') + ' · ' + FORJADOR_HORAS_DIA + 'h de trabalho/dia',
       fmtTempo(forjadorHoras, FORJADOR_HORAS_DIA),
-      usaAuto
+      !state.ajudante
     ));
     productionRowsEl.appendChild(pRow(
-      'Forjador (com ajudante)',
+      'Forjador (com ajudante)' + (usaAuto ? ' + Criações Automáticas' : ''),
       'metade do tempo do Forjador · ' + FORJADOR_HORAS_DIA + 'h/dia',
       fmtTempo(forjadorAjudanteHoras, FORJADOR_HORAS_DIA),
-      !usaAuto
+      !!state.ajudante
     ));
     productionRowsEl.appendChild(pRow(
       'Outra classe, não-Forjador (sozinho)',
@@ -1455,6 +1462,7 @@
 
     if (!origem || !destino) {
       transmutResultEl.appendChild(mgWarning('Escolha o material de origem e de destino.'));
+      syncMagicosBadge();
       return;
     }
     var rOrigem = TIER_ORDER.indexOf(origem.tier);
@@ -1482,6 +1490,34 @@
 
     transmutResultEl.appendChild(mgLine('Custo (' + notaCusto + ')', fmtMoeda(custoTransmut)));
     transmutResultEl.appendChild(mgLine('Tempo de trabalho', fmt(tempoTransmut) + 'h' + (complexa ? ' (Tier B ou A: 8h por material transformado)' : ' (Tier D/C: 1h + 1h por tier acima)')));
+    syncMagicosBadge();
+  }
+
+  function syncMagicosBadge() {
+    if (!magicosActiveCountEl) return;
+    var partes = [];
+    if (state.magicoRaridade && state.magicoRaridade !== 'comum') {
+      var opt = magicoRaridadeSelect && magicoRaridadeSelect.options[magicoRaridadeSelect.selectedIndex];
+      partes.push(opt ? opt.text : state.magicoRaridade);
+    }
+    var optsAtivas = 0;
+    if (state.encantarExistente) optsAtivas++;
+    if (state.desencantado) optsAtivas++;
+    if (state.peritoItensMagicos) optsAtivas++;
+    if (state.especialistaItensMagicos) optsAtivas++;
+    if (state.versadoItensMagicos) optsAtivas++;
+    if (optsAtivas) partes.push(optsAtivas === 1 ? '1 opção' : optsAtivas + ' opções');
+    if (state.transmutOrigemId && state.transmutDestinoId) partes.push('Transmutação');
+    magicosActiveCountEl.textContent = partes.join(' · ');
+  }
+
+  function syncHighLevelBadge() {
+    if (!forjHighCountEl) return;
+    var n = 0;
+    if (state.melhorDosMelhores) n++;
+    if (state.criacoesAutomaticas) n++;
+    if (state.excalibur && state.tipoItem === 'arma') n++;
+    forjHighCountEl.textContent = n ? (n === 1 ? '1 ativo' : n + ' ativos') : '';
   }
 
   function deltaPct(value, cheio) {
@@ -1664,6 +1700,7 @@
     renderModsWarn();
     renderJuncao();
     renderCompMateriais();
+    syncHighLevelBadge();
     updateMagicos();
 
     // Atualiza o tempo na barra mobile e no aviso de acessibilidade
@@ -1701,6 +1738,7 @@
     var horas = Math.max(1, baseHoras + adj) * (2 / 3);
     if (state.criacoesAutomaticas && (mat.tier === 'A' || mat.tier === 'S')) horas /= 2;
     if (state.pressa) horas /= 2;
+    if (state.ajudante) horas /= 2;
 
     var modNum = parseInt(mat.mod, 10) || 0;
     if (state.obraPrima) modNum = Math.min(3, modNum + 1);
@@ -1793,6 +1831,25 @@
         line.appendChild(v);
         card.appendChild(line);
       });
+
+      var useBtn = document.createElement('button');
+      useBtn.type = 'button';
+      useBtn.className = 'btn-ghost cm-use-btn';
+      useBtn.textContent = 'Usar este';
+      useBtn.addEventListener('click', function () {
+        state.materials = [{ materialId: r.mat.id, name: r.mat.nome, mult: r.mat.mult, tier: r.mat.tier }];
+        if (r.mat.forcaPesado && state.peso !== 'pesado') setPeso('pesado');
+        saveState();
+        renderMaterials();
+        update();
+        updateMagicos();
+        showToast('Material aplicado: ' + r.mat.nome);
+        var matSec = document.getElementById('sec-mat');
+        if (matSec && matSec.getBoundingClientRect().top < 0) {
+          matSec.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        }
+      });
+      card.appendChild(useBtn);
       compMatGridEl.appendChild(card);
     });
   }
@@ -1809,12 +1866,22 @@
   function showEquipInfo() {
     var e = null;
     EQUIP_DB.forEach(function (x) { if (x.nome === state.equipNome) e = x; });
-    if (!e) { equipInfo.hidden = true; return; }
-    var partes = [e.grupo, 'PDE ' + fmtMoeda(e.pde)];
-    if (e.pesoKg != null) partes.push(fmtKg(e.pesoKg));
-    if (e.peso) partes.push(e.peso === 'leve' ? 'Leve (−8h)' : 'Pesado (+8h)');
-    if (e.maestria) partes.push('Maestria: ' + e.maestria);
-    equipInfo.textContent = partes.join(' · ');
+    if (!e) { equipInfo.hidden = true; equipInfo.innerHTML = ''; return; }
+    var chips = [
+      { txt: e.grupo, main: true },
+      { txt: 'PDE ' + fmtMoeda(e.pde) }
+    ];
+    if (e.pesoKg != null) chips.push({ txt: fmtKg(e.pesoKg) });
+    if (e.peso) chips.push({ txt: e.peso === 'leve' ? 'Leve (−8h)' : 'Pesado (+8h)' });
+    else chips.push({ txt: 'Normal' });
+    if (e.maestria) chips.push({ txt: 'Maestria: ' + e.maestria });
+    equipInfo.innerHTML = '';
+    chips.forEach(function (ch) {
+      var s = document.createElement('span');
+      s.className = 'eq-chip' + (ch.main ? ' eq-chip-main' : '');
+      s.textContent = ch.txt;
+      equipInfo.appendChild(s);
+    });
     equipInfo.hidden = false;
   }
 
@@ -2191,16 +2258,34 @@
     saveState();
     updateMagicos();
   });
+  function syncLucroPresets() {
+    var cur = String(state.lucro == null ? '' : state.lucro).trim();
+    lucroPresetBtns.forEach(function (b) {
+      var on = b.dataset.lucro === cur;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
   lucroInput.addEventListener('input', function () {
     state.lucro = lucroInput.value;
+    syncLucroPresets();
     saveState();
     update();
+  });
+  lucroPresetBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.lucro = Number(b.dataset.lucro);
+      lucroInput.value = state.lucro;
+      syncLucroPresets();
+      saveState();
+      update();
+    });
   });
 
   function syncAutoSwitches() {
     var val = state.criacoesAutomaticas ? 'true' : 'false';
-    autoForjSwitch.setAttribute('aria-checked', val);
-    autoMagicSwitch.setAttribute('aria-checked', val);
+    if (autoForjSwitch) autoForjSwitch.setAttribute('aria-checked', val);
+    if (autoMagicSwitch) autoMagicSwitch.setAttribute('aria-checked', val);
   }
   function toggleCriacoesAutomaticas() {
     state.criacoesAutomaticas = !state.criacoesAutomaticas;
@@ -2209,8 +2294,8 @@
     update();
     updateMagicos();
   }
-  autoForjSwitch.addEventListener('click', toggleCriacoesAutomaticas);
-  autoMagicSwitch.addEventListener('click', toggleCriacoesAutomaticas);
+  if (autoForjSwitch) autoForjSwitch.addEventListener('click', toggleCriacoesAutomaticas);
+  if (autoMagicSwitch) autoMagicSwitch.addEventListener('click', toggleCriacoesAutomaticas);
 
   excaliburSwitch.addEventListener('click', function () {
     state.excalibur = !state.excalibur;

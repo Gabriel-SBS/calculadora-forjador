@@ -281,39 +281,58 @@
         <div class="setting">
           <div class="toggle-row">
             <div class="toggle-label">
-              <span class="t-name">O Melhor dos Melhores</span>
-              <span class="t-sub">Forjador nível 14: gasta o dobro de materiais e o item vira Obra-Prima</span>
+              <span class="t-name">Com ajudante</span>
+              <span class="t-sub">Outro personagem ajuda na forja: metade do tempo</span>
             </div>
-            <button type="button" class="switch" id="melhor-switch" role="switch" aria-checked="false" aria-label="O Melhor dos Melhores">
-              <span class="knob"></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="setting" id="auto-forj-setting">
-          <div class="toggle-row">
-            <div class="toggle-label">
-              <span class="t-name">Criações Automáticas</span>
-              <span class="t-sub">Forja Arcana nível 17: ferramenta automatizada ajuda em materiais raros e itens mágicos (tempo ÷2)</span>
-            </div>
-            <button type="button" class="switch" id="auto-forj-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
-              <span class="knob"></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="setting" id="excalibur-setting">
-          <div class="toggle-row">
-            <div class="toggle-label">
-              <span class="t-name">Excalibur</span>
-              <span class="t-sub">Forjador nível 20: arma ou foco com até 6 materiais (4 Tier S + 2 Tier A ou menor), tempo de 1 Tier S e encantamento Lendário sem StarMetal (+0h)</span>
-            </div>
-            <button type="button" class="switch" id="excalibur-switch" role="switch" aria-checked="false" aria-label="Excalibur">
+            <button type="button" class="switch" id="ajudante-switch" role="switch" aria-checked="false" aria-label="Com ajudante">
               <span class="knob"></span>
             </button>
           </div>
         </div>
       </div>
+
+      <details class="mods high-level-details" id="forj-high-details">
+        <summary class="mods-summary">Nível alto (14–20) <span class="mods-total" id="forj-high-count"></span></summary>
+        <div class="mods-body">
+          <div class="settings-list" role="group" aria-label="Recursos de nível alto">
+            <div class="setting">
+              <div class="toggle-row">
+                <div class="toggle-label">
+                  <span class="t-name">O Melhor dos Melhores</span>
+                  <span class="t-sub">Forjador nível 14: gasta o dobro de materiais e o item vira Obra-Prima</span>
+                </div>
+                <button type="button" class="switch" id="melhor-switch" role="switch" aria-checked="false" aria-label="O Melhor dos Melhores">
+                  <span class="knob"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="setting" id="auto-forj-setting">
+              <div class="toggle-row">
+                <div class="toggle-label">
+                  <span class="t-name">Criações Automáticas</span>
+                  <span class="t-sub">Forja Arcana nível 17: ferramenta automatizada ajuda em materiais raros e itens mágicos (tempo ÷2)</span>
+                </div>
+                <button type="button" class="switch" id="auto-forj-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
+                  <span class="knob"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="setting" id="excalibur-setting">
+              <div class="toggle-row">
+                <div class="toggle-label">
+                  <span class="t-name">Excalibur</span>
+                  <span class="t-sub">Forjador nível 20: arma ou foco com até 6 materiais (4 Tier S + 2 Tier A ou menor), tempo de 1 Tier S e encantamento Lendário sem StarMetal (+0h)</span>
+                </div>
+                <button type="button" class="switch" id="excalibur-switch" role="switch" aria-checked="false" aria-label="Excalibur">
+                  <span class="knob"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
 
       <p class="mao-obra-note">Mão de obra do Forjador (Trabalhador Itinerante): sempre ÷2.</p>
     </section>
@@ -335,6 +354,11 @@
         <div class="field-group" id="lucro-wrap" hidden>
           <label for="lucro">Margem de lucro (%)</label>
           <input id="lucro" type="number" min="0" step="1" inputmode="numeric" />
+          <div class="lucro-presets" id="lucro-presets" role="group" aria-label="Atalhos de margem">
+            <button type="button" class="btn-chip" data-lucro="25">25%</button>
+            <button type="button" class="btn-chip" data-lucro="50">50%</button>
+            <button type="button" class="btn-chip" data-lucro="100">100%</button>
+          </div>
         </div>
         <p class="magicos-note" id="conserto-note" hidden>Um item quebrado (penalidade −5) custa metade do valor para ser consertado (p. 173). Com o Trabalhador Itinerante (p. 124), o Forjador paga só a matéria-prima desse serviço (metade do conserto, ou grátis se já tiver o material).</p>
       </div>
@@ -855,7 +879,7 @@
   </details>
 
   <details class="magicos" id="magicos-details" data-oficina-panel="forja">
-    <summary class="magicos-summary">Itens Mágicos e Transmutação <span class="magicos-sub">(Forjador Arcano / Alquimista)</span></summary>
+    <summary class="magicos-summary">Itens Mágicos e Transmutação <span class="magicos-sub">(Forjador Arcano / Alquimista)</span> <span class="mods-total" id="magicos-active-count"></span></summary>
     <div class="magicos-body">
 
       <div class="magicos-block">
@@ -918,15 +942,7 @@
             <span class="knob"></span>
           </button>
         </div>
-        <div class="toggle-row">
-          <div class="toggle-label">
-            <span class="t-name">Criações Automáticas</span>
-            <span class="t-sub">17º nível de Forjador Arcano: ferramenta automatizada ajuda, tempo ÷2</span>
-          </div>
-          <button type="button" class="switch" id="automaticas-switch" role="switch" aria-checked="false" aria-label="Criações Automáticas">
-            <span class="knob"></span>
-          </button>
-        </div>
+        <p class="magicos-note" id="magico-auto-note">Criações Automáticas (nv. 17) é ativado em <strong>O Forjador → Nível alto</strong> e vale também para encantamentos.</p>
         <div class="toggle-row">
           <div class="toggle-label">
             <span class="t-name">Versado em Itens Mágicos</span>

@@ -135,7 +135,7 @@
           function () { return state.compMats[slot] ? materialById(state.compMats[slot]) : null; },
           'Buscar material ' + (slot + 1) + ' (ex.: aço, mithral, tier b)',
           'comp-mat-' + slot + '-label',
-          function (m) { return 'Tier ' + m.tier + ' · ×' + m.mult; },
+          function (m) { return 'Tier ' + m.tier + ' · ×' + m.mult + (m.mod && m.mod !== '+0' && m.mod !== '0' ? ' · ' + m.mod : ''); },
           function (m) { state.compMats[slot] = m.id; saveState(); renderCompMateriais(); },
           function () { state.compMats[slot] = ''; saveState(); renderCompMateriais(); }
         );
@@ -157,6 +157,7 @@
     pressaSwitch.setAttribute('aria-checked', state.pressa ? 'true' : 'false');
     fracaoSwitch.setAttribute('aria-checked', state.fracaoFixa ? 'true' : 'false');
     lucroInput.value = state.lucro;
+    syncLucroPresets();
     magicoRaridadeSelect.value = state.magicoRaridade || 'comum';
     peritoSwitch.setAttribute('aria-checked', state.peritoItensMagicos ? 'true' : 'false');
     especialistaSwitch.setAttribute('aria-checked', state.especialistaItensMagicos ? 'true' : 'false');
