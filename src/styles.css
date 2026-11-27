@@ -286,18 +286,25 @@
   .hero-text { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; }
   .hero-title-row { display: flex; align-items: center; gap: var(--sp-3); }
   .hero-mark {
-    width: 30px;
-    height: 30px;
+    width: 38px;
+    height: 38px;
     flex-shrink: 0;
     display: grid;
     place-items: center;
+    border-radius: 10px;
     color: var(--accent);
-    transition: color var(--t-med), filter var(--t-med);
+    background:
+      radial-gradient(90% 90% at 30% 20%, color-mix(in srgb, var(--ember-hot) 18%, transparent), transparent 70%),
+      color-mix(in srgb, var(--accent) 12%, var(--surface));
+    border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 2px rgba(0,0,0,.08);
+    transition: border-color var(--t-med), box-shadow var(--t-med), color var(--t-med);
   }
-  .hero-mark svg { width: 28px; height: 28px; }
+  .hero-mark svg { width: 22px; height: 22px; }
   .forja-on .hero-mark {
     color: var(--ember);
-    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--ember) 45%, transparent));
+    border-color: color-mix(in srgb, var(--ember) 65%, var(--border));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 2px 8px rgba(0,0,0,.22);
   }
 
   /* Barra de exibição (dureza, modo forja) */
