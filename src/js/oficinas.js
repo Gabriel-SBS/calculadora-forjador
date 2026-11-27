@@ -16,7 +16,7 @@
     },
     herbalismo: {
       title: 'Herbalismo e Poções',
-      sub: 'As 23 receitas herbáceas e os 8 ramos do Guia (p. 148–150), com rolador de forrageamento e herbolário.',
+      sub: 'As 23 receitas herbáceas e os 8 ramos do Guia (p. 148–150), com cálculo de custo, tempo e venda.',
       forjaLabel: 'Modo jardim',
       themeLight: '#2c6b44',
       themeDark: '#131915'

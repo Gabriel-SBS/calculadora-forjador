@@ -3761,7 +3761,6 @@
   ];
 
   var autoForjSwitch = document.getElementById('auto-forj-switch');
-  var autoMagicSwitch = document.getElementById('automaticas-switch');
   var excaliburSwitch = document.getElementById('excalibur-switch');
   var excaliburSetting = document.getElementById('excalibur-setting');
   var consertoNoteEl = document.getElementById('conserto-note');
@@ -5755,7 +5754,6 @@
   function syncAutoSwitches() {
     var val = state.criacoesAutomaticas ? 'true' : 'false';
     if (autoForjSwitch) autoForjSwitch.setAttribute('aria-checked', val);
-    if (autoMagicSwitch) autoMagicSwitch.setAttribute('aria-checked', val);
   }
   function toggleCriacoesAutomaticas() {
     state.criacoesAutomaticas = !state.criacoesAutomaticas;
@@ -5765,7 +5763,6 @@
     updateMagicos();
   }
   if (autoForjSwitch) autoForjSwitch.addEventListener('click', toggleCriacoesAutomaticas);
-  if (autoMagicSwitch) autoMagicSwitch.addEventListener('click', toggleCriacoesAutomaticas);
 
   excaliburSwitch.addEventListener('click', function () {
     state.excalibur = !state.excalibur;
@@ -6378,7 +6375,7 @@
     },
     herbalismo: {
       title: 'Herbalismo e Poções',
-      sub: 'As 23 receitas herbáceas e os 8 ramos do Guia (p. 148–150), com rolador de forrageamento e herbolário.',
+      sub: 'As 23 receitas herbáceas e os 8 ramos do Guia (p. 148–150), com cálculo de custo, tempo e venda.',
       forjaLabel: 'Modo jardim',
       themeLight: '#2c6b44',
       themeDark: '#131915'

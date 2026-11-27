@@ -293,7 +293,6 @@
   ];
 
   var autoForjSwitch = document.getElementById('auto-forj-switch');
-  var autoMagicSwitch = document.getElementById('automaticas-switch');
   var excaliburSwitch = document.getElementById('excalibur-switch');
   var excaliburSetting = document.getElementById('excalibur-setting');
   var consertoNoteEl = document.getElementById('conserto-note');
@@ -2287,7 +2286,6 @@
   function syncAutoSwitches() {
     var val = state.criacoesAutomaticas ? 'true' : 'false';
     if (autoForjSwitch) autoForjSwitch.setAttribute('aria-checked', val);
-    if (autoMagicSwitch) autoMagicSwitch.setAttribute('aria-checked', val);
   }
   function toggleCriacoesAutomaticas() {
     state.criacoesAutomaticas = !state.criacoesAutomaticas;
@@ -2297,7 +2295,6 @@
     updateMagicos();
   }
   if (autoForjSwitch) autoForjSwitch.addEventListener('click', toggleCriacoesAutomaticas);
-  if (autoMagicSwitch) autoMagicSwitch.addEventListener('click', toggleCriacoesAutomaticas);
 
   excaliburSwitch.addEventListener('click', function () {
     state.excalibur = !state.excalibur;
