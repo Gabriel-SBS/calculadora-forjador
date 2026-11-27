@@ -7866,8 +7866,7 @@
   Array.prototype.forEach.call(document.querySelectorAll('input[type="number"][min]'), check);
 })();
 
-// Grupos de opção (botões segmentados): setas do teclado, indicador deslizante e um só ponto de foco por grupo
-// + abertura/fechamento suave de gavetas <details> via Web Animations API
+// Navegação por teclado nos botões segmentados e animação dos <details>
 (function () {
   'use strict';
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -7920,7 +7919,7 @@
       else if (ev.key === 'End') next = btns[btns.length - 1];
       if (!next) return;
       ev.preventDefault();
-      // Ações por teclado não animam (regra do emil-design-eng)
+      // Troca pelo teclado vai direto, sem animar
       skipNextAnim = true;
       next.click();
       next.focus();
@@ -7942,7 +7941,7 @@
     pillUpdaters.forEach(function (fn) { fn(); });
   }).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['hidden'] });
 
-  // Gavetas <details>: expansão e fechamento interrompíveis com tempos assimétricos (abre em 220ms, fecha em 165ms)
+  // Abre e fecha os <details> de forma suave
   Array.prototype.forEach.call(document.querySelectorAll('details.mods, details.magicos, details.explain'), function (det) {
     var sum = det.querySelector('summary');
     if (!sum || !det.animate) return;
