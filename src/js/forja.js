@@ -112,6 +112,7 @@
     herbalQtd: 1,
     herbalOrigem: 'comprar-ramos',
     herbalArtesao: true,
+    herbalAjudante: false,
     herbalModo: 'proprio',
     herbalLucro: 50
   };

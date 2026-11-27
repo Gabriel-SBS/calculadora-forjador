@@ -717,6 +717,12 @@
       <div class="field-group">
         <label for="herbal-qtd">Quantidade de doses / lotes</label>
         <input id="herbal-qtd" type="number" min="1" step="1" value="1" inputmode="numeric" />
+        <div class="lucro-presets" id="herbal-qtd-presets" role="group" aria-label="Atalhos de quantidade">
+          <button type="button" class="btn-chip" data-qtd="1">1</button>
+          <button type="button" class="btn-chip" data-qtd="3">3</button>
+          <button type="button" class="btn-chip" data-qtd="5">5</button>
+          <button type="button" class="btn-chip" data-qtd="10">10</button>
+        </div>
       </div>
 
       <div class="field-group">
@@ -747,9 +753,20 @@
           <div class="toggle-row">
             <div class="toggle-label">
               <span class="t-name">Talento Artesão (−20%)</span>
-              <span class="t-sub">Desconto na compra de ramos ou itens herbáceos não-mágicos</span>
+              <span class="t-sub" id="herbal-artesao-sub">Desconto na compra de ramos ou itens herbáceos não-mágicos</span>
             </div>
             <button type="button" class="switch" id="herbal-artesao-switch" role="switch" aria-checked="true" aria-label="Talento Artesão no herbalismo">
+              <span class="knob"></span>
+            </button>
+          </div>
+        </div>
+        <div class="setting" id="herbal-ajudante-setting">
+          <div class="toggle-row">
+            <div class="toggle-label">
+              <span class="t-name">Com ajudante</span>
+              <span class="t-sub">Outro personagem ajuda no preparo: metade do tempo</span>
+            </div>
+            <button type="button" class="switch" id="herbal-ajudante-switch" role="switch" aria-checked="false" aria-label="Com ajudante no herbalismo">
               <span class="knob"></span>
             </button>
           </div>
@@ -774,6 +791,11 @@
         <div class="field-group" id="herbal-lucro-wrap" hidden>
           <label for="herbal-lucro">Margem de lucro (%)</label>
           <input id="herbal-lucro" type="number" min="0" step="1" value="50" inputmode="numeric" />
+          <div class="lucro-presets" id="herbal-lucro-presets" role="group" aria-label="Atalhos de margem">
+            <button type="button" class="btn-chip" data-lucro="25">25%</button>
+            <button type="button" class="btn-chip" data-lucro="50">50%</button>
+            <button type="button" class="btn-chip" data-lucro="100">100%</button>
+          </div>
         </div>
       </div>
     </section>

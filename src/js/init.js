@@ -112,6 +112,7 @@
 
     herbalQtdInput.value = state.herbalQtd || 1;
     herbalArtesaoSwitch.setAttribute('aria-checked', state.herbalArtesao !== false ? 'true' : 'false');
+    if (herbalAjudanteSwitch) herbalAjudanteSwitch.setAttribute('aria-checked', state.herbalAjudante ? 'true' : 'false');
     herbalOrigemBtns.forEach(function (x) {
       var on = x.getAttribute('data-horigem') === (state.herbalOrigem || 'comprar-ramos');
       x.classList.toggle('active', on);
