@@ -133,7 +133,7 @@
         window._compMatCombos[slot] = buildCatalogCombo(
           MATERIALS_DB,
           function () { return state.compMats[slot] ? materialById(state.compMats[slot]) : null; },
-          'Buscar material ' + (slot + 1) + ' (ex.: aço, mitral, tier b)',
+          'Buscar material ' + (slot + 1) + ' (ex.: aço, mithral, tier b)',
           'comp-mat-' + slot + '-label',
           function (m) { return 'Tier ' + m.tier + ' · ×' + m.mult; },
           function (m) { state.compMats[slot] = m.id; saveState(); renderCompMateriais(); },

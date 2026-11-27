@@ -1969,7 +1969,7 @@
       <div class="toggle-row" id="fracao-wrap" hidden>
         <div class="toggle-label">
           <span class="t-name">Fração fixa do PDE</span>
-          <span class="t-sub">Regra opcional: só 20% do PDE é sensível ao material — suaviza armaduras caras</span>
+          <span class="t-sub">Regra opcional: só 20% do PDE é sensível ao material (suaviza armaduras caras)</span>
         </div>
         <button type="button" class="switch" id="fracao-switch" role="switch" aria-checked="false" aria-label="Fração fixa do PDE">
           <span class="knob"></span>
@@ -2001,7 +2001,7 @@
           </ul>
         </div>
         <div id="material-rows"></div>
-        <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais — além disso, não altera o custo.</p>
+        <p class="mat-cap-note" id="mat-cap-note" hidden>Máximo de 4 materiais (além disso, não altera o custo).</p>
         <div class="juncao" id="juncao-info" hidden></div>
       </div>
 
@@ -2764,9 +2764,9 @@
         <div class="field-group">
           <label for="transmut-nivel">Nível da característica</label>
           <select id="transmut-nivel">
-            <option value="3">3º — Transmutação (Tier D/C, mesma categoria)</option>
-            <option value="7">7º — Avançada (qualquer categoria, até Tier B)</option>
-            <option value="13">13º — Suprema (D/C/B grátis, Tier A permitido)</option>
+            <option value="3">3º: Transmutação (Tier D/C, mesma categoria)</option>
+            <option value="7">7º: Avançada (qualquer categoria, até Tier B)</option>
+            <option value="13">13º: Suprema (D/C/B grátis, Tier A permitido)</option>
           </select>
         </div>
         <div class="mg-grid">
@@ -7766,7 +7766,7 @@
         window._compMatCombos[slot] = buildCatalogCombo(
           MATERIALS_DB,
           function () { return state.compMats[slot] ? materialById(state.compMats[slot]) : null; },
-          'Buscar material ' + (slot + 1) + ' (ex.: aço, mitral, tier b)',
+          'Buscar material ' + (slot + 1) + ' (ex.: aço, mithral, tier b)',
           'comp-mat-' + slot + '-label',
           function (m) { return 'Tier ' + m.tier + ' · ×' + m.mult; },
           function (m) { state.compMats[slot] = m.id; saveState(); renderCompMateriais(); },
