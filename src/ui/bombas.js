@@ -71,7 +71,7 @@
   MUNICOES_LIST.forEach(function (m) {
     var opt = document.createElement('option');
     opt.value = m.nome;
-    opt.textContent = m.nome + ' — ' + fmtMoeda(m.pde);
+    opt.textContent = m.nome + ' · ' + fmtMoeda(m.pde);
     bmMunSelect.appendChild(opt);
   });
 
@@ -104,17 +104,6 @@
     bombaTipoInfo.hidden = !open;
     bombaInfoBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
-
-  function bombaById(id) {
-    if (!id) return null;
-    for (var i = 0; i < BOMBAS_DB.length; i++) if (BOMBAS_DB[i].id === id) return BOMBAS_DB[i];
-    return null;
-  }
-  function polvoraBombaById(id) {
-    if (!id) return null;
-    for (var i = 0; i < POLVORAS_BOMBA_DB.length; i++) if (POLVORAS_BOMBA_DB[i].id === id) return POLVORAS_BOMBA_DB[i];
-    return null;
-  }
 
   function renderBmAmmoMods() {
     bmAmmoModsList.innerHTML = '';
@@ -189,113 +178,10 @@
     b.addEventListener('click', function () { setBmTipo(b.getAttribute('data-bmtipo')); });
   });
 
-  // Cálculos dos 3 modos
-  function calcBombas() {
-    var b = bombaById(state.bombaId);
-    if (!b) return null;
-    var p = polvoraBombaById(state.bombaPolvora) || POLVORAS_BOMBA_DB[0];
-    var isBombinha = state.bombaFormato === 'bombinha';
-    var qtd = Math.max(1, Math.floor(num(state.bombaQtd, 1)));
-    var cargasEfetivas = isBombinha ? 1 : b.cargas;
-    var extraPolvoraUnit = p.id === 'negra' ? 0 : Math.max(0, (p.preco - 5) * cargasEfetivas);
-    var polvoraBloqueada = isBombinha && p.id !== 'negra' &&
-      !(b.id === 'fumaca' && p.id === 'fumegante') &&
-      !(b.id === 'polvora');
-    if (polvoraBloqueada) extraPolvoraUnit = 0;
-
-    var precoUnitCheio = b.preco + extraPolvoraUnit;
-    var cheioTotal = precoUnitCheio * qtd;
-
-    var discFactor = state.bombaArtesao ? (1 - ARTESAO_DESCONTO / 100) : 1;
-    var duplo = !!state.bombaArtesao && state.artesaoModo !== 'simples';
-    var divisor = state.bombaForjador ? FORJADOR_DIVISOR : 1;
-
-    var proprio = state.bombaPossuidos
-      ? 0
-      : (cheioTotal * discFactor * (duplo ? discFactor : 1)) / divisor;
-
-    var lucroPct = num(state.bombaLucro, 50);
-    var lucroValor = state.bombaModo === 'vendido' ? proprio * (lucroPct / 100) : 0;
-    var final = proprio + lucroValor;
-
-    var des = Math.floor(num(state.bombaDes, 0));
-    var bp = Math.max(2, Math.floor(num(state.bombaBp, 2)));
-    var cdDetonacao = 8 + des + (state.bombaMestre ? bp : 0);
-
-    return {
-      b: b, p: p, isBombinha: isBombinha, qtd: qtd,
-      cargasEfetivas: cargasEfetivas, extraPolvoraUnit: extraPolvoraUnit, polvoraBloqueada: polvoraBloqueada,
-      cheioTotal: cheioTotal, proprio: proprio, lucroPct: lucroPct, lucroValor: lucroValor, final: final,
-      discFactor: discFactor, duplo: duplo, divisor: divisor, cdDetonacao: cdDetonacao
-    };
-  }
-
-  function calcBmMunicao() {
-    var mat = state.bmMunMatId ? materialById(state.bmMunMatId) : null;
-    var mm = MUNICAO_MODS[state.bmMunMod] || null;
-    if (!mat && !(mm && state.bmMunModExistente)) return null;
-    var pdeUnit = Math.max(0, num(state.bmMunPde, 0));
-    var pdeLote = pdeUnit * 4;
-    var cheioBase = mat ? pdeLote * mat.mult : 0;
-
-    var discFactor = state.bombaArtesao ? (1 - ARTESAO_DESCONTO / 100) : 1;
-    var duplo = !!state.bombaArtesao && state.artesaoModo !== 'simples';
-    var divisor = state.bombaForjador ? FORJADOR_DIVISOR : 1;
-    var proprioBase = state.bombaPossuidos ? 0 : (cheioBase * discFactor * (duplo ? discFactor : 1)) / divisor;
-
-    var mm = MUNICAO_MODS[state.bmMunMod] || null;
-    var modMun = null;
-    var proprio = proprioBase;
-    if (mm) {
-      var q = Math.max(1, Math.floor(num(state.bmMunModQtd, 5)));
-      var cheioMod = mm[1] * Math.ceil(q / mm[2]);
-      var pagoMod = state.bombaPossuidos ? 0 : (cheioMod * discFactor) / divisor;
-      modMun = { nome: mm[0], custo: mm[1], por: mm[2], qtd: q, cheio: cheioMod, pago: pagoMod, existente: !!state.bmMunModExistente };
-      proprio = modMun.existente ? pagoMod : proprioBase + pagoMod;
-    }
-
-    var cheioTotal = modMun ? (modMun.existente ? modMun.cheio : cheioBase + modMun.cheio) : cheioBase;
-    var lucroPct = num(state.bombaLucro, 50);
-    var lucroValor = state.bombaModo === 'vendido' ? proprio * (lucroPct / 100) : 0;
-    var final = proprio + lucroValor;
-
-    var horasBase = mat ? (MUNICAO_HORAS[mat.tier] || 1) : 1;
-    var horas = modMun && modMun.existente
-      ? null
-      : horasBase * (state.bombaForjador ? 2 / 3 : 1) * (state.bmPressa ? 0.5 : 1) * (state.bmAjudante ? 0.5 : 1);
-
-    var modNum = mat ? (parseInt(mat.mod, 10) || 0) : 0;
-    if (state.bmObra) modNum = Math.min(3, modNum + 1);
-    if (state.bmPressa) modNum -= 1;
-
-    return {
-      mat: mat, pdeUnit: pdeUnit, pdeLote: pdeLote, cheioBase: cheioBase, cheioTotal: cheioTotal,
-      proprioBase: proprioBase, proprio: proprio, modMun: modMun,
-      lucroPct: lucroPct, lucroValor: lucroValor, final: final,
-      discFactor: discFactor, duplo: duplo, divisor: divisor,
-      horasBase: horasBase, horas: horas, modNum: modNum
-    };
-  }
-
-  function calcBmPolvora() {
-    var p = polvoraBombaById(state.bmPolvId);
-    if (!p) return null;
-    var qtd = Math.max(1, Math.floor(num(state.bmPolvQtd, 1)));
-    var cheioTotal = p.preco * 2 * qtd;
-    var discFactor = state.bombaArtesao ? (1 - ARTESAO_DESCONTO / 100) : 1;
-    var duplo = !!state.bombaArtesao && state.artesaoModo !== 'simples';
-    var divisor = state.bombaForjador ? FORJADOR_DIVISOR : 1;
-    var proprio = state.bombaPossuidos ? 0 : (cheioTotal * discFactor * (duplo ? discFactor : 1)) / divisor;
-    var lucroPct = num(state.bombaLucro, 50);
-    var lucroValor = state.bombaModo === 'vendido' ? proprio * (lucroPct / 100) : 0;
-    var final = proprio + lucroValor;
-    var horas = 8 * qtd * (state.bombaForjador ? 2 / 3 : 1) * (state.bmPressa ? 0.5 : 1) * (state.bmAjudante ? 0.5 : 1);
-    return {
-      p: p, qtd: qtd, cheioTotal: cheioTotal, proprio: proprio,
-      lucroPct: lucroPct, lucroValor: lucroValor, final: final,
-      discFactor: discFactor, duplo: duplo, divisor: divisor, horas: horas
-    };
-  }
+  // Cálculos dos 3 modos (regras/bombas.js)
+  function calcBombas() { return bombaCalc(state); }
+  function calcBmMunicao() { return municaoCalc(state); }
+  function calcBmPolvora() { return polvoraCalc(state); }
 
   // Detalhes da bomba/munição/pólvora abaixo do formulário
   var ICON_NOTE = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 7h14M5 12h14M5 17h9"/></svg>';
@@ -559,7 +445,6 @@
     bombaInfoCard.appendChild(item);
   }
 
-  // Atualiza o painel de resultado da aba Bombas e Munições
   function updateBombas() {
     bombaArtesaoSub.textContent = '−20% em compras de itens não-mágicos';
     if (bombaArtesaoModoWrap) bombaArtesaoModoWrap.hidden = !state.bombaArtesao;
@@ -843,7 +728,7 @@
         id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
         oficina: 'bombas',
         subtipo: 'municao',
-        nome: baseNome + (cm.mat ? ' — ' + cm.mat.nome + ' (' + cm.mat.tier + ')' : ''),
+        nome: baseNome + (cm.mat ? ' de ' + cm.mat.nome + ' (' + cm.mat.tier + ')' : ''),
         mats: [],
         mods: [],
         valor: cm.final,
@@ -892,7 +777,6 @@
     };
   }
 
-  // Listeners
   bombaQtdInput.addEventListener('input', function () { state.bombaQtd = Math.max(1, Math.floor(num(bombaQtdInput.value, 1))); saveState(); update(); });
   bombaDesInput.addEventListener('input', function () { state.bombaDes = num(bombaDesInput.value, 0); saveState(); update(); });
   bombaBpInput.addEventListener('input', function () { state.bombaBp = Math.max(2, Math.floor(num(bombaBpInput.value, 2))); saveState(); update(); });

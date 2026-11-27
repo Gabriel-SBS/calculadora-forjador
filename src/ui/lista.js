@@ -8,19 +8,6 @@
   }
   function fmtMod(m) { return (m >= 0 ? '+' : '−') + Math.abs(m); }
 
-  function encodeJsonB64(obj) {
-    var json = JSON.stringify(obj);
-    var bytes = unescape(encodeURIComponent(json));
-    return btoa(bytes).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  }
-  function decodeJsonB64(str) {
-    try {
-      var b64 = str.replace(/-/g, '+').replace(/_/g, '/');
-      while (b64.length % 4) b64 += '=';
-      return JSON.parse(decodeURIComponent(escape(atob(b64))));
-    } catch (e) { return null; }
-  }
-
   function resumoAtual() {
     var snap = encodeShareState();
     if (state.oficina === 'bombas') {
@@ -68,7 +55,7 @@
   }
 
   function linhaTitulo(r) {
-    return r.nome + (r.excalibur ? ' [Excalibur]' : '') + (r.mats && r.mats.length ? ' — ' + r.mats.join(' + ') : '');
+    return r.nome + (r.excalibur ? ' [Excalibur]' : '') + (r.mats && r.mats.length ? ' de ' + r.mats.join(' + ') : '');
   }
 
   function textoResumo(r) {
@@ -288,7 +275,7 @@
         btnOpen.title = 'Recarregar este item na calculadora';
         btnOpen.addEventListener('click', function () {
           var parsed = decodeJsonB64(r.snap);
-          if (!parsed || typeof parsed !== 'object') return;
+          if (!linkDesteApp(parsed)) return;
           state = Object.assign(JSON.parse(JSON.stringify(DEFAULTS)), parsed);
           saveState();
           hydrateForm();
@@ -405,7 +392,7 @@
       var base = (window.location.protocol === 'http:' || window.location.protocol === 'https:')
         ? window.location.origin + window.location.pathname
         : SITE_URL;
-      var url = base + '?l=' + encodeJsonB64(lista);
+      var url = base + '?l=' + encodeJsonB64({ app: APP_ID, v: APP_LINK_V, itens: lista });
       copiarTexto(url).then(function () {
         morphBtn(listaShareBtnEl, ICON_CHECK + ' Link copiado');
         showToast('Link da lista copiado. Quem abrir recebe todos os itens.');
@@ -444,15 +431,17 @@
     });
   });
 
-  // Carrega lista compartilhada (?l=...) se houver na URL
   (function loadSharedLista() {
     var q = window.location.search || '';
     var m = q.match(/[?&]l=([A-Za-z0-9_-]+)/);
     if (!m) return;
     var parsed = decodeJsonB64(m[1]);
-    if (!Array.isArray(parsed) || !parsed.length) return;
+    // Links antigos mandavam a lista pura; os novos vêm com app e versão
+    var itens = Array.isArray(parsed) ? parsed : (linkDesteApp(parsed) && Array.isArray(parsed.itens) ? parsed.itens : null);
+    if (itens) itens = itens.filter(function (r) { return r && typeof r === 'object' && typeof r.nome === 'string'; });
+    if (!itens || !itens.length) return;
     var anterior = lista.slice();
-    lista = parsed;
+    lista = itens;
     salvarLista();
     try {
       if (window.history && window.history.replaceState) {

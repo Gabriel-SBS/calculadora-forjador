@@ -34,12 +34,6 @@
     herbalInfoBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
 
-  function herbalById(id) {
-    if (!id) return null;
-    for (var i = 0; i < HERBAL_DB.length; i++) if (HERBAL_DB[i].id === id) return HERBAL_DB[i];
-    return null;
-  }
-
   function renderRamosTable() {
     ramosGridEl.innerHTML = '';
     RAMOS_DB.forEach(function (r) {
@@ -68,39 +62,7 @@
   }
   renderRamosTable();
 
-  function calcHerbal() {
-    var h = herbalById(state.herbalId);
-    if (!h) return null;
-    var qtd = Math.max(1, Math.floor(num(state.herbalQtd, 1)));
-    var ramosUnit = h.ramos.reduce(function (s, rm) {
-      var pUnit = rm.precoUnit != null ? rm.precoUnit : (RAMOS_MAP[rm.id] ? RAMOS_MAP[rm.id].preco : 5);
-      return s + pUnit * rm.qtd;
-    }, 0);
-    var extraUnit = h.extraCusto || 0;
-    var custoRamosCheio = (ramosUnit + extraUnit) * qtd;
-    var precoLojaTotal = h.preco * qtd;
-    var disc = state.herbalArtesao ? (1 - ARTESAO_DESCONTO / 100) : 1;
-
-    var proprio = 0;
-    if (state.herbalOrigem === 'comprar-ramos') {
-      proprio = custoRamosCheio * disc;
-    } else if (state.herbalOrigem === 'forragear') {
-      proprio = extraUnit * qtd * disc;
-    } else {
-      proprio = precoLojaTotal * disc;
-    }
-    var lucroPct = num(state.herbalLucro, 50);
-    var baseVenda = proprio > 0 ? proprio : custoRamosCheio * disc;
-    var lucroValor = state.herbalModo === 'vendido' ? baseVenda * (lucroPct / 100) : 0;
-    var final = state.herbalModo === 'vendido' ? baseVenda + lucroValor : proprio;
-    var horas = state.herbalOrigem === 'comprar-pronto' ? 0 : qtd * (state.herbalAjudante ? 0.5 : 1);
-    return {
-      h: h, qtd: qtd, ramosUnit: ramosUnit, extraUnit: extraUnit,
-      custoRamosCheio: custoRamosCheio, precoLojaTotal: precoLojaTotal,
-      disc: disc, proprio: proprio, baseVenda: baseVenda, lucroPct: lucroPct, lucroValor: lucroValor,
-      final: final, horas: horas
-    };
-  }
+  function calcHerbal() { return herbalCalc(state); }
 
   var ICON_STAR = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3l2.7 5.5 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.9z"/></svg>';
   var lastHerbalVantKey = '';
