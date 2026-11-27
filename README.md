@@ -93,9 +93,11 @@ Exemplo com uma espada longa de aço (PDE 50 × 30 de Aço = 1.500 PO cheio, ÷ 
 O `build.py` junta tudo de `src/` no `index.html` único. O código fica em quatro pastas, e a ordem importa porque uma camada só usa o que vem antes dela:
 
 - `data/`: os catálogos do Guia (materiais, equipamentos, bombas, pólvoras, receitas e os 8 ramos, que ficam sozinhos em `ramos.js` para o Cozinheiro reaproveitar).
-- `core/`: o que não é regra de jogo. `util.js` tem busca sem acento, moedas e links; `combo.js` é o campo de busca com sugestões usado em todas as buscas.
-- `regras/`: as contas. Recebem o estado e devolvem números, sem tocar na tela.
+- `core/`: o que não é regra de jogo. `util.js` tem busca sem acento, moedas e links; `icones.js`, os ícones da interface; `combo.js`, o campo de busca com sugestões; `campo-moeda.js`, o campo de preço com seletor PO / PP / PC.
+- `regras/`: as contas. Recebem o estado e devolvem números, sem tocar na tela. `estado.js` guarda o estado padrão e o `APP_ID` usado nos links; `comum.js`, as regras que valem para mais de uma classe (o desconto do Artesão).
 - `ui/`: cada oficina lê o formulário, chama `regras/` e desenha o resultado.
+
+`core/`, `data/ramos.js`, `regras/comum.js`, `ui/controles.js` e `ui/tema.js` são compartilhados com a futura calculadora do Cozinheiro e não podem citar nada da Forja; um teste confere isso. O tema guarda a escolha na chave indicada em `data-tema-key`, no `<html>` do template.
 
 Os testes carregam `data/`, `core/util.js` e `regras/` e chamam as funções de verdade, então uma conta quebrada aparece no teste:
 
@@ -111,6 +113,9 @@ A calculadora não decide nada que o Guia deixa para o Mestre: o tempo de itens 
 Achou um número diferente do livro? Abra uma issue dizendo o item, os materiais e a página.
 
 ## O que mudou em cada versão
+
+### v6.2
+- Só organização, nada muda na tela nem nas contas: os arquivos que o Cozinheiro vai copiar deixaram de depender da Forja. `APP_ID` foi para `regras/estado.js`, os ícones para `core/icones.js`, o desconto do Artesão para `regras/comum.js`, e o `tema.js` lê a chave do tema no `<html>` e a cor da barra do navegador direto do CSS.
 
 ### v6.1
 - As moedas aparecem com sigla em maiúsculas: PO, PP e PC.
