@@ -6,7 +6,7 @@
     var raw = input.value, v = parseFloat(raw);
     var bad = raw !== '' && (!isFinite(v) || (isFinite(min) && v < min));
     input.setAttribute('aria-invalid', bad ? 'true' : 'false');
-    var group = input.parentElement && input.parentElement.classList.contains('field-group') ? input.parentElement : null;
+    var group = input.closest('.field-group');
     if (!group) { input.title = bad ? (min > 0 ? 'Use um número a partir de ' + min + '.' : 'O valor não pode ser negativo.') : ''; return; }
     var msg = group.querySelector('.field-error');
     if (bad && !msg) {

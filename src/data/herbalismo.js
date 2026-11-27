@@ -12,7 +12,7 @@
     },
     {
       id: 'cura_maior', categoria: 'Poções e Cura', nome: 'Poção Não Mágica de Cura Maior', preco: 250, rende: '1 poção',
-      ramos: [{ id: 'vermelho', qtd: 1 }, { id: 'azul', qtd: 1 }], extraText: '+ 1 Poção de Cura Menor (50 po)', extraCusto: 50,
+      ramos: [{ id: 'vermelho', qtd: 1 }, { id: 'azul', qtd: 1 }], extraText: '+ 1 Poção de Cura Menor (50 PO)', extraCusto: 50,
       efeito: 'Ao beber ou administrar em outra criatura, recupera 4d4 + 4 pontos de vida.'
     },
     {

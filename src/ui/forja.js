@@ -59,6 +59,8 @@
 
   // Elementos da tela
   var pdeInput = document.getElementById('pde');
+  var pdeMoedaSel = document.getElementById('pde-moeda-sel');
+  var pdeCampo = campoMoeda(pdeInput, pdeMoedaSel);
   var artesaoSwitch = document.getElementById('artesao-switch');
   var artesaoModoWrap = document.getElementById('artesao-modo-wrap');
   var artesaoModoBtns = Array.prototype.slice.call(document.querySelectorAll('#artesao-modo .seg-btn, #bomba-artesao-modo .seg-btn'));
@@ -77,6 +79,8 @@
   var fracaoWrap = document.getElementById('fracao-wrap');
   var magicoRaridadeSelect = document.getElementById('magico-raridade');
   var magicoCustoInput = document.getElementById('magico-custo');
+  var magicoCustoMoedaSel = document.getElementById('magico-custo-moeda');
+  var magicoCampo = campoMoeda(magicoCustoInput, magicoCustoMoedaSel);
   var magicoTempoInput = document.getElementById('magico-tempo');
   var peritoSwitch = document.getElementById('perito-switch');
   var especialistaSwitch = document.getElementById('especialista-switch');
@@ -840,12 +844,13 @@
     var t = RARIDADE_TABELA[state.magicoRaridade];
     var personalizado = !t;
     magicoCustoInput.disabled = !personalizado;
+    magicoCustoMoedaSel.disabled = !personalizado;
     magicoTempoInput.disabled = !personalizado;
     if (t) {
       state.magicoCustoBase = t.custo;
       state.magicoTempoBase = t.horas;
     }
-    magicoCustoInput.value = state.magicoCustoBase;
+    magicoCampo.mostrar(state.magicoCustoBase, state.magicoCustoMoeda);
     magicoTempoInput.value = state.magicoTempoBase;
   }
 
@@ -1028,10 +1033,11 @@
     if (state.oficina === 'herbalismo') { updateHerbalismo(); return; }
     if (kpiTimeLabelEl) kpiTimeLabelEl.textContent = 'Tempo do Forjador';
     var c = calculate();
-    // PDE fracionado sai em pp/pc
+    // Mostra a conversão quando o PDE está em PP/PC ou tem fração de PO
     var pdeNum = num(state.pde, 0);
-    pdeMoedaEl.hidden = !(pdeNum > 0 && Math.round(pdeNum * 100) % 100 !== 0);
-    pdeMoedaEl.textContent = fmt(pdeNum) + ' po = ' + fmtMoeda(pdeNum);
+    var pdeM = moedaValida(state.pdeMoeda);
+    pdeMoedaEl.hidden = !(pdeNum > 0 && (pdeM !== 'po' || Math.round(pdeNum * 100) % 100 !== 0));
+    pdeMoedaEl.textContent = fmt(dePo(pdeNum, pdeM)) + ' ' + pdeM.toUpperCase() + ' = ' + fmtMoeda(pdeNum);
     var vazio = emptyReason(c);
     resultCard.classList.toggle('is-empty', !!vazio);
     resultEmptyEl.hidden = !vazio;
@@ -1088,16 +1094,17 @@
     if (state.modo === 'vendido') {
       breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(c.lucro) + '%)', '+' + fmtMoeda(c.lucroValor)));
     }
+    if (c.subiuPara1pc) breakdownEl.appendChild(bRow('Menor valor possível (não existe moeda abaixo de 1 PC)', '1 PC'));
     breakdownEl.appendChild(bRow(c.conserto ? 'Custo do conserto' : state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(c.final), true));
 
     if (consertoNoteEl && c.conserto) {
       consertoNoteEl.textContent = c.consertoVivo
-        ? 'Material vivo quebrado não se conserta com po: exige magia de ressurreição, sem gasto em ouro (p. 173).'
+        ? 'Material vivo quebrado não se conserta com PO: exige magia de ressurreição, sem gasto em ouro (p. 173).'
         : 'Um item quebrado (penalidade −5) custa metade do valor do item novo para consertar (p. 173). Reparar +1 de durabilidade antes de quebrar é grátis em um Descanso Curto com ferramentas.';
     }
 
     var formulaStr = c.consertoVivo
-      ? 'material vivo quebrado: magia de ressurreição (0 po, p. 173)'
+      ? 'material vivo quebrado: magia de ressurreição (0 PO, p. 173)'
       : c.possuidos
       ? 'materiais em posse, grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
       : c.conserto
@@ -1310,7 +1317,7 @@
       onPick: function (e) {
         state.equipNome = e.nome;
         state.pde = e.pde;
-        pdeInput.value = e.pde;
+        pdeCampo.mostrar(e.pde, state.pdeMoeda);
         setTipo(e.tipo);
         setPeso(e.peso);
         showEquipInfo();
@@ -1382,7 +1389,7 @@
       name.textContent = m[0];
       var cost = document.createElement('span');
       cost.className = 'mod-cost';
-      cost.textContent = (m[1] > 0 ? '+' : m[1] < 0 ? '−' : '') + Math.abs(m[1]) + ' po';
+      cost.textContent = (m[1] > 0 ? '+' : m[1] < 0 ? '−' : '') + Math.abs(m[1]) + ' PO';
       var desc = document.createElement('span');
       desc.className = 'mod-desc';
       desc.textContent = m[2] + ': ' + m[3];
@@ -1412,7 +1419,7 @@
     var n = state.mods.length;
     var s = modsSum();
     modsTotal.textContent = n
-      ? n + (n === 1 ? ' escolhida · ' : ' escolhidas · ') + (s >= 0 ? '+' : '−') + Math.abs(s) + ' po no valor-base'
+      ? n + (n === 1 ? ' escolhida · ' : ' escolhidas · ') + (s >= 0 ? '+' : '−') + Math.abs(s) + ' PO no valor-base'
       : '';
   }
 
@@ -1553,7 +1560,7 @@
 
   // Eventos dos campos fixos
   pdeInput.addEventListener('input', function () {
-    state.pde = pdeInput.value;
+    state.pde = pdeCampo.lerPo();
     state.equipNome = '';
     equipInfo.hidden = true;
     saveState();
@@ -1593,8 +1600,19 @@
     saveState();
     updateMagicos();
   });
+  pdeMoedaSel.addEventListener('change', function () {
+    state.pdeMoeda = moedaValida(pdeMoedaSel.value);
+    pdeCampo.mostrar(state.pde, state.pdeMoeda);
+    saveState();
+    update();
+  });
+  magicoCustoMoedaSel.addEventListener('change', function () {
+    state.magicoCustoMoeda = moedaValida(magicoCustoMoedaSel.value);
+    magicoCampo.mostrar(state.magicoCustoBase, state.magicoCustoMoeda);
+    saveState();
+  });
   magicoCustoInput.addEventListener('input', function () {
-    state.magicoCustoBase = magicoCustoInput.value;
+    state.magicoCustoBase = magicoCampo.lerPo();
     saveState();
     updateMagicos();
   });

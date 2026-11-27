@@ -137,6 +137,8 @@
       lucroValor = proprio * (lucro / 100);
       final = proprio + lucroValor;
     }
+    var subiuPara1pc = minimoPc(final) !== final;
+    final = minimoPc(final);
 
     return {
       pde: pde, sumMat: sumMat, desconto: desconto, divisor: divisor, lucro: lucro,
@@ -144,7 +146,7 @@
       cheio: cheio, cheioPadrao: cheioPadrao, usaFracaoFixa: usaFracaoFixa,
       lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota,
       duplo: duplo, modMun: modMun, proprioItem: proprioItem, conserto: conserto,
-      consertoCheio: consertoCheio, consertoVivo: consertoVivo
+      consertoCheio: consertoCheio, consertoVivo: consertoVivo, subiuPara1pc: subiuPara1pc
     };
   }
 
@@ -273,7 +275,7 @@
     var proprio = s.materiaisPossuidos ? 0 : (cheio * disc * (duplo ? disc : 1)) / FORJADOR_DIVISOR;
     if (conserto && !s.materiaisPossuidos) proprio /= 2;
     var lucroPct = Math.max(0, num(s.lucro, 0));
-    var final = s.modo === 'vendido' ? proprio * (1 + lucroPct / 100) : proprio;
+    var final = minimoPc(s.modo === 'vendido' ? proprio * (1 + lucroPct / 100) : proprio);
 
     var baseHoras = TIER_HOURS[mat.tier] || 24;
     var pesoEfetivo = mat.forcaPesado ? 'pesado' : s.peso;

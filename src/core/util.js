@@ -23,20 +23,39 @@
     if (po) partes.push([po.toLocaleString('pt-BR'), 'po']);
     if (pp) partes.push([String(pp), 'pp']);
     if (pc) partes.push([String(pc), 'pc']);
+    // Menos de 1 PC não vira zero: um item de osso de 1 PC sai a 0,32 PC
+    if (!partes.length && isFinite(n) && n !== 0) {
+      partes.push([(Math.abs(n) * 100).toLocaleString('pt-BR', { maximumSignificantDigits: 2 }), 'pc']);
+      return { neg: n < 0, partes: partes };
+    }
     if (!partes.length) partes.push(['0', 'po']);
     return { neg: n < 0 && c > 0, partes: partes };
   }
+  // Na tela as siglas vão em maiúsculas (PO, PP, PC); a chave interna continua minúscula
   function fmtMoeda(n) {
     var m = moedas(n);
-    return (m.neg ? '−' : '') + m.partes.map(function (p) { return p[0] + ' ' + p[1]; }).join(' ');
+    return (m.neg ? '−' : '') + m.partes.map(function (p) { return p[0] + ' ' + p[1].toUpperCase(); }).join(' ');
   }
   // Destaca a moeda principal e diminui o resto
   function htmlMoeda(n) {
     var m = moedas(n);
     return m.partes.map(function (p, i) {
-      return '<span class="coin' + (i ? ' coin-sm' : '') + '" data-coin="' + p[1] + '"><span class="coin-n">' + (i === 0 && m.neg ? '−' : '') + p[0] + '</span><span class="unit">' + p[1] + '</span></span>';
+      return '<span class="coin' + (i ? ' coin-sm' : '') + '" data-coin="' + p[1] + '"><span class="coin-n">' + (i === 0 && m.neg ? '−' : '') + p[0] + '</span><span class="unit">' + p[1].toUpperCase() + '</span></span>';
     }).join('');
   }
+
+  // Não existe moeda menor que 1 PC: custo acima de zero e abaixo disso vira 1 PC
+  var MENOR_VALOR_PO = 0.01;
+  function minimoPc(v) { return v > 0 && v < MENOR_VALOR_PO ? MENOR_VALOR_PO : v; }
+
+  // Campos de preço aceitam PO, PP ou PC; a conta e o estado ficam sempre em PO
+  var MOEDA_POR_PO = { po: 1, pp: 10, pc: 100 };
+  var MOEDA_PASSO = { po: '0.01', pp: '0.1', pc: '1' };
+
+  function moedaValida(m) { return MOEDA_POR_PO[m] ? m : 'po'; }
+  // O arredondamento só tira o ruído do ponto flutuante (0,07 × 100 = 7,000000000000001)
+  function paraPo(valor, moeda) { return Math.round(valor / MOEDA_POR_PO[moedaValida(moeda)] * 1e8) / 1e8; }
+  function dePo(po, moeda) { return Math.round(po * MOEDA_POR_PO[moedaValida(moeda)] * 1e8) / 1e8; }
 
   function fmtKg(kg) {
     if (kg == null || !isFinite(kg)) return '';

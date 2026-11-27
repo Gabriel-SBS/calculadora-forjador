@@ -480,6 +480,24 @@
   input[type="number"] { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
   input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
   input[aria-invalid="true"] { border-color: var(--danger); }
+
+  /* Campo de preço + seletor PO/PP/PC grudados num controle só */
+  .input-moeda { display: flex; }
+  .input-moeda input { flex: 1; min-width: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+  .input-moeda .moeda-sel {
+    flex: none;
+    width: auto;
+    min-width: 4.6em;
+    margin-left: -1px;
+    padding: 0 var(--sp-2);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    font-weight: 700;
+    letter-spacing: .03em;
+    color: var(--text-dim);
+    cursor: pointer;
+  }
+  .input-moeda input:focus-visible, .input-moeda .moeda-sel:focus-visible { position: relative; z-index: 1; }
   input[aria-invalid="true"]:focus-visible { outline-color: var(--danger); }
   .label-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px var(--sp-2); }
   .btn-info {
@@ -1986,8 +2004,11 @@
       </div>
 
       <div class="field-group">
-        <label for="pde" id="pde-label">PDE (preço base em po)</label>
-        <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" aria-describedby="pde-moeda" />
+        <label for="pde" id="pde-label">PDE (preço base)</label>
+        <div class="input-moeda">
+          <input id="pde" type="number" min="0" step="0.01" inputmode="decimal" aria-describedby="pde-moeda" />
+          <select id="pde-moeda-sel" class="moeda-sel" aria-label="Moeda do PDE"><option value="po">PO</option><option value="pp">PP</option><option value="pc">PC</option></select>
+        </div>
         <p class="field-hint" id="pde-moeda" hidden></p>
       </div>
 
@@ -2317,8 +2338,11 @@
             <select id="bm-mun-select"></select>
           </div>
           <div class="field-group">
-            <label for="bm-mun-pde">PDE de 1 munição (po)</label>
-            <input id="bm-mun-pde" type="number" min="0" step="0.01" value="0.05" inputmode="decimal" />
+            <label for="bm-mun-pde">PDE de 1 munição</label>
+            <div class="input-moeda">
+              <input id="bm-mun-pde" type="number" min="0" step="0.01" value="0.05" inputmode="decimal" />
+              <select id="bm-mun-pde-moeda" class="moeda-sel" aria-label="Moeda do PDE da munição"><option value="po">PO</option><option value="pp">PP</option><option value="pc">PC</option></select>
+            </div>
           </div>
         </div>
         <p class="equip-info" id="bm-mun-info">Custo de 4 unidades · rende 2d4 munições (p. 171)</p>
@@ -2447,7 +2471,7 @@
           <div class="toggle-row">
             <div class="toggle-label">
               <span class="t-name">Já possui os ingredientes / materiais</span>
-              <span class="t-sub">Custo 0 po (usa componentes já no inventário)</span>
+              <span class="t-sub">Custo 0 PO (usa componentes já no inventário)</span>
             </div>
             <button type="button" class="switch" id="bomba-possuidos-switch" role="switch" aria-checked="false" aria-label="Já possui os ingredientes">
               <span class="knob"></span>
@@ -2818,8 +2842,11 @@
         </div>
         <div class="mg-grid">
           <div class="field-group">
-            <label for="magico-custo">Custo do encantamento (po)</label>
-            <input id="magico-custo" type="number" min="0" step="0.01" inputmode="decimal" />
+            <label for="magico-custo">Custo do encantamento</label>
+            <div class="input-moeda">
+              <input id="magico-custo" type="number" min="0" step="0.01" inputmode="decimal" />
+              <select id="magico-custo-moeda" class="moeda-sel" aria-label="Moeda do custo do encantamento"><option value="po">PO</option><option value="pp">PP</option><option value="pc">PC</option></select>
+            </div>
           </div>
           <div class="field-group">
             <label for="magico-tempo">Tempo do encantamento (horas)</label>
@@ -2915,7 +2942,7 @@
     <span class="cb-label" id="cb-label">Custo para forjar</span>
     <span class="cb-time" id="cb-time"></span>
   </span>
-  <span class="cb-value" id="cb-value">0 po</span>
+  <span class="cb-value" id="cb-value">0 PO</span>
 </button>
 <p class="sr-only" id="live-result" aria-live="polite"></p>
 <div class="toast" id="toast" role="status" hidden>
@@ -3185,15 +3212,15 @@
     ['Câmara Expandida', 25, 'Armas com Ignição', '+1d10 de dano, +3 no valor de Emperrado, empurra usuário Pequeno 1,5 m.'],
     ['Suporte para Baioneta', 10, 'Armas com Munição ou focos', 'Acopla uma arma Sutil para ataques corpo a corpo.'],
     ['Prótese', 5, 'Item que não seja de duas mãos', 'Acopla o item a um membro faltante; não pode ser desarmado.'],
-    ['Amálgama', 5, 'Itens aprovados pelo Mestre (5 po em cada)', 'Une dois itens num híbrido; alterna a forma com ação livre.'],
-    ['Desacoplamento', 5, 'Armas Duplo ou com Amálgama (5 po em cada)', 'Separa o item “dois em um” com ação livre.'],
-    ['Arma Gêmea', 5, 'Armas corpo a corpo leves (5 po em cada)', 'Junta duas armas leves numa arma Duas Mãos e Dupla.'],
+    ['Amálgama', 5, 'Itens aprovados pelo Mestre (5 PO em cada)', 'Une dois itens num híbrido; alterna a forma com ação livre.'],
+    ['Desacoplamento', 5, 'Armas Duplo ou com Amálgama (5 PO em cada)', 'Separa o item “dois em um” com ação livre.'],
+    ['Arma Gêmea', 5, 'Armas corpo a corpo leves (5 PO em cada)', 'Junta duas armas leves numa arma Duas Mãos e Dupla.'],
     ['Usuário Preferido', 10, 'Qualquer item', 'Quem não conhece o segredo usa sem proficiência.'],
-    ['Suporte para Carregador', 10, 'Bestas', 'Aceita carregador (5 po, 10 munições) e ignora Recarga.'],
+    ['Suporte para Carregador', 10, 'Bestas', 'Aceita carregador (5 PO, 10 munições) e ignora Recarga.'],
     ['Compartimento Secreto', 5, 'Item grande o bastante', 'Guarda um item pequeno; pegar é ação livre.'],
     ['Coronha Reforçada', 10, 'Armas com Ignição ou Recarga', 'Ignora o empurrão do próprio disparo.'],
     ['Ferramenta Integrada', 5, 'Qualquer arma corpo a corpo', 'A arma também funciona como uma ferramenta escolhida.'],
-    ['Remoção de Maestria (−30 po)', -30, 'Item com Maestria', 'Perde a Maestria e o valor-base cai 30 po (mínimo 1 po).'],
+    ['Remoção de Maestria (−30 PO)', -30, 'Item com Maestria', 'Perde a Maestria e o valor-base cai 30 PO (mínimo 1 PO).'],
     ['Remoção de Maestria (+dano)', 0, 'Item com Maestria', 'Perde a Maestria e o dado de dano sobe um passo.'],
     ['Maestria Adicional', 35, 'Qualquer arma ou escudo', 'Ganha uma segunda Maestria (máximo de duas).'],
     ['Maestria Reconfigurada', 5, 'Arma ou escudo com Maestria', 'Troca a Maestria por outra.'],
@@ -3381,7 +3408,7 @@
     },
     {
       id: 'cura_maior', categoria: 'Poções e Cura', nome: 'Poção Não Mágica de Cura Maior', preco: 250, rende: '1 poção',
-      ramos: [{ id: 'vermelho', qtd: 1 }, { id: 'azul', qtd: 1 }], extraText: '+ 1 Poção de Cura Menor (50 po)', extraCusto: 50,
+      ramos: [{ id: 'vermelho', qtd: 1 }, { id: 'azul', qtd: 1 }], extraText: '+ 1 Poção de Cura Menor (50 PO)', extraCusto: 50,
       efeito: 'Ao beber ou administrar em outra criatura, recupera 4d4 + 4 pontos de vida.'
     },
     {
@@ -3510,20 +3537,39 @@
     if (po) partes.push([po.toLocaleString('pt-BR'), 'po']);
     if (pp) partes.push([String(pp), 'pp']);
     if (pc) partes.push([String(pc), 'pc']);
+    // Menos de 1 PC não vira zero: um item de osso de 1 PC sai a 0,32 PC
+    if (!partes.length && isFinite(n) && n !== 0) {
+      partes.push([(Math.abs(n) * 100).toLocaleString('pt-BR', { maximumSignificantDigits: 2 }), 'pc']);
+      return { neg: n < 0, partes: partes };
+    }
     if (!partes.length) partes.push(['0', 'po']);
     return { neg: n < 0 && c > 0, partes: partes };
   }
+  // Na tela as siglas vão em maiúsculas (PO, PP, PC); a chave interna continua minúscula
   function fmtMoeda(n) {
     var m = moedas(n);
-    return (m.neg ? '−' : '') + m.partes.map(function (p) { return p[0] + ' ' + p[1]; }).join(' ');
+    return (m.neg ? '−' : '') + m.partes.map(function (p) { return p[0] + ' ' + p[1].toUpperCase(); }).join(' ');
   }
   // Destaca a moeda principal e diminui o resto
   function htmlMoeda(n) {
     var m = moedas(n);
     return m.partes.map(function (p, i) {
-      return '<span class="coin' + (i ? ' coin-sm' : '') + '" data-coin="' + p[1] + '"><span class="coin-n">' + (i === 0 && m.neg ? '−' : '') + p[0] + '</span><span class="unit">' + p[1] + '</span></span>';
+      return '<span class="coin' + (i ? ' coin-sm' : '') + '" data-coin="' + p[1] + '"><span class="coin-n">' + (i === 0 && m.neg ? '−' : '') + p[0] + '</span><span class="unit">' + p[1].toUpperCase() + '</span></span>';
     }).join('');
   }
+
+  // Não existe moeda menor que 1 PC: custo acima de zero e abaixo disso vira 1 PC
+  var MENOR_VALOR_PO = 0.01;
+  function minimoPc(v) { return v > 0 && v < MENOR_VALOR_PO ? MENOR_VALOR_PO : v; }
+
+  // Campos de preço aceitam PO, PP ou PC; a conta e o estado ficam sempre em PO
+  var MOEDA_POR_PO = { po: 1, pp: 10, pc: 100 };
+  var MOEDA_PASSO = { po: '0.01', pp: '0.1', pc: '1' };
+
+  function moedaValida(m) { return MOEDA_POR_PO[m] ? m : 'po'; }
+  // O arredondamento só tira o ruído do ponto flutuante (0,07 × 100 = 7,000000000000001)
+  function paraPo(valor, moeda) { return Math.round(valor / MOEDA_POR_PO[moedaValida(moeda)] * 1e8) / 1e8; }
+  function dePo(po, moeda) { return Math.round(po * MOEDA_POR_PO[moedaValida(moeda)] * 1e8) / 1e8; }
 
   function fmtKg(kg) {
     if (kg == null || !isFinite(kg)) return '';
@@ -3560,6 +3606,7 @@
   var DEFAULTS = {
     oficina: 'forja',
     pde: '',
+    pdeMoeda: 'po',
     materials: [
       { materialId: '', name: '', mult: '', tier: '' }
     ],
@@ -3582,6 +3629,7 @@
     lucro: 30,
     magicoRaridade: 'comum',
     magicoCustoBase: '',
+    magicoCustoMoeda: 'po',
     magicoTempoBase: '',
     encantarExistente: false,
     desencantado: false,
@@ -3609,6 +3657,7 @@
     bombaLucro: 50,
     bmMunId: '',
     bmMunPde: '',
+    bmMunPdeMoeda: 'po',
     bmMunMatId: '',
     bmMunMod: -1,
     bmMunModQtd: 5,
@@ -3770,6 +3819,8 @@
       lucroValor = proprio * (lucro / 100);
       final = proprio + lucroValor;
     }
+    var subiuPara1pc = minimoPc(final) !== final;
+    final = minimoPc(final);
 
     return {
       pde: pde, sumMat: sumMat, desconto: desconto, divisor: divisor, lucro: lucro,
@@ -3777,7 +3828,7 @@
       cheio: cheio, cheioPadrao: cheioPadrao, usaFracaoFixa: usaFracaoFixa,
       lucroValor: lucroValor, final: final, possuidos: possuidos, baseNota: base.nota,
       duplo: duplo, modMun: modMun, proprioItem: proprioItem, conserto: conserto,
-      consertoCheio: consertoCheio, consertoVivo: consertoVivo
+      consertoCheio: consertoCheio, consertoVivo: consertoVivo, subiuPara1pc: subiuPara1pc
     };
   }
 
@@ -3906,7 +3957,7 @@
     var proprio = s.materiaisPossuidos ? 0 : (cheio * disc * (duplo ? disc : 1)) / FORJADOR_DIVISOR;
     if (conserto && !s.materiaisPossuidos) proprio /= 2;
     var lucroPct = Math.max(0, num(s.lucro, 0));
-    var final = s.modo === 'vendido' ? proprio * (1 + lucroPct / 100) : proprio;
+    var final = minimoPc(s.modo === 'vendido' ? proprio * (1 + lucroPct / 100) : proprio);
 
     var baseHoras = TIER_HOURS[mat.tier] || 24;
     var pesoEfetivo = mat.forcaPesado ? 'pesado' : s.peso;
@@ -3943,7 +3994,8 @@
   function bmVenda(s, proprio) {
     var lucroPct = Math.max(0, num(s.bombaLucro, 50));
     var lucroValor = s.bombaModo === 'vendido' ? proprio * (lucroPct / 100) : 0;
-    return { lucroPct: lucroPct, lucroValor: lucroValor, final: proprio + lucroValor };
+    var final = proprio + lucroValor;
+    return { lucroPct: lucroPct, lucroValor: lucroValor, final: minimoPc(final), subiuPara1pc: minimoPc(final) !== final };
   }
 
   function bombaCalc(s) {
@@ -3973,7 +4025,7 @@
     return {
       b: b, p: p, isBombinha: isBombinha, qtd: qtd,
       cargasEfetivas: cargasEfetivas, extraPolvoraUnit: extraPolvoraUnit, polvoraBloqueada: polvoraBloqueada,
-      cheioTotal: cheioTotal, proprio: proprio, lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final,
+      cheioTotal: cheioTotal, proprio: proprio, lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final, subiuPara1pc: v.subiuPara1pc,
       discFactor: d.discFactor, duplo: d.duplo, divisor: d.divisor, cdDetonacao: cdDetonacao
     };
   }
@@ -4015,7 +4067,7 @@
     return {
       mat: mat, pdeUnit: pdeUnit, pdeLote: pdeLote, cheioBase: cheioBase, cheioTotal: cheioTotal,
       proprioBase: proprioBase, proprio: proprio, modMun: modMun,
-      lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final,
+      lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final, subiuPara1pc: v.subiuPara1pc,
       discFactor: d.discFactor, duplo: d.duplo, divisor: d.divisor,
       horasBase: horasBase, horas: horas, modNum: modNum
     };
@@ -4033,7 +4085,7 @@
     var horas = 8 * qtd * (s.bombaForjador ? 2 / 3 : 1) * (s.bmPressa ? 0.5 : 1) * (s.bmAjudante ? 0.5 : 1);
     return {
       p: p, qtd: qtd, cheioTotal: cheioTotal, proprio: proprio,
-      lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final,
+      lucroPct: v.lucroPct, lucroValor: v.lucroValor, final: v.final, subiuPara1pc: v.subiuPara1pc,
       discFactor: d.discFactor, duplo: d.duplo, divisor: d.divisor, horas: horas
     };
   }
@@ -4073,7 +4125,7 @@
       h: h, qtd: qtd, ramosUnit: ramosUnit, extraUnit: extraUnit,
       custoRamosCheio: custoRamosCheio, precoLojaTotal: precoLojaTotal,
       disc: disc, proprio: proprio, baseVenda: baseVenda, lucroPct: lucroPct, lucroValor: lucroValor,
-      final: final, horas: horas
+      final: minimoPc(final), subiuPara1pc: minimoPc(final) !== final, horas: horas
     };
   }
   function attachComboClear(wrap, input, onClear) {
@@ -4296,6 +4348,23 @@
     wrap._close = close;
     return wrap;
   }
+  // Campo de preço com seletor PO/PP/PC ao lado. O estado guarda sempre PO;
+  // o campo mostra o valor na moeda escolhida (5 PC aparece como 5, não 0,05).
+  function campoMoeda(input, select) {
+    return {
+      lerPo: function () {
+        if (input.value === '') return '';
+        var m = moedaValida(select.value);
+        return m === 'po' ? input.value : String(paraPo(num(input.value, 0), m));
+      },
+      mostrar: function (po, moeda) {
+        var m = moedaValida(moeda);
+        select.value = m;
+        input.step = MOEDA_PASSO[m];
+        input.value = (po === '' || po == null) ? '' : dePo(num(po, 0), m);
+      }
+    };
+  }
 
   var state = null;
 
@@ -4357,6 +4426,8 @@
 
   // Elementos da tela
   var pdeInput = document.getElementById('pde');
+  var pdeMoedaSel = document.getElementById('pde-moeda-sel');
+  var pdeCampo = campoMoeda(pdeInput, pdeMoedaSel);
   var artesaoSwitch = document.getElementById('artesao-switch');
   var artesaoModoWrap = document.getElementById('artesao-modo-wrap');
   var artesaoModoBtns = Array.prototype.slice.call(document.querySelectorAll('#artesao-modo .seg-btn, #bomba-artesao-modo .seg-btn'));
@@ -4375,6 +4446,8 @@
   var fracaoWrap = document.getElementById('fracao-wrap');
   var magicoRaridadeSelect = document.getElementById('magico-raridade');
   var magicoCustoInput = document.getElementById('magico-custo');
+  var magicoCustoMoedaSel = document.getElementById('magico-custo-moeda');
+  var magicoCampo = campoMoeda(magicoCustoInput, magicoCustoMoedaSel);
   var magicoTempoInput = document.getElementById('magico-tempo');
   var peritoSwitch = document.getElementById('perito-switch');
   var especialistaSwitch = document.getElementById('especialista-switch');
@@ -5138,12 +5211,13 @@
     var t = RARIDADE_TABELA[state.magicoRaridade];
     var personalizado = !t;
     magicoCustoInput.disabled = !personalizado;
+    magicoCustoMoedaSel.disabled = !personalizado;
     magicoTempoInput.disabled = !personalizado;
     if (t) {
       state.magicoCustoBase = t.custo;
       state.magicoTempoBase = t.horas;
     }
-    magicoCustoInput.value = state.magicoCustoBase;
+    magicoCampo.mostrar(state.magicoCustoBase, state.magicoCustoMoeda);
     magicoTempoInput.value = state.magicoTempoBase;
   }
 
@@ -5326,10 +5400,11 @@
     if (state.oficina === 'herbalismo') { updateHerbalismo(); return; }
     if (kpiTimeLabelEl) kpiTimeLabelEl.textContent = 'Tempo do Forjador';
     var c = calculate();
-    // PDE fracionado sai em pp/pc
+    // Mostra a conversão quando o PDE está em PP/PC ou tem fração de PO
     var pdeNum = num(state.pde, 0);
-    pdeMoedaEl.hidden = !(pdeNum > 0 && Math.round(pdeNum * 100) % 100 !== 0);
-    pdeMoedaEl.textContent = fmt(pdeNum) + ' po = ' + fmtMoeda(pdeNum);
+    var pdeM = moedaValida(state.pdeMoeda);
+    pdeMoedaEl.hidden = !(pdeNum > 0 && (pdeM !== 'po' || Math.round(pdeNum * 100) % 100 !== 0));
+    pdeMoedaEl.textContent = fmt(dePo(pdeNum, pdeM)) + ' ' + pdeM.toUpperCase() + ' = ' + fmtMoeda(pdeNum);
     var vazio = emptyReason(c);
     resultCard.classList.toggle('is-empty', !!vazio);
     resultEmptyEl.hidden = !vazio;
@@ -5386,16 +5461,17 @@
     if (state.modo === 'vendido') {
       breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(c.lucro) + '%)', '+' + fmtMoeda(c.lucroValor)));
     }
+    if (c.subiuPara1pc) breakdownEl.appendChild(bRow('Menor valor possível (não existe moeda abaixo de 1 PC)', '1 PC'));
     breakdownEl.appendChild(bRow(c.conserto ? 'Custo do conserto' : state.modo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(c.final), true));
 
     if (consertoNoteEl && c.conserto) {
       consertoNoteEl.textContent = c.consertoVivo
-        ? 'Material vivo quebrado não se conserta com po: exige magia de ressurreição, sem gasto em ouro (p. 173).'
+        ? 'Material vivo quebrado não se conserta com PO: exige magia de ressurreição, sem gasto em ouro (p. 173).'
         : 'Um item quebrado (penalidade −5) custa metade do valor do item novo para consertar (p. 173). Reparar +1 de durabilidade antes de quebrar é grátis em um Descanso Curto com ferramentas.';
     }
 
     var formulaStr = c.consertoVivo
-      ? 'material vivo quebrado: magia de ressurreição (0 po, p. 173)'
+      ? 'material vivo quebrado: magia de ressurreição (0 PO, p. 173)'
       : c.possuidos
       ? 'materiais em posse, grátis (Trabalhador Itinerante)' + (state.modo === 'vendido' ? ' + lucro' : '')
       : c.conserto
@@ -5608,7 +5684,7 @@
       onPick: function (e) {
         state.equipNome = e.nome;
         state.pde = e.pde;
-        pdeInput.value = e.pde;
+        pdeCampo.mostrar(e.pde, state.pdeMoeda);
         setTipo(e.tipo);
         setPeso(e.peso);
         showEquipInfo();
@@ -5680,7 +5756,7 @@
       name.textContent = m[0];
       var cost = document.createElement('span');
       cost.className = 'mod-cost';
-      cost.textContent = (m[1] > 0 ? '+' : m[1] < 0 ? '−' : '') + Math.abs(m[1]) + ' po';
+      cost.textContent = (m[1] > 0 ? '+' : m[1] < 0 ? '−' : '') + Math.abs(m[1]) + ' PO';
       var desc = document.createElement('span');
       desc.className = 'mod-desc';
       desc.textContent = m[2] + ': ' + m[3];
@@ -5710,7 +5786,7 @@
     var n = state.mods.length;
     var s = modsSum();
     modsTotal.textContent = n
-      ? n + (n === 1 ? ' escolhida · ' : ' escolhidas · ') + (s >= 0 ? '+' : '−') + Math.abs(s) + ' po no valor-base'
+      ? n + (n === 1 ? ' escolhida · ' : ' escolhidas · ') + (s >= 0 ? '+' : '−') + Math.abs(s) + ' PO no valor-base'
       : '';
   }
 
@@ -5851,7 +5927,7 @@
 
   // Eventos dos campos fixos
   pdeInput.addEventListener('input', function () {
-    state.pde = pdeInput.value;
+    state.pde = pdeCampo.lerPo();
     state.equipNome = '';
     equipInfo.hidden = true;
     saveState();
@@ -5891,8 +5967,19 @@
     saveState();
     updateMagicos();
   });
+  pdeMoedaSel.addEventListener('change', function () {
+    state.pdeMoeda = moedaValida(pdeMoedaSel.value);
+    pdeCampo.mostrar(state.pde, state.pdeMoeda);
+    saveState();
+    update();
+  });
+  magicoCustoMoedaSel.addEventListener('change', function () {
+    state.magicoCustoMoeda = moedaValida(magicoCustoMoedaSel.value);
+    magicoCampo.mostrar(state.magicoCustoBase, state.magicoCustoMoeda);
+    saveState();
+  });
   magicoCustoInput.addEventListener('input', function () {
-    state.magicoCustoBase = magicoCustoInput.value;
+    state.magicoCustoBase = magicoCampo.lerPo();
     saveState();
     updateMagicos();
   });
@@ -6723,6 +6810,8 @@
   // Controles de Munição
   var bmMunSelect = document.getElementById('bm-mun-select');
   var bmMunPdeInput = document.getElementById('bm-mun-pde');
+  var bmMunPdeMoedaSel = document.getElementById('bm-mun-pde-moeda');
+  var bmMunCampo = campoMoeda(bmMunPdeInput, bmMunPdeMoedaSel);
   var bmMunInfo = document.getElementById('bm-mun-info');
   var bmMunMatWrap = document.getElementById('bm-mun-mat-wrap');
   var bmAmmoModsList = document.getElementById('bm-ammo-mods-list');
@@ -7229,6 +7318,7 @@
         breakdownEl.appendChild(bRow(cm.modMun.nome + ' (' + cm.modMun.qtd + ' un., ' + porTxt + ')', state.bombaPossuidos ? 'grátis' : '+' + fmtMoeda(cm.modMun.pago)));
       }
       if (state.bombaModo === 'vendido') breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(cm.lucroPct) + '%)', '+' + fmtMoeda(cm.lucroValor)));
+      if (cm.subiuPara1pc) breakdownEl.appendChild(bRow('Menor valor possível (não existe moeda abaixo de 1 PC)', '1 PC'));
       breakdownEl.appendChild(bRow(state.bombaModo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(cm.final), true));
 
       formulaNote.textContent = 'Munições (p. 160 e 171) · 4 unidades × material → rende 2d4 · modificações fora do multiplicador';
@@ -7288,6 +7378,7 @@
         if (state.bombaForjador) breakdownEl.appendChild(bRow('Trabalhador Itinerante', '÷ 2'));
       }
       if (state.bombaModo === 'vendido') breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(cp.lucroPct) + '%)', '+' + fmtMoeda(cp.lucroValor)));
+      if (cp.subiuPara1pc) breakdownEl.appendChild(bRow('Menor valor possível (não existe moeda abaixo de 1 PC)', '1 PC'));
       breakdownEl.appendChild(bRow(state.bombaModo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(cp.final), true));
 
       formulaNote.textContent = 'Pólvoras (p. 160 e 171) · preço de 2 unidades → rende 1d4 · 8h base por lote';
@@ -7371,6 +7462,7 @@
     if (state.bombaModo === 'vendido') {
       breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(cb.lucroPct) + '%)', '+' + fmtMoeda(cb.lucroValor)));
     }
+    if (cb.subiuPara1pc) breakdownEl.appendChild(bRow('Menor valor possível (não existe moeda abaixo de 1 PC)', '1 PC'));
     breakdownEl.appendChild(bRow(state.bombaModo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(cb.final), true));
 
     formulaNote.textContent = 'Bombas (p. 216–220) · CD = 8 + DES' + (state.bombaMestre ? ' + BP (Mestre das Bombas)' : '') + ' · 1 bomba = 2d4 bombinhas';
@@ -7465,10 +7557,15 @@
   bmMunSelect.addEventListener('change', function () {
     state.bmMunId = bmMunSelect.value;
     var found = MUNICOES_LIST.filter(function (m) { return m.nome === state.bmMunId; })[0];
-    if (found) { state.bmMunPde = found.pde; bmMunPdeInput.value = found.pde; }
+    if (found) { state.bmMunPde = found.pde; bmMunCampo.mostrar(found.pde, state.bmMunPdeMoeda); }
     saveState(); update();
   });
-  bmMunPdeInput.addEventListener('input', function () { state.bmMunPde = Math.max(0, num(bmMunPdeInput.value, 0)); saveState(); update(); });
+  bmMunPdeInput.addEventListener('input', function () { state.bmMunPde = Math.max(0, num(bmMunCampo.lerPo(), 0)); saveState(); update(); });
+  bmMunPdeMoedaSel.addEventListener('change', function () {
+    state.bmMunPdeMoeda = moedaValida(bmMunPdeMoedaSel.value);
+    bmMunCampo.mostrar(state.bmMunPde, state.bmMunPdeMoeda);
+    saveState();
+  });
   bmAmmoQtdInput.addEventListener('input', function () { state.bmMunModQtd = Math.max(1, Math.floor(num(bmAmmoQtdInput.value, 5))); updateBmAmmoModsTotal(); saveState(); update(); });
   bmPolvQtdInput.addEventListener('input', function () { state.bmPolvQtd = Math.max(1, Math.floor(num(bmPolvQtdInput.value, 1))); saveState(); update(); });
 
@@ -7786,6 +7883,7 @@
       }
       breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(ch.lucroPct) + '%)', '+' + fmtMoeda(ch.lucroValor)));
     }
+    if (ch.subiuPara1pc) breakdownEl.appendChild(bRow('Menor valor possível (não existe moeda abaixo de 1 PC)', '1 PC'));
     breakdownEl.appendChild(bRow(state.herbalModo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(ch.final), true));
 
     formulaNote.textContent = 'Herbalismo (p. 148–150) · 1h por item · venda de ramos para herbolários por metade do preço';
@@ -7951,7 +8049,7 @@
 
     if (state.bmMunId === 'Bala (1 unidade)') state.bmMunId = 'Bala — funda / arma de fogo (1 unidade)';
     bmMunSelect.value = state.bmMunId || '';
-    bmMunPdeInput.value = state.bmMunPde == null ? '' : state.bmMunPde;
+    bmMunCampo.mostrar(state.bmMunPde, state.bmMunPdeMoeda);
     bmAmmoQtdInput.value = state.bmMunModQtd == null ? 5 : state.bmMunModQtd;
     bmAmmoExistenteSwitch.setAttribute('aria-checked', state.bmMunModExistente ? 'true' : 'false');
     bmPressaSwitch.setAttribute('aria-checked', state.bmPressa ? 'true' : 'false');
@@ -8038,7 +8136,7 @@
   function hydrateForm() {
     if (state.mostrarDureza === undefined) state.mostrarDureza = true;
     if (!state.magicoRaridade) state.magicoRaridade = 'comum';
-    pdeInput.value = state.pde;
+    pdeCampo.mostrar(state.pde, state.pdeMoeda);
     artesaoSwitch.setAttribute('aria-checked', state.artesao ? 'true' : 'false');
     materiaisSwitch.setAttribute('aria-checked', state.materiaisPossuidos ? 'true' : 'false');
     durezaSwitch.setAttribute('aria-checked', state.mostrarDureza ? 'true' : 'false');
@@ -8160,7 +8258,7 @@
     var raw = input.value, v = parseFloat(raw);
     var bad = raw !== '' && (!isFinite(v) || (isFinite(min) && v < min));
     input.setAttribute('aria-invalid', bad ? 'true' : 'false');
-    var group = input.parentElement && input.parentElement.classList.contains('field-group') ? input.parentElement : null;
+    var group = input.closest('.field-group');
     if (!group) { input.title = bad ? (min > 0 ? 'Use um número a partir de ' + min + '.' : 'O valor não pode ser negativo.') : ''; return; }
     var msg = group.querySelector('.field-error');
     if (bad && !msg) {

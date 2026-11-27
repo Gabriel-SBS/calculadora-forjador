@@ -65,7 +65,7 @@
 
     if (state.bmMunId === 'Bala (1 unidade)') state.bmMunId = 'Bala — funda / arma de fogo (1 unidade)';
     bmMunSelect.value = state.bmMunId || '';
-    bmMunPdeInput.value = state.bmMunPde == null ? '' : state.bmMunPde;
+    bmMunCampo.mostrar(state.bmMunPde, state.bmMunPdeMoeda);
     bmAmmoQtdInput.value = state.bmMunModQtd == null ? 5 : state.bmMunModQtd;
     bmAmmoExistenteSwitch.setAttribute('aria-checked', state.bmMunModExistente ? 'true' : 'false');
     bmPressaSwitch.setAttribute('aria-checked', state.bmPressa ? 'true' : 'false');
@@ -152,7 +152,7 @@
   function hydrateForm() {
     if (state.mostrarDureza === undefined) state.mostrarDureza = true;
     if (!state.magicoRaridade) state.magicoRaridade = 'comum';
-    pdeInput.value = state.pde;
+    pdeCampo.mostrar(state.pde, state.pdeMoeda);
     artesaoSwitch.setAttribute('aria-checked', state.artesao ? 'true' : 'false');
     materiaisSwitch.setAttribute('aria-checked', state.materiaisPossuidos ? 'true' : 'false');
     durezaSwitch.setAttribute('aria-checked', state.mostrarDureza ? 'true' : 'false');

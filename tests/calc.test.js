@@ -92,12 +92,32 @@ test('Pesos em kg do Guia e materiais que mudam o peso', () => {
 
 // Utilitários
 
-test('Moedas: arredonda no pc e não usa electro nem platina', () => {
-  assert.equal(app.fmtMoeda(0.05), '5 pc');
-  assert.equal(app.fmtMoeda(9.6), '9 po 6 pp');
-  assert.equal(app.fmtMoeda(1500), '1.500 po');
-  assert.equal(app.fmtMoeda(0), '0 po');
-  assert.equal(app.fmtMoeda(-2.5), '−2 po 5 pp');
+test('Moedas: siglas PO, PP e PC, arredonda no PC e não usa electro nem platina', () => {
+  assert.equal(app.fmtMoeda(0.05), '5 PC');
+  assert.equal(app.fmtMoeda(9.6), '9 PO 6 PP');
+  assert.equal(app.fmtMoeda(1500), '1.500 PO');
+  assert.equal(app.fmtMoeda(0), '0 PO');
+  assert.equal(app.fmtMoeda(-2.5), '−2 PO 5 PP');
+  // Abaixo de 1 PC mostra a fração em vez de zero
+  assert.equal(app.fmtMoeda(0.0032), '0,32 PC');
+  assert.equal(app.fmtMoeda(0.000032), '0,0032 PC');
+  // a chave interna continua minúscula, porque o CSS das cores depende dela
+  assert.match(app.htmlMoeda(9.6), /data-coin="po".*>PO<.*data-coin="pp".*>PP</);
+});
+
+test('Campos de preço: PP e PC viram PO na conta e voltam na tela', () => {
+  approx(app.paraPo(5, 'pc'), 0.05);
+  approx(app.paraPo(5, 'pp'), 0.5);
+  approx(app.paraPo(50, 'po'), 50);
+  approx(app.dePo(0.05, 'pc'), 5);
+  approx(app.dePo(50, 'pp'), 500);
+  assert.equal(app.moedaValida('xx'), 'po');
+  approx(app.paraPo(0.01, 'pc'), 0.0001);
+  approx(app.paraPo(0.001, 'pc'), 0.00001);
+  // Flecha de 5 PC digitada em PC dá o mesmo custo que 0,05 PO
+  const emPc = app.municaoCalc(estado({ bmMunPde: app.paraPo(5, 'pc'), bmMunMatId: 'metal_ferro' }));
+  const emPo = app.municaoCalc(estado({ bmMunPde: '0.05', bmMunMatId: 'metal_ferro' }));
+  approx(emPc.final, emPo.final);
 });
 
 test('Busca ignora acento e acha por categoria e tier', () => {
@@ -170,6 +190,22 @@ test('Forja: venda, conserto e conserto de material vivo', () => {
   const vivo = app.forjaCalc(estado({ pde: '50', materials: [linhaMaterial('metal_elementium')], modo: 'conserto' }));
   assert.equal(vivo.consertoVivo, true);
   assert.equal(vivo.final, 0);
+});
+
+test('Menor valor é 1 PC: osso de 1 PC (0,32 PC na conta) sai a 1 PC', () => {
+  const osso = linhaMaterial(app.MATERIALS_DB.find((m) => /^Ossos/.test(m.nome) && m.mult === 1).id);
+  for (const pdePc of [1, 0.01]) {
+    const c = app.forjaCalc(estado({ pde: String(app.paraPo(pdePc, 'pc')), materials: [osso] }));
+    approx(c.final, 0.01);
+    assert.equal(c.subiuPara1pc, true);
+    assert.equal(app.fmtMoeda(c.final), '1 PC');
+  }
+  // Zero continua zero (materiais em posse) e valor acima de 1 PC não muda
+  assert.equal(app.forjaCalc(estado({ pde: '0.01', materials: [osso], materiaisPossuidos: true })).final, 0);
+  approx(app.forjaCalc(estado({ pde: '50', materials: [ACO] })).final, 480);
+  assert.equal(app.forjaCalc(estado({ pde: '50', materials: [ACO] })).subiuPara1pc, false);
+  approx(app.municaoCalc(estado({ bmMunPde: '0.0001', bmMunMatId: 'metal_ferro' })).final, 0.01);
+  approx(app.forjaMaterialUnico(estado({ pde: '0.01' }), app.materialById(osso.materialId)).final, 0.01);
 });
 
 test('Forja: PDE negativo vale zero e PDE abaixo de 1 po não vira 1 po', () => {

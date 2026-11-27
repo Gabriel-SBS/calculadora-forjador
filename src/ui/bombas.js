@@ -43,6 +43,8 @@
   // Controles de Munição
   var bmMunSelect = document.getElementById('bm-mun-select');
   var bmMunPdeInput = document.getElementById('bm-mun-pde');
+  var bmMunPdeMoedaSel = document.getElementById('bm-mun-pde-moeda');
+  var bmMunCampo = campoMoeda(bmMunPdeInput, bmMunPdeMoedaSel);
   var bmMunInfo = document.getElementById('bm-mun-info');
   var bmMunMatWrap = document.getElementById('bm-mun-mat-wrap');
   var bmAmmoModsList = document.getElementById('bm-ammo-mods-list');
@@ -549,6 +551,7 @@
         breakdownEl.appendChild(bRow(cm.modMun.nome + ' (' + cm.modMun.qtd + ' un., ' + porTxt + ')', state.bombaPossuidos ? 'grátis' : '+' + fmtMoeda(cm.modMun.pago)));
       }
       if (state.bombaModo === 'vendido') breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(cm.lucroPct) + '%)', '+' + fmtMoeda(cm.lucroValor)));
+      if (cm.subiuPara1pc) breakdownEl.appendChild(bRow('Menor valor possível (não existe moeda abaixo de 1 PC)', '1 PC'));
       breakdownEl.appendChild(bRow(state.bombaModo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(cm.final), true));
 
       formulaNote.textContent = 'Munições (p. 160 e 171) · 4 unidades × material → rende 2d4 · modificações fora do multiplicador';
@@ -608,6 +611,7 @@
         if (state.bombaForjador) breakdownEl.appendChild(bRow('Trabalhador Itinerante', '÷ 2'));
       }
       if (state.bombaModo === 'vendido') breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(cp.lucroPct) + '%)', '+' + fmtMoeda(cp.lucroValor)));
+      if (cp.subiuPara1pc) breakdownEl.appendChild(bRow('Menor valor possível (não existe moeda abaixo de 1 PC)', '1 PC'));
       breakdownEl.appendChild(bRow(state.bombaModo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(cp.final), true));
 
       formulaNote.textContent = 'Pólvoras (p. 160 e 171) · preço de 2 unidades → rende 1d4 · 8h base por lote';
@@ -691,6 +695,7 @@
     if (state.bombaModo === 'vendido') {
       breakdownEl.appendChild(bRow('+ margem de lucro (' + fmt(cb.lucroPct) + '%)', '+' + fmtMoeda(cb.lucroValor)));
     }
+    if (cb.subiuPara1pc) breakdownEl.appendChild(bRow('Menor valor possível (não existe moeda abaixo de 1 PC)', '1 PC'));
     breakdownEl.appendChild(bRow(state.bombaModo === 'vendido' ? 'Preço de venda' : 'Custo final', fmtMoeda(cb.final), true));
 
     formulaNote.textContent = 'Bombas (p. 216–220) · CD = 8 + DES' + (state.bombaMestre ? ' + BP (Mestre das Bombas)' : '') + ' · 1 bomba = 2d4 bombinhas';
@@ -785,10 +790,15 @@
   bmMunSelect.addEventListener('change', function () {
     state.bmMunId = bmMunSelect.value;
     var found = MUNICOES_LIST.filter(function (m) { return m.nome === state.bmMunId; })[0];
-    if (found) { state.bmMunPde = found.pde; bmMunPdeInput.value = found.pde; }
+    if (found) { state.bmMunPde = found.pde; bmMunCampo.mostrar(found.pde, state.bmMunPdeMoeda); }
     saveState(); update();
   });
-  bmMunPdeInput.addEventListener('input', function () { state.bmMunPde = Math.max(0, num(bmMunPdeInput.value, 0)); saveState(); update(); });
+  bmMunPdeInput.addEventListener('input', function () { state.bmMunPde = Math.max(0, num(bmMunCampo.lerPo(), 0)); saveState(); update(); });
+  bmMunPdeMoedaSel.addEventListener('change', function () {
+    state.bmMunPdeMoeda = moedaValida(bmMunPdeMoedaSel.value);
+    bmMunCampo.mostrar(state.bmMunPde, state.bmMunPdeMoeda);
+    saveState();
+  });
   bmAmmoQtdInput.addEventListener('input', function () { state.bmMunModQtd = Math.max(1, Math.floor(num(bmAmmoQtdInput.value, 5))); updateBmAmmoModsTotal(); saveState(); update(); });
   bmPolvQtdInput.addEventListener('input', function () { state.bmPolvQtd = Math.max(1, Math.floor(num(bmPolvQtdInput.value, 1))); saveState(); update(); });
 
