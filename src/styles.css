@@ -286,25 +286,18 @@
   .hero-text { display: flex; flex-direction: column; gap: var(--sp-2); min-width: 0; }
   .hero-title-row { display: flex; align-items: center; gap: var(--sp-3); }
   .hero-mark {
-    width: 38px;
-    height: 38px;
+    width: 30px;
+    height: 30px;
     flex-shrink: 0;
     display: grid;
     place-items: center;
-    border-radius: 10px;
     color: var(--accent);
-    background:
-      radial-gradient(90% 90% at 30% 20%, color-mix(in srgb, var(--ember-hot) 18%, transparent), transparent 70%),
-      color-mix(in srgb, var(--accent) 12%, var(--surface));
-    border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 2px rgba(0,0,0,.08);
-    transition: border-color var(--t-med), box-shadow var(--t-med), color var(--t-med);
+    transition: color var(--t-med), filter var(--t-med);
   }
-  .hero-mark svg { width: 22px; height: 22px; }
+  .hero-mark svg { width: 28px; height: 28px; }
   .forja-on .hero-mark {
     color: var(--ember);
-    border-color: color-mix(in srgb, var(--ember) 65%, var(--border));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.22), 0 2px 8px rgba(0,0,0,.22);
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--ember) 45%, transparent));
   }
 
   /* Barra de exibição (dureza, modo forja) */
@@ -397,18 +390,15 @@
 
   /* Lista de ajustes (interruptores agrupados) */
   .settings-list {
-    border: 1px solid var(--border);
-    border-radius: var(--r-sm);
-    background: color-mix(in srgb, var(--surface-2) 50%, transparent);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
-  .setting { padding: var(--sp-3) var(--sp-4); }
+  .setting { padding: var(--sp-3) 0; }
   .setting + .setting { border-top: 1px solid var(--border); }
   .setting-sub {
     margin-top: var(--sp-3);
-    padding: var(--sp-3);
-    border-radius: var(--r-sm);
-    background: color-mix(in srgb, var(--surface-2) 70%, var(--surface));
-    border: 1px solid var(--border);
+    padding-top: var(--sp-3);
+    border-top: 1px dashed var(--border);
   }
   .compare, .vantagens, .production { padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-1); }
 
@@ -702,7 +692,7 @@
   .tipo-info code.search-ex { cursor: pointer; transition: background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast); }
   .tipo-info code.search-ex:hover { border-color: var(--accent); color: var(--accent); }
   .material-row[data-tier] .mat-search {
-    border-left: 3px solid var(--tier-color);
+    border-color: color-mix(in srgb, var(--tier-color) 55%, var(--border));
   }
   .tier-select {
     font-family: var(--font-mono);
@@ -968,10 +958,15 @@
   .btn-strong {
     background: var(--accent);
     border-color: var(--accent);
-    color: #fff;
+    color: var(--accent-ink);
     font-weight: 600;
   }
   .btn-strong .ico { stroke: currentColor; }
+  .btn-strong.is-confirmed {
+    background: var(--good);
+    border-color: var(--good);
+    color: var(--accent-ink);
+  }
   .btn-ghost.is-morphing {
     filter: blur(1.8px);
     opacity: .72;
@@ -1198,7 +1193,7 @@
     color: var(--accent);
   }
   .high-level-details { margin-top: var(--sp-2); }
-  .high-level-details .settings-list { margin-top: 0; }
+  .high-level-details .settings-list { margin-top: 0; border-top: none; border-bottom: none; }
   .cm-empty {
     grid-column: 1 / -1;
     margin: 0;
@@ -1761,6 +1756,7 @@
     .li-qty-btn { width: 32px; height: 32px; }
     .theme-btn { width: 38px; height: 38px; flex-shrink: 0; }
     .btn-info, .btn-reset { min-height: 36px; padding-left: var(--sp-2); padding-right: var(--sp-2); }
+    .btn-chip { min-height: 36px; padding: 6px 13px; }
     .toast-btn { height: 38px; }
     .mat-dropdown { max-height: min(240px, 42vh); -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
     .mat-option { min-height: 40px; padding: 9px var(--sp-2); }
@@ -1816,7 +1812,7 @@
       will-change: auto;
     }
     .btn-ghost.is-morphing { filter: none; }
-    .seg-btn:active, .btn-ghost:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .btn-info:active, .btn-reset:active, .mods-summary:active, .magicos-summary:active, .explain > summary:active, .switch:active, .cost-bar:active { transform: none; }
+    .seg-btn:active, .btn-ghost:active, .btn-chip:active, .btn-remove:active, .theme-btn:active, .toast-btn:active, .btn-info:active, .btn-reset:active, .mods-summary:active, .magicos-summary:active, .explain > summary:active, .switch:active, .cost-bar:active { transform: none; }
     .mat-clear-btn:active { transform: translateY(-50%); }
     .theme-btn svg { transform: none !important; }
     .toast, .toast.show { transform: translate(-50%, 0); }
@@ -1832,14 +1828,13 @@
     input:hover:not(:disabled), select:hover:not(:disabled) { border-color: var(--border-strong); }
     .btn-info:hover { color: var(--accent); }
     .btn-ghost:hover:not(:disabled) { border-color: var(--border-strong); background: color-mix(in srgb, var(--text) 5%, transparent); }
-    .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 88%, #000); border-color: color-mix(in srgb, var(--accent) 88%, #000); }
+    .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 88%, var(--text)); border-color: color-mix(in srgb, var(--accent) 88%, var(--text)); }
     .btn-chip:hover:not(.active) { border-color: var(--border-strong); color: var(--text); }
     .btn-remove:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
     .btn-reset:hover { color: var(--accent); }
     .seg-btn:hover:not(.active) { color: var(--text); background: color-mix(in srgb, var(--text) 5%, transparent); }
     .mat-option:hover { background: var(--surface-2); }
     .mod-item:hover { background: color-mix(in srgb, var(--accent) 7%, transparent); }
-    .btn-strong:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 20%, transparent); border-color: var(--accent); }
     .toast-btn:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
     .mods-summary:hover, .magicos-summary:hover, .explain > summary:hover { color: var(--accent); }
     .ramo-row:hover { border-color: var(--border-strong); }
